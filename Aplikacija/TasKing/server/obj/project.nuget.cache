@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jZlRzZT9a4/eoj+Ke5rGA9OqhWamH6eKB4nQy/myFmrkPpMqcyXsIKPG0AbDklfJ/EhaYFDZV8n5HVKPRPbbEg==",
+  "dgSpecHash": "v4knp/iImXXbvGSUSYkkBjz8pFCZ8fw41yMooRI4KVK3qehF2TzfRpWDbWdz9n+Gk9QWCr9kGlZzccZMQ7cAlA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Joka\\Documents\\si.22.21.tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj",
+  "projectFilePath": "C:\\Users\\Joka\\Desktop\\si.22.21.tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Joka\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Joka\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

@@ -22,8 +22,6 @@ namespace Models
 
         public List<Task> taskovi { get; set; }
 
-        public Tim tim { get; set; }
-
         public ClanOrganizacije clanOgranizacijeID { get; set; }
     }
 }
