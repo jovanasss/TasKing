@@ -20,7 +20,8 @@ namespace Models
         
         public DateTime datumOsnivanja { get; set; }
 
-        [MaxLength(50)]
+        public DateTime vremePosecivanja { get; set; }
+
         public string slika { get; set; }
 
         public List<ClanTima> clanoviTima { get; set; }

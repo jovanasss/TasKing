@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Joka\\Desktop\\TasKing\\TasKing.csproj": {}
+    "C:\\Users\\Joka\\Documents\\si.22.21.tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Joka\\Desktop\\TasKing\\TasKing.csproj": {
+    "C:\\Users\\Joka\\Documents\\si.22.21.tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Joka\\Desktop\\TasKing\\TasKing.csproj",
+        "projectUniqueName": "C:\\Users\\Joka\\Documents\\si.22.21.tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj",
         "projectName": "TasKing",
-        "projectPath": "C:\\Users\\Joka\\Desktop\\TasKing\\TasKing.csproj",
+        "projectPath": "C:\\Users\\Joka\\Documents\\si.22.21.tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj",
         "packagesPath": "C:\\Users\\Joka\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Joka\\Desktop\\TasKing\\obj\\",
+        "outputPath": "C:\\Users\\Joka\\Documents\\si.22.21.tasking\\Aplikacija\\TasKing\\server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,6 +44,16 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.6.3, )"

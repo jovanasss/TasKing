@@ -15,6 +15,7 @@ namespace Models
         [Required]
         public bool administrator { get; set; }
 
+        [Required]
         public bool izbacen { get; set; }
         
         public Korisnik korisnikID { get; set; }

@@ -12,23 +12,22 @@ namespace Models
         public int ID { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(20)]
         public string korisnickoIme { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(20)]
         public string lozinka { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(20)]
         public string ime { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(30)]
         public string prezime { get; set; }
 
         [Required]
-        [MaxLength(50)]
         public string profilnaSlika { get; set; }
 
         [Required]

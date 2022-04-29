@@ -18,11 +18,12 @@ namespace Models
 
         public DateTime datumOsnivanja { get; set; }
 
-        [MaxLength(50)]
         public string slika { get; set; }
-        
+
         [Required]
         public bool aktivna { get; set; }
+        
+        public DateTime vremePosecivanja { get; set; }
 
         public List<ClanOrganizacije> clanoviOrganizacije { get; set; }
 

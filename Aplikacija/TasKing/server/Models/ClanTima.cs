@@ -14,15 +14,16 @@ namespace Models
 
         public Tim timID { get; set; }
         
+        [Required]
         public bool vodjaTima { get; set; }
 
+        [Required]
         public bool izbacen { get; set; }
 
         public List<Task> taskovi { get; set; }
 
         public Tim tim { get; set; }
 
-        [Required]
         public ClanOrganizacije clanOgranizacijeID { get; set; }
     }
 }

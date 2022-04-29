@@ -6,13 +6,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Models;
 
-namespace TasKing
+namespace TasKing 
 {
     public class Startup
     {
@@ -26,11 +28,37 @@ namespace TasKing
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<TasKingContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("StumpCS"));
+
+            });
+
+            services.AddCors(options => 
+           {
+               options.AddPolicy("CORS", builder => 
+               {
+                   builder.WithOrigins(new string[]
+                   {
+                       "http://localhost:8080",
+                       "https://localhost:8080",
+                       "http://127.0.0.1:8080",
+                       "https://127.0.0.1:8080",
+                       "http://127.0.0.1:5501",
+                       "http://localhost:5501",
+                       "https://127.0.0.1:5501",
+                       "https://localhost:5501"
+                   })
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+               });
+
+           });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TasKing", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WEBP", Version = "v1" });
             });
         }
 
@@ -41,12 +69,14 @@ namespace TasKing
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TasKing v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WEBP v1"));
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CORS");
 
             app.UseAuthorization();
 
