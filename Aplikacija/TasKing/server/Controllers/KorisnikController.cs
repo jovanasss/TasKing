@@ -65,9 +65,9 @@ namespace TasKing.Controllers
                            return BadRequest("Email je prazan ili ima neodgovarajuci format!");
                         }
 
-                        if(string.IsNullOrWhiteSpace(korisnik.korisnickoIme) || korisnik.korisnickoIme.Length > 20 || korisnik.korisnickoIme.Any(Char.IsDigit))
+                        if(string.IsNullOrWhiteSpace(korisnik.korisnickoIme) || korisnik.korisnickoIme.Length > 20)
                         {
-                           return BadRequest("Korisnicko ime je prazno ili sadrzi cifru ili je duze od 20!");
+                           return BadRequest("Korisnicko ime je prazno ili je duze od 20!");
                         }
 
                         if(string.IsNullOrWhiteSpace(korisnik.lozinka) || korisnik.lozinka.Length > 20)
@@ -106,6 +106,129 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Nalog sa unetim email-om vec postoji!");
             }
+        }
+
+        [Route("VratiClanove/{korisnickoIme}/{lozinka}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiRezervacije(string korisnickoIme, string lozinka)
+        {     
+                 try
+                {
+                    Korisnik korisnik = await Context.Korisnici.Where(k => k.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();;
+                    if(korisnik==null || korisnik.lozinka!=lozinka)
+                        {
+                                return BadRequest("Uneli ste pogresno korisnicko ime ili lozinku");
+                        }
+
+                    var clanovi = korisnik.clanoviOrganizacije;
+                    return Ok(clanovi);
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
+
+        [Route("KreirajOrganizaciju")]
+        [HttpPost]
+        public async Task<ActionResult> KreirajOrganizaciju([FromBody] Organizacija organizacija)
+        {
+            var org = Context.Organizacije.Where(o => o.ime == organizacija.ime).FirstOrDefault();
+            if(org == null)
+            {
+                 if(string.IsNullOrWhiteSpace(organizacija.ime) || organizacija.ime.Length > 50)
+                        {
+                           return BadRequest("Ime je prazno ili je duze od 50!");
+                        }
+
+                        try
+                        {
+                            Organizacija organizacija1 = new Organizacija
+                            {
+                                ime = organizacija.ime,
+                                datumOsnivanja = DateTime.Now,
+                                aktivna=true,
+                                slika = organizacija.slika
+                            };
+
+                            Context.Organizacije.Add(organizacija1);
+                            await Context.SaveChangesAsync();
+                            return Ok("Sve je OK!");
+                        }
+
+                        catch(Exception e)
+                        {
+                             return BadRequest("Doslo je do greske:" + e.Message);
+                        }
+            }
+            else
+            {
+                return BadRequest("Organizacija sa unetim imenom vec postoji!");
+            }
+        }
+
+        [Route("UclaniOrg/{korisnikID}/{OrganizacijaID}/{administrator}")]
+        [HttpPost]
+        public async Task<ActionResult> Upisi(int korisnikID, int OrganizacijaID, bool administrator)
+        {     
+                Korisnik korisnik = await Context.Korisnici.Where(p => p.ID == korisnikID).FirstOrDefaultAsync();
+                if(korisnik==null)
+                    return BadRequest("Korisnik ne postoji u bazi");
+
+                Organizacija organizacija = await Context.Organizacije.Where(p => p.ID == OrganizacijaID).FirstOrDefaultAsync();
+                if(organizacija==null)
+                    return BadRequest("Organizacija ne postoji u bazi");
+
+                ClanOrganizacije clan =  await Context.ClanoviOrganizacije.Where(p => p.korisnikID.ID == korisnikID && p.organizacijaID.ID == OrganizacijaID).FirstOrDefaultAsync();
+                if(clan==null)
+                {
+                    try
+                    {
+                        
+                        {
+                            ClanOrganizacije clan1 = new ClanOrganizacije()
+                            {
+                                administrator=administrator,
+                                izbacen = false,
+                                korisnikID = korisnik,
+                                organizacijaID = organizacija
+                            };
+
+        
+
+                            Context.ClanoviOrganizacije.Add(clan1);
+                            await Context.SaveChangesAsync(); 
+
+                            /*var rezervacijaInfo = await Context.Rezervacije
+                        .Include(p => p.Sobe)
+                        .Include(p => p.Korisnik)
+                        .Where(p => p.Korisnik.Mejl == mejl)
+                        .Select(p=>
+                        new{
+                                Ime = p.Korisnik.Ime,
+                                Prezime = p.Korisnik.Prezime,
+                                DatumP = p.DatumPrijavljivanja,
+                                DatumO = p.DatumOdjavljivanja,
+                                Sobe = p.Sobe.Select(s=>new{
+                                naziv = s.Naziv,
+                                hotel = s.Hotel.Naziv
+                            }),
+                                id = p.ID,
+                                korisnikId = korisnik.ID
+                        }).ToListAsync();*/
+
+                            return Ok(clan);
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        return BadRequest(e.Message);
+                    }
+                }
+                else
+                {
+                    return BadRequest("Korisnik je vec uclanjen u organizaciju");
+                }
         }
     }
 }
