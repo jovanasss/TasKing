@@ -19,12 +19,14 @@ namespace Models
         public bool izbacen { get; set; }
         
         [JsonIgnore]
-        public Korisnik korisnikID { get; set; }
+        public Korisnik korisnik { get; set; }
 
         [JsonIgnore]
-        public Organizacija organizacijaID { get; set; }
+        public Organizacija organizacija { get; set; }
 
         public List<ClanTima> clanoviTima { get; set; }
+
+        public DateTime vremePosecivanja { get; set; }
     }
 
 }

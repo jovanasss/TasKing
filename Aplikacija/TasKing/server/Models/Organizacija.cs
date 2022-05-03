@@ -12,6 +12,9 @@ namespace Models
         [Key]
         public int ID { get; set; }
 
+        [MaxLength(6)]
+        public string kod { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string ime { get; set; }
@@ -22,11 +25,9 @@ namespace Models
 
         [Required]
         public bool aktivna { get; set; }
-        
-        public DateTime vremePosecivanja { get; set; }
 
         public List<ClanOrganizacije> clanoviOrganizacije { get; set; }
 
+        public List<PozivUOrganizaciju> poziviUOrganizaciju { get; set; }
     }
-
 }

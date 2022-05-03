@@ -28,6 +28,10 @@ namespace Models
         public string prezime { get; set; }
 
         [Required]
+        [MaxLength(20)]
+        [RegularExpression(@"\d+")]
+        public string brTelefona { get; set; }
+
         public string profilnaSlika { get; set; }
 
         [Required]
@@ -37,6 +41,8 @@ namespace Models
 
         public List<ClanOrganizacije> clanoviOrganizacije { get; set; }
 
-    }
+        public List<PozivUOrganizaciju> primljeniPoziviIzOrganizacije { get; set; }
 
+        public List<PozivUTim> primljeniPoziviIzTima { get; set; }
+    }
 }

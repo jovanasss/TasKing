@@ -12,7 +12,7 @@ namespace Models
         [Key]
         public int ID { get; set; }
 
-        public Tim timID { get; set; }
+        public Tim tim { get; set; }
         
         [Required]
         public bool vodjaTima { get; set; }
@@ -20,8 +20,10 @@ namespace Models
         [Required]
         public bool izbacen { get; set; }
 
+        public DateTime vremePosecivanja { get; set; }
+
         public List<Task> taskovi { get; set; }
 
-        public ClanOrganizacije clanOgranizacijeID { get; set; }
+        public ClanOrganizacije clanOgranizacije { get; set; }
     }
 }

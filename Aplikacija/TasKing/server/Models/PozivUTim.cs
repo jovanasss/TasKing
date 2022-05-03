@@ -6,27 +6,22 @@ using System.Text.Json.Serialization;
 
 namespace Models
 {
-    [Table("Projekat")]
-    public class Projekat
+    [Table("Poziv u tim")]
+    public class PozivUTim
     {
         [Key]
         public int ID { get; set; }
 
         [Required]
-        [MaxLength(50)]
-        public string naziv { get; set; }
+        public Korisnik pozvaniKorisnik { get; set; }
 
         [Required]
-        [MaxLength(300)]
-        public string opis { get; set; }
+        public DateTime vremePoziva { get; set; }
 
         [Required]
         public bool status { get; set; }
 
         [Required]
         public Tim tim { get; set; }
-
-        public List<Task> taskovi { get; set; }
     }
-
 }

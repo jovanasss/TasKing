@@ -114,7 +114,7 @@ namespace TasKing.Controllers
         {     
                  try
                 {
-                    Korisnik korisnik = await Context.Korisnici.Where(k => k.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();;
+                    Korisnik korisnik = await Context.Korisnici.Where(k => k.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();
                     if(korisnik==null || korisnik.lozinka!=lozinka)
                         {
                                 return BadRequest("Uneli ste pogresno korisnicko ime ili lozinku");
@@ -167,7 +167,7 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("UclaniOrg/{korisnikID}/{OrganizacijaID}/{administrator}")]
+        [Route("UclaniUOrganizaciju/{korisnikID}/{OrganizacijaID}/{administrator}")]
         [HttpPost]
         public async Task<ActionResult> Upisi(int korisnikID, int OrganizacijaID, bool administrator)
         {     
@@ -179,7 +179,7 @@ namespace TasKing.Controllers
                 if(organizacija==null)
                     return BadRequest("Organizacija ne postoji u bazi");
 
-                ClanOrganizacije clan =  await Context.ClanoviOrganizacije.Where(p => p.korisnikID.ID == korisnikID && p.organizacijaID.ID == OrganizacijaID).FirstOrDefaultAsync();
+                ClanOrganizacije clan =  await Context.ClanoviOrganizacije.Where(p => p.korisnik.ID == korisnikID && p.organizacija.ID == OrganizacijaID).FirstOrDefaultAsync();
                 if(clan==null)
                 {
                     try
@@ -190,8 +190,8 @@ namespace TasKing.Controllers
                             {
                                 administrator=administrator,
                                 izbacen = false,
-                                korisnikID = korisnik,
-                                organizacijaID = organizacija
+                                korisnik = korisnik,
+                                organizacija = organizacija
                             };
 
         

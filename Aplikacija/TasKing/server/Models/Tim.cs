@@ -12,6 +12,9 @@ namespace Models
         [Key]
         public int ID { get; set; }
 
+        [MaxLength(6)]
+        public string kod { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string ime { get; set; }
@@ -20,14 +23,13 @@ namespace Models
         
         public DateTime datumOsnivanja { get; set; }
 
-        public DateTime vremePosecivanja { get; set; }
-
         public string slika { get; set; }
 
         public List<ClanTima> clanoviTima { get; set; }
 
         public List<Projekat> projekti { get; set; }
 
-    }
+        public List<PozivUTim> poziviUTim { get; set; }
 
+    }
 }
