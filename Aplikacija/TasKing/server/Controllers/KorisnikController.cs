@@ -110,7 +110,7 @@ namespace TasKing.Controllers
 
         [Route("VratiClanove/{korisnickoIme}/{lozinka}")]
         [HttpGet]
-        public async Task<ActionResult> VratiRezervacije(string korisnickoIme, string lozinka)
+        public async Task<ActionResult> VratiClanove(string korisnickoIme, string lozinka)
         {     
                  try
                 {
@@ -120,8 +120,18 @@ namespace TasKing.Controllers
                                 return BadRequest("Uneli ste pogresno korisnicko ime ili lozinku");
                         }
 
-                    var clanovi = korisnik.clanoviOrganizacije;
-                    return Ok(clanovi);
+                    var clanInfo = await Context.ClanoviOrganizacije
+                            .Include(p=>p.organizacija)
+                            .Where(p=>p.korisnik==korisnik && p.izbacen==false)
+                            .Select(p=>
+                            new{
+                                imeOrganizacije = p.organizacija.ime,
+                                administrator = p.administrator,
+                                vremePosecivanja = p.vremePosecivanja
+                            }).ToArrayAsync();
+                        
+
+                            return Ok(clanInfo);
                 }
                 catch(Exception e)
                 {
@@ -148,7 +158,8 @@ namespace TasKing.Controllers
                                 ime = organizacija.ime,
                                 datumOsnivanja = DateTime.Now,
                                 aktivna=true,
-                                slika = organizacija.slika
+                                slika = organizacija.slika,
+                                kod = organizacija.kod
                             };
 
                             Context.Organizacije.Add(organizacija1);
@@ -198,26 +209,12 @@ namespace TasKing.Controllers
 
                             Context.ClanoviOrganizacije.Add(clan1);
                             await Context.SaveChangesAsync(); 
+                            var clanInfo = await Context.ClanoviOrganizacije
+                            .Include(p=>p.organizacija)
+                            .Where(p=>p.korisnik.ID==korisnikID && p.organizacija.ID==OrganizacijaID && p.izbacen==false).ToArrayAsync();
+                        
 
-                            /*var rezervacijaInfo = await Context.Rezervacije
-                        .Include(p => p.Sobe)
-                        .Include(p => p.Korisnik)
-                        .Where(p => p.Korisnik.Mejl == mejl)
-                        .Select(p=>
-                        new{
-                                Ime = p.Korisnik.Ime,
-                                Prezime = p.Korisnik.Prezime,
-                                DatumP = p.DatumPrijavljivanja,
-                                DatumO = p.DatumOdjavljivanja,
-                                Sobe = p.Sobe.Select(s=>new{
-                                naziv = s.Naziv,
-                                hotel = s.Hotel.Naziv
-                            }),
-                                id = p.ID,
-                                korisnikId = korisnik.ID
-                        }).ToListAsync();*/
-
-                            return Ok(clan);
+                            return Ok(clanInfo);
                         }
                     }
                     catch(Exception e)
