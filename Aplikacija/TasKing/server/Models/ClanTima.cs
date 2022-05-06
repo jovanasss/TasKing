@@ -12,6 +12,7 @@ namespace Models
         [Key]
         public int ID { get; set; }
 
+        [JsonIgnore]
         public Tim tim { get; set; }
         
         [Required]
@@ -24,6 +25,7 @@ namespace Models
 
         public List<Task> taskovi { get; set; }
 
+        [JsonIgnore]
         public ClanOrganizacije clanOgranizacije { get; set; }
     }
 }

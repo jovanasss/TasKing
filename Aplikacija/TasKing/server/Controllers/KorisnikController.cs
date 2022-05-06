@@ -14,27 +14,11 @@ namespace TasKing.Controllers
     [Route("[controller]")]
     public class KorisnikController : ControllerBase
     {
-
         public TasKingContext Context { get; set; }
 
         public KorisnikController(TasKingContext context)
         {
             Context = context;
-        }
-
-        [Route("PreuzetiKorisnike")]
-        [HttpGet]
-        public async Task<ActionResult> PreuzmiKorisnike()
-        {
-            try
-            {
-                var korisnici = await Context.Korisnici.ToListAsync();
-                return Ok(korisnici);
-            }
-            catch(Exception e)
-            {
-                return BadRequest("Doslo je do greske:" + e.Message);
-            }
         }
 
         [Route("UnesiKorisnika")]
@@ -75,6 +59,11 @@ namespace TasKing.Controllers
                            return BadRequest("Lozinka je prazna ili je duza od 20!");
                         }
 
+                        if(string.IsNullOrWhiteSpace(korisnik.brTelefona) || korisnik.brTelefona.Length > 20 || korisnik.brTelefona.Any(Char.IsControl))
+                        {
+                           return BadRequest("Broj telefona je prazan ili je duzi od 20!");
+                        }
+
                         try
                         {
                             Korisnik korisnik1 = new Korisnik
@@ -84,7 +73,8 @@ namespace TasKing.Controllers
                                 korisnickoIme = korisnik.korisnickoIme,
                                 lozinka = korisnik.lozinka,
                                 email = korisnik.email,
-                                profilnaSlika = korisnik.profilnaSlika
+                                profilnaSlika = korisnik.profilnaSlika,
+                                brTelefona = korisnik.brTelefona
                             };
 
                             Context.Korisnici.Add(korisnik1);
@@ -108,9 +98,9 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiClanove/{korisnickoIme}/{lozinka}")]
+        [Route("VratiClanoveOrganizacije/{korisnickoIme}/{lozinka}")]
         [HttpGet]
-        public async Task<ActionResult> VratiClanove(string korisnickoIme, string lozinka)
+        public async Task<ActionResult> VratiClanoveOrganizacije(string korisnickoIme, string lozinka)
         {     
                  try
                 {
@@ -130,7 +120,6 @@ namespace TasKing.Controllers
                                 vremePosecivanja = p.vremePosecivanja
                             }).ToArrayAsync();
                         
-
                             return Ok(clanInfo);
                 }
                 catch(Exception e)
@@ -138,94 +127,7 @@ namespace TasKing.Controllers
                     return BadRequest(e.Message);
                 }
         }
-
-        [Route("KreirajOrganizaciju")]
-        [HttpPost]
-        public async Task<ActionResult> KreirajOrganizaciju([FromBody] Organizacija organizacija)
-        {
-            var org = Context.Organizacije.Where(o => o.ime == organizacija.ime).FirstOrDefault();
-            if(org == null)
-            {
-                 if(string.IsNullOrWhiteSpace(organizacija.ime) || organizacija.ime.Length > 50)
-                        {
-                           return BadRequest("Ime je prazno ili je duze od 50!");
-                        }
-
-                        try
-                        {
-                            Organizacija organizacija1 = new Organizacija
-                            {
-                                ime = organizacija.ime,
-                                datumOsnivanja = DateTime.Now,
-                                aktivna=true,
-                                slika = organizacija.slika,
-                                kod = organizacija.kod
-                            };
-
-                            Context.Organizacije.Add(organizacija1);
-                            await Context.SaveChangesAsync();
-                            return Ok("Sve je OK!");
-                        }
-
-                        catch(Exception e)
-                        {
-                             return BadRequest("Doslo je do greske:" + e.Message);
-                        }
-            }
-            else
-            {
-                return BadRequest("Organizacija sa unetim imenom vec postoji!");
-            }
-        }
-
-        [Route("UclaniUOrganizaciju/{korisnikID}/{OrganizacijaID}/{administrator}")]
-        [HttpPost]
-        public async Task<ActionResult> Upisi(int korisnikID, int OrganizacijaID, bool administrator)
-        {     
-                Korisnik korisnik = await Context.Korisnici.Where(p => p.ID == korisnikID).FirstOrDefaultAsync();
-                if(korisnik==null)
-                    return BadRequest("Korisnik ne postoji u bazi");
-
-                Organizacija organizacija = await Context.Organizacije.Where(p => p.ID == OrganizacijaID).FirstOrDefaultAsync();
-                if(organizacija==null)
-                    return BadRequest("Organizacija ne postoji u bazi");
-
-                ClanOrganizacije clan =  await Context.ClanoviOrganizacije.Where(p => p.korisnik.ID == korisnikID && p.organizacija.ID == OrganizacijaID).FirstOrDefaultAsync();
-                if(clan==null)
-                {
-                    try
-                    {
-                        
-                        {
-                            ClanOrganizacije clan1 = new ClanOrganizacije()
-                            {
-                                administrator=administrator,
-                                izbacen = false,
-                                korisnik = korisnik,
-                                organizacija = organizacija
-                            };
-
-        
-
-                            Context.ClanoviOrganizacije.Add(clan1);
-                            await Context.SaveChangesAsync(); 
-                            var clanInfo = await Context.ClanoviOrganizacije
-                            .Include(p=>p.organizacija)
-                            .Where(p=>p.korisnik.ID==korisnikID && p.organizacija.ID==OrganizacijaID && p.izbacen==false).ToArrayAsync();
-                        
-
-                            return Ok(clanInfo);
-                        }
-                    }
-                    catch(Exception e)
-                    {
-                        return BadRequest(e.Message);
-                    }
-                }
-                else
-                {
-                    return BadRequest("Korisnik je vec uclanjen u organizaciju");
-                }
-        }
     }
 }
+
+
