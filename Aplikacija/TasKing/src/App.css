@@ -1,38 +1,68 @@
-.App {
-  text-align: center;
+body{
+  background-color: azure;
+  justify-content: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.divMain{
+  display: flex;
+  justify-content: center;
+  height: 100%;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Forma{
   display: flex;
   flex-direction: column;
-  align-items: center;
+  background-color: whitesmoke;
+  width:30%;
+  height: 400px;
+  margin-left: 35%;
+  margin-right: 35%;
+  margin-top:10%;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+}
+.BtnLogin{
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 80px;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  font-size: large;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: rgb(161, 17, 161);
+  color: aliceblue;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  margin-left: 10%;
+  margin-right: 10%; 
+  margin-bottom: 10px;
+  border-radius: 25px;
 }
-
-.App-link {
-  color: #61dafb;
+.divPass , .divUser {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left : 10%;
+  margin-right: 10%;
+  width: 80%;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-weight: 500;
 }
+.OrSignUp{
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.labelLogin{
+  margin-top: 10px;
+  font-weight: bold;
+}
+.inputUser, .inputPass{
+  border-radius: 10px;
+  height: 25px;
+}
+.divChecked{
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  float: left;
+
 }
