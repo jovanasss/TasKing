@@ -30,7 +30,8 @@ body{
   align-items: center;
   font-size: large;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  background-color: rgb(161, 17, 161);
+  /*background-color: rgb(161, 17, 161);*/
+  background-color: rgb(0, 100, 100);
   color: aliceblue;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   margin-left: 10%;
