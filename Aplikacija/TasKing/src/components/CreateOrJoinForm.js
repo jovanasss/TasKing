@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles/CreateOrJoinForm.css';
+import '../styles/CreateOrJoinForm.css';
 
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -78,9 +78,5 @@ const createOrgButtonStyle = {
   borderRadius: "25px",
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <CreateOrJoinForm />
-  </React.StrictMode>
-);
+
+export default CreateOrJoinForm ;

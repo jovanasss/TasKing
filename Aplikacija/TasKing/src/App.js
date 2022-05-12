@@ -3,6 +3,11 @@ import * as React from 'react';
 import './styles/LoginForm.css';
 import LoginForm from './components/LoginForm';
 
+import './styles/CreateOrJoinForm.css';
+import CreateOrJoinForm from './components/CreateOrJoinForm';
+import MainScreen from './components/MainScreen';
+import { Paper } from '@mui/material';
+
 function App() {
 
 
@@ -17,7 +22,9 @@ function App() {
 
   return (
     <div className="App">
-        <LoginForm/>
+        <MainScreen name='Organizacije'/>
+        <MainScreen name='Timovi'/>
+        <Paper></Paper>
     </div>
   );
 }
