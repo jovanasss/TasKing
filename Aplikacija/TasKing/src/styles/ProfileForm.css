@@ -1,0 +1,28 @@
+.divAvatar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+}
+
+.active{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background-color: rgb(26, 167, 167);
+    color: aliceblue;
+  }
+
+  h3, h5{
+      margin:0;
+  }
+
+  h3{
+      margin-left: 4px;
+  }
+
+  h5{
+      margin-left: 12px;
+  }
+
+  .divRoutes{
+      margin-left: 600px;
+  }

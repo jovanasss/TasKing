@@ -7,6 +7,9 @@ import './styles/CreateOrJoinForm.css';
 import CreateOrJoinForm from './components/CreateOrJoinForm';
 import MainScreen from './components/MainScreen';
 import { Paper } from '@mui/material';
+import ProfileForm from './components/ProfileForm';
+
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
 
@@ -20,11 +23,19 @@ function App() {
   */
 
 
-  return (
+  /*return (
     <div className="App">
         <MainScreen name='Organizacije'/>
         <MainScreen name='Timovi'/>
         <Paper></Paper>
+    </div>
+  );*/
+
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <ProfileForm />
+      </BrowserRouter>  
     </div>
   );
 }
