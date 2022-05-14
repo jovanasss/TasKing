@@ -4,9 +4,16 @@ import { pink , orange } from "@mui/material/colors";
 import { FormControlLabel, TextField } from "@mui/material";
 import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
+import { useNavigate } from "react-router-dom";
 
 
 function LoginForm()  {
+
+    let navigate = useNavigate(); 
+    const routeChange = () =>{ 
+      let path = `/CoJ`; 
+      navigate(path);
+    }
 
   // kreiranje teme u MUI ( bez toga nije htela da se promeni boja elementa)
     const theme = createTheme({
@@ -78,9 +85,9 @@ return (
                     />
             </div>
 
-            <button className="BtnLogin">LOGIN</button>
+            <button className="BtnLogin" onClick={routeChange}>LOGIN</button>
 
-            <label className="OrSignUp">Need an account ? <a href ="google.rs" >SignUp</a></label>   
+            <label className="OrSignUp">Need an account ? <a href ="http://localhost:3000/main" >SignUp</a></label>   
         </form>
     </div>
 )

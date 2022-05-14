@@ -9,7 +9,7 @@ import MainScreen from './components/MainScreen';
 import { Paper } from '@mui/material';
 import ProfileForm from './components/ProfileForm';
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter ,Route ,Routes} from "react-router-dom";
 
 function App() {
 
@@ -33,9 +33,21 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <ProfileForm />
-      </BrowserRouter>  
+
+
+      <Routes>
+
+      <Route  path= "/" element={<LoginForm/>}/>
+      <Route  path= "/CoJ" element={<CreateOrJoinForm/>}/>
+      <Route  path= "/Main" element={<MainScreen/>}/>
+      <Route  path= "/Profile" element={              
+          <BrowserRouter>
+                <ProfileForm />
+          </BrowserRouter> }/>
+
+      </Routes>
+ 
+
     </div>
   );
 }

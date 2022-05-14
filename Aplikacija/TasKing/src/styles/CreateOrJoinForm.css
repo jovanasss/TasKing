@@ -6,6 +6,8 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    width: 100%;
 }
 
 .Form{
@@ -13,7 +15,7 @@ body{
     flex-direction: column;
     background-color: whitesmoke;
     align-items: center;
-    width:55%;
+    width:50%;
     height: 400px;
     margin-top:10%;
     text-align: center;
@@ -31,14 +33,13 @@ body{
     flex-direction: column;
     border-radius: 10px;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3), 0 6px 30px 0 rgba(0,0,0,0.19);
-    width: 320px;
-    height: 200px;
+    width: 40%;
+    height: 100%;
     background-color:aliceblue;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
-.JoinOrganization{
-    margin-right: 100px;
-}
 
 label{
     font-size: 25px;
@@ -48,8 +49,9 @@ label{
 
 input{
     margin-top: 10px;
-    width: 150px;
-    margin-left: 80px;
+    width: 35%;
+    margin-left: 30%;
+    margin-right: 30%;
     border-radius: 5px;
     height: 25px;
     border-color:azure;
@@ -57,8 +59,9 @@ input{
 
 button{
     margin-top: 20px;
-    width: 100px;
-    margin-left: 110px;
+    margin-bottom: 10%;
+    margin-left: 25%;
+    margin-right: 25%;
     text-align: center;
     cursor: pointer;
     outline: none;

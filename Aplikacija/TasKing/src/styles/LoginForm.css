@@ -6,15 +6,16 @@ body{
   display: flex;
   justify-content: center;
   height: 100%;
+  width: 100%;
 }
 .Forma{
   display: flex;
   flex-direction: column;
   background-color: whitesmoke;
-  width:30%;
+  width:400px;
   height: 400px;
-  margin-left: 35%;
-  margin-right: 35%;
+  margin-left: 30%;
+  margin-right: 30%;
   margin-top:10%;
   text-align: center;
   border-radius: 10px;
