@@ -16,13 +16,13 @@ function CreateOrJoinForm(){
        <div className="JoinDiv">
          <div className="JoinOrganization">
          <div  className="divIcons"><div className="divIcon"><GroupsIcon /></div></div>
-           <label>Join a organization with a code</label>
+           <label className="label">Join a organization with a code</label>
            <input type="text" placeholder="Enter code" name="inputCode1" onKeyUp={EnableDisable} />
            <button className="buttonJoin1">Join</button>
          </div>
          <div className="JoinTeam">
            <div className="divIcons"><div  className="divIcon"><GroupIcon /></div></div>
-           <label>Join a team with a code</label>
+           <label className="label">Join a team with a code</label>
            <input type="text" placeholder="Enter code" name="inputCode2" onKeyUp={EnableDisable} />
            <button className="buttonJoin2">Join</button>
          </div>

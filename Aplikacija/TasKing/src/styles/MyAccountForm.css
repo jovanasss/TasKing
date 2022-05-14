@@ -1,0 +1,26 @@
+.divMyAccount{
+    height: 100%;
+    /*width: 75%;*/
+}
+
+.divAvatarMyAccount{
+    display: flex;
+    align-items: center;
+    height: 15%;
+}
+
+.divCards{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 70%;
+    margin-left: 25%;
+}
+
+.Information{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    width: 50%;
+    margin-left: 28%;
+}
