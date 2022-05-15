@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom/client';
 import '../styles/CreateOrJoinForm.css';
+import { useNavigate } from "react-router-dom";
 
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -8,6 +9,15 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import GroupIcon from '@mui/icons-material/Group';
 
 function CreateOrJoinForm(){
+
+
+
+  
+      let navigate = useNavigate(); 
+      const routeChange = () =>{ 
+        let path = `/cORG`; 
+        navigate(path);
+      }
 
   return(
     <div className="Main">
@@ -29,6 +39,7 @@ function CreateOrJoinForm(){
        </div>
     
        <Button 
+       onClick={routeChange}
        style={createOrgButtonStyle} 
        sx={{border: 2, borderColor:"text.primary"}}
        startIcon={<AddCircleIcon />}>

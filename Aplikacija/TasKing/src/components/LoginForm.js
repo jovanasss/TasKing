@@ -87,7 +87,7 @@ return (
 
             <button className="BtnLogin" onClick={routeChange}>LOGIN</button>
 
-            <label className="OrSignUp">Need an account ? <a href ="http://localhost:3000/main" >SignUp</a></label>   
+            <label className="OrSignUp">Need an account ? <a href ="http://localhost:3000/SignUp" >SignUp</a></label>   
         </form>
     </div>
 )
