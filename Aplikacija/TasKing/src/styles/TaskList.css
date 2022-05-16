@@ -29,3 +29,19 @@
     width: 50%;
     margin-left: 28%;
 }
+
+.normal{
+    background-color: rgb(255, 255, 255);
+}
+
+.intrested{
+    background-color: rgb(255, 207, 49);
+}
+
+.working{
+    background-color: rgb(77, 154, 255);
+}
+
+.waitingReview{
+    background-color: rgb(78, 255, 93);
+}

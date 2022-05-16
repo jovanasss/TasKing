@@ -69,7 +69,7 @@ const useStyles = makeStyles({
         naziv:"Popravi funkcionalnost login bara",
         opis:"Popravi",
         poeni: 5,
-        status: 1
+        status: 3
     }
 ]
   
@@ -134,13 +134,19 @@ function TaskList(props){
     }
   }, [open]);
 
+  const tekstovi = ["I'm intreseted", "Cancel", "Done", ""]
+  const displej = ['inline', 'inline', 'inline', 'none']
+  const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
+  const boje = ['rgb(255, 255, 255)', 'rgb(255, 207, 49)', 'rgb(77, 154, 255)', 'rgb(78, 255, 93)']
 
+//className={imeKlasa[task.status]}
+// backgroundColor:boje[task.status]
   return(
         <div className="divTasks">
-                {tasks.map((task, index) => (
+                {tasks.filter(task => task.status==props.selected-1 || props.selected==0).map((task, index) => (
                 <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%" }}>
                   <Card variant="outlined" 
-                  sx={{backgroundColor:"#d6e9de", boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)"}}>
+                  sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status] }}>
                       <CardContent>
                         <Typography variant="h5" component="div">
                           {task.naziv.slice(0,100) + (task.naziv.length>100? "..." : "")}
@@ -154,15 +160,7 @@ function TaskList(props){
                       </CardContent>
                       <CardActions>
                         <ThemeProvider theme={theme}>
-                          <Button 
-                            //aria-describedby={id} 
-                            variant="contained" 
-                            //onClick={handleClick}
-                            sx={{ border:"2px solid black", borderRadius:"10px"}}
-                            color="primary">
-                            I'm intreseted
-                          </Button>
-                          <Button
+                        <Button
                             onClick={handleClickOpen('paper', index)} 
                             //aria-describedby={id} 
                             variant="contained" 
@@ -170,6 +168,14 @@ function TaskList(props){
                             sx={{ border:"2px solid black", borderRadius:"10px"}}
                             color="primary">
                             See more
+                          </Button>
+                          <Button 
+                            //aria-describedby={id} 
+                            variant="contained" 
+                            //onClick={handleClick}
+                            sx={{ border:"2px solid black", borderRadius:"10px", display: displej[task.status]}}
+                            color="primary">
+                              {tekstovi[task.status]}
                           </Button>
                         </ThemeProvider> 
                       </CardActions>

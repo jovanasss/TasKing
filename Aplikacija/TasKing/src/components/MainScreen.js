@@ -6,17 +6,17 @@ import LeftMenu from './LeftMenu';
 import ProjectDescription from './ProjectDescription';
 import TaskList from './TaskList';
 import UpProjectMenu from './UpProjectMenu';
+import TeamsMenu from './TeamsMenu';
 
 
 function MainScreen()  {
     const navigate=useNavigate();
       return (
         <div className="App">
-            <LeftMenu name='Organizacije'/>
-            <LeftMenu name='Timovi'/>
+            <LeftMenu/>
+            <TeamsMenu name='Timovi'/>
             <div>
               <UpProjectMenu/>
-              <TaskList/>
               <ProjectDescription/>
             </div>
         </div>

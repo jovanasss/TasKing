@@ -1,14 +1,40 @@
 import * as React from 'react';
 import '../styles/UpProjectMenu.css';
-import { AppBar, IconButton, Toolbar, Typography, createTheme } from '@mui/material';
+import { AppBar, IconButton, Toolbar, Typography, createTheme, List, ListItem, ListItemText, Menu, MenuItem } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-import { SubjectOutlined } from '@mui/icons-material';
+import { ArrowDropDown, SubjectOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import TaskList from './TaskList';
 
+const options = [
+  'All tasks',
+  'Available tasks',
+  'The tasks im intrested in',
+  'The tasks Im working on',
+  'The tasks wainting for review',
+];
 
+const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
+const boje = ['rgb(255, 255, 255)', 'rgb(255, 207, 49)', 'rgb(77, 154, 255)', 'rgb(78, 255, 93)']
 
 export default function UpProjectMenu() {
   let navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const open = Boolean(anchorEl);
+  const handleClickListItem = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event, index) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
 
   const theme = createTheme({
@@ -35,11 +61,52 @@ export default function UpProjectMenu() {
   
   return (
     <div>
-        <AppBar position="static" className='upMenu' style={{ background: "rgb(0, 86, 83)" }}>
+        <AppBar position="static" className='upMenu' style={{ background: "rgb(17, 156, 151)" }}>
           <Toolbar className='upToolbar'>
             <Typography variant="h6" color="inherit" component="div">
               Taskovi
             </Typography>
+              <div>
+                <List
+                  component="nav"
+                  aria-label="Device settings"
+                  sx={{ bgcolor: 'background.paper', marginLeft: '30px' }}
+                >
+                  <ListItem
+                    button
+                    id="lock-button"
+                    aria-haspopup="listbox"
+                    aria-controls="lock-menu"
+                    aria-label="when device is locked"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClickListItem}
+                  >
+                    <ListItemText
+                      secondary={options[selectedIndex]}
+                    />
+                  </ListItem>
+                </List>
+                <Menu
+                  id="lock-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'lock-button',
+                    role: 'listbox',
+                  }}
+                >
+                  {options.map((option, index) => (
+                    <MenuItem
+                      key={option}
+                      selected={index === selectedIndex}
+                      onClick={(event) => handleMenuItemClick(event, index)}
+                      sx={{backgroundColor:boje[index-1] }}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </div>
               <div className='UpMenuBtnDiv'>
             <ThemeProvider theme={theme}>
               <IconButton className='upMenuBtn' onClick={() => navigate("/Profile")}>
@@ -49,6 +116,7 @@ export default function UpProjectMenu() {
             </div>
           </Toolbar>
         </AppBar>
+        <TaskList selected={selectedIndex}/>
     </div>
   );
 }

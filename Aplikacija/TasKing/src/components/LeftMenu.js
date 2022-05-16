@@ -156,10 +156,6 @@ export default function LeftMenu(props){
     
   return(
     <div className='leftMenu'>
-        <div>
-            <Typography variant="h5"> {props.name} </Typography>
-        </div>
-
     <Paper className='leftList'>
         <List className='listDiv'>
            {organisationItems.map(item => (
