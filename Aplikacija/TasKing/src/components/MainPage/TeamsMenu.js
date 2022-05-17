@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import '../styles/TeamsMenu.css';
+//import '../styles/MainPage/TeamsMenu.css';
 import { Avatar, Button, createTheme, Icon, IconButton, List, ListItem, ListItemIcon, Paper, Tooltip } from '@mui/material';
 import { Typography } from '@mui/material';
 import { SubjectOutlined } from '@mui/icons-material';

@@ -1,4 +1,4 @@
-import '../styles/TaskList.css';
+//import '../styles/MainPage/TaskList.css';
 import React, { Component, useState } from 'react';
 import { Button, Card, CardActions, CardContent, createTheme} from '@mui/material';
 import { Typography } from '@mui/material';

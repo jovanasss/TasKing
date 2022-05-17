@@ -11,7 +11,7 @@ function LoginForm()  {
 
     let navigate = useNavigate(); 
     const routeChange = () =>{ 
-      let path = `/CoJ`; 
+      let path = `/Main`; 
       navigate(path);
     }
 
@@ -50,6 +50,9 @@ function LoginForm()  {
 
 return (
     <div className="divMain">
+        <div className="divLoginNaslov">
+            <label className="loginNaslov">Welcome to TasKing web application</label>       
+        </div>
 
         <form className="Forma">
             <label className="labelLogin">LOGIN</label>

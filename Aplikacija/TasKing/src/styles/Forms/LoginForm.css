@@ -4,19 +4,33 @@ body{
 }
 .divMain{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   height: 100%;
   width: 100%;
 }
+.divLoginNaslov{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  height: 15%;
+  margin-top: 5%;
+}
+.loginNaslov{
+  font-size: large;
+  font-weight: bold;
+  font-style: italic;
+}
 .Forma{
   display: flex;
   flex-direction: column;
+  justify-content: center;
   background-color: whitesmoke;
-  width:400px;
+  width:30%;
   height: 400px;
-  margin-left: 30%;
-  margin-right: 30%;
-  margin-top:10%;
+  margin-left: 35%;
+  margin-right: 35%;
+  margin-top:5%;
   text-align: center;
   border-radius: 10px;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -43,6 +57,11 @@ body{
 }
 .BtnLogin:hover  {
   background-color: rgb(31, 206, 206)
+}
+.BtnLogin:active {
+  background-color: rgb(31, 206, 206);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 .divPass , .divUser {
   display: flex;

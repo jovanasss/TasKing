@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../styles/MainScreen.css';
+//import '../styles/MainPage/MainScreen.css';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LeftMenu from './LeftMenu';

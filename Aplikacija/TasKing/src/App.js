@@ -1,20 +1,34 @@
 import * as React from 'react';
 
-import './styles/LoginForm.css';
-import LoginForm from './components/LoginForm';
+import './styles/Forms/LoginForm.css';
+import LoginForm from './components/Forms/LoginForm';
 
-import './styles/CreateOrJoinForm.css';
-import CreateOrJoinForm from './components/CreateOrJoinForm';
+import './styles/Forms/CreateOrJoinForm.css';
+import CreateOrJoinForm from './components/Forms/CreateOrJoinForm';
 
-import SignUpForm from './components/SignUpForm';
-import './styles/SignUpForm.css';
 
-import CreateOrganisationForm from './components/CreateOrganisationForm';
-import './styles/CreateOrganisationForm.css';
+import './styles/Forms/SignUpForm.css';
+import SignUpForm from './components/Forms/SignUpForm';
 
-import MainScreen from './components/MainScreen';
+import './styles/Forms/CreateOrganisationForm.css';
+import CreateOrganisationForm from './components/Forms/CreateOrganisationForm';
+
+import './styles/Forms/AccountCreated.css';
+import AccountCreatedForm from './components/Forms/AccountCreatedForm';
+
+import MainScreen from './components/MainPage/MainScreen';
+import './styles/MainPage/LeftMenu.css';
+import './styles/MainPage/MainScreen.css';
+import './styles/MainPage/ProjectDescription.css';
+import './styles/MainPage/TaskList.css';
+import './styles/MainPage/TeamsMenu.css';
+import './styles/MainPage/UpProjectMenu.css';
+
+
 import { Paper } from '@mui/material';
-import ProfileForm from './components/ProfileForm';
+import ProfileForm from './components/ProfileView/ProfileForm';
+import './styles/ProfileView/MyAccountForm.css';
+import './styles/ProfileView/ProfileForm.css';
 
 import { BrowserRouter ,Route ,Routes} from "react-router-dom";
 
@@ -51,6 +65,7 @@ function App() {
       <Route  path= "/Profile" element={<ProfileForm />}/>
       <Route  path= "/SignUp" element={<SignUpForm />}/>
       <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
+      <Route  path= "/acc" element={<AccountCreatedForm />}/>
 
       </Routes>
  

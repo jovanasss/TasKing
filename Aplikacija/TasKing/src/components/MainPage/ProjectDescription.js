@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../styles/ProjectDescription.css';
+//import '../styles/MainPage/ProjectDescription.css';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 
 

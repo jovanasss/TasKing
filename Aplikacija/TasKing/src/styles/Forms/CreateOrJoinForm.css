@@ -74,7 +74,7 @@ input{
 .buttonJoin1:hover , .buttonJoin2:hover {background-color: rgb(31, 206, 206)}
 
 .buttonJoin1:active, .buttonJoin2:active {
-    background-color: #3e8e41;
+    background-color: rgb(31, 206, 206);
     box-shadow: 0 5px #666;
     transform: translateY(4px);
   }

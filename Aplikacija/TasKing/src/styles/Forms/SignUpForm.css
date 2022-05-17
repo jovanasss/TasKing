@@ -12,11 +12,11 @@ body{
     display: flex;
     flex-direction: column;
     background-color: whitesmoke;
-    width:500px;
+    width:35%;
     height: 500px;
-    margin-left: 30%;
-    margin-right: 30%;
-    margin-top:10%;
+    margin-left: 32.5%;
+    margin-right: 32.5%;
+    margin-top:5%;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -24,6 +24,18 @@ body{
   }
   .GlavniDiv{
       height: 100%;
+  }
+  .divSignupNaslov{
+    display: flex;
+    justify-content: center;
+    height: 15%;
+    margin-top: 5%;
+    margin-bottom: 0;
+  }
+  .naslovSignup{
+    font-size: large;
+    font-weight: bold;
+    font-style: italic;
   }
   .divNaslov{
       background-color: rgb(0, 100, 100);
@@ -69,6 +81,11 @@ body{
     margin-right: 7.5%;
     border-radius: 25px;
   }
-  .BtnSignUp:hover  {
-      background-color: rgb(31, 206, 206)
-    }
+.BtnSignUp:hover  {
+    background-color: rgb(31, 206, 206)
+}
+.BtnSignUp:active {
+    background-color: rgb(31, 206, 206);
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}   

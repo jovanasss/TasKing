@@ -9,6 +9,13 @@ import { ClassNames } from "@emotion/react";
 
 function SignUp(){
 
+
+    let navigate = useNavigate(); 
+    const routeChange = () =>{ 
+      let path = `/acc`; 
+      navigate(path);
+    }
+
     const theme = createTheme({
         components:{
           MuiTextField : {styleOverrides:{
@@ -41,6 +48,9 @@ function SignUp(){
 
     return (
         <div className="divMain">
+            <div className="divSignupNaslov">
+                <label className="naslovSignup">Sign up to our website to access all options</label>
+            </div>
             <form className="forma">
                 <div className="GlavniDiv">
                     <div className="divNaslov"> 
@@ -79,7 +89,7 @@ function SignUp(){
                                 <TextField id="outlined-basic" label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
-                    <button className="BtnSignUp">CREATE ACCOUNT</button>
+                    <button onClick={routeChange} className="BtnSignUp">CREATE ACCOUNT</button>
                 </div>
             </form>
         </div>
