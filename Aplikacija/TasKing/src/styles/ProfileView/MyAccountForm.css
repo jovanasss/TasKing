@@ -1,11 +1,11 @@
 .divMyAccount{
     height: 100%;
-    /*width: 75%;*/
 }
 
 .divAvatarMyAccount{
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 15%;
 }
 
@@ -14,13 +14,23 @@
     flex-direction: row;
     flex-wrap: wrap;
     width: 70%;
-    margin-left: 25%;
+    margin-left: 23%;
 }
 
 .Information{
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
-    width: 50%;
-    margin-left: 28%;
+    border: 2px solid;
+    border-color: #d6e9de;
+    width: 25%;
+    margin-left: 40%;
+    margin-bottom: 2%;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    /*background-color: #d6e9bb;*/
+    background-color: rgb(26, 167, 167);
+    border-style:dotted;
+}
+
+.h3UserName, .h3Phone, .h3Email, .h2FirstLastName{
+    margin:2%;
 }

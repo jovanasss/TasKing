@@ -1,4 +1,4 @@
-//import '../styles/ProfileView/ProfileForm.css';
+import '../../styles/ProfileView/ProfileForm.css';
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -24,35 +24,44 @@ const drawerwidth = 240;
 function ProfileForm(){
 
   const theme = createTheme({
+    components: {
+      MuiDrawer: {
+        styleOverrides: {
+          paper: {
+            background: "rgb(26, 167, 167)"
+          }
+        }
+      }
+    },
     palette: {
       primary: {
-        main: "rgb(100, 250, 100)",
+        main: "#d6e9de",
       },
       secondary:{
-        main : "rgb(0, 100, 0)",
+        main : "rgb(26, 167, 167)",
       }
     },
   });
 
   const items = [
     {
-      text: "My Account",
+      text: <label style={{fontWeight:"bold"}}>My Account</label>,
       icon: <ThemeProvider theme={theme}>
-              <AccountCircleIcon color="secondary" />
+              <AccountCircleIcon color= "primary" />
             </ThemeProvider>,
       path: "/"
     },
     {
-      text: "Edit Account",
+      text: <label style={{fontWeight:"bold"}}>Edit Account</label>,
       icon: <ThemeProvider theme={theme}>
-               <EditIcon color="secondary" />
+               <EditIcon color="primary" />
             </ThemeProvider>,
       path: "/editaccount"
     },
     {
-      text: "Log Out",
+      text:  <label style={{fontWeight:"bold"}}>Log Out</label>,
       icon: <ThemeProvider theme={theme}>
-              <LogoutIcon color="secondary" />
+              <LogoutIcon color="primary" />
             </ThemeProvider>,
       path: "/logout"
     }
@@ -63,6 +72,7 @@ function ProfileForm(){
 
       return (
       <div>
+      <ThemeProvider theme={theme}>
        <Drawer 
         variant="permanent"
         sx={{width: drawerwidth}}
@@ -76,8 +86,8 @@ function ProfileForm(){
              <Avatar></Avatar>
            </StyledBadge>
            <div>
-             <h3>FirstName</h3>
-             <h5>Username</h5>
+             <h3 className="h3FirstName">FirstName</h3>
+             <h5 className="h5UserName">Username</h5>
            </div>
         </div>
           <List>
@@ -94,6 +104,7 @@ function ProfileForm(){
            ))}
           </List>
           </Drawer>
+          </ThemeProvider>
           <div className="divRoutes">
             <Routes>
                 <Route path="/" element={<MyAccountForm />} />
@@ -135,4 +146,3 @@ export const StyledBadge = styled(Badge)(({ theme }) => ({
   }));
 
 export default ProfileForm;
-

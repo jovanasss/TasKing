@@ -1,5 +1,5 @@
 import React from "react";
-//import '../styles/ProfileView/MyAccountForm.css';
+import '../../styles/ProfileView/MyAccountForm.css';
 
 import Avatar from '@mui/material/Avatar';
 import { StyledBadge } from "./ProfileForm";
@@ -20,7 +20,7 @@ function MyAccountForm(){
             MuiButton: {styleOverrides:{
              root: {
               "&:hover": {
-                backgroundColor: "rgb(0, 120, 0)",
+                backgroundColor: "rgb(31, 206, 206)",
               },
              }
             }}
@@ -123,6 +123,14 @@ function MyAccountForm(){
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
+    const user = {
+            firstName: "Pavle",
+            lastName: "Zivanovic",
+            username: "payaz__",
+            email: "pavle123@gmail.com",
+            phone: 1234567891
+        }
+    
     return(
         <div className="divMyAccount">
             <form>
@@ -134,18 +142,21 @@ function MyAccountForm(){
                  variant="dot"
                 >
                      <Avatar 
-                      sx={{width:"80px", height:"80px"}}>
+                      sx={{width:"100px", height:"100px"}}>
                     </Avatar>
                </StyledBadge>
             </div>
             <div className="Name">
-                <h2>FirstName LastName</h2>
+                <h2 className="h2FirstLastName">{user.firstName} {user.lastName}</h2>
             </div>
             <div className="divUsername">
-                <h3>Username</h3>
+                <h3 className="h3UserName">{user.username}</h3>
+            </div>
+            <div className="divEmail">
+                <h3 className="h3Email">{user.email}</h3>
             </div>
             <div className="divNumber">
-                <h3>Number</h3>
+                <h3 className="h3Phone">{user.phone}</h3>
             </div>
         </div>
         
@@ -167,6 +178,7 @@ function MyAccountForm(){
                   style={{
                       width: project.procenat, 
                       border: "1px solid black", 
+                      borderRadius:"10px",
                       height:"4px",
                       backgroundColor: 
                       parseInt(project.procenat) > 0 && parseInt(project.procenat) <= 25 
@@ -219,4 +231,5 @@ function MyAccountForm(){
 }
 
 export default MyAccountForm;
+
 

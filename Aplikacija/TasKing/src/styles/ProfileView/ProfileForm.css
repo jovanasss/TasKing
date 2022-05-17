@@ -2,27 +2,36 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90px;
+    height: 15%;
+    background-color: rgb(26, 150, 167);
 }
 
 .active{
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    background-color: rgb(26, 167, 167);
-    color: aliceblue;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.4), 0 6px 20px 0 rgba(0,0,0,0.19);
+    /*background-color: rgb(26, 167, 167);
+    color: aliceblue;*/
   }
 
-  h3, h5{
+  .h3FirstName, .h5UserName{
       margin:0;
   }
 
-  h3{
-      margin-left: 4px;
+  .h3FirstName{
+      margin-left: 4%;
   }
 
-  h5{
-      margin-left: 12px;
+  .h5UserName{
+      margin-left: 12%;
   }
 
-  .divRoutes{
-      margin-left: 600px;
+.divRoutes{
+    display: flex;
+    justify-content: center;
+     /*position: absolute;
+     top: 50%;
+     left: 50%;
+     margin-top: -50px;
+     margin-left: -50px;
+     width: 100%;
+     height: 100%;*/
   }
