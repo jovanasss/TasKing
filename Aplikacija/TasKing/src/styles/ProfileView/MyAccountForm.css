@@ -29,6 +29,7 @@
     /*background-color: #d6e9bb;*/
     background-color: rgb(26, 167, 167);
     border-style:dotted;
+    margin-top:1%;
 }
 
 .h3UserName, .h3Phone, .h3Email, .h2FirstLastName{

@@ -49,21 +49,21 @@ function ProfileForm(){
       icon: <ThemeProvider theme={theme}>
               <AccountCircleIcon color= "primary" />
             </ThemeProvider>,
-      path: "/"
+      path: ""
     },
     {
       text: <label style={{fontWeight:"bold"}}>Edit Account</label>,
       icon: <ThemeProvider theme={theme}>
                <EditIcon color="primary" />
             </ThemeProvider>,
-      path: "/editaccount"
+      path: "editaccount"
     },
     {
       text:  <label style={{fontWeight:"bold"}}>Log Out</label>,
       icon: <ThemeProvider theme={theme}>
               <LogoutIcon color="primary" />
             </ThemeProvider>,
-      path: "/logout"
+      path: "logout"
     }
   ]
 
@@ -107,9 +107,9 @@ function ProfileForm(){
           </ThemeProvider>
           <div className="divRoutes">
             <Routes>
-                <Route path="/" element={<MyAccountForm />} />
-                <Route path="/editaccount" element={<EditAccountForm />} />
-                <Route path="/logout" element={<LogOutForm />} />
+                <Route path="" element={<MyAccountForm />} />
+                <Route path="editaccount" element={<EditAccountForm />} />
+                <Route path="logout" element={<LogOutForm />} />
             </Routes>
           </div>
      </div>

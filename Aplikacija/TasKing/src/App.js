@@ -62,7 +62,7 @@ function App() {
       <Route  path= "/" element={<LoginForm/>}/>
       <Route  path= "/CoJ" element={<CreateOrJoinForm/>}/>
       <Route  path= "/Main" element={<MainScreen/>}/>
-      <Route  path= "/Profile" element={<ProfileForm />}/>
+      <Route  path= "/Profile/*" element={<ProfileForm />}/>
       <Route  path= "/SignUp" element={<SignUpForm />}/>
       <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
       <Route  path= "/acc" element={<AccountCreatedForm />}/>
