@@ -15,9 +15,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
 import MyAccountForm from "./MyAccountForm";
 import EditAccountForm from "./EditAccountForm";
-import LogOutForm from "./LogOutForm";
-import { createTheme } from "@mui/material/styles"
-import {ThemeProvider} from "@mui/system";
+import LoginForm from "../Forms/LoginForm.js";
+import { createTheme } from "@mui/material/styles";
+import {fontWeight, ThemeProvider} from "@mui/system";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 
 const drawerwidth = 240;
 
@@ -33,6 +39,14 @@ function ProfileForm(){
         }
       }
     },
+    MuiButton: {styleOverrides:{
+      root: {
+       "&:hover": {
+         backgroundColor: "rgb(31, 206, 206)",
+       },
+      }
+     }
+    },
     palette: {
       primary: {
         main: "#d6e9de",
@@ -42,6 +56,17 @@ function ProfileForm(){
       }
     },
   });
+
+  const theme1 = createTheme({
+    palette: {
+      primary: {
+        main: "#F57878",
+      },
+      secondary:{
+        main : "rgb(0, 0, 0)",
+      }
+    },
+  })
 
   const items = [
     {
@@ -57,15 +82,25 @@ function ProfileForm(){
                <EditIcon color="primary" />
             </ThemeProvider>,
       path: "editaccount"
-    },
-    {
-      text:  <label style={{fontWeight:"bold"}}>Log Out</label>,
+    } 
+  ]
+ const item = {
+      text:  <label style={{fontWeight:"bold", marginRight: "8%"}}>Log Out</label>,
       icon: <ThemeProvider theme={theme}>
               <LogoutIcon color="primary" />
             </ThemeProvider>,
-      path: "logout"
-    }
-  ]
+      path: "/"
+  }
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -92,24 +127,57 @@ function ProfileForm(){
         </div>
           <List>
            {items.map(item => (
-             <ListItem
+            <ListItem
              key={item.text}
              button
              onClick={() => navigate(item.path)}
-             className={location.pathname == item.path ? "active" : null}
+             className={location.pathname == item.path ? "active" : "inactive"}
            >
                <ListItemIcon>{item.icon}</ListItemIcon>
                <ListItemText primary={item.text} />
              </ListItem>
            ))}
           </List>
+         
+          <ThemeProvider theme={theme}>
+          <Button 
+          variant="contained"
+          color="secondary"
+          sx={{boxShadow:"0 8px 16px 0 rgba(0,0,0,0.4), 0 6px 20px 0 rgba(0,0,0,0.19)", marginTop: "258%"}}
+          onClick={handleClickOpen}>
+            {item.text} {item.icon}
+          </Button>
+          </ThemeProvider>
+          <Dialog
+           open={open}
+           onClose={handleClose}
+           aria-labelledby="alert-dialog-title"
+           aria-describedby="alert-dialog-description"
+          >
+          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold"}}>
+            {"Log Out"}
+          </DialogTitle>
+          <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to logout?
+          </DialogContentText>
+        </DialogContent>
+          <DialogActions>
+             <ThemeProvider theme={theme1}><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+             <ThemeProvider theme={theme1}>
+               <Button variant="contained" onClick={() => navigate(item.path)} color="primary" sx={{fontWeight:"bold"}} autoFocus>
+                 Log Out
+               </Button></ThemeProvider>
+        </DialogActions>
+      </Dialog>
+    
           </Drawer>
           </ThemeProvider>
           <div className="divRoutes">
             <Routes>
                 <Route path="" element={<MyAccountForm />} />
                 <Route path="editaccount" element={<EditAccountForm />} />
-                <Route path="logout" element={<LogOutForm />} />
+                <Route path="/" element={<LoginForm />} />
             </Routes>
           </div>
      </div>

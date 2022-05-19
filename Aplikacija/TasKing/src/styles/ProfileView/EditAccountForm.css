@@ -8,6 +8,8 @@ body{
     justify-content: center;
     height: 100%;
     width: 100%;
+    margin-left: 100%;
+    margin-top: 10%;
   }
 
   .GlavniDivEditAccount{
@@ -30,18 +32,39 @@ body{
 }
 
 .DivButtonChangePassword{
-  margin-top: 21%;
-  margin-left: 5%;
+  margin-top: 35%;
+  margin-left: 10%;
 }
 
 .DesniDivEditAccount{
   display: flex;
   flex-direction: column;
-  margin-top: 10%;
-  margin-left: 10%;
+  margin-top: 2%;
+  margin-left: 20%;
 }
 
-.divStack{
-  margin-top: 20%;
+.divPaperEditAccount{
+  margin-top: 12%;
 }
 
+.PaperEditAccount{
+  height: 40vh;
+  overflow: auto;
+}
+
+.divPaperTopLabelOrganisation{
+  margin-left: 17%;
+}
+
+.divPaperTopLabelTeam{
+  margin-left: 32%;
+}
+
+.divButtonSee{
+  display: flex;
+  flex-direction: row;
+}
+
+.divAvatarEditAccount{
+  margin-left: 19%;
+}
