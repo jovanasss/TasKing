@@ -1,4 +1,4 @@
-import React, { Component }  from "react";
+import React, { Component, useState }  from "react";
 import Checkbox from '@mui/material/Checkbox';
 import { pink , orange } from "@mui/material/colors";
 import { FormControlLabel, TextField } from "@mui/material";
@@ -6,16 +6,77 @@ import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate } from "react-router-dom";
 import { ClassNames } from "@emotion/react";
+import { Password } from "@mui/icons-material";
 
 function SignUp(){
 
 
-    let navigate = useNavigate(); 
+     
+    // konstante  za cuvanje inputa 
+    const [userName , setUserName] = useState('')
+    const [userError , setUserError] = useState(false)
+    const [passWord , setPassWord] = useState('')
+    const [passError , setPassError] = useState(false)
+    const [email , setEmail] = useState('')
+    const [emailError , setEmailError] = useState(false)
+    const [firstName , setFirstName] = useState('')
+    const [fnameError , setFnameError] = useState(false)
+    const [lastName , setLastName] = useState('')
+    const [lnameError , seLnameError] = useState(false)
+    const [phoneNo , setPhoneNo] = useState('')
+
+    // nije potrebno polje tako da ne mora error handle
+    const [phoneError , setPhoneError] = useState(false)
+
+
+    // error check => pravljenjeNaloga( podaci [] )
+    const handleSignUp = () =>{
+
+        if ( firstName === ''){
+            setFnameError(true)
+        }
+        if (lastName === ''){
+            setLastName(true)
+        }
+        if (userName === ''){
+            setUserError(true)
+        }
+        if (passWord === ''){
+            setPassError(true)
+        }
+        if (email === ''){
+            setEmailError(true)
+        }
+        // ako je sve ok pravi se nalog i prebacuje nas na main 
+        if (firstName && lastName && userName && passWord  && emailCheck()){
+            
+            // pravljenjeNaloga( podaci[] )
+            console.log(firstName , lastName , userName ,passWord , email)
+            routeChange()
+        }
+    }
+
+
+    let navigate = useNavigate();
+    // promena strane
     const routeChange = () =>{ 
       let path = `/acc`; 
       navigate(path);
     }
 
+    // validacija emaila 
+    const emailCheck = () => {
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if ( re.test(email)){
+            return true 
+        }
+        else {
+            setEmailError(true);
+            return false
+        }
+    }
+
+    // kreiranje mui element teme 
     const theme = createTheme({
         components:{
           MuiTextField : {styleOverrides:{
@@ -46,6 +107,8 @@ function SignUp(){
         },
       });
 
+
+    
     return (
         <div className="divMain">
             <div className="divSignupNaslov">
@@ -60,36 +123,42 @@ function SignUp(){
                     <div className="inputFirstLastName">
                         <div className="inputFirstName">
                             <ThemeProvider theme={theme}>
-                                <TextField id="outlined-basic" label="First Name" variant="outlined" size="small" type="text" color="primary" required/>
+                                <TextField onChange={ (e) => setFirstName(e.target.value) } error={fnameError}
+                                id="outlined-basic" label="First Name" variant="outlined" size="small" type="text" color="primary" required/>
                             </ThemeProvider>
                         </div>
                         <div className="inputLastName">
                             <ThemeProvider theme={theme}>
-                                <TextField id="outlined-basic" label="Last Name" variant="outlined" size="small" type="text" color="primary" required/>
+                                <TextField onChange={ (e) => setLastName(e.target.value) } error={lnameError}
+                                id="outlined-basic" label="Last Name" variant="outlined" size="small" type="text" color="primary" required/>
                             </ThemeProvider>
                         </div>
                     </div>
                     <div className="inputUserSignUp">
                             <ThemeProvider theme={theme}>
-                                <TextField id="outlined-basic" label="Username" variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }}/> 
+                                <TextField onChange={ (e) => setUserName(e.target.value) } error={userError}
+                                id="outlined-basic" label="Username" variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputPassSignUp">
                             <ThemeProvider theme={theme}>
-                                <TextField id="outlined-basic" label="Password" variant="outlined" type="password" color="primary" required sx ={{ width: "85%"  }}/> 
+                                <TextField onChange={ (e) => setPassWord(e.target.value) } error={passError}
+                                id="outlined-basic" label="Password" variant="outlined" type="password" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputEmailSignUp">
                             <ThemeProvider theme={theme}>
-                                <TextField id="outlined-basic" label="Email" variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }}/> 
+                                <TextField onChange={ (e) => setEmail(e.target.value) } error={emailError}
+                                id="outlined-basic" label="Email" variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputPhoneSignUp">
                             <ThemeProvider theme={theme}>
-                                <TextField id="outlined-basic" label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
+                                <TextField onChange={ (e) => setPhoneNo(e.target.value) } 
+                                id="outlined-basic" label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
-                    <button onClick={routeChange} className="BtnSignUp">CREATE ACCOUNT</button>
+                    <button onClick={(event) => { event.preventDefault() ; handleSignUp(); } } className="BtnSignUp">CREATE ACCOUNT</button>
                 </div>
             </form>
         </div>

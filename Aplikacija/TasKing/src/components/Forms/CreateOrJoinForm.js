@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { useNavigate } from "react-router-dom";
 import {ThemeProvider} from "@mui/system";
+import { FormControlLabel, TextField } from "@mui/material";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -10,6 +11,8 @@ import GroupIcon from '@mui/icons-material/Group';
 
 function CreateOrJoinForm(){
 
+
+  // kreiranje MUI teme
   const theme = createTheme({
     components: {
         MuiButton: {styleOverrides:{
@@ -30,12 +33,48 @@ function CreateOrJoinForm(){
     },
   });
 
-  
-      let navigate = useNavigate(); 
-      const routeChange = () =>{ 
-        let path = `/cORG`; 
-        navigate(path);
-      }
+
+  //Cuvanje inputa
+  const [teamCode , setTeamCode] = useState('')
+  const [teamCodeError , setTeamCodeError] = useState(false)
+  const [orgCode , setOrgCode] = useState('')
+  const [orgCodeError , setOrgCodeError] = useState(false)
+
+  // Join Team
+  const handleJoinTeam = () => {
+    
+    if (teamCode === ''){
+      setTeamCodeError(true)
+    }
+    else {
+      // joinTeam(userID ,orgID)
+      console.log(teamCode)
+      routeChange()
+    }
+
+  }
+
+  // Join Org
+  const handleJoinOrg = () => {
+
+    if (orgCode === ''){
+      setOrgCodeError(true)
+    }
+    else {
+      // joinOrg(userID ,orgID)
+      console.log(orgCode)
+      routeChange()
+    }
+  }
+
+  // promena strane 
+  let navigate = useNavigate(); 
+  const routeChange = () =>{ 
+  let path = `/main`; 
+  navigate(path);
+  }
+
+
 
   return(
     <div className="Main">
@@ -45,14 +84,22 @@ function CreateOrJoinForm(){
           <div className="JoinOrganization">
           <div  className="divIcons"><div className="divIcon"><GroupsIcon /></div></div>
             <label className="label">Join a organization with a code</label>
-            <input type="text" placeholder="Enter code" name="inputCode1" onKeyUp={EnableDisable} />
-            <button className="buttonJoin1">Join</button>
+            <ThemeProvider theme={theme}>
+                <TextField onChange={ (e) => setOrgCode(e.target.value) } error={orgCodeError}
+                sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
+                id="outlined-basic" label="Enter Code" variant="outlined" size="small" type="text" color="primary" required/>
+            </ThemeProvider>
+            <button className="buttonJoin1" onClick={(event) => { event.preventDefault() ; handleJoinOrg(); } }>Join</button>
           </div>
           <div className="JoinTeam">
             <div className="divIcons"><div  className="divIcon"><GroupIcon /></div></div>
             <label className="label">Join a team with a code</label>
-            <input type="text" placeholder="Enter code" name="inputCode2" onKeyUp={EnableDisable} />
-            <button className="buttonJoin2">Join</button>
+            <ThemeProvider theme={theme}>
+                <TextField onChange={ (e) => setTeamCode(e.target.value) } error={teamCodeError}
+                sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
+                id="outlined-basic" label="Enter Code" variant="outlined" size="small" type="text" color="primary" required/>
+            </ThemeProvider>
+            <button className="buttonJoin2" onClick={(event) => { event.preventDefault() ; handleJoinTeam(); } }>Join</button>
           </div>
         </div>
       <ThemeProvider theme={theme}>

@@ -1,4 +1,4 @@
-import React, { Component }  from "react";
+import React, { Component, useState }  from "react";
 import Checkbox from '@mui/material/Checkbox';
 import { pink , orange } from "@mui/material/colors";
 import { FormControlLabel, TextField } from "@mui/material";
@@ -9,13 +9,40 @@ import { useNavigate } from "react-router-dom";
 
 function LoginForm()  {
 
-    let navigate = useNavigate(); 
+    
+    // konstante  za cuvanje inputa 
+    const [userName , setUserName] = useState('')
+    const [userError , setUserError] = useState(false)
+    const [password , setPassWord] = useState('')
+    const [passError , setPassError] = useState(false)
+
+    // error check => logovanje(user,pass)
+    const handleLogin = () =>{
+
+      // error ako je neki input prazan
+      if ( userName === ''){
+        setUserError(true)
+      }
+      if ( password === ''){
+        setPassError(true)
+      } // oba imaju vrednost => logovanje 
+      if (userName && password){
+
+        // logovanje(user , pass)
+        console.log(userName ,password)
+
+        routeChange()
+      }
+    }
+
+    // promena strane 
+    let navigate = useNavigate();
     const routeChange = () =>{ 
       let path = `/Main`; 
       navigate(path);
     }
 
-  // kreiranje teme u MUI ( bez toga nije htela da se promeni boja elementa)
+    // kreiranje teme u MUI ( bez toga nije htela da se promeni boja elementa)
     const theme = createTheme({
         components:{
           MuiTextField : {styleOverrides:{
@@ -60,13 +87,15 @@ return (
             <div className="divUser">
             {/* element na koji hocemo da primenimo temu mora da se wrapuje */}
                     <ThemeProvider theme={theme} >
-                    <TextField id="outlined-basic" label="Username" variant="outlined" type="text" color="primary"/>
+                    <TextField onChange={ (e) => setUserName(e.target.value) }
+                    error={userError} id="outlined-basic" label="Username" variant="outlined" type="text" color="primary"/>
                     </ThemeProvider>
             </div>
 
             <div className="divPass">
                     <ThemeProvider theme={theme} >
-                    <TextField id="outlined-basic" label="Password" variant="outlined" type="password" color="primary"/>
+                    <TextField onChange={ (e) => setPassWord(e.target.value) }
+                    error={passError} id="outlined-basic" label="Password" variant="outlined" type="password" color="primary"/>
                     </ThemeProvider>
             </div>
 
@@ -88,7 +117,7 @@ return (
                     />
             </div>
 
-            <button className="BtnLogin" onClick={routeChange}>LOGIN</button>
+            <button className="BtnLogin" onClick={(event) => { event.preventDefault() ; handleLogin(); } }>LOGIN</button>
 
             <label className="OrSignUp">Need an account ? <a href ="http://localhost:3000/SignUp" >SignUp</a></label>   
         </form>

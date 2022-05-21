@@ -16,6 +16,9 @@ import CreateOrganisationForm from './components/Forms/CreateOrganisationForm';
 import './styles/Forms/AccountCreated.css';
 import AccountCreatedForm from './components/Forms/AccountCreatedForm';
 
+import './styles/Forms/CreateTeamTasks.css';
+import CreateTeamTasks from './components/Forms/CreateTeamTasks';
+
 import MainScreen from './components/MainPage/MainScreen';
 import './styles/MainPage/LeftMenu.css';
 import './styles/MainPage/MainScreen.css';
@@ -66,6 +69,7 @@ function App() {
       <Route  path= "/SignUp" element={<SignUpForm />}/>
       <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
       <Route  path= "/acc" element={<AccountCreatedForm />}/>
+      <Route  path= "/cTT" element={<CreateTeamTasks />}/>
 
       </Routes>
  

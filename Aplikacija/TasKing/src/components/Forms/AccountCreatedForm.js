@@ -8,8 +8,10 @@ import { useNavigate } from "react-router-dom";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 
-function LoginForm()  {
+function AccountCreatedForm()  {
 
+
+  // promena stranice
     let navigate = useNavigate(); 
     const routeChange = () =>{ 
       let path = `/CoJ`; 
@@ -71,4 +73,4 @@ return (
 )
 }
 
-export default LoginForm ;
+export default AccountCreatedForm ;

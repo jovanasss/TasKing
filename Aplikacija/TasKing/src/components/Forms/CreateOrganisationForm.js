@@ -9,7 +9,9 @@ import { useNavigate } from "react-router-dom";
 
 function CreateOrganisationForm (){
 
-    const theme = createTheme({
+
+      // kreiranje MUI teme
+      const theme = createTheme({
         components:{
           MuiTextField : {styleOverrides:{
               root : sx ({
@@ -38,7 +40,9 @@ function CreateOrganisationForm (){
           }
         },
       });
-;
+
+
+      // promena stranice
       let navigate = useNavigate(); 
       const routeChange = () =>{ 
         let path = `/Main`; 
@@ -47,7 +51,9 @@ function CreateOrganisationForm (){
         console.log(type, teamName , orgName);
         
       }
+      
 
+      // konstante za cuvanje inputa + listaNaslova
       const FormTitles = ["CHOSE A NAME FOR YOUR ORGANISATION","CHOSE WHAT TYPE OF AN ORGANISATION IT IS","CREATE A TEAM"];
       const [orgName , setORGname] = useState('');
       const [orgError ,setORGerror] = useState(false);
@@ -56,12 +62,17 @@ function CreateOrganisationForm (){
       const [type,setType] = useState('');
       const [typeError ,setTypeError] = useState(false);
 
+
+      // LOGIKA za promenu strane forme 
+
+
       const PageDisplay = () => {
 
+        // ubacivanje tipa iz selecta u nas type state 
         const handleChange = (event) => {
             setType(event.target.value)
         }
-
+          // renderovanje u zavisnosti koja je strana 
           if (page === 0 ){
               return (                       
                  <ThemeProvider theme={theme}>
@@ -89,15 +100,23 @@ function CreateOrganisationForm (){
                 </ThemeProvider>)
           }
       }
+
+      // pamcenje indexa strane  + brojanje klikova
       const [page , setPage] = useState(0);
       const [click ,setClick] = useState(0);
       const handleCLick= () => {
 
+        // klikom na dugme se inkrementira
         setClick(click + 1 );
 
+
+        // ako smo na prvoj strani i popunili smo polje a pre toga nismo kliknuli
+        // idemo dalje 
         if (page === 0 && orgName && click === 0){
           setPage(page + 1)
         }
+
+        // ako je ovo gore tacno plus vec smo jednom kliknuli resetuje se error i promenimo stranu
         else if(page === 0 && orgName && click >= 1){
           setPage(page + 1)
         }
@@ -105,23 +124,30 @@ function CreateOrganisationForm (){
           setORGerror(true);
         }
 
+        // ako smo na drugoj strani i imamo tip resetujemo error i menjamo stranu page = 2
         if (page === 1 && type){
           setTypeError(false);
           setPage(page + 1);
         }
+        // provera da li postoji input na prethodnoj a na ovoj nema klikom na dugme dobijamo error
         else if(page === 1 && type === '' && orgName){
           setTypeError(true);
         }
 
-
+        // ako smo na trecoj strani  i popunili smo input error => false  i zavrsavamo 
         if (page === 2 && teamName){
           setTEAMerror(false);
           routeChange();
         }
+        // ali ako nismo pupunili input vracamo error 
         else if(page === 2 && teamName === ''){
           setTEAMerror(true);
         }
       }
+
+
+      // =================================
+
 
     return (
         <div className="divMainCORG">
