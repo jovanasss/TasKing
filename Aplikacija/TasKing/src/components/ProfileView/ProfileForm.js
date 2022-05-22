@@ -15,6 +15,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
 import MyAccountForm from "./MyAccountForm";
 import EditAccountForm from "./EditAccountForm";
+import RequestsForm from "./RequestsForm";
 import LoginForm from "../Forms/LoginForm.js";
 import { createTheme } from "@mui/material/styles";
 import {fontWeight, ThemeProvider} from "@mui/system";
@@ -24,6 +25,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 const drawerwidth = 240;
 
@@ -82,7 +84,14 @@ function ProfileForm(){
                <EditIcon color="primary" />
             </ThemeProvider>,
       path: "editaccount"
-    } 
+    },
+    {
+      text: <label style={{fontWeight:"bold"}}>Requests</label>,
+      icon: <ThemeProvider theme={theme}>
+               <GroupAddIcon color="primary" />
+            </ThemeProvider>,
+      path: "requests"
+    }  
   ]
  const item = {
       text:  <label style={{fontWeight:"bold", marginRight: "8%"}}>Log Out</label>,
@@ -131,7 +140,8 @@ function ProfileForm(){
              key={item.text}
              button
              onClick={() => navigate(item.path)}
-             className={location.pathname == item.path ? "active" : "inactive"}
+             className={location.pathname == "/Profile" + item.path ? "active" 
+             : location.pathname == "/Profile/" + item.path ? "active" : null}
            >
                <ListItemIcon>{item.icon}</ListItemIcon>
                <ListItemText primary={item.text} />
@@ -178,6 +188,7 @@ function ProfileForm(){
                 <Route path="" element={<MyAccountForm />} />
                 <Route path="editaccount" element={<EditAccountForm />} />
                 <Route path="/" element={<LoginForm />} />
+                <Route path="requests" element={<RequestsForm />} />
             </Routes>
           </div>
      </div>

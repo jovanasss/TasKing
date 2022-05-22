@@ -1,0 +1,46 @@
+.MaindivRequestsForm
+{
+    display: flex;
+    flex-direction: row;
+    margin-left: 100%;
+    width: 100%;
+}
+
+.PaperRequests{
+    height: 60vh;
+    overflow: auto;
+  }
+
+.divPaperTeamRequests
+{
+    margin-top: 25%;
+    width: 350px;
+}
+
+.divPaperOrgRequests
+{
+    margin-top: 25%;
+    width: 350px;
+}
+
+.desnidivRequests
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.levidivRequests
+{
+    display: flex;
+    flex-direction: column;
+    margin-right: 40%;
+}
+
+.divButtonSentReceive{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .divPaperTopLabelTeamRequests{
+    margin-left: 20%;
+  }
