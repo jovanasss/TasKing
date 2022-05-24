@@ -6,4 +6,5 @@
   .teamList{
     height: 100vh;
     overflow: auto;
+    width: 10vw;
   }

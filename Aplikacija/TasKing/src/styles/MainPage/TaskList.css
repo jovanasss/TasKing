@@ -18,7 +18,7 @@
 .divTasks{
     display: flex;
     flex-direction: row;
-    width: 85vw;
+    width: 84.38vw;
     overflow: auto;
 }
 
@@ -44,4 +44,18 @@
 
 .waitingReview{
     background-color: rgb(78, 255, 93);
+}
+
+.addBtnBox{
+    align-self: center;
+    display: flex;
+}
+
+.addCard{
+    align-self: center;
+    display: flex;
+}
+
+.addBtn{
+    align-self: center;
 }

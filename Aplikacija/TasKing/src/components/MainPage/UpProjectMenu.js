@@ -5,6 +5,8 @@ import { ThemeProvider } from '@emotion/react';
 import { ArrowDropDown, SubjectOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
+import ProgressBar from './ProgressBar';
+import ProjectDescription from './ProjectDescription';
 
 const options = [
   'All tasks',
@@ -17,7 +19,7 @@ const options = [
 const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
 const boje = ['rgb(255, 255, 255)', 'rgb(255, 207, 49)', 'rgb(77, 154, 255)', 'rgb(78, 255, 93)']
 
-export default function UpProjectMenu() {
+export default function UpProjectMenu(props) {
   let navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -64,7 +66,7 @@ export default function UpProjectMenu() {
         <AppBar position="static" className='upMenu' style={{ background: "rgb(17, 156, 151)" }}>
           <Toolbar className='upToolbar'>
             <Typography variant="h6" color="inherit" component="div">
-              Taskovi
+              Tasks
             </Typography>
               <div>
                 <List
@@ -107,16 +109,12 @@ export default function UpProjectMenu() {
                   ))}
                 </Menu>
               </div>
-              <div className='UpMenuBtnDiv'>
-            <ThemeProvider theme={theme}>
-              <IconButton className='upMenuBtn' onClick={() => navigate("/Profile")}>
-                <SubjectOutlined/>
-              </IconButton>
-            </ThemeProvider>
-            </div>
           </Toolbar>
         </AppBar>
-        <TaskList selected={selectedIndex}/>
+        <TaskList selected={selectedIndex} vodjaStatus={props.vodjaStatus}/>
+        <ProgressBar vodjaStatus={props.vodjaStatus}/>
+        <TaskList selected={5} vodjaStatus={0}/>
+        <ProjectDescription/>
     </div>
   );
 }

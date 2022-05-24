@@ -64,7 +64,7 @@ export default function TeamsMenu(props){
         <Paper className='teamList'>
             <List>
             {teams.map(team => (
-                <ListItem key={team.id} className={curOrg==team.id? 'active' : null}>
+                <ListItem key={team.id} className={curOrg==team.id? 'activeEnt' : null}>
                 <ThemeProvider theme={theme}>
                         <Button onClick={() =>{setOrg(team.id)}}>
                             <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
@@ -81,24 +81,4 @@ export default function TeamsMenu(props){
         </Paper>
     </div>
   )
-
-    // return(
-    //     <div className='leftMenu'>
-    //     <Paper className='leftList'>
-    //         <List className='listDiv'>
-    //         {teams.map(item => (
-    //             <ListItem key={item.id} className={curOrg==item.id? 'active' : null}>
-    //             <Tooltip title={item.name}>
-    //                 <ThemeProvider theme={theme}>
-    //                     <IconButton onClick={() =>{setOrg(item.id)}} sx={{backgroundColor: 'white'}}>
-    //                     {item.picture}
-    //                     </IconButton>
-    //                 </ThemeProvider>
-    //             </Tooltip>
-    //             </ListItem>
-    //         ))}
-    //         </List>
-    //     </Paper>
-    //     </div>
-    // )
 }

@@ -159,7 +159,7 @@ export default function LeftMenu(props){
     <Paper className='leftList'>
         <List className='listDiv'>
            {organisationItems.map(item => (
-             <ListItem key={item.id} className={curOrg==item.id? 'active' : null}>
+             <ListItem key={item.id} className={curOrg==item.id? 'activeEnt' : null}>
                <Tooltip title={item.name}>
                 <ThemeProvider theme={theme}>
                     <IconButton onClick={() =>{setOrg(item.id)}} sx={{backgroundColor: 'white'}}>

@@ -1,6 +1,6 @@
 //import '../styles/MainPage/TaskList.css';
 import React, { Component, useState } from 'react';
-import { Button, Card, CardActions, CardContent, createTheme} from '@mui/material';
+import { Button, Card, CardActions, CardContent, createTheme, IconButton} from '@mui/material';
 import { Typography } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import { Box } from '@mui/system';
@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import AddIcon from '@mui/icons-material/Add';
 const drawerWidth = 240
 
 /*
@@ -34,7 +35,7 @@ const useStyles = makeStyles({
         naziv:"Popravi responsivness login ekrana",
         opis:"Napravi da login screen izgleda dobro u svakoj rezoluciji",
         poeni: 10,
-        status: 0
+        status: 4
     },
     {
         id:2,
@@ -70,7 +71,14 @@ const useStyles = makeStyles({
         opis:"Popravi",
         poeni: 5,
         status: 3
-    }
+    },
+    {
+      id:7,
+      naziv:"Popravi sve",
+      opis:"Popravi bre",
+      poeni: 5,
+      status: 4
+  }
 ]
   
 
@@ -134,25 +142,45 @@ function TaskList(props){
     }
   }, [open]);
 
-  const tekstovi = ["I'm intreseted", "Cancel", "Done", ""]
-  const displej = ['inline', 'inline', 'inline', 'none']
+  const tekstoviClan = ["I'm intreseted", "Cancel", "Done", ""]
+  const tekstoviVodja = ["Edit", "Pick", "", "Review"]
+  const tekstovi = [tekstoviClan, tekstoviVodja]
+  const displejClan = ['inline', 'inline', 'inline', 'none', 'none']
+  const displejVodja = ['inline', 'inline', 'none', 'inline', 'none']
+  const displej = [displejClan, displejVodja]
   const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
   const boje = ['rgb(255, 255, 255)', 'rgb(255, 207, 49)', 'rgb(77, 154, 255)', 'rgb(78, 255, 93)']
+  const displejPlus = ['none', 'inline']
 
 //className={imeKlasa[task.status]}
 // backgroundColor:boje[task.status]
   return(
         <div className="divTasks">
-                {tasks.filter(task => task.status==props.selected-1 || props.selected==0).map((task, index) => (
+                <Box className='addBtnBox' sx={{margin:"0.5%", display: displejPlus[props.vodjaStatus] }}>
+                  <Card variant="outlined" 
+                    className='addCard'
+                    sx={{minWidth: 250, maxWidth: 340, minHeight: 250, maxHeight: 340, boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[0]}}>
+                      <CardContent>
+                      </CardContent>
+                      <CardActions>
+                        <ThemeProvider theme={theme}>
+                        <IconButton className='addBtn'>
+                          <AddIcon sx={{minWidth: 150, maxWidth: 300, minHeight: 150, maxHeight: 300}}/>
+                        </IconButton>
+                        </ThemeProvider> 
+                      </CardActions>
+                  </Card>
+                </Box>
+                {tasks.filter(task => (task.status==props.selected-1 || (props.selected==0 && task.status<4))).map((task, index) => (
                 <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%" }}>
                   <Card variant="outlined" 
-                  sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status] }}>
+                    sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status], marginBottom:'10px' }}>
                       <CardContent>
                         <Typography variant="h5" component="div">
-                          {task.naziv.slice(0,100) + (task.naziv.length>100? "..." : "")}
+                          {task.naziv.slice(0,70) + (task.naziv.length>70? "..." : "")}
                         </Typography>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          {"Descripiton: " + task.opis.slice(0,100) + (task.opis.length>100? "..." : "")}
+                        <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
+                          {"Descripiton: " + task.opis.slice(0,150) + (task.opis.length>150? "..." : "")}
                         </Typography>
                         <Typography sx={{ mb: 1.5, fontSize:15 , fontWeight: 'bold' }} color="text.primary">
                           poeni: {task.poeni} 
@@ -173,33 +201,35 @@ function TaskList(props){
                             //aria-describedby={id} 
                             variant="contained" 
                             //onClick={handleClick}
-                            sx={{ border:"2px solid black", borderRadius:"10px", display: displej[task.status]}}
+                            sx={{ border:"2px solid black", borderRadius:"10px", display: displej[props.vodjaStatus][task.status]}}
                             color="primary">
-                              {tekstovi[task.status]}
+                              {tekstovi[props.vodjaStatus][task.status]}
                           </Button>
                         </ThemeProvider> 
                       </CardActions>
                   </Card>
-                </Box> ))}
+                </Box>
+                
+                 ))}
                 <Dialog
-                          open={open}
-                          onClose={handleClose}
-                          scroll={scroll}
-                          aria-labelledby={"scroll-dialog-title"}
-                          aria-describedby="scroll-dialog-description"
-                          >
-                            <DialogTitle id="scroll-dialog-title">{tasks[dialogTask].naziv}</DialogTitle>
-                              <DialogContent dividers={scroll === 'paper'}>
-                                <DialogContentText
-                                  id="scroll-dialog-description"
-                                  ref={descriptionElementRef}
-                                  tabIndex={-1}>
-                                  {tasks[dialogTask].opis}
-                                </DialogContentText>
-                              </DialogContent>
-                              <DialogActions>
-                              <Button onClick={handleClose}>ok</Button>
-                            </DialogActions>
+                  open={open}
+                  onClose={handleClose}
+                  scroll={scroll}
+                  aria-labelledby={"scroll-dialog-title"}
+                  aria-describedby="scroll-dialog-description"
+                  >
+                    <DialogTitle id="scroll-dialog-title">{tasks[dialogTask].naziv}</DialogTitle>
+                    <DialogContent dividers={scroll === 'paper'}>
+                      <DialogContentText
+                        id="scroll-dialog-description"
+                        ref={descriptionElementRef}
+                        tabIndex={-1}>
+                        {tasks[dialogTask].opis}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleClose}>ok</Button>
+                    </DialogActions>
                 </Dialog>
       </div>
 )
