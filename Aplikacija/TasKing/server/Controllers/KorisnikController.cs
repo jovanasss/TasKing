@@ -127,6 +127,33 @@ namespace TasKing.Controllers
                     return BadRequest(e.Message);
                 }
         }
+
+        [Route("VratiKorisnika/{userID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiKorisnika(int userID)
+        {
+            try
+            {
+                var korisnici = await Context.Korisnici
+                .Where(k => k.ID == userID)
+                .Select(k => new
+                {
+                    ime = k.ime,
+                    prezime = k.prezime,
+                    korisnickoIme = k.korisnickoIme,
+                    email = k.email,
+                    brtelefona = k.brTelefona,
+                    profilnaSlika = k.profilnaSlika
+                }).ToListAsync();
+
+                return Ok(korisnici);
+            }
+
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
     }
 }
 

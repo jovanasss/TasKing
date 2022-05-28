@@ -129,7 +129,7 @@ const drawerWidth = 240
       }
   ]
 
-export default function LeftMenu(props){
+export default function LeftMenu(){
 
   const theme = createTheme({
     components: {
@@ -159,15 +159,15 @@ export default function LeftMenu(props){
     <Paper className='leftList'>
         <List className='listDiv'>
            {organisationItems.map(item => (
+             <Tooltip title={item.name}>
              <ListItem key={item.id} className={curOrg==item.id? 'activeEnt' : null}>
-               <Tooltip title={item.name}>
                 <ThemeProvider theme={theme}>
                     <IconButton onClick={() =>{setOrg(item.id)}} sx={{backgroundColor: 'white'}}>
                       {item.picture}
                     </IconButton>
                 </ThemeProvider>
-             </Tooltip>
              </ListItem>
+             </Tooltip>
            ))}
         </List>
       </Paper>

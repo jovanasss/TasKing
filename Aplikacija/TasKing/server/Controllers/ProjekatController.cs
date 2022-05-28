@@ -21,9 +21,29 @@ namespace TasKing.Controllers
             Context = context;
         }
 
-        [Route("VratiProjekte/{userID}")]
+       /*[Route("VratiProjekteSaTaskovima/{userID}")]
+       [HttpGet]
+       public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
+       {
+           try
+           {
+               var clan = await Context.Korisnici.Where(k => k.ID == userID)
+               .Include(k => k.clanoviOrganizacije)
+               .ThenInclude(c => c.clanoviTima)
+               .ThenInclude(c => c.tim)
+               .ThenInclude(t => t.projekti)
+               .ToListAsync();
+               return Ok(clan);
+           }
+           catch(Exception e)
+           {
+               return BadRequest("Doslo je do greske" + e.Message);
+           }
+       }*/
+
+        [Route("VratiProjekteSaTaskovima/{userID}")]
         [HttpGet]
-        public async Task<ActionResult> VratiProjekte(int userID)
+        public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
         {
             try
             {
@@ -31,16 +51,25 @@ namespace TasKing.Controllers
                 .Include(p => p.taskovi)
                 .Include(p => p.tim)
                 .ThenInclude(t => t.clanoviTima.Where(clan => clan.ID == userID))
+                .ThenInclude(clan => clan.taskovi)
                 .Select(proj => new
                 {
+                    id = proj.ID,
                     naziv = proj.naziv,
                     opis = proj.opis,
-                    taskovi = proj.taskovi.Select(task => new
+                    taskoviUkupni = proj.taskovi.Select(task => new
                     {
                         naziv = task.naziv,
-                        opis = task.opis
+                        opis = task.opis,
+                        vrednost = task.vrednost
+                    }),
+                    taskoviUradjeni = proj.taskovi.Where(t => t.clanTima.ID == userID).Select(p => new
+                    {
+                        id = p.ID,
+                        naziv = p.naziv,
+                        opis = p.opis,
+                        vrednost = p.vrednost
                     })
-
                 }).ToListAsync();
                  return Ok(projekti);
             }

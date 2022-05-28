@@ -1,5 +1,7 @@
 .divMyAccount{
     height: 100%;
+    width: 100%;
+    margin-left: 20%;
 }
 
 .divAvatarMyAccount{
@@ -9,27 +11,24 @@
     height: 15%;
 }
 
-.divCards{
+/*divCards{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 70%;
     margin-left: 23%;
-}
+}*/
 
 .Information{
-    display: flex;
-    flex-direction: column;
     border: 2px solid;
     border-color: #d6e9de;
-    width: 25%;
-    margin-left: 40%;
+    /*width: 50%;
+    margin-left: 40%;*/
     margin-bottom: 2%;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    /*background-color: #d6e9bb;*/
     background-color: rgb(26, 167, 167);
     border-style:dotted;
-    margin-top:1%;
+    min-width: 250px;
 }
 
 .h3UserName, .h3Phone, .h3Email, .h2FirstLastName{

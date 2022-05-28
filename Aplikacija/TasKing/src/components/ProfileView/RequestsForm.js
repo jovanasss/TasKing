@@ -304,7 +304,7 @@ function PaperListTeamSentRequests(){
     <div className="divPaperTeamRequests">
       <div className="divPaperTopLabelTeamRequests"><h2>Teams (Sent)</h2></div>
           <Paper className="PaperRequests">
-          <List alignItems="flex-start">
+          <List>
           {teamSentRequests.map(item => (
           <ListItem
            key={item.id}
@@ -349,7 +349,7 @@ function PaperListTeamSentRequests(){
     <div className="divPaperTeamRequests">
       <div className="divPaperTopLabelTeamRequests"><h2>Teams (Received)</h2></div>
           <Paper className="PaperRequests">
-          <List alignItems="flex-start">
+          <List>
           {teamReceivedRequests.map(item => (
           <ListItem
            key={item.id}
@@ -394,7 +394,7 @@ function PaperListTeamSentRequests(){
     <div className="divPaperOrgRequests">
       <div className="divPaperTopLabelOrganisation"><h2>Organisations (Sent)</h2></div>
           <Paper className="PaperRequests">
-          <List alignItems="flex-start">
+          <List>
           {organisationSentRequests.map(item => (
           <ListItem
            key={item.id}
@@ -439,7 +439,7 @@ function PaperListTeamSentRequests(){
     <div className="divPaperOrgRequests">
       <div className="divPaperTopLabelOrganisation"><h2>Organisations (Received)</h2></div>
           <Paper className="PaperRequests">
-          <List alignItems="flex-start">
+          <List>
           {organisationReceivedRequests.map(item => (
           <ListItem
            key={item.id}

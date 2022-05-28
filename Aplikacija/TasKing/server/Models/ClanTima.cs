@@ -12,7 +12,6 @@ namespace Models
         [Key]
         public int ID { get; set; }
 
-        [JsonIgnore]
         public Tim tim { get; set; }
         
         [Required]

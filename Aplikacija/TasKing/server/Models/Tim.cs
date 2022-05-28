@@ -25,6 +25,7 @@ namespace Models
 
         public string slika { get; set; }
 
+        [JsonIgnore]
         public List<ClanTima> clanoviTima { get; set; }
 
         public List<Projekat> projekti { get; set; }

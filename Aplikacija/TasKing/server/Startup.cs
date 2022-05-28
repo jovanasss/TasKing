@@ -47,7 +47,9 @@ namespace TasKing
                        "http://127.0.0.1:5501",
                        "http://localhost:5501",
                        "https://127.0.0.1:5501",
-                       "https://localhost:5501"
+                       "https://localhost:5501",
+                       "http://localhost:3000",
+                       "https://localhost:3000"
                    })
                    .AllowAnyHeader()
                    .AllowAnyMethod();
@@ -58,7 +60,7 @@ namespace TasKing
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WEBP", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TasKing", Version = "v1" });
             });
         }
 
@@ -69,7 +71,7 @@ namespace TasKing
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WEBP v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TasKing v1"));
             }
 
             app.UseHttpsRedirection();

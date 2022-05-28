@@ -1,8 +1,13 @@
+.divProfileForm{
+    width: 100%;
+    height: 100%;
+}
+
 .divAvatar{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 15%;
+    min-height: 50%;
     background-color: rgb(26, 150, 167);
 }
 
@@ -27,6 +32,8 @@
 .divRoutes{
     display: flex;
     justify-content: center;
+    width: 100%;
+    height: 100%;
      /*position: absolute;
      top: 50%;
      left: 50%;
@@ -34,5 +41,5 @@
      margin-left: -50px;
      width: 100%;
      height: 100%;*/
-  }
+}
  
