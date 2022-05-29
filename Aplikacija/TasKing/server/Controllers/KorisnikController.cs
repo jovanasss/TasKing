@@ -23,7 +23,7 @@ namespace TasKing.Controllers
 
         [Route("UnesiKorisnika")]
         [HttpPost]
-        public async Task<ActionResult> OtvoriNalog([FromBody] Korisnik korisnik)
+        public async Task<ActionResult> OtvoriNalog([FromBody] NoviKorisnikDTO korisnik)
         {
             var k = Context.Korisnici.Where(k => k.email == korisnik.email).FirstOrDefault();
             if(k == null)
@@ -73,7 +73,7 @@ namespace TasKing.Controllers
                                 korisnickoIme = korisnik.korisnickoIme,
                                 lozinka = korisnik.lozinka,
                                 email = korisnik.email,
-                                profilnaSlika = korisnik.profilnaSlika,
+                                //profilnaSlika = korisnik.profilnaSlika,
                                 brTelefona = korisnik.brTelefona
                             };
 
@@ -97,6 +97,33 @@ namespace TasKing.Controllers
                 return BadRequest("Nalog sa unetim email-om vec postoji!");
             }
         }
+
+        [Route("UlogujKorisnika")]
+        [HttpPost]
+        public async Task<ActionResult> UlogujKorisnika([FromBody] KorisnikDTO user){
+            try{
+                Korisnik k1 = await Context.Korisnici.Where(k => k.korisnickoIme == user.korisnickoIme).FirstOrDefaultAsync();
+                if(k1 == null || k1.lozinka != user.lozinka){
+                    return BadRequest("Incorect Credentials");
+                }
+                else{
+                    var podaci = new
+                    {
+                        korisnickoIme = k1.korisnickoIme,
+                        lozinka = k1.lozinka,
+                        id = k1.ID
+                    };
+                    return Ok(podaci);
+                }
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+
 
         [Route("VratiClanoveOrganizacije/{korisnickoIme}/{lozinka}")]
         [HttpGet]

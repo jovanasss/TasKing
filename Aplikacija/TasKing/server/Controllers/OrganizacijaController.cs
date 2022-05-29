@@ -23,7 +23,7 @@ namespace TasKing.Controllers
 
         [Route("KreirajOrganizaciju")]
         [HttpPost]
-        public async Task<ActionResult> KreirajOrganizaciju([FromBody] Organizacija organizacija)
+        public async Task<ActionResult> KreirajOrganizaciju([FromBody] OrganizacijaDTO organizacija)
         {
             var org = Context.Organizacije.Where(o => o.ime == organizacija.ime).FirstOrDefault();
             if(org == null)

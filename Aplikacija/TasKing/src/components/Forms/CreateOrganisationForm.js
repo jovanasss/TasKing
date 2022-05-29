@@ -41,18 +41,55 @@ function CreateOrganisationForm (){
         },
       });
 
-
       // promena stranice
       let navigate = useNavigate(); 
-      const routeChange = () =>{ 
+
+
+      // kreiranje organizacije i tima 
+      async function createOrganisation() { 
         let path = `/Main`; 
-        navigate(path);
-        alert(JSON.stringify(type), JSON.stringify(teamName));
+
+        // alert(JSON.stringify(type), JSON.stringify(teamName));
         console.log(type, teamName , orgName);
-        
+        const organizacija = {
+          //type : type,
+          ime : orgName
+        }
+        const tim = {
+          ime : teamName
+        }
+        let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/", {
+          method : 'POST',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+          body : JSON.stringify(organizacija)
+        });
+        //result  = await result.json();
+        console.log(result.status);
+        if (result.status === 200){
+
+          let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(tim)
+          });
+          //result  = await result.json();
+          console.log(rezultat.status);
+          if (rezultat.status === 200){
+            navigate(path)
+          }
+        }
+        else{
+            console.log(result.status)
+        }
+      
       }
       
-
       // konstante za cuvanje inputa + listaNaslova
       const FormTitles = ["CHOSE A NAME FOR YOUR ORGANISATION","CHOSE WHAT TYPE OF AN ORGANISATION IT IS","CREATE A TEAM"];
       const [orgName , setORGname] = useState('');
@@ -104,6 +141,9 @@ function CreateOrganisationForm (){
       // pamcenje indexa strane  + brojanje klikova
       const [page , setPage] = useState(0);
       const [click ,setClick] = useState(0);
+
+
+      // handlovanje promene strane => poziva kreiranje organizacije na kraju 
       const handleCLick= () => {
 
         // klikom na dugme se inkrementira
@@ -134,10 +174,10 @@ function CreateOrganisationForm (){
           setTypeError(true);
         }
 
-        // ako smo na trecoj strani  i popunili smo input error => false  i zavrsavamo 
+        // ako smo na trecoj strani  i popunili smo input error => false  i kreiramo oraganizaciju
         if (page === 2 && teamName){
           setTEAMerror(false);
-          routeChange();
+          createOrganisation();
         }
         // ali ako nismo pupunili input vracamo error 
         else if(page === 2 && teamName === ''){

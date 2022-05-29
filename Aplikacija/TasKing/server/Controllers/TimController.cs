@@ -23,7 +23,7 @@ namespace TasKing.Controllers
 
         [Route("KreirajTim")]
         [HttpPost]
-        public async Task<ActionResult> KreirajTim([FromBody] Tim tim)
+        public async Task<ActionResult> KreirajTim([FromBody] TimDTO tim)
         {
             var t = Context.Timovi.Where(p => p.ime == tim.ime).FirstOrDefault();
             if(t == null)

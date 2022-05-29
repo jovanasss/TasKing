@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj": {}
+    "F:\\Desktop\\fax\\III Godina\\SWE\\TasKing\\Aplikacija\\TasKing\\server\\TasKing.csproj": {}
   },
   "projects": {
-    "D:\\Tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj": {
+    "F:\\Desktop\\fax\\III Godina\\SWE\\TasKing\\Aplikacija\\TasKing\\server\\TasKing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj",
+        "projectUniqueName": "F:\\Desktop\\fax\\III Godina\\SWE\\TasKing\\Aplikacija\\TasKing\\server\\TasKing.csproj",
         "projectName": "TasKing",
-        "projectPath": "D:\\Tasking\\Aplikacija\\TasKing\\server\\TasKing.csproj",
-        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "D:\\Tasking\\Aplikacija\\TasKing\\server\\obj\\",
+        "projectPath": "F:\\Desktop\\fax\\III Godina\\SWE\\TasKing\\Aplikacija\\TasKing\\server\\TasKing.csproj",
+        "packagesPath": "C:\\Users\\Andrija\\.nuget\\packages\\",
+        "outputPath": "F:\\Desktop\\fax\\III Godina\\SWE\\TasKing\\Aplikacija\\TasKing\\server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Andrija\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -73,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
         }
       }
     }

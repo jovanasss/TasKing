@@ -1,10 +1,10 @@
-import React, { Component, useState }  from "react";
+import React, { Component, useState , useEffect}   from "react";
 import Checkbox from '@mui/material/Checkbox';
 import { pink , orange } from "@mui/material/colors";
 import { FormControlLabel, TextField } from "@mui/material";
 import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 
 function LoginForm()  {
@@ -15,6 +15,37 @@ function LoginForm()  {
     const [userError , setUserError] = useState(false)
     const [password , setPassWord] = useState('')
     const [passError , setPassError] = useState(false)
+
+    const history = useNavigate();
+    useEffect(() => {
+      if(localStorage.getItem('user-info')){
+        navigate("/Main")
+      }
+    },[])
+
+    async function login(){
+      const user = {
+        korisnickoIme : userName,
+        lozinka : password,
+      };
+      let result = await fetch("https://localhost:5001/Korisnik/UlogujKorisnika/", {
+        method : 'POST',
+        headers : {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json; charset=utf-8'
+        },
+        body : JSON.stringify(user)
+      });
+      console.log(JSON.stringify(user))
+      let a = await result.json();
+      console.log(a);
+      console.log(JSON.stringify(a));
+      console.log(result);
+      localStorage.setItem('user-info',JSON.stringify(a))
+      // history.push("/main")
+      routeChange()
+    }
+
 
     // error check => logovanje(user,pass)
     const handleLogin = () =>{
@@ -30,8 +61,7 @@ function LoginForm()  {
 
         // logovanje(user , pass)
         console.log(userName ,password)
-
-        routeChange()
+        login();
       }
     }
 

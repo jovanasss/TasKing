@@ -7,6 +7,7 @@ import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate } from "react-router-dom";
 import { ClassNames } from "@emotion/react";
 import { Password } from "@mui/icons-material";
+import Korisnik from "../../Classes/KorisnikDTO";
 
 function SignUp(){
 
@@ -22,13 +23,48 @@ function SignUp(){
     const [firstName , setFirstName] = useState('')
     const [fnameError , setFnameError] = useState(false)
     const [lastName , setLastName] = useState('')
-    const [lnameError , seLnameError] = useState(false)
+    const [lnameError , setLnameError] = useState(false)
     const [phoneNo , setPhoneNo] = useState('')
 
     // nije potrebno polje tako da ne mora error handle
     const [phoneError , setPhoneError] = useState(false)
 
 
+    async function signUP(){
+
+        const user = {
+            korisnickoIme: userName,
+            lozinka: passWord,
+            ime: firstName,
+            prezime: lastName,
+            email: email,
+            brTelefona: phoneNo
+       }
+       console.log(JSON.stringify(user))
+       try{
+        let result = await fetch("https://localhost:5001/Korisnik/UnesiKorisnika/", {
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(user)
+          });
+          //result  = await result.json();
+          console.log(result.status);
+          if (result.status === 200){
+            routeChange()
+          }
+          else{
+              console.log(result.status)
+          }
+       }
+       catch (error){
+           console.log(error)
+
+       }
+}
+    
     // error check => pravljenjeNaloga( podaci [] )
     const handleSignUp = () =>{
 
@@ -36,7 +72,7 @@ function SignUp(){
             setFnameError(true)
         }
         if (lastName === ''){
-            setLastName(true)
+            setLnameError(true)
         }
         if (userName === ''){
             setUserError(true)
@@ -51,8 +87,10 @@ function SignUp(){
         if (firstName && lastName && userName && passWord  && emailCheck()){
             
             // pravljenjeNaloga( podaci[] )
-            console.log(firstName , lastName , userName ,passWord , email)
-            routeChange()
+            console.log(firstName , lastName , userName ,passWord , email, phoneNo)
+
+            signUP()
+
         }
     }
 
