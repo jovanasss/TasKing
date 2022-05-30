@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import {ThemeProvider} from "@mui/system";
 import Button from '@mui/material/Button';
 import { createTheme , experimental_sx as sx} from "@mui/material/styles";
+import Grid from '@mui/material/Grid';
 
 const theme = createTheme({
     components:{
@@ -244,6 +245,8 @@ function RequestsForm(){
  return(
 <div className= "MaindivRequestsForm">
 
+<Grid container  spacing={20}>
+  <Grid item md={5} xs={12} sm={8}>
     <div className="levidivRequests">
     {active1 === "TeamSentRequests" && <PaperListTeamSentRequests />}
     {active1 === "TeamReceivedRequests" && <PaperListTeamReceivedRequests />}
@@ -253,7 +256,7 @@ function RequestsForm(){
                   <div>
                   <ThemeProvider theme={theme}>
                   <Button 
-                   sx={{height:"50px", width: "130px", border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginRight:"1%"}}
+                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"18%"}}
                    variant="contained"
                    onClick={() => setActive1("TeamSentRequests")}>
                    Sent
@@ -262,7 +265,7 @@ function RequestsForm(){
                  <div>
                   <ThemeProvider theme={theme}>
                   <Button 
-                   sx={{height:"50px", width: "130px", border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginLeft:"70%"}}
+                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginLeft:"2%"}}
                    variant="contained"
                    onClick={() => setActive1("TeamReceivedRequests")}>
                    Received
@@ -270,7 +273,9 @@ function RequestsForm(){
                  </ThemeProvider></div>
             </div>
     </div>
+    </Grid>
 
+    <Grid item md={5} xs={12} sm={8}>
     <div className="desnidivRequests">
     {active2 === "OrganisationSentRequests" && <PaperListOrganisationSentRequests />}
     {active2 === "OrganisationReceivedRequests" && <PaperListOrganisationReceivedRequests />}
@@ -278,7 +283,7 @@ function RequestsForm(){
                   <div>
                   <ThemeProvider theme={theme}>
                   <Button 
-                   sx={{height:"50px", width: "130px", border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginRight:"1%"}}
+                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"18%"}}
                    variant="contained"
                    onClick={() => setActive2("OrganisationSentRequests")}>
                    Sent
@@ -287,14 +292,16 @@ function RequestsForm(){
                  <div>
                   <ThemeProvider theme={theme}>
                   <Button 
-                   sx={{height:"50px", width: "130px", border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginLeft:"70%"}}
+                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginLeft:"2%"}}
                    variant="contained"
                    onClick={() => setActive2("OrganisationReceivedRequests")}>
                    Received
                  </Button>
                  </ThemeProvider></div>
             </div>
-    </div>    
+    </div> 
+    </Grid>
+    </Grid>   
 </div>
     )
 }

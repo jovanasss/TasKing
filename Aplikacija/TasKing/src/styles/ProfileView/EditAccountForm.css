@@ -8,12 +8,7 @@ body{
     justify-content: center;
     height: 100%;
     width: 100%;
-    margin-left: 100%;
-    margin-top: 10%;
-  }
-
-  .GlavniDivEditAccount{
-      height: 100%;
+    margin-left: 25%;
   }
 
 .divInputUserName , .divInputPhone , .divInputEmail, .divInputFirstName, .divInputLastName {
@@ -21,9 +16,9 @@ body{
     width: 300px;
 }
 
-.LeviDivEditAccount{
+/*.LeviDivEditAccount{
   margin-top: 8%;
-}
+}*/
 
 .DivEditUserName, .DivEditPhone{
   display: flex;
@@ -31,17 +26,17 @@ body{
   width: 100%;
 }
 
-.DivButtonChangePassword{
+/*.DivButtonChangePassword{
   margin-top: 35%;
   margin-left: 10%;
-}
+}*/
 
-.DesniDivEditAccount{
+/*.DesniDivEditAccount{
   display: flex;
   flex-direction: column;
   margin-top: 2%;
   margin-left: 20%;
-}
+}*/
 
 .divPaperEditAccount{
   margin-top: 12%;
@@ -50,6 +45,7 @@ body{
 .PaperEditAccount{
   height: 40vh;
   overflow: auto;
+  min-width: 270px;
 }
 
 .divPaperTopLabelOrganisation{
@@ -63,8 +59,12 @@ body{
 .divButtonSee{
   display: flex;
   flex-direction: row;
+  flex-grow: 20;
+  flex-shrink: 2;
+  margin-left: 5%;
 }
 
 .divAvatarEditAccount{
-  margin-left: 19%;
+  margin-left: 30%;
+  margin-top: 10%;
 }

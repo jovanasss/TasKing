@@ -165,5 +165,33 @@ namespace TasKing.Controllers
                     return BadRequest(e.Message);
                 }
         }
+
+        [Route("VratiTimoveKorisnika/{userID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiTimoveKorisnika(int userID)
+        {
+            try
+            {
+                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
+                .Include(k => k.clanoviOrganizacije)
+                .ThenInclude(c => c.clanoviTima)
+                .ThenInclude(clan => clan.tim)
+                .Select(kor => 
+                  kor.clanoviOrganizacije.Select(clan => 
+                  clan.clanoviTima.Select(c => new {
+                      id = c.tim.ID,
+                      ime = c.tim.ime,
+                      slika = c.tim.slika
+                  }))
+                ).FirstOrDefaultAsync();
+
+                var k = korisnik.FirstOrDefault();
+                return Ok(k);
+            }
+           catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
     }
 }

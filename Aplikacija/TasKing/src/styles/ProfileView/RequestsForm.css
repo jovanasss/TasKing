@@ -2,8 +2,9 @@
 {
     display: flex;
     flex-direction: row;
-    margin-left: 100%;
+    margin-left: 25%;
     width: 100%;
+    height: 100%;
 }
 
 .PaperRequests{
@@ -11,19 +12,17 @@
     overflow: auto;
   }
 
-.divPaperTeamRequests
+/*.divPaperTeamRequests
 {
-    margin-top: 25%;
     width: 350px;
 }
 
 .divPaperOrgRequests
 {
-    margin-top: 25%;
     width: 350px;
-}
+}*/
 
-.desnidivRequests
+/*.desnidivRequests
 {
     display: flex;
     flex-direction: column;
@@ -33,12 +32,12 @@
 {
     display: flex;
     flex-direction: column;
-    margin-right: 40%;
-}
+}*/
 
 .divButtonSentReceive{
     display: flex;
     flex-direction: row;
+    justify-content: center;
   }
 
   .divPaperTopLabelTeamRequests{

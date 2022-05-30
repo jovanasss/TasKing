@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import '../../styles/ProfileView/MyAccountForm.css';
-
 import Avatar from '@mui/material/Avatar';
 import { StyledBadge } from "./ProfileForm";
 import Box from '@mui/material/Box';
@@ -9,19 +8,22 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Popover from '@mui/material/Popover';
 import {ThemeProvider} from "@mui/system";
 import { createTheme, experimental_sx as sx } from "@mui/material/styles";
-
 import Grid from '@mui/material/Grid';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function MyAccountForm(){
 
-    const [projects, setProjects] = useState([]);
+    const [projects, setProjects] = useState(null);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+2,
+        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+1,
         {
             method:"GET",
             headers: {
@@ -52,7 +54,7 @@ function MyAccountForm(){
 
     return(
         <div className="divMyAccount">
-             {user && projects && <MyAccount1 projects={projects} user={user} />}
+             {(projects && user) && <MyAccount1 projects={projects} user={user} />}
         </div>
     )
 }
@@ -79,18 +81,29 @@ function MyAccount1({projects, user}){
         },
       });
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
+    const [open, setOpen] = useState(false);
+    const [scroll, setScroll] = useState('paper');
+    const [dialogTask, setDialog] = useState(0);
+  
+    const handleClickOpen = (scrollType, ind) => () => {
+      setDialog(ind);
+      setOpen(true);
+      setScroll(scrollType);
     };
-
+  
     const handleClose = () => {
-      setAnchorEl(null);
+      setOpen(false);
     };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+  
+    const descriptionElementRef = React.useRef(null);
+    React.useEffect(() => {
+      if (open) {
+        const { current: descriptionElement } = descriptionElementRef;
+        if (descriptionElement !== null) {
+          descriptionElement.focus();
+        }
+      }
+    }, [open]);
 
     let procenat;
 
@@ -132,10 +145,8 @@ function MyAccount1({projects, user}){
             </div>
         </div>
         </Grid>
-        
           <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
-            {/*<div className="divCards">*/}
-            {projects.map(project => (
+            {projects.map((project, index) => (
            <Grid item md={4} sm={6} xs={12}>     
             <Box key={project.id} sx={{margin:"0.5%" }}>
             <Card key={project.id} variant="outlined" 
@@ -174,33 +185,46 @@ function MyAccount1({projects, user}){
                  </div>    
               </CardContent>
               <CardActions>
-            <ThemeProvider theme={theme}>
+          <ThemeProvider theme={theme}>
               <Button 
-              aria-describedby={id}
               variant="contained" 
-              onClick={handleClick}
+              onClick={handleClickOpen("paper", index)}
               sx={{height:"30px", border:"2px solid black", borderRadius:"10px"}}
               color="primary">
                See Tasks
              </Button>
            </ThemeProvider>
-           <Popover
-             id={id}
-             open={open}
-             anchorEl={anchorEl}
-             onClose={handleClose}
-             anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left'
-           }}
-           > 
-        {project.taskoviUradjeni.map(task => (<Typography key={task.id} sx={{ p: 2 }}> {task.naziv + ": " + task.opis} </Typography>))}
-      </Popover>
             </CardActions>
             </Card>
             </Box> 
-        </Grid>))}
-        {/*</div>*/}
+        </Grid>
+        ))}
+        <Dialog
+              open={open}
+              onClose={handleClose}
+              scroll={scroll}
+              aria-labelledby={"scroll-dialog-title"}
+              aria-describedby="scroll-dialog-description"
+              >
+              <DialogTitle id="scroll-dialog-title">{projects[dialogTask].naziv}</DialogTitle>
+              <DialogContent dividers={scroll === 'paper'}>
+                    {projects[dialogTask].taskoviUradjeni.map(task => 
+                    (<DialogContentText
+                    key={task.id}
+                    id="scroll-dialog-description"
+                    ref={descriptionElementRef}
+                    tabIndex={-1}>
+                    {task.naziv + ": " + task.opis + ". (" + "type: " + task.tip + ", " + "valuation: " + task.vrednost + ")"}
+                    </DialogContentText>))}
+                </DialogContent>
+                <DialogActions>
+                <ThemeProvider theme={theme}>
+                <Button variant="contained" onClick={handleClose} color="primary">
+                  ok
+                </Button>
+                </ThemeProvider>
+                </DialogActions>
+            </Dialog>
      </Grid>
     </Grid>
     )

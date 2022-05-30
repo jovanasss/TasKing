@@ -21,7 +21,6 @@ namespace Models
         [JsonIgnore]
         public Korisnik korisnik { get; set; }
 
-        [JsonIgnore]
         public Organizacija organizacija { get; set; }
 
         public List<ClanTima> clanoviTima { get; set; }

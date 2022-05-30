@@ -60,44 +60,53 @@ namespace TasKing.Controllers
             }
         }
 
-
-        [Route("VratiProjekte/{userID}")]
-        [HttpGet]
-        public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
-        {
-            try
-            {
-                var projekti = await Context.Projekti
-                .Include(p => p.taskovi)
-                .Include(p => p.tim)
-                .ThenInclude(t => t.clanoviTima.Where(clan => clan.ID == userID))
-                .ThenInclude(clan => clan.taskovi)
-                .Select(proj => new
-                {
-                    id = proj.ID,
-                    naziv = proj.naziv,
-                    opis = proj.opis,
-                    taskoviUkupni = proj.taskovi.Select(task => new
+       [Route("VratiProjekteSaTaskovima/{userID}")]
+       [HttpGet]
+       public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
+       {
+           try
+           {
+               var clan = await Context.Korisnici.Where(k => k.ID == userID)
+               .Include(k => k.clanoviOrganizacije)
+               .ThenInclude(c => c.clanoviTima)
+               .ThenInclude(c => c.tim)
+               .ThenInclude(t => t.projekti)
+               .Select(kor => 
+               kor.clanoviOrganizacije
+               .Select(clan => 
+               clan.clanoviTima
+               .Select(c => 
+               c.tim.projekti
+               .Select(p => new
+               {
+                   id = p.ID,
+                   naziv = p.naziv,
+                   opis = p.opis,
+                   taskoviUkupni = p.taskovi.Select(task => new
                     {
                         naziv = task.naziv,
                         opis = task.opis,
                         vrednost = task.vrednost
                     }),
-                    taskoviUradjeni = proj.taskovi.Where(t => t.clanTima.ID == userID).Select(p => new
+                    taskoviUradjeni = p.taskovi.Where(t => t.clanTima.clanOgranizacije.korisnik.ID == userID).Select(p => new
                     {
                         id = p.ID,
                         naziv = p.naziv,
                         opis = p.opis,
-                        vrednost = p.vrednost
-                    })
-                }).ToListAsync();
-                 return Ok(projekti);
-            }
+                        vrednost = p.vrednost,
+                        tip = p.tip
+                    })    
+               })))).FirstOrDefaultAsync();
 
-            catch(Exception e)
-            {
-                 return BadRequest("Doslo je do greske:" + e.Message);
-            }
-        }
+                var c1 = clan.FirstOrDefault();
+                var c2 = c1.FirstOrDefault();
+
+                return Ok(c2);
+           }
+           catch(Exception e)
+           {
+               return BadRequest("Doslo je do greske" + e.Message);
+           }
+       }
     }
 }

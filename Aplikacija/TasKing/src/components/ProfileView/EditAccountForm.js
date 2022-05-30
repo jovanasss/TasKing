@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles";
 import { ListItemSecondaryAction, TextField } from "@mui/material";
@@ -17,6 +17,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
 
 const theme = createTheme({
   components:{
@@ -62,7 +63,65 @@ const theme = createTheme({
 
 function EditAccountForm(){
 
-          const [open, setOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const [teams, setTeams] = useState([]);
+    const [organisations, setOrganisations] = useState([]);
+
+  useEffect(() =>{
+    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+1,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+        res.json()
+        .then(data => {
+            setUser(data);
+        });
+    })
+}, [])
+
+    useEffect(() => {
+        fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/" + 1,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(res => {
+                res.json()
+                    .then(data => {
+                        setOrganisations(data);
+                    });
+            })
+    }, [])
+
+    useEffect(() => {
+        fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + 1,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(res => {
+                res.json()
+                    .then(data => {
+                        setTeams(data);
+                    });
+            })
+    }, [])
+
+  return(
+    <div className="divMainEditAccount">
+          {user && teams && organisations && <EditAccountForm1 user={user} organisations={organisations} teams={teams} />}
+    </div>
+  )
+}
+
+function EditAccountForm1({user, organisations, teams}){
+
+    const [open, setOpen] = useState(false);
 
           const handleClickOpen = () => {
             setOpen(true);
@@ -75,25 +134,25 @@ function EditAccountForm(){
           const [active, setActive] = useState("TeamList");
 
         return (
-            <div className="divMainEditAccount">
-
+              <Grid container>
+                <Grid item md={4} xs={12} sm={12}>
                     <div className="LeviDivEditAccount">
                         <div className="divInputFirstName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value="Pavle" variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic" value={user[0].ime} variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }} disabled/>
                                 </ThemeProvider>
                         </div>
 
                         <div className="divInputLastName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value="Zivanovic" variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic" value={user[0].prezime} variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }} disabled/> 
                                 </ThemeProvider>
                         </div>
 
                        <div className="DivEditUserName"> 
                         <div className="divInputUserName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" label="Username" variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }}/> 
+                                    <TextField id="outlined-basic" label="Username" value={user[0].korisnickoIme} variant="outlined" type="text" color="primary" sx ={{ width: "85%"  }}/>
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -104,14 +163,14 @@ function EditAccountForm(){
 
                         <div className="divInputEmail">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value="pavle123@gmail.com" variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic" value={user[0].email} variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }} disabled/> 
                                 </ThemeProvider>
                         </div>
 
                         <div className="DivEditPhone"> 
                         <div className="divInputPhone">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
+                                    <TextField id="outlined-basic" label="Phone Number" value={user[0].brtelefona} variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -119,15 +178,16 @@ function EditAccountForm(){
                         variant="contained">Edit</Button>
                         </ThemeProvider>
                         </div>
-
                         </div>
+                      </Grid>
 
+                     <Grid item md={3} xs={12} sm={6}>
                       <div className="DivButtonChangePassword">
                         <ThemeProvider theme={theme}>
                            <Button 
                            onClick={handleClickOpen} 
                            variant="contained"
-                           sx={{height:"80px", width: "190px", border:"2px solid black", borderRadius:"10px", marginTop: "10%", marginRight:"47%"}}
+                           sx={{height:"80px", width: "190px", border:"2px solid black", borderRadius:"10px", marginTop:"20%", marginLeft:"21%"}}
                            color="primary">
                              Change password
                           </Button>
@@ -172,7 +232,9 @@ function EditAccountForm(){
                     </DialogActions>
                     </Dialog>
                   </div>
+                </Grid>
 
+              <Grid item md={3} xs={8} sm={4}>
                 <div className="DesniDivEditAccount">
                   <div className="divAvatarEditAccount">
                             <ThemeProvider theme={theme}>
@@ -182,14 +244,14 @@ function EditAccountForm(){
                             </ThemeProvider>
                   </div>
 
-                  {active === "TeamList" && <PaperListTeams />}
-                  {active === "OrganisationList" && <PaperListOrganisations />}
+                        {active === "TeamList" && <PaperListTeams teams={teams} />}
+                        {active === "OrganisationList" && <PaperListOrganisations organisations={organisations} />}
 
               <div className="divButtonSee">
                   <div>
                   <ThemeProvider theme={theme}>
                   <Button 
-                   sx={{height:"50px", width: "130px", border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginRight:"1%"}}
+                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginRight:"1%"}}
                    variant="contained"
                    onClick={() => setActive("OrganisationList")}>
                    See organisations
@@ -198,7 +260,7 @@ function EditAccountForm(){
                  <div>
                   <ThemeProvider theme={theme}>
                   <Button 
-                   sx={{height:"50px", width: "130px", border:"2px solid black", borderRadius:"10px", marginTop:"12%"}}
+                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"19%"}}
                    variant="contained"
                    onClick={() => setActive("TeamList")}>
                    See teams
@@ -206,13 +268,14 @@ function EditAccountForm(){
                  </ThemeProvider></div>
             </div>
                 </div>
-            </div>
+                </Grid>
+            </Grid>
         )
 }
 
-function PaperListTeams(){
+function PaperListTeams({ teams }){
 
-  const teams = [
+  /*const teams = [
     {
       id: 1,
       photo: <Avatar></Avatar>,
@@ -243,7 +306,7 @@ function PaperListTeams(){
       photo: <Avatar></Avatar>,
       name: "Stump"
     }
-  ]
+  ]*/
 
   return(
   <div className="divPaperEditAccount">
@@ -255,8 +318,8 @@ function PaperListTeams(){
          key={item.id}
          button
         >
-        <ListItemIcon>{item.photo}</ListItemIcon>
-        <ListItemText primary={item.name} />
+        <ListItemIcon>{item.slika}</ListItemIcon>
+        <ListItemText primary={item.ime} />
        </ListItem>
          ))}
       </List>
@@ -265,9 +328,9 @@ function PaperListTeams(){
   )
 }
 
-function PaperListOrganisations(){
+function PaperListOrganisations({ organisations }){
 
-  const organisations = [
+  /*const organisations = [
     {
       id:1,
       photo: <Avatar></Avatar>,
@@ -298,7 +361,7 @@ function PaperListOrganisations(){
       photo: <Avatar></Avatar>,
       name: "Elfak"
     }
-  ]
+  ]*/
 
   return(
   <div className="divPaperEditAccount">
@@ -310,8 +373,8 @@ function PaperListOrganisations(){
          key={item.id}
          button
         >
-        <ListItemIcon>{item.photo}</ListItemIcon>
-        <ListItemText primary={item.name} />
+        <ListItemIcon>{item.slika}</ListItemIcon>
+        <ListItemText primary={item.ime} />
        </ListItem>
          ))}
       </List>

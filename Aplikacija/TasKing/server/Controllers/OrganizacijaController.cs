@@ -138,5 +138,29 @@ namespace TasKing.Controllers
                 }
         }
         
+        
+        [Route("VratiOrganizacijeKorisnika/{userID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiOrganizacijeKorisnika(int userID)
+        {
+            try
+            {
+                var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
+                .Include(k => k.clanoviOrganizacije)
+                .ThenInclude(c => c.organizacija)
+                .Select(kor => 
+                  kor.clanoviOrganizacije.Select(clan => new {
+                      id = clan.organizacija.ID,
+                      ime = clan.organizacija.ime,
+                      slika = clan.organizacija.slika
+                  })
+                ).FirstOrDefaultAsync();
+                return Ok(korisnik);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
     }
 }
