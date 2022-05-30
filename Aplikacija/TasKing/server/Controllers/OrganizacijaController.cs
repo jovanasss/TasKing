@@ -46,7 +46,7 @@ namespace TasKing.Controllers
 
                             Context.Organizacije.Add(organizacija1);
                             await Context.SaveChangesAsync();
-                            return Ok("Sve je OK!");
+                            return Ok(organizacija1.ID);
                         }
 
                         catch(Exception e)
@@ -60,19 +60,19 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("UclaniUOrganizaciju/{korisnikID}/{OrganizacijaID}/{administrator}")]
+        [Route("UclaniUOrganizaciju")]
         [HttpPost]
-        public async Task<ActionResult> UclaniUOrganizaciju(int korisnikID, int OrganizacijaID, bool administrator)
+        public async Task<ActionResult> UclaniUOrganizaciju([FromBody] ClanOrganizacijeDTO clanorganizacije)
         {     
-                Korisnik korisnik = await Context.Korisnici.Where(p => p.ID == korisnikID).FirstOrDefaultAsync();
+                Korisnik korisnik = await Context.Korisnici.Where(p => p.ID == clanorganizacije.idKorisnika).FirstOrDefaultAsync();
                 if(korisnik==null)
                     return BadRequest("Korisnik ne postoji u bazi");
 
-                Organizacija organizacija = await Context.Organizacije.Where(p => p.ID == OrganizacijaID).FirstOrDefaultAsync();
+                Organizacija organizacija = await Context.Organizacije.Where(p => p.ID == clanorganizacije.idOrganizacije).FirstOrDefaultAsync();
                 if(organizacija==null)
                     return BadRequest("Organizacija ne postoji u bazi");
 
-                ClanOrganizacije clan =  await Context.ClanoviOrganizacije.Where(p => p.korisnik.ID == korisnikID && p.organizacija.ID == OrganizacijaID).FirstOrDefaultAsync();
+                ClanOrganizacije clan =  await Context.ClanoviOrganizacije.Where(p => p.korisnik.ID == clanorganizacije.idKorisnika && p.organizacija.ID == clanorganizacije.idOrganizacije).FirstOrDefaultAsync();
                 if(clan==null)
                 {
                     try
@@ -80,7 +80,7 @@ namespace TasKing.Controllers
                         {
                             ClanOrganizacije clan1 = new ClanOrganizacije()
                             {
-                                administrator=administrator,
+                                administrator= clanorganizacije.admin,
                                 izbacen = false,
                                 korisnik = korisnik,
                                 organizacija = organizacija
@@ -90,9 +90,9 @@ namespace TasKing.Controllers
                             await Context.SaveChangesAsync(); 
                             var clanInfo = await Context.ClanoviOrganizacije
                             .Include(p=>p.organizacija)
-                            .Where(p=>p.korisnik.ID==korisnikID && p.organizacija.ID==OrganizacijaID && p.izbacen==false).ToArrayAsync();
+                            .Where(p=>p.korisnik.ID==clanorganizacije.idKorisnika && p.organizacija.ID==clanorganizacije.idOrganizacije && p.izbacen==false).ToArrayAsync();
                         
-                            return Ok(clanInfo);
+                            return Ok(clan1.ID);
                         }
                     }
                     catch(Exception e)

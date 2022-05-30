@@ -46,7 +46,7 @@ namespace TasKing.Controllers
 
                             Context.Timovi.Add(tim1);
                             await Context.SaveChangesAsync();
-                            return Ok("Sve je OK!");
+                            return Ok(tim1.ID);
                         }
 
                         catch(Exception e)
@@ -60,20 +60,20 @@ namespace TasKing.Controllers
             }
         }
 
-       
-        [Route("UclaniUTim/{clanOrganizacijeID}/{TimID}/{vodjaTima}")]
+
+        [Route("UclaniUTim")]
         [HttpPost]
-        public async Task<ActionResult> UclaniUTim(int clanOrganizacijeID, int TimID, bool vodjaTima)
+        public async Task<ActionResult> UclaniUTim([FromBody] ClanTimaDTO clantima)
         {     
-                ClanOrganizacije clanOrganizacije = await Context.ClanoviOrganizacije.Where(p => p.ID == clanOrganizacijeID).FirstOrDefaultAsync();
+                ClanOrganizacije clanOrganizacije = await Context.ClanoviOrganizacije.Where(p => p.ID == clantima.idClanaOrganizacije).FirstOrDefaultAsync();
                 if(clanOrganizacije==null)
                     return BadRequest("Clan organizacije ne postoji u bazi");
 
-                Tim tim = await Context.Timovi.Where(p => p.ID == TimID).FirstOrDefaultAsync();
+                Tim tim = await Context.Timovi.Where(p => p.ID == clantima.idtima).FirstOrDefaultAsync();
                 if(tim==null)
                     return BadRequest("Tim ne postoji u bazi");
 
-                ClanTima clan =  await Context.ClanoviTima.Where(p => p.clanOgranizacije.ID == clanOrganizacijeID && p.tim.ID == TimID).FirstOrDefaultAsync();
+                ClanTima clan =  await Context.ClanoviTima.Where(p => p.clanOgranizacije.ID == clantima.idClanaOrganizacije && p.tim.ID == clantima.idtima).FirstOrDefaultAsync();
                 if(clan==null)
                 {
                     try
@@ -81,7 +81,7 @@ namespace TasKing.Controllers
                         {
                             ClanTima clan1 = new ClanTima
                             {
-                                vodjaTima=vodjaTima,
+                                vodjaTima= clantima.vodja,
                                 izbacen = false,
                                 clanOgranizacije = clanOrganizacije,
                                 tim = tim
@@ -91,9 +91,9 @@ namespace TasKing.Controllers
                             await Context.SaveChangesAsync(); 
                             var clanInfo = await Context.ClanoviTima
                             .Include(p=>p.tim)
-                            .Where(p=>p.clanOgranizacije.ID==clanOrganizacijeID && p.tim.ID==TimID && p.izbacen==false).ToArrayAsync();
+                            .Where(p=>p.clanOgranizacije.ID==clantima.idClanaOrganizacije && p.tim.ID==clantima.idtima && p.izbacen==false).ToArrayAsync();
                         
-                            return Ok(clanInfo);
+                            return Ok(clan1.ID);
                         }
                     }
                     catch(Exception e)
@@ -107,7 +107,7 @@ namespace TasKing.Controllers
                 }
         }
 
-         [Route("VratiProjekteTima/{timID}")]
+        [Route("VratiProjekteTima/{timID}")]
         [HttpGet]
         public async Task<ActionResult> VratiProjekteTima(int timID)
         {     

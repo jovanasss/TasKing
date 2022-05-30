@@ -66,9 +66,33 @@ function CreateOrganisationForm (){
           },
           body : JSON.stringify(organizacija)
         });
-        //result  = await result.json();
-        console.log(result.status);
-        if (result.status === 200){
+        let status = result.status ;
+        result  = await result.json();
+        let idNoveOrg = result ;
+        const admin = true ;
+        const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        console.log(user.id);
+        console.log("ID Nove Organizacije :" ,idNoveOrg);
+        console.log(status)
+        const ClanOrganizacije = {
+          idKorisnika : user.id,
+          idOrganizacije : idNoveOrg,
+          admin : admin
+        }
+        if (status === 200){
+          let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(ClanOrganizacije)
+          });
+          let statusU = temp.status ;
+          temp = await temp.json();
+          let idClanaORG = temp ;
+          console.log("IDclanaOrganizacije :" ,idClanaORG);
+          console.log(statusU);
 
           let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
             method : 'POST',
@@ -78,14 +102,39 @@ function CreateOrganisationForm (){
             },
             body : JSON.stringify(tim)
           });
+          let statusT = rezultat.status;
+          rezultat = await rezultat.json();
+          let idNovogTima = rezultat ;
+          console.log("ID novog tima :" ,idNovogTima);
+          const vodja = true ;
           //result  = await result.json();
-          console.log(rezultat.status);
-          if (rezultat.status === 200){
-            navigate(path)
+          console.log(statusT);
+          if (statusT === 200){
+
+            const ClanTima = {
+              idClanaOrganizacije : idClanaORG,
+              idtima : idNovogTima,
+              vodja : vodja
+            }
+            console.log(ClanTima);
+
+            let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+              method : 'POST',
+              headers : {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json; charset=utf-8'
+              },
+              body : JSON.stringify(ClanTima)
+            });
+            
+            console.log(tmp.status);
+            if(tmp.status === 200){
+              navigate(path)
+            }
           }
         }
         else{
-            console.log(result.status)
+            console.log(status)
         }
       
       }
