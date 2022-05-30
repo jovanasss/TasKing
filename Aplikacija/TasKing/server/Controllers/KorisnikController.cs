@@ -125,30 +125,37 @@ namespace TasKing.Controllers
 
 
 
-        [Route("VratiClanoveOrganizacije/{korisnickoIme}/{lozinka}")]
+        [Route("VratiClanoveOrganizacije/{korisnikID}")]
+
         [HttpGet]
-        public async Task<ActionResult> VratiClanoveOrganizacije(string korisnickoIme, string lozinka)
-        {     
+
+        public async Task<ActionResult> VratiClanoveOrganizacije(int korisnikID)
+
+        {    
                  try
                 {
-                    Korisnik korisnik = await Context.Korisnici.Where(k => k.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();
-                    if(korisnik==null || korisnik.lozinka!=lozinka)
+                    Korisnik korisnik = await Context.Korisnici.Where(k => k.ID == korisnikID).FirstOrDefaultAsync();
+
+                    if(korisnik==null)
+
                         {
-                                return BadRequest("Uneli ste pogresno korisnicko ime ili lozinku");
+                            return BadRequest("nepostojeci korisnik");
                         }
 
                     var clanInfo = await Context.ClanoviOrganizacije
+
                             .Include(p=>p.organizacija)
                             .Where(p=>p.korisnik==korisnik && p.izbacen==false)
                             .Select(p=>
+
                             new{
                                 idClan = p.ID,
                                 imeOrganizacije = p.organizacija.ime,
                                 administrator = p.administrator,
                                 vremePosecivanja = p.vremePosecivanja
-                            }).ToArrayAsync();
-                        
+                            }).ToArrayAsync();               
                             return Ok(clanInfo);
+
                 }
                 catch(Exception e)
                 {

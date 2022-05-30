@@ -14,7 +14,11 @@ export default function LeftMenu(props){
 
   const [organisations, setOrganisations] = useState([])
   const showOrganisations = ()=>{
-    fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + "jzlnikola" + "/" + "123nikola",
+    
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    console.log(user.id);
+
+    fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.id,
     {
         method:"GET",
         headers: {
