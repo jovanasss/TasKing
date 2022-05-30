@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import UpProjectMenu from './UpProjectMenu';
 import { ThemeProvider } from '@emotion/react';
 import { Button, IconButton } from '@mui/material';
-import { SubjectOutlined } from '@mui/icons-material';
+import { Autorenew, SubjectOutlined } from '@mui/icons-material';
 import { createTheme } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
@@ -33,26 +33,44 @@ function TabPanel(props) {
   );
 }
 
-const projects = [
-    {
-        id:0,
-        naziv:"Swe projekat",
-    },
-    {
-        id:1,
-        naziv:"projekat iz rm",
-    },
-    {
-        id:2,
-        naziv:"projekat neki treci",
-    }
-]
 
 export default function ProjectMenu(props) {
   const [value, setValue] = React.useState(0);
-  const [curProj, setProj] = React.useState(0)
+  const [curProj, setProj] = React.useState(-1)
   const boje = ['rgb(147, 219, 217)', 'rgb(17, 156, 151)']
   const displej = ['none', 'inline']
+
+  const [projects, setProjects] = React.useState([])
+  const showProjects = ()=>{
+    fetch("https://localhost:5001/Tim/VratiProjekteTima/" + 1,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+      if(res.ok)
+      {
+        console.log(res);
+        res.json().then(data => {
+          console.log(data);
+          setProjects(data)
+        });
+      }
+      else
+      {
+        alert("uneli ste pogresno korisnicko ime ili lozinku");
+      }
+    })
+  }
+
+  React.useEffect(() => {
+    if(props.timID!=-1)
+    {
+      console.log('✅ variable is NOT undefined or null');
+      showProjects();
+    }
+  }, [props.timID]);
 
   let navigate = useNavigate();
   const handleChange = (event, newValue) => {
@@ -83,21 +101,21 @@ export default function ProjectMenu(props) {
     <div>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', background: "rgb(147, 219, 217)", display:'flex' }}>
           {projects.map(proj =>
-          <Button  onClick={() =>{setProj(proj.id)}} sx={{backgroundColor: curProj==proj.id? boje[1] : boje[0], color: 'black'}}>   
-          {proj.naziv}
+          <Button  onClick={() =>{setProj(proj.idProj)}} sx={{backgroundColor: curProj==proj.idProj? boje[1] : boje[0], color: 'black'}}>   
+          {proj.imeProj}
           </Button>
             )}
-          <IconButton sx={{marginLeft:"0.5%", display: displej[props.vodjaStatus] }}>
+          <IconButton sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}}>
             <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
           </IconButton>
             <div sx={{float: 'right'}}>
             <IconButton onClick={() => navigate('/Profile')} sx={{marginLeft:"0.5%"}}>
-            <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
+              <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
             </IconButton>
             </div>
 
       </Box>
-      <UpProjectMenu vodjaStatus={props.vodjaStatus}/>
+      <UpProjectMenu vodjaStatus={props.vodjaStatus} projectID={curProj}/>
     </div>
   );
 }

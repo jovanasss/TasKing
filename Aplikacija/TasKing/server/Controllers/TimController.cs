@@ -60,6 +60,7 @@ namespace TasKing.Controllers
             }
         }
 
+       
         [Route("UclaniUTim/{clanOrganizacijeID}/{TimID}/{vodjaTima}")]
         [HttpPost]
         public async Task<ActionResult> UclaniUTim(int clanOrganizacijeID, int TimID, bool vodjaTima)
@@ -103,6 +104,65 @@ namespace TasKing.Controllers
                 else
                 {
                     return BadRequest("Korisnik je vec uclanjen u tim");
+                }
+        }
+
+         [Route("VratiProjekteTima/{timID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiProjekteTima(int timID)
+        {     
+                 try
+                {
+                    Tim tim = await Context.Timovi.Where(t => t.ID == timID).FirstOrDefaultAsync();
+                    if(tim==null)
+                        {
+                            return BadRequest("ne postoji dati tim");
+                        }
+
+                    var projektiInfo = await Context.Projekti
+                            .Where(p=>p.tim==tim && p.status==false)
+                            .Select(p=>
+                            new{
+                                idProj = p.ID,
+                                imeProj = p.naziv,
+                            }).ToArrayAsync();
+                        
+                            return Ok(projektiInfo);
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
+
+        [Route("vratiProjekat/{projID}")]
+        [HttpGet]
+        public async Task<ActionResult> vratiProjekat(int projID)
+        {     
+                 try
+                {
+                    var projekatInfo = await Context.Projekti
+                            .Include(p=>p.taskovi)
+                            .Where(p=>p.ID==projID && p.status==false)
+                            .Select(p=>
+                            new{
+                                imeProj = p.naziv,
+                                opisProj = p.opis,
+                                Taskovi = p.taskovi.Select(t=>new{
+                                taskID = t.ID,
+                                naziv = t.naziv,
+                                opisTaska = t.opis,
+                                vrednost = t.vrednost,
+                                status = t.status,
+                                tip = t.tip,
+                       }),
+                            }).FirstOrDefaultAsync();
+                        
+                            return Ok(projekatInfo);
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
                 }
         }
     }

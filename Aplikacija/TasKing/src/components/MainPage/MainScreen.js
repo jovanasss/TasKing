@@ -15,14 +15,7 @@ function MainScreen()  {
     const navigate=useNavigate();
       return (
         <div className="App">
-
-          <div style={{display: 'flex', position: 'fixed', zIndex: '1', top: '0', left: '0', overflowX: 'hidden'}}>
-            <LeftMenu/>
-            <TeamsMenu name='Timovi'/>
-          </div>
-            <div style={{marginLeft: '14.62vw'}}>
-              <ProjectMenu vodjaStatus={1}/>
-            </div>
+        <LeftMenu/>
         </div>
       );
 }

@@ -1,40 +1,47 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 //import '../styles/MainPage/TeamsMenu.css';
 import { Avatar, Button, createTheme, Icon, IconButton, List, ListItem, ListItemIcon, Paper, Tooltip } from '@mui/material';
 import { Typography } from '@mui/material';
-import { SubjectOutlined } from '@mui/icons-material';
+import { Autorenew, SubjectOutlined } from '@mui/icons-material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { ThemeProvider } from '@emotion/react';
+import ProjectMenu from './ProjectMenu';
 const drawerWidth = 240
 
-  const teams = [
-      {
-        id : 0,
-        name: 'Marketing tim',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 1,
-        name: 'Drustvene mreze',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 2,
-        name: 'Tasking tim',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 3,
-        name: 'Multiplayer igrice tim',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 4,
-        name: 'Pravljenje aplikacija za knjigovodjstvo',
-        picture: <SubjectOutlined/>
-      }
-  ]
-
 export default function TeamsMenu(props){
+
+  const [teams, setTeams] = useState([])
+  const showTeams = ()=>{
+    fetch("https://localhost:5001/Organizacija/VratiClanoveTima/" + props.clanID,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+      if(res.ok)
+      {
+        console.log(res);
+        res.json().then(data => {
+          console.log(data);
+          setTeams(data)
+        });
+      }
+      else
+      {
+        alert("");
+      }
+    })
+  }
+
+  useEffect(() => {
+    if(props.clanID!=-1)
+    {
+      console.log('✅ variable is NOT undefined or null');
+      showTeams();
+    }
+  }, [props.clanID]);
+
 
   const theme = createTheme({
     components: {
@@ -57,28 +64,43 @@ export default function TeamsMenu(props){
   });           
 
   
-  const [curOrg, setOrg] = useState(0)
+  const [curTim, setTim] = useState(-1)
     
   return(
-    <div className='teamMenu'>
-        <Paper className='teamList'>
-            <List>
-            {teams.map(team => (
-                <ListItem key={team.id} className={curOrg==team.id? 'activeEnt' : null}>
-                <ThemeProvider theme={theme}>
-                        <Button onClick={() =>{setOrg(team.id)}}>
-                            <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
-                            {team.picture}
-                            </IconButton>
-                            <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>
-                                {team.name.slice(0,30) + (team.name.length>30? "..." : "")}
-                            </Typography>
-                        </Button>
+    <div style={{display:'flex'}}>
+      <div className='teamMenu'>
+          <Paper className='teamList'>
+              <List>
+              <ListItem key={0} style={{display: props.clanID!=-1? 'inline' : 'none'}}>
+                  <ThemeProvider theme={theme}>
+                    <Button>
+                      <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
+                        <AddCircleIcon/>
+                      </IconButton>
+                      <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>
+                          Add Team
+                      </Typography>
+                    </Button>
+                  </ThemeProvider>
+              </ListItem>
+              {teams.map(team => (
+                  <ListItem key={team.idTima} className={curTim==team.idTima? 'activeEnt' : null}>
+                    <ThemeProvider theme={theme}>
+                      <Button onClick={() =>{setTim(team.idTima)}}>
+                        <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
+                          <SubjectOutlined/>
+                        </IconButton>
+                        <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>
+                            {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
+                        </Typography>
+                      </Button>
                     </ThemeProvider>
-                </ListItem>
-            ))}
-            </List>
-        </Paper>
+                  </ListItem>
+              ))}
+              </List>
+          </Paper>
+      </div>
+      <ProjectMenu vodjaStatus={1} timID = {curTim}/>
     </div>
   )
 }

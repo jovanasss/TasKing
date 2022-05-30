@@ -105,5 +105,38 @@ namespace TasKing.Controllers
                     return BadRequest("Korisnik je vec uclanjen u organizaciju");
                 }
         }
+
+        [Route("VratiClanoveTima/{clanID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiClanoveTima(int clanID)
+        {     
+                 try
+                {
+                    ClanOrganizacije clanOrg = await Context.ClanoviOrganizacije.Where(c => c.ID == clanID).FirstOrDefaultAsync();
+                    if(clanOrg==null)
+                        {
+                            return BadRequest("ne postoji dato clanstvo");
+                        }
+
+                    var clanInfo = await Context.ClanoviTima
+                            .Include(p=>p.tim)
+                            .Where(p=>p.clanOgranizacije==clanOrg && p.izbacen==false)
+                            .Select(p=>
+                            new{
+                                idClan = p.ID,
+                                idTima = p.tim.ID,
+                                imeTima = p.tim.ime,
+                                vodja = p.vodjaTima,
+                                vremePosecivanja = p.vremePosecivanja
+                            }).ToArrayAsync();
+                        
+                            return Ok(clanInfo);
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
+        
     }
 }

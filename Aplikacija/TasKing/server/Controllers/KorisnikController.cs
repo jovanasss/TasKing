@@ -142,6 +142,7 @@ namespace TasKing.Controllers
                             .Where(p=>p.korisnik==korisnik && p.izbacen==false)
                             .Select(p=>
                             new{
+                                idClan = p.ID,
                                 imeOrganizacije = p.organizacija.ime,
                                 administrator = p.administrator,
                                 vremePosecivanja = p.vremePosecivanja

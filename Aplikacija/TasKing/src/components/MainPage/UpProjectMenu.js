@@ -2,7 +2,7 @@ import * as React from 'react';
 //import '../styles/MainPage/UpProjectMenu.css';
 import { AppBar, IconButton, Toolbar, Typography, createTheme, List, ListItem, ListItemText, Menu, MenuItem } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-import { ArrowDropDown, SubjectOutlined } from '@mui/icons-material';
+import { ArrowDropDown, Autorenew, SubjectOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
 import ProgressBar from './ProgressBar';
@@ -15,6 +15,7 @@ const options = [
   'The tasks Im working on',
   'The tasks wainting for review',
 ];
+
 
 const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
 const boje = ['rgb(255, 255, 255)', 'rgb(255, 207, 49)', 'rgb(77, 154, 255)', 'rgb(78, 255, 93)']
@@ -37,6 +38,38 @@ export default function UpProjectMenu(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [project, setProject] = React.useState({})
+  const showProjectData = ()=>{
+    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+      if(res.ok)
+      {
+        console.log(res);
+        res.json().then(data => {
+          console.log(data);
+          setProject(data)
+        });
+      }
+      else
+      {
+        alert("");
+      }
+    })
+  }
+
+  React.useEffect(() => {
+    if(props.projectID!=-1)
+    {
+      console.log('✅ variable is NOT undefined or null');
+      showProjectData();
+    }
+  }, [props.projectID]);
 
 
   const theme = createTheme({
@@ -111,10 +144,10 @@ export default function UpProjectMenu(props) {
               </div>
           </Toolbar>
         </AppBar>
-        <TaskList selected={selectedIndex} vodjaStatus={props.vodjaStatus}/>
+        <TaskList selected={selectedIndex} vodjaStatus={props.vodjaStatus} taskovi = {project.taskovi}/>
         <ProgressBar vodjaStatus={props.vodjaStatus}/>
-        <TaskList selected={5} vodjaStatus={0}/>
-        <ProjectDescription/>
+        <TaskList selected={5} vodjaStatus={0} taskovi = {project.taskovi}/>
+        <ProjectDescription ProjectName={project.imeProj} ProjectDescription={project.opisProj}/>
     </div>
   );
 }

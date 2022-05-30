@@ -3,18 +3,12 @@ import * as React from 'react';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 
 
-export default function ProjectDescription() {
+export default function ProjectDescription(props) {
   return (
     <div className='descriptionDiv'>
-        <h2>Projekat iz SWE</h2>
-        <Typography>Ovo je projekat iz softverskog inzinjerstva. Cilj ovog projekta je da se napravi aplikacije Tasking koja ce da omoguci laski i pravedniji rad u timovima.
-          Taskovi ce biti podeljeni na manje celine kako bi svako mogo da se odluci za task po zelji.Ovo je projekat iz softverskog inzinjerstva. Cilj ovog projekta je da se napravi aplikacije Tasking koja ce da omoguci laski i pravedniji rad u timovima.
-          Taskovi ce biti podeljeni na manje celine kako bi svako mogo da se odluci za task po zelji.Ovo je projekat iz softverskog inzinjerstva. Cilj ovog projekta je da se napravi aplikacije Tasking koja ce da omoguci laski i pravedniji rad u timovima.
-          Taskovi ce biti podeljeni na manje celine kako bi svako mogo da se odluci za task po zelji.Ovo je projekat iz softverskog inzinjerstva. Cilj ovog projekta je da se napravi aplikacije Tasking koja ce da omoguci laski i pravedniji rad u timovima.
-          Taskovi ce biti podeljeni na manje celine kako bi svako mogo da se odluci za task po zelji.Ovo je projekat iz softverskog inzinjerstva. Cilj ovog projekta je da se napravi aplikacije Tasking koja ce da omoguci laski i pravedniji rad u timovima.
-          Taskovi ce biti podeljeni na manje celine kako bi svako mogo da se odluci za task po zelji.Ovo je projekat iz softverskog inzinjerstva. Cilj ovog projekta je da se napravi aplikacije Tasking koja ce da omoguci laski i pravedniji rad u timovima.
-          Taskovi ce biti podeljeni na manje celine kako bi svako mogo da se odluci za task po zelji.Ovo je projekat iz softverskog inzinjerstva. Cilj ovog projekta je da se napravi aplikacije Tasking koja ce da omoguci laski i pravedniji rad u timovima.
-          Taskovi ce biti podeljeni na manje celine kako bi svako mogo da se odluci za task po zelji.
+        <h2>{props.ProjectName}</h2>
+        <Typography>
+          {props.ProjectDescription}
         </Typography>
     </div>
   );

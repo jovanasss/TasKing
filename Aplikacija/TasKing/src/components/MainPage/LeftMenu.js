@@ -1,135 +1,44 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 //import '../styles/MainPage/LeftMenu.css';
 import { createTheme, IconButton, List, ListItem, Paper, Tooltip } from '@mui/material';
 import { Typography } from '@mui/material';
 import { SubjectOutlined } from '@mui/icons-material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { ThemeProvider } from '@emotion/react';
-const drawerWidth = 240
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import TeamsMenu from './TeamsMenu';
+const drawerWidth = 240     
 
-  const organisationItems = [
+
+export default function LeftMenu(props){
+
+  const [organisations, setOrganisations] = useState([])
+  const showOrganisations = ()=>{
+    fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + "jzlnikola" + "/" + "123nikola",
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+      if(res.ok)
       {
-        id : 0,
-        name: 'Faks',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 1,
-        name: 'Skola',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 2,
-        name: 'Poso',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 3,
-        name: 'Faks',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 4,
-        name: 'Skola',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 5,
-        name: 'Poso',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 6,
-        name: 'Faks',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 7,
-        name: 'Skola',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 8,
-        name: 'Poso',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 9,
-        name: 'Faks',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 10,
-        name: 'Skola',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 11,
-        name: 'Poso',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 12,
-        name: 'Faks',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 13,
-        name: 'Skola',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 14,
-        name: 'Poso',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 15,
-        name: 'Faks',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 16,
-        name: 'Skola',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 17,
-        name: 'Poso',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 18,
-        name: 'Faks',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 19,
-        name: 'Skola',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 20,
-        name: 'Poso',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 21,
-        name: 'Faks',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 22,
-        name: 'Skola',
-        picture: <SubjectOutlined/>
-      },
-      {
-        id : 23,
-        name: 'Poso',
-        picture: <SubjectOutlined/>
+        console.log(res);
+        res.json().then(data => {
+          console.log(data);
+          setOrganisations(data)
+        });
       }
-  ]
+      else
+      {
+        alert("uneli ste pogresno korisnicko ime ili lozinku");
+      }
+    })
+  }
 
-export default function LeftMenu(){
+  useEffect(() => {
+    showOrganisations();
+  }, []);
 
   const theme = createTheme({
     components: {
@@ -152,25 +61,33 @@ export default function LeftMenu(){
   });           
 
   
-  const [curOrg, setOrg] = useState(0)
+  const [curOrg, setOrg] = useState(-1)
     
   return(
+    <div style={{display: 'flex', position: 'fixed', zIndex: '1', top: '0', left: '0', overflowX: 'hidden'}}>
     <div className='leftMenu'>
     <Paper className='leftList'>
         <List className='listDiv'>
-           {organisationItems.map(item => (
-             <Tooltip title={item.name}>
-             <ListItem key={item.id} className={curOrg==item.id? 'activeEnt' : null}>
-                <ThemeProvider theme={theme}>
-                    <IconButton onClick={() =>{setOrg(item.id)}} sx={{backgroundColor: 'white'}}>
-                      {item.picture}
-                    </IconButton>
-                </ThemeProvider>
+          <ListItem key={0}>
+              <ThemeProvider theme={theme}>
+                <IconButton sx={{backgroundColor: 'white'}}>
+                  <AddCircleIcon/>
+                </IconButton>
+              </ThemeProvider>
+            </ListItem>
+           {organisations.map(item => (
+             <ListItem key={item.idClan} className={curOrg==item.idClan? 'activeEnt' : null}>
+              <ThemeProvider theme={theme}>
+                <IconButton onClick={() =>{setOrg(item.idClan)}} sx={{backgroundColor: 'white'}}>
+                  <SubjectOutlined/>
+                </IconButton>
+              </ThemeProvider>
              </ListItem>
-             </Tooltip>
            ))}
         </List>
       </Paper>
+    </div>
+    <TeamsMenu clanID={curOrg}/>
     </div>
   )
 }
