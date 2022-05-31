@@ -18,6 +18,8 @@ import { ClassNames } from "@emotion/react";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import App from "../../App";
+import Task from "../../Classes/TaskDTO";
+import TaskList from "../MainPage/TaskList";
 
 function CreateTeamTasks(){
 
@@ -31,12 +33,9 @@ function CreateTeamTasks(){
     const [projDesc , setProjDesc] = useState('')
     const [projDescError, setProjDescError] = useState(false)
 
-    /*
-    Jos uvek nisam siguran kako ovaj deo da resim 
-    const [task , setTask] = useState('')
-    const [taskList , setTaskList] = useState('')
-    */
 
+    const [tasks , setTasks] = useState([])
+    
 
 
 
@@ -48,27 +47,64 @@ function CreateTeamTasks(){
         setOpenD(false)
     }
 
+    
 
     // error check => napraviNoviTask(Naslov , bodovi) && dodavnje u taskList parent Projekta
     const handleSubmit = () => {
         setOpenD(false)
-        console.log(taskName , bodovi)
-        const root = ReactDOMClient.createRoot(document.getElementById('inputTasks'))
-        const element = 
-        <div className="taskovi">
-        <List>
-            <ListItemButton component="a" href="#simple-list">
-                <ListItemText primary={taskName} secondary={bodovi} />
-                <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                </IconButton>
-            </ListItemButton>
-        </List>
-        </div>
-        root.render(element)
+        let task = {bodovi: bodovi ,taskName : taskName};
+        let arr = tasks.concat(task);
+        setTasks(arr);
+
+       // const t = new Task(bodovi,taskName);
+
+       // const element = 
+
+       //root.render(element);
     }
 
+    async function createProject(){
 
+
+        // let timID = localstorage.GetItem("timID"); 
+
+
+        const projekat = {
+            naziv : projName,
+            opis : projDesc,
+            //taskovi : tasks
+            timID : 1,
+        }
+        console.log(projekat);
+
+        let rezultat = await fetch("https://localhost:5001/Projekat/KreirajProjekat/", {
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(projekat)
+          });
+          let status = rezultat.status;
+          let idProjekta = await rezultat.json();
+
+          // dodati idProjekta u niz taskova i proslediti kroz body fetcha 
+          // za svaki task mora da se doda novi prop idProjekta vrv preko map f-je i onda se vrti foreach sa ovim fetchom ispod
+
+          console.log(status);
+          if (status === 200){
+
+            let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
+                method : 'POST',
+                headers : {
+                  'Content-Type': 'application/json; charset=utf-8',
+                  'Accept': 'application/json; charset=utf-8'
+                },
+                body : JSON.stringify(tasks)
+              });
+          }
+
+    }
     // error check => napraviNoviprojekat(Naslov, opis , listaTaskova[])
     const handleProjectCreation = () =>{
 
@@ -83,8 +119,9 @@ function CreateTeamTasks(){
         if (projName && projDesc){
             
             // napraviNoviprojekat(Naslov, opis , listaTaskova[])
-            console.log(projName , projDesc)
-            routeChange()
+            //console.log(projName , projDesc , tasks);
+
+            createProject();
         }
 
     }
@@ -163,8 +200,19 @@ function CreateTeamTasks(){
                                 sx={{ width : "85%", height: "40%"}}/>
                             </ThemeProvider>
                         </div>
-                        <div id="inputTasks" className="inputTasks">
-
+                        <div id="inputTasks" className="inputTasks" rows={'5'} multiline = "true" >
+                            <List style={{maxHeight: '85%', overflow: 'auto'}} >
+                                 {tasks.map(task => 
+                            <ListItem>             
+                            <ListItemButton component="a" href="#simple-list">
+                                <ListItemText primary={task.taskName} secondary={task.bodovi} />
+                                <IconButton edge="end" aria-label="delete">
+                                <DeleteIcon />
+                                    </IconButton>
+                            </ListItemButton>
+                            </ListItem>   )}                   
+                            </List>
+ 
                         </div>
                         <div>
                             <ThemeProvider theme={theme}>

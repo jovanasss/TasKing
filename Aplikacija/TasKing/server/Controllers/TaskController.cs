@@ -23,32 +23,32 @@ namespace TasKing.Controllers
 
         [Route("KreirajTask")]
         [HttpPost]
-        public async Task<ActionResult> KreirajTask(string naziv, string opis, int projekatID, string vrednost, string tip)
+        public async Task<ActionResult> KreirajTask([FromBody] TaskDTO Task)
         {
-            var task = Context.Taskovi.Where(t => t.naziv == naziv).FirstOrDefault();
+            var task = Context.Taskovi.Where(t => t.naziv == Task.naziv).FirstOrDefault();
             if(task == null)
             {
-                 if(string.IsNullOrWhiteSpace(naziv) || naziv.Length > 50)
+                 if(string.IsNullOrWhiteSpace(Task.naziv) || Task.naziv.Length > 50)
                         {
                            return BadRequest("Ime je prazno ili je duze od 50!");
                         }
 
                         try
                         {
-                            Projekat proj = Context.Projekti.Where(p => p.ID == projekatID).FirstOrDefault();
+                            Projekat proj = Context.Projekti.Where(p => p.ID == Task.projekatID).FirstOrDefault();
                             Models.Task task1 = new Models.Task
                             {
-                                naziv = naziv,
-                                opis = opis,
+                                naziv = Task.naziv,
+                                opis = "opis",
                                 status = false,
                                 projekat = proj,
-                                vrednost = vrednost,
-                                tip =tip
+                                vrednost = Task.bodovi.ToString(),
+                                tip = "wtf je tip"
                             };
 
                             Context.Taskovi.Add(task1);
                             await Context.SaveChangesAsync();
-                            return Ok("Sve je OK!");
+                            return Ok(task1.ID);
                         }
 
                         catch(Exception e)

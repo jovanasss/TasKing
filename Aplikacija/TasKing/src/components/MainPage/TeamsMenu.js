@@ -74,7 +74,7 @@ export default function TeamsMenu(props){
               <ListItem key={0} style={{display: props.clanID!=-1? 'inline' : 'none'}}>
                   <ThemeProvider theme={theme}>
                     <Button>
-                      <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
+                      <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}} >
                         <AddCircleIcon/>
                       </IconButton>
                       <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>

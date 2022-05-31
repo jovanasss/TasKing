@@ -23,30 +23,30 @@ namespace TasKing.Controllers
 
         [Route("KreirajProjekat")]
         [HttpPost]
-        public async Task<ActionResult> KreirajProjekat(string naziv, string opis, int timID)
+        public async Task<ActionResult> KreirajProjekat([FromBody] ProjekatDTO projekat)
         {
-            var proj = Context.Projekti.Where(p => p.naziv == naziv).FirstOrDefault();
+            var proj = Context.Projekti.Where(p => p.naziv == projekat.naziv).FirstOrDefault();
             if(proj == null)
             {
-                 if(string.IsNullOrWhiteSpace(naziv) || naziv.Length > 50)
+                 if(string.IsNullOrWhiteSpace(projekat.naziv) || projekat.naziv.Length > 50)
                         {
                            return BadRequest("Ime je prazno ili je duze od 50!");
                         }
 
                         try
                         {
-                            Tim tim = Context.Timovi.Where(t => t.ID == timID).FirstOrDefault();
+                            Tim tim = Context.Timovi.Where(t => t.ID == projekat.timID).FirstOrDefault();
                             Projekat projekat1 = new Projekat
                             {
-                                naziv = naziv,
-                                opis = opis,
+                                naziv = projekat.naziv,
+                                opis = projekat.opis,
                                 status = false,
                                 tim = tim
                             };
 
                             Context.Projekti.Add(projekat1);
                             await Context.SaveChangesAsync();
-                            return Ok("Sve je OK!");
+                            return Ok(projekat1.ID);
                         }
 
                         catch(Exception e)

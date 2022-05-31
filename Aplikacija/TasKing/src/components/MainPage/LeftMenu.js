@@ -1,5 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 //import '../styles/MainPage/LeftMenu.css';
+import { useNavigate } from "react-router-dom";
 import { createTheme, IconButton, List, ListItem, Paper, Tooltip } from '@mui/material';
 import { Typography } from '@mui/material';
 import { SubjectOutlined } from '@mui/icons-material';
@@ -17,6 +18,7 @@ export default function LeftMenu(props){
     
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
     console.log(user.id);
+
 
     fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.id,
     {
@@ -38,6 +40,14 @@ export default function LeftMenu(props){
         alert("uneli ste pogresno korisnicko ime ili lozinku");
       }
     })
+  }
+
+
+  let navigate = useNavigate();
+  // promena strane
+  const routeChange = () =>{ 
+    let path = `/cORG`; 
+    navigate(path);
   }
 
   useEffect(() => {
@@ -74,7 +84,7 @@ export default function LeftMenu(props){
         <List className='listDiv'>
           <ListItem key={0}>
               <ThemeProvider theme={theme}>
-                <IconButton sx={{backgroundColor: 'white'}}>
+                <IconButton sx={{backgroundColor: 'white'}} onClick={() => routeChange()}>
                   <AddCircleIcon/>
                 </IconButton>
               </ThemeProvider>
