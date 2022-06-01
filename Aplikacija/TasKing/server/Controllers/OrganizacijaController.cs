@@ -185,7 +185,12 @@ namespace TasKing.Controllers
         {
             try
             {
-                var tim = await Context.Timovi.Where(k => k.ID == timID).FirstOrDefaultAsync();
+                var tim = await Context.Timovi.Where(k => k.ID == timID)
+                .Include(p => p.organizacija)
+                .FirstOrDefaultAsync();
+
+                //var organizacija = tim.organizacija ;
+
 
                 return Ok(tim.organizacija.ID);
             }

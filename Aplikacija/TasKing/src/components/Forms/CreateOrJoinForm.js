@@ -191,6 +191,10 @@ function CreateOrJoinForm(){
   let path = `/main`; 
   navigate(path);
   }
+  const navigacija = () => {
+    let path = '/cORG';
+    navigate(path);
+  }
 
 
 
@@ -222,7 +226,7 @@ function CreateOrJoinForm(){
         </div>
       <ThemeProvider theme={theme}>
         <Button 
-        onClick={routeChange}
+        onClick={navigacija}
         //style={createOrgButtonStyle} 
         sx={{
            border: 2,

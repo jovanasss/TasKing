@@ -79,7 +79,15 @@ namespace TasKing.Controllers
 
                             Context.Korisnici.Add(korisnik1);
                             await Context.SaveChangesAsync();
-                            return Ok("Sve je OK!");
+
+                            var podaci = new
+                            {
+                                korisnickoIme = korisnik1.korisnickoIme,
+                                lozinka = korisnik1.lozinka,
+                                id = korisnik1.ID
+                            };
+                            return Ok(podaci);
+
                         }
 
                         catch(Exception e)

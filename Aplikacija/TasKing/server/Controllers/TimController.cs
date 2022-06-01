@@ -25,6 +25,8 @@ namespace TasKing.Controllers
         [HttpPost]
         public async Task<ActionResult> KreirajTim([FromBody] TimDTO tim)
         {
+            var org = Context.Organizacije.Where(p=> p.ID == tim.idOrganizacije).FirstOrDefault();
+
             var t = Context.Timovi.Where(p => p.ime == tim.ime).FirstOrDefault();
             if(t == null)
             {
@@ -41,7 +43,8 @@ namespace TasKing.Controllers
                                 datumOsnivanja = DateTime.Now,
                                 aktivan = true,
                                 slika = tim.slika,
-                                kod = tim.kod
+                                kod = tim.kod,
+                                organizacija = org         
                             };
 
                             Context.Timovi.Add(tim1);

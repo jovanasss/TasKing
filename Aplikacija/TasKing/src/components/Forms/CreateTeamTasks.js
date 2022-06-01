@@ -77,7 +77,7 @@ function CreateTeamTasks(){
             naziv : projName,
             opis : projDesc,
             //taskovi : tasks
-            timID : 1,
+            timID : 3012,
         }
         console.log(projekat);
 

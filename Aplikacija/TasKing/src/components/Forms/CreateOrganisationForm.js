@@ -55,9 +55,7 @@ function CreateOrganisationForm (){
           //type : type,
           ime : orgName
         }
-        const tim = {
-          ime : teamName
-        }
+
         let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/", {
           method : 'POST',
           headers : {
@@ -93,6 +91,15 @@ function CreateOrganisationForm (){
           let idClanaORG = temp ;
           console.log("IDclanaOrganizacije :" ,idClanaORG);
           console.log(statusU);
+
+
+          const tim = {
+            ime : teamName ,
+            idOrganizacije : idNoveOrg,
+            
+          }
+          console.log(tim);
+
 
           let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
             method : 'POST',

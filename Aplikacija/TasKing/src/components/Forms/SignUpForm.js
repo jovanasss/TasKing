@@ -49,6 +49,11 @@ function SignUp(){
             },
             body : JSON.stringify(user)
           });
+          let a = await result.json();
+          console.log(a);
+          console.log(JSON.stringify(a));
+
+          localStorage.setItem('user-info',JSON.stringify(a))
           //result  = await result.json();
           console.log(result.status);
           if (result.status === 200){
