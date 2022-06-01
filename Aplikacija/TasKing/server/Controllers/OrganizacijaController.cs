@@ -162,5 +162,37 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske" + e.Message);
             }
         }
+
+        [Route("VratiOrganizaciju/{kod}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiOrganizaciju(string kod)
+        {
+            try
+            {
+                var organizacija = await Context.Organizacije.Where(k => k.kod == kod).FirstOrDefaultAsync();
+
+                return Ok(organizacija.ID);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
+
+        [Route("VratiOrganizacijuTim/{timID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiOrganizaciju(int timID)
+        {
+            try
+            {
+                var tim = await Context.Timovi.Where(k => k.ID == timID).FirstOrDefaultAsync();
+
+                return Ok(tim.organizacija.ID);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
     }
 }

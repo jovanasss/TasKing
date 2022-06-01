@@ -193,5 +193,22 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske" + e.Message);
             }
         }
+
+
+        [Route("VratiTim/{kod}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiTim(string kod)
+        {
+            try
+            {
+                var tim = await Context.Timovi.Where(k => k.kod == kod).FirstOrDefaultAsync();
+
+                return Ok(tim.ID);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
     }
 }

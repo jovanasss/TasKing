@@ -52,9 +52,13 @@ function CreateTeamTasks(){
     // error check => napraviNoviTask(Naslov , bodovi) && dodavnje u taskList parent Projekta
     const handleSubmit = () => {
         setOpenD(false)
-        let task = {bodovi: bodovi ,taskName : taskName};
+        let task = {
+            naziv: taskName ,
+            bodovi : bodovi
+        };
         let arr = tasks.concat(task);
         setTasks(arr);
+        console.log(arr);
 
        // const t = new Task(bodovi,taskName);
 
@@ -90,18 +94,44 @@ function CreateTeamTasks(){
 
           // dodati idProjekta u niz taskova i proslediti kroz body fetcha 
           // za svaki task mora da se doda novi prop idProjekta vrv preko map f-je i onda se vrti foreach sa ovim fetchom ispod
+ 
+         /* tasks.map((task)=> {
+            niz[task] = Object.assign(tasks[task] , idProjekta);
+         })*/
+
+         console.log(tasks);
+         // dodajemo prop idProjekta 
+         tasks.forEach((element) => {
+            element.projekatID = idProjekta
+          });
+
+          console.log(tasks)
+          
 
           console.log(status);
+
+          // ako je ok dodajemo taskove 
           if (status === 200){
 
-            let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
-                method : 'POST',
-                headers : {
-                  'Content-Type': 'application/json; charset=utf-8',
-                  'Accept': 'application/json; charset=utf-8'
-                },
-                body : JSON.stringify(tasks)
-              });
+            tasks.map(async task => {
+                let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
+                    method : 'POST',
+                    headers : {
+                      'Content-Type': 'application/json; charset=utf-8',
+                      'Accept': 'application/json; charset=utf-8'
+                    },
+                    body : JSON.stringify(task)
+                  });
+                  let statusT = result.status;
+                  if ( statusT === 200){
+                      routeChange();
+                  }
+            })
+          }
+          else {
+
+                // prikaz greske 
+              console.log(status);
           }
 
     }
@@ -205,7 +235,7 @@ function CreateTeamTasks(){
                                  {tasks.map(task => 
                             <ListItem>             
                             <ListItemButton component="a" href="#simple-list">
-                                <ListItemText primary={task.taskName} secondary={task.bodovi} />
+                                <ListItemText primary={task.naziv} secondary={task.bodovi} />
                                 <IconButton edge="end" aria-label="delete">
                                 <DeleteIcon />
                                     </IconButton>

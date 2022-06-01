@@ -7,7 +7,7 @@ import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate } from "react-router-dom";
 import { ClassNames } from "@emotion/react";
 import { Password } from "@mui/icons-material";
-import Korisnik from "../../Classes/KorisnikDTO";
+import Korisnik from "../../Classes/TaskDTO";
 
 function SignUp(){
 
@@ -54,6 +54,7 @@ function SignUp(){
           console.log(result.status);
           if (result.status === 200){
             routeChange()
+        
           }
           else{
               console.log(result.status)
@@ -162,13 +163,13 @@ function SignUp(){
                         <div className="inputFirstName">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setFirstName(e.target.value) } error={fnameError}
-                                id="outlined-basic" label="First Name" variant="outlined" size="small" type="text" color="primary" required/>
+                                id="outlined-basic" label="First Name" variant="outlined"  type="text" color="primary" required sx= {{ width : "100%"}}/>
                             </ThemeProvider>
                         </div>
                         <div className="inputLastName">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setLastName(e.target.value) } error={lnameError}
-                                id="outlined-basic" label="Last Name" variant="outlined" size="small" type="text" color="primary" required/>
+                                id="outlined-basic" label="Last Name" variant="outlined"  type="text" color="primary" required sx ={{ width : "100%"}}/>
                             </ThemeProvider>
                         </div>
                     </div>

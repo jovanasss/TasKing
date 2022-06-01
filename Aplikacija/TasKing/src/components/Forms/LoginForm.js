@@ -43,7 +43,29 @@ function LoginForm()  {
       console.log(result);
       localStorage.setItem('user-info',JSON.stringify(a))
       // history.push("/main")
-      routeChange()
+
+      const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+      console.log(userN.id);
+
+      let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+userN.id , {
+        method : 'GET',
+        headers : {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json; charset=utf-8'
+        },
+      });
+      temp = await temp.json();
+      let niz = [];
+      console.log(temp);
+      niz = temp ;
+      let statusOrg = temp.status
+      if (niz.length === 0){
+        navigate("/CoJ")
+      }
+      else{
+        routeChange()
+      }
+
     }
 
 

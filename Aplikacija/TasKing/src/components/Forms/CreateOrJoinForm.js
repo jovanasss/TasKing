@@ -41,7 +41,7 @@ function CreateOrJoinForm(){
   const [orgCodeError , setOrgCodeError] = useState(false)
 
   // Join Team
-  const handleJoinTeam = () => {
+  async function  handleJoinTeam()  {
     
     if (teamCode === ''){
       setTeamCodeError(true)
@@ -49,13 +49,96 @@ function CreateOrJoinForm(){
     else {
       // joinTeam(userID ,orgID)
       console.log(teamCode)
-      routeChange()
+
+      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
+        method : 'GET',
+        headers : {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json; charset=utf-8'
+        },
+      });
+      let statusTima = temp.status;
+      temp = await temp.json();
+      console.log(temp);
+      let idNovogTima = temp;
+
+      if (statusTima === 200){
+
+
+        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima , {
+          method : 'GET',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+        });
+        nzm = await nzm.json();
+        let idORG = nzm ;
+
+
+        const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+        console.log(userN.id);
+
+        const ClanOrganizacije = {
+          idKorisnika : userN.id,
+          idOrganizacije : idORG,
+          admin : false
+        }
+
+        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+          method : 'POST',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+          body : JSON.stringify(ClanOrganizacije)
+        });
+        let statusU = rezultat.status ;
+        rezultat = await rezultat.json();
+        let idClanaORG = rezultat ;
+        console.log("IDclanaOrganizacije :" ,idClanaORG);
+        console.log(statusU);
+
+
+        if (statusU === 200){
+
+
+          const ClanTima = {
+            idClanaOrganizacije : idClanaORG,
+            idtima : idNovogTima,
+            vodja : false
+          }
+          console.log(ClanTima);
+  
+  
+          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(ClanTima)
+          });
+  
+          let statusTmp = tmp.status;
+          if ( statusTmp === 200){
+
+            routeChange();
+
+          }
+        }
+      }
+      else {
+        console.log(statusTima);
+      }
+
+       // routeChange()
     }
 
   }
 
   // Join Org
-  const handleJoinOrg = () => {
+  async function handleJoinOrg()  {
 
     if (orgCode === ''){
       setOrgCodeError(true)
@@ -63,7 +146,42 @@ function CreateOrJoinForm(){
     else {
       // joinOrg(userID ,orgID)
       console.log(orgCode)
-      routeChange()
+
+      let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
+        method : 'GET',
+        headers : {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json; charset=utf-8'
+        },
+      });
+      temp = await temp.json();
+      console.log(temp);
+      let idNoveOrg = temp;
+
+      const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+      console.log(userN.id);
+
+      const ClanOrganizacije = {
+        idKorisnika : userN.id,
+        idOrganizacije : idNoveOrg,
+        admin : false,
+      }
+
+        let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+          method : 'POST',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+          body : JSON.stringify(ClanOrganizacije)
+        });
+        let noviStatus = tmp.status;
+        if ( noviStatus === 200){
+          routeChange();
+        }
+
+
+      // routeChange()
     }
   }
 
