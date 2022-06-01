@@ -20,7 +20,7 @@ namespace TasKing.Controllers
         {
             Context = context;
         }
-
+        
         [Route("KreirajProjekat")]
         [HttpPost]
         public async Task<ActionResult> KreirajProjekat([FromBody] ProjekatDTO projekat)
@@ -40,7 +40,7 @@ namespace TasKing.Controllers
                             {
                                 naziv = projekat.naziv,
                                 opis = projekat.opis,
-                                status = false,
+                                aktivan = true,
                                 tim = tim
                             };
 
@@ -60,23 +60,18 @@ namespace TasKing.Controllers
             }
         }
 
-       [Route("VratiProjekteSaTaskovima/{userID}")]
+       [Route("VratiProjekteSaTaskovima/{clantimaID}")]
        [HttpGet]
-       public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
+       public async Task<ActionResult> VratiProjekteSaTaskovima(int clantimaID)
        {
            try
            {
-               var clan = await Context.Korisnici.Where(k => k.ID == userID)
-               .Include(k => k.clanoviOrganizacije)
-               .ThenInclude(c => c.clanoviTima)
-               .ThenInclude(c => c.tim)
+               var clan = await Context.ClanoviTima.Where(c => c.ID == clantimaID)
+               .Include(c => c.tim)
                .ThenInclude(t => t.projekti)
-               .Select(kor => 
-               kor.clanoviOrganizacije
-               .Select(clan => 
-               clan.clanoviTima
-               .Select(c => 
-               c.tim.projekti
+               .ThenInclude(p => p.taskovi).ToListAsync();
+              
+              var projekti = clan[0].tim.projekti
                .Select(p => new
                {
                    id = p.ID,
@@ -86,27 +81,86 @@ namespace TasKing.Controllers
                     {
                         naziv = task.naziv,
                         opis = task.opis,
-                        vrednost = task.vrednost
+                        vrednost = task.vrednost,
                     }),
-                    taskoviUradjeni = p.taskovi.Where(t => t.clanTima.clanOgranizacije.korisnik.ID == userID).Select(p => new
+                    /*taskoviUradjeni = p.taskovi.Where(t => t.clanTima.ID == clantimaID).Select(p => new
                     {
                         id = p.ID,
                         naziv = p.naziv,
                         opis = p.opis,
                         vrednost = p.vrednost,
                         tip = p.tip
-                    })    
-               })))).FirstOrDefaultAsync();
+                    })*/
+               }).ToList();
 
-                var c1 = clan.FirstOrDefault();
-                var c2 = c1.FirstOrDefault();
-
-                return Ok(c2);
+                return Ok(projekti);
            }
            catch(Exception e)
            {
                return BadRequest("Doslo je do greske" + e.Message);
            }
        }
+
+        /*[Route("VratiProjekteSaTaskovima/{userID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
+        {
+            try
+            {
+                List<ProjectInfo> allProjectsInfo = new List<ProjectInfo>();
+                var clanoviOrg = await Context.ClanoviOrganizacije.Where(clan => clan.korisnik.ID == userID)
+                    .Include(o => o.clanoviTima)
+                    .ThenInclude(t => t.tim)
+                    .ThenInclude(ti => ti.projekti)
+                    .ThenInclude(p => p.taskovi)
+                    .ToListAsync();
+
+                foreach (var clanO in clanoviOrg)
+                {
+                    foreach (var clanT in clanO.clanoviTima)
+                    {
+                        foreach (var proj in clanT.tim.projekti)
+                        {
+                            List<Models.Task> allTasks = new List<Models.Task>();
+                            List<Models.Task> myTasks = new List<Models.Task>();
+                            foreach (var task in proj.taskovi)
+                            {
+                                allTasks.Add(task);
+                                if (task.clanTima == clanT)
+                                    myTasks.Add(task);
+                            }
+                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.status, allTasks, myTasks);
+                            allProjectsInfo.Add(projInfo);
+                        }
+                    }
+                }
+                return Ok(allProjectsInfo);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
+
+        public class ProjectInfo
+        { 
+        public int id { get; set; }
+        public string naziv { get; set; }
+        public string opis { get; set; }
+        public bool status { get; set; }
+        public List<Models.Task> allTasks { get; set; }
+        public List<Models.Task> myTasks { get; set; }
+
+        public ProjectInfo(int id_, string naziv_, string opis_, bool status_, List<Models.Task> allTasks_, List<Models.Task> myTasks_)
+        {
+            id = id_;
+            naziv = naziv_;
+            opis = opis_;
+            status = status_;
+            allTasks = allTasks_;
+            myTasks = myTasks_;
+        }
+
+      }*/
     }
 }

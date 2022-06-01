@@ -21,10 +21,9 @@ namespace Models
         public string opis { get; set; }
 
         [Required]
-        public bool status { get; set; }
+        public bool aktivan { get; set; }
 
         [Required]
-        [JsonIgnore]
         public Tim tim { get; set; }
 
         public List<Task> taskovi { get; set; }

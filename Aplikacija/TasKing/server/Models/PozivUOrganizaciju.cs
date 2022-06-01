@@ -19,7 +19,7 @@ namespace Models
         public DateTime vremePoziva { get; set; }
 
         [Required]
-        public bool status { get; set; }
+        public bool prihvacen { get; set; }
 
         [Required]
         public Organizacija organizacija { get; set; }

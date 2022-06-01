@@ -30,6 +30,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const drawerwidth = 240;
 
@@ -99,7 +100,6 @@ return(
 }
 
 function ProfileForm1({user}){
-  //const container = window !== undefined ? () => window().document.body : undefined;
   
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -157,6 +157,15 @@ function ProfileForm1({user}){
       const drawer = (
         <div>
         <div className='divAvatar'>
+               <div className="divButtonBackToMain">
+               <ThemeProvider theme={theme}>
+                 <Button 
+                 variant="contained" 
+                 color="secondary" 
+                 startIcon={ <ThemeProvider theme={theme}><ArrowBackIcon color="primary" /></ThemeProvider>}
+                 onClick={() => navigate("/Main")}></Button>
+                </ThemeProvider>
+               </div>
                 <StyledBadge
                 overlap="circular"
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -183,6 +192,7 @@ function ProfileForm1({user}){
                  </ListItem>
                ))}
               </List>
+              <div className="divButtonLogOut">
               <ThemeProvider theme={theme}>
               <Button 
               variant="contained"
@@ -192,6 +202,7 @@ function ProfileForm1({user}){
                 {item.text} {item.icon}
               </Button>
               </ThemeProvider>
+              </div>
               <Dialog
                open={open}
                onClose={handleClose}

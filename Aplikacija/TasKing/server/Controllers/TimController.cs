@@ -120,7 +120,7 @@ namespace TasKing.Controllers
                         }
 
                     var projektiInfo = await Context.Projekti
-                            .Where(p=>p.tim==tim && p.status==false)
+                            .Where(p=>p.tim==tim && p.aktivan==true)
                             .Select(p=>
                             new{
                                 idProj = p.ID,
@@ -143,7 +143,7 @@ namespace TasKing.Controllers
                 {
                     var projekatInfo = await Context.Projekti
                             .Include(p=>p.taskovi)
-                            .Where(p=>p.ID==projID && p.status==false)
+                            .Where(p=>p.ID==projID && p.aktivan==true)
                             .Select(p=>
                             new{
                                 imeProj = p.naziv,
@@ -165,28 +165,25 @@ namespace TasKing.Controllers
                     return BadRequest(e.Message);
                 }
         }
-
-        [Route("VratiTimoveKorisnika/{userID}")]
+        
+        [Route("VratiTimoveKorisnika/{clanorgID}")]
         [HttpGet]
-        public async Task<ActionResult> VratiTimoveKorisnika(int userID)
+        public async Task<ActionResult> VratiTimoveKorisnika(int clanorgID)
         {
             try
             {
-                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
-                .Include(k => k.clanoviOrganizacije)
-                .ThenInclude(c => c.clanoviTima)
-                .ThenInclude(clan => clan.tim)
-                .Select(kor => 
-                  kor.clanoviOrganizacije.Select(clan => 
-                  clan.clanoviTima.Select(c => new {
-                      id = c.tim.ID,
-                      ime = c.tim.ime,
-                      slika = c.tim.slika
-                  }))
-                ).FirstOrDefaultAsync();
+                var clan = await Context.ClanoviOrganizacije.Where(clan => clan.ID == clanorgID)
+                    .Include(clan => clan.clanoviTima)
+                    .ThenInclude(clantima => clantima.tim).ToListAsync();
 
-                var k = korisnik.FirstOrDefault();
-                return Ok(k);
+                var timovi = clan[0].clanoviTima.Select(clantima => new
+                {
+                    id = clantima.tim.ID,
+                    ime = clantima.tim.ime,
+                    slika = clantima.tim.slika
+                }).ToList();
+                    
+                return Ok(timovi);
             }
            catch(Exception e)
             {

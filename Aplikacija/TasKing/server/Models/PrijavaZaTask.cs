@@ -6,22 +6,19 @@ using System.Text.Json.Serialization;
 
 namespace Models
 {
-    [Table("Poziv u tim")]
-    public class PozivUTim
+    [Table("Prijava Za Task")]
+    public class PrijavaZaTask
     {
         [Key]
         public int ID { get; set; }
 
         [Required]
-        public Korisnik pozvaniKorisnik { get; set; }
+        public Task task { get; set; }
 
         [Required]
-        public DateTime vremePoziva { get; set; }
+        public ClanTima clanTima { get; set; }
 
-        [Required]
-        public bool prihvacen { get; set; }
-
-        [Required]
-        public Tim tim { get; set; }
+        public bool pregledan { get; set; }
     }
+
 }

@@ -18,6 +18,12 @@ namespace Models
         public DbSet<Task> Taskovi {get; set;}
 
         public DbSet<Tim> Timovi {get; set;}
+        
+        public DbSet<PozivUTim> PoziviUTim {get; set;}
+
+        public DbSet<PozivUOrganizaciju> PoziviUOrganizaciju {get; set;}
+
+        public DbSet<PrijavaZaTask> PrijaveZaTask {get; set;}
 
         public TasKingContext(DbContextOptions options) :base(options)
         {

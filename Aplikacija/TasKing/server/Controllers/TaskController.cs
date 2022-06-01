@@ -40,7 +40,7 @@ namespace TasKing.Controllers
                             {
                                 naziv = Task.naziv,
                                 opis = "opis",
-                                status = false,
+                                status = 0,
                                 projekat = proj,
                                 vrednost = Task.bodovi.ToString(),
                                 tip = "wtf je tip"

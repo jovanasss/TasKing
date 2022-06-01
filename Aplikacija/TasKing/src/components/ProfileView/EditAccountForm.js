@@ -16,8 +16,10 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import ClearIcon from '@mui/icons-material/Clear';
+import { ListItemButton } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
 
 const theme = createTheme({
   components:{
@@ -64,11 +66,14 @@ const theme = createTheme({
 function EditAccountForm(){
 
     const [user, setUser] = useState(null);
-    const [teams, setTeams] = useState([]);
-    const [organisations, setOrganisations] = useState([]);
+    const [teams, setTeams] = useState(null);
+    const [organisations, setOrganisations] = useState(null);
+    const teams1 = [];
+    const idclanova = [];
 
   useEffect(() =>{
-    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+1,
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+user.id,
     {
         method:"GET",
         headers: {
@@ -83,7 +88,8 @@ function EditAccountForm(){
 }, [])
 
     useEffect(() => {
-        fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/" + 1,
+      const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/" + user.id,
             {
                 method: "GET",
                 headers: {
@@ -98,7 +104,8 @@ function EditAccountForm(){
     }, [])
 
     useEffect(() => {
-        fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + 1,
+      const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Korisnik/VratiIDClanovaOrganizacije/" + user.id,
             {
                 method: "GET",
                 headers: {
@@ -107,9 +114,28 @@ function EditAccountForm(){
             }).then(res => {
                 res.json()
                     .then(data => {
-                        setTeams(data);
+                        data.forEach(d =>{
+                          idclanova.push(d);
+                        })
+                        {idclanova.map(clanid => {
+                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + clanid.id,
+                        {
+                            method: "GET",
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        }).then(res => {
+                            res.json()
+                                .then(data => {
+                                    data.forEach(d =>{
+                                      teams1.push(d);
+                                    })
+                                });
+                        })
+                        })}
+                        setTeams(teams1);
+                        })
                     });
-            })
     }, [])
 
   return(
@@ -123,15 +149,148 @@ function EditAccountForm1({user, organisations, teams}){
 
     const [open, setOpen] = useState(false);
 
-          const handleClickOpen = () => {
+        const handleClickOpen = () => {
             setOpen(true);
           };
         
-          const handleClose = () => {
+        const handleClose = () => {
             setOpen(false);
           };
 
-          const [active, setActive] = useState("TeamList");
+        const [active, setActive] = useState("OrganisationList");
+         
+        const [username, setUsername] = useState(null);
+        const [phone, setPhone] = useState(null);
+        const [currentpass, setCurrenpass] = useState(null);
+        const [newpass, setNewpass] = useState(null);
+        const [confirmnewpass, setConfirmnewpass] = useState(null);
+
+        function getUsername(e){
+          setUsername(e.target.value);
+          console.log(username);
+        }
+
+        function getPhone(e){
+          setPhone(e.target.value);
+        }
+
+        function getCurrentpass(e){
+          setCurrenpass(e.target.value);
+        }
+
+        function getNewpass(e){
+          setNewpass(e.target.value);
+        }
+
+        function getConfirmnewpass(e){
+          setConfirmnewpass(e.target.value);
+        }
+
+        function changeUsername(){
+          const user = (JSON.parse(window.localStorage.getItem('user-info')));
+          if(username == null){
+            alert("The field username must be filled in!");
+            return
+          }
+
+          if(username.length == 0){
+            alert("The field username must be filled in!");
+            return
+          }
+
+          if(username === user.korisnickoIme){
+            alert("This is already a username!");
+            return
+          }
+
+          fetch("https://localhost:5001/Korisnik/PromeniUsernameKorisniku/"+user.id+"/"+username,
+          {
+              method:"PUT",
+              headers:{
+                  "Content-Type":"application/json"
+              },
+          })
+           alert("Username is successfully changed 😀");
+           return
+        }
+
+        function changePhone(){
+          if(phone == null){
+            alert("The field phone number must be filled in!");
+            return
+          }
+
+          if(phone.length == 0){
+            alert("The field phone number must be filled in!");
+            return
+          }
+
+          const user = (JSON.parse(window.localStorage.getItem('user-info')));
+          fetch("https://localhost:5001/Korisnik/PromeniBrTelefonaKorisniku/"+user.id+"/"+phone,
+          {
+              method:"PUT",
+              headers:{
+                  "Content-Type":"application/json"
+              },
+          })
+          alert("Phone number is successfully changed 😀");
+          return
+        }
+
+        function changePassword(){
+          const user = (JSON.parse(window.localStorage.getItem('user-info')));
+
+          if(currentpass == null){
+            alert("The field current password must be filled in!");
+            return
+          }
+          if(newpass == null){
+            alert("The field new password must be filled in!");
+            return
+          }
+          if(confirmnewpass == null){
+            alert("The field confirm new password must be filled in!");
+            return
+          }
+
+          if(currentpass.length == 0){
+            alert("The field current password must be filled in!");
+            return
+          }
+          if(newpass.length == 0){
+            alert("The field new password must be filled in!");
+            return
+          }
+          if(confirmnewpass.length == 0){
+            alert("The field confirm new password must be filled in!");
+            return
+          }
+
+          if(currentpass !== user.lozinka){
+            alert("Wrong current password!");
+            return
+          }
+
+          if(newpass !== confirmnewpass){
+            alert("New password and confirm new password are not the same!");
+            return;
+          }
+
+          if(newpass == confirmnewpass == currentpass){
+            alert("This is already a password!");
+            return;
+          }
+
+          fetch("https://localhost:5001/Korisnik/PromeniPasswordKorisniku/"+user.id+"/"+currentpass+"/"+newpass+"/"+confirmnewpass,
+          {
+              method:"PUT",
+              headers:{
+                  "Content-Type":"application/json"
+              },
+          })
+          alert("Password is successfully changed 😀");
+          return
+        }
 
         return (
               <Grid container>
@@ -152,12 +311,14 @@ function EditAccountForm1({user, organisations, teams}){
                        <div className="DivEditUserName"> 
                         <div className="divInputUserName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" label="Username" value={user[0].korisnickoIme} variant="outlined" type="text" color="primary" sx ={{ width: "85%"  }}/>
+                                    <TextField id="outlined-basic" onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ width: "85%"  }}/>
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
                         <Button sx={{height:"40px", width: "40px", border:"2px solid black", borderRadius:"10px", marginTop:"12%"}}
-                        variant="contained">Edit</Button>
+                        variant="contained"
+                        onClick={changeUsername}
+                        >Edit</Button>
                         </ThemeProvider>
                        </div> 
 
@@ -170,12 +331,14 @@ function EditAccountForm1({user, organisations, teams}){
                         <div className="DivEditPhone"> 
                         <div className="divInputPhone">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" label="Phone Number" value={user[0].brtelefona} variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
+                                    <TextField id="outlined-basic" onChange={getPhone} label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
                         <Button sx={{height:"40px", width: "40px", border:"2px solid black", borderRadius:"10px", marginTop:"12%"}}
-                        variant="contained">Edit</Button>
+                        variant="contained"
+                        onClick={changePhone}
+                        >Edit</Button>
                         </ThemeProvider>
                         </div>
                         </div>
@@ -198,6 +361,7 @@ function EditAccountForm1({user, organisations, teams}){
                             <DialogContentText>
                              Enter your current password and a new password.
                            </DialogContentText>
+                          <ThemeProvider theme={theme}>
                          <TextField
                           autoFocus
                           margin="dense"
@@ -206,6 +370,7 @@ function EditAccountForm1({user, organisations, teams}){
                           type="password"
                           fullWidth
                           variant="standard"
+                          onChange={getCurrentpass}
                           />
                           <TextField
                           autoFocus
@@ -215,6 +380,7 @@ function EditAccountForm1({user, organisations, teams}){
                           type="password"
                           fullWidth
                           variant="standard"
+                          onChange={getNewpass}
                           />
                           <TextField
                           autoFocus
@@ -224,11 +390,13 @@ function EditAccountForm1({user, organisations, teams}){
                           type="password"
                           fullWidth
                           variant="standard"
+                          onChange={getConfirmnewpass}
                           />
+                          </ThemeProvider>
                        </DialogContent>
                       <DialogActions>
-                      <Button onClick={handleClose}>Cancel</Button>
-                      <Button onClick={handleClose}>Done</Button>
+                     <ThemeProvider theme={theme}><Button color="primary" onClick={handleClose}>Cancel</Button></ThemeProvider>
+                     <ThemeProvider theme={theme}><Button variant="contained" onClick={changePassword}>Done</Button></ThemeProvider>
                     </DialogActions>
                     </Dialog>
                   </div>
@@ -275,39 +443,6 @@ function EditAccountForm1({user, organisations, teams}){
 
 function PaperListTeams({ teams }){
 
-  /*const teams = [
-    {
-      id: 1,
-      photo: <Avatar></Avatar>,
-      name: "Stump"
-    },
-    {
-      id: 2,
-      photo: <Avatar></Avatar>,
-      name: "Stump"
-    },
-    {
-      id: 3,
-      photo: <Avatar></Avatar>,
-      name: "Stump"
-    },
-    {
-      id:4,
-      photo: <Avatar></Avatar>,
-      name: "Stump"
-    },
-    {
-      id:5,
-      photo: <Avatar></Avatar>,
-      name: "Stump"
-    },
-    {
-      id:6,
-      photo: <Avatar></Avatar>,
-      name: "Stump"
-    }
-  ]*/
-
   return(
   <div className="divPaperEditAccount">
     <div className="divPaperTopLabelTeam"><h2>Teams</h2></div>
@@ -316,10 +451,12 @@ function PaperListTeams({ teams }){
         {teams.map(item => (
         <ListItem
          key={item.id}
-         button
         >
-        <ListItemIcon>{item.slika}</ListItemIcon>
+        <ListItemButton component="a" href="#simple-list">
+        <ListItemIcon><Avatar></Avatar></ListItemIcon>
         <ListItemText primary={item.ime} />
+        <IconButton edge="end" aria-label="delete"><ClearIcon /></IconButton>
+        </ListItemButton>
        </ListItem>
          ))}
       </List>
@@ -330,39 +467,6 @@ function PaperListTeams({ teams }){
 
 function PaperListOrganisations({ organisations }){
 
-  /*const organisations = [
-    {
-      id:1,
-      photo: <Avatar></Avatar>,
-      name: "Elfak"
-    },
-    {
-      id:2,
-      photo: <Avatar></Avatar>,
-      name: "Elfak"
-    },
-    {
-      id:3,
-      photo: <Avatar></Avatar>,
-      name: "Elfak"
-    },
-    {
-      id:4,
-      photo: <Avatar></Avatar>,
-      name: "Elfak"
-    },
-    {
-      id:5,
-      photo: <Avatar></Avatar>,
-      name: "Elfak"
-    },
-    {
-      id:6,
-      photo: <Avatar></Avatar>,
-      name: "Elfak"
-    }
-  ]*/
-
   return(
   <div className="divPaperEditAccount">
     <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
@@ -371,10 +475,12 @@ function PaperListOrganisations({ organisations }){
         {organisations.map(item => (
         <ListItem
          key={item.id}
-         button
         >
-        <ListItemIcon>{item.slika}</ListItemIcon>
+        <ListItemButton component="a" href="#simple-list">
+        <ListItemIcon><Avatar></Avatar></ListItemIcon>
         <ListItemText primary={item.ime} />
+        <IconButton edge="end" aria-label="delete"><ClearIcon /></IconButton>
+        </ListItemButton>
        </ListItem>
          ))}
       </List>

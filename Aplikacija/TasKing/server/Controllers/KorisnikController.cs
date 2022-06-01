@@ -189,6 +189,156 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske" + e.Message);
             }
         }
+
+        [Route("PromeniUsernameKorisniku/{userID}/{newusername}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniUsernameKorisniku(int userID, string newusername)
+        {
+            var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
+
+            if(korisnik == null)
+            {
+                return BadRequest("Korisnik ne postoji!");
+            }
+
+            try
+            {
+                korisnik.korisnickoIme = newusername;
+                await Context.SaveChangesAsync();
+                return Ok("Username je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("PromeniBrTelefonaKorisniku/{userID}/{novibrtelefona}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniBrTelefonaKorisniku(int userID, string novibrtelefona)
+        {
+            var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
+
+            if(korisnik == null)
+            {
+                return BadRequest("Korisnik ne postoji!");
+            }
+
+            try
+            {
+                korisnik.brTelefona = novibrtelefona;
+                await Context.SaveChangesAsync();
+                return Ok("Broj telefona je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("PromeniSlikuKorisniku/{userID}/{novaslika}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniSlikuKorisniku(int userID, string novaslika)
+        {
+            var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
+
+            if(korisnik == null)
+            {
+                return BadRequest("Korisnik ne postoji!");
+            }
+
+            try
+            {
+                korisnik.profilnaSlika = novaslika;
+                await Context.SaveChangesAsync();
+                return Ok("Profilna slika je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("PromeniPasswordKorisniku/{userID}/{currentpass}/{newpass}/{confirmnewpass}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniPasswordKorisniku(int userID, string currentpass, string newpass, string confirmnewpass)
+        {
+            var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
+
+            if(korisnik == null)
+            {
+                return BadRequest("Korisnik ne postoji!");
+            }
+
+            if(string.Compare(korisnik.lozinka, currentpass) != 0)
+            {
+                return BadRequest("Trenutni password nije validan!");
+            }
+
+            if(string.Compare(newpass, confirmnewpass) != 0)
+            {
+                return BadRequest("Novi password se ne slaze!");
+            }
+
+            try
+            {
+                korisnik.lozinka = newpass;
+                await Context.SaveChangesAsync();
+                return Ok("Password je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("VratiIDClanovaOrganizacije/{userID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiIDClanovaOrganizacije(int userID)
+        {
+            try
+            {
+                var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
+                    .Include(k => k.clanoviOrganizacije).ToListAsync();
+
+                var clanovi = korisnik[0].clanoviOrganizacije
+                    .Select(c => new
+                    {
+                        id = c.ID
+                    }).ToList();
+
+                return Ok(clanovi);
+                
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("VratiIDClanovaTima/{clanorgID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiIDClanovaTima(int clanorgID)
+        {
+            try
+            {
+                var korisnik = await Context.ClanoviOrganizacije.Where(c => c.ID == clanorgID)
+                    .Include(c => c.clanoviTima).ToListAsync();
+
+                var clanovi = korisnik[0].clanoviTima
+                    .Select(c => new
+                    {
+                        id = c.ID
+                    }).ToList();
+
+                return Ok(clanovi);
+                
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
     }
 }
 

@@ -23,7 +23,8 @@ function MyAccountForm(){
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+1,
+      const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+user.id,
         {
             method:"GET",
             headers: {
@@ -38,7 +39,8 @@ function MyAccountForm(){
     }, [])
 
     useEffect(() =>{
-        fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+1,
+      const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+user.id,
         {
             method:"GET",
             headers: {
@@ -54,7 +56,7 @@ function MyAccountForm(){
 
     return(
         <div className="divMyAccount">
-             {(projects && user) && <MyAccount1 projects={projects} user={user} />}
+             {projects && user && <MyAccount1 projects={projects} user={user} />}
         </div>
     )
 }

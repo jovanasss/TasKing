@@ -9,7 +9,8 @@ public class TaskDTO {
     
     //public string opis {get ; set;}
 
-    // public string status {get ; set;}
+    public bool aktivan {get ; set;}
+
     public int bodovi {get ;set;}
 
     public int projekatID {get;set ;}

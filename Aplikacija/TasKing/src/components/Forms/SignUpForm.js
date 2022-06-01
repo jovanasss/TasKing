@@ -7,7 +7,6 @@ import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate } from "react-router-dom";
 import { ClassNames } from "@emotion/react";
 import { Password } from "@mui/icons-material";
-import Korisnik from "../../Classes/TaskDTO";
 
 function SignUp(){
 

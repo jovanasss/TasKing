@@ -21,7 +21,7 @@ namespace Models
         public string opis { get; set; }
 
         [Required]
-        public bool status { get; set; }
+        public int status { get; set; }
 
         [Required]
         public string vrednost { get; set; }
@@ -31,6 +31,8 @@ namespace Models
         public Projekat projekat { get; set; }
 
         public ClanTima clanTima { get; set; }
+
+        public List<PrijavaZaTask> prijaveZaTask { get; set; }
 
     }
 

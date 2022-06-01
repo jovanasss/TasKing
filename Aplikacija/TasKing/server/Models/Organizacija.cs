@@ -27,6 +27,9 @@ namespace Models
         public bool aktivna { get; set; }
 
         [JsonIgnore]
+        public List<Tim> timovi { get; set; }
+
+        [JsonIgnore]
         public List<ClanOrganizacije> clanoviOrganizacije { get; set; }
 
         public List<PozivUOrganizaciju> poziviUOrganizaciju { get; set; }
