@@ -33,6 +33,14 @@ export default function LeftMenu(props){
         res.json().then(data => {
           console.log(data);
           setOrganisations(data)
+          if(data==undefined || data==null)
+          return;
+         
+          if(data.length==0)
+            return;  
+          console.log(data[0].idClan);
+          setOrg(data[0].idClan)
+          localStorage.setItem('clanOrgID',data[0].idClan)
         });
       }
       else
@@ -92,7 +100,7 @@ export default function LeftMenu(props){
            {organisations.map(item => (
              <ListItem key={item.idClan} className={curOrg==item.idClan? 'activeEnt' : null}>
               <ThemeProvider theme={theme}>
-                <IconButton onClick={() =>{setOrg(item.idClan)}} sx={{backgroundColor: 'white'}}>
+                <IconButton onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan)}} sx={{backgroundColor: 'white'}}>
                   <SubjectOutlined/>
                 </IconButton>
               </ThemeProvider>

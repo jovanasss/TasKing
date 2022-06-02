@@ -18,10 +18,8 @@ namespace Models
         [Required]
         public bool izbacen { get; set; }
         
-        [JsonIgnore]
         public Korisnik korisnik { get; set; }
 
-        [JsonIgnore]
         public Organizacija organizacija { get; set; }
 
         public List<ClanTima> clanoviTima { get; set; }

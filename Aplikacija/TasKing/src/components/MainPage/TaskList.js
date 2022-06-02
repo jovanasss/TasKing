@@ -106,9 +106,9 @@ return(
                           //aria-describedby={id} 
                           variant="contained" 
                           //onClick={handleClick}
-                          sx={{ border:"2px solid black", borderRadius:"10px", display: displej[props.vodjaStatus][task.status]}}
+                          sx={{ border:"2px solid black", borderRadius:"10px", display: displej[props.vodjaStatus? 1 : 0][task.status]}}
                           color="primary">
-                            {tekstovi[props.vodjaStatus][task.status]}
+                            {tekstovi[props.vodjaStatus? 1 : 0][task.status]}
                         </Button>
                       </ThemeProvider> 
                     </CardActions>
@@ -167,7 +167,7 @@ function TaskList(props){
 
   return(
         <div className="divTasks">
-                <Box className='addBtnBox' sx={{margin:"0.5%", display: displejPlus[props.vodjaStatus] }}>
+                <Box className='addBtnBox' sx={{margin:"0.5%", display: displejPlus[props.vodjaStatus? 1 : 0] }}>
                   <Card variant="outlined" 
                     className='addCard'
                     sx={{minWidth: 250, maxWidth: 340, minHeight: 250, maxHeight: 340, boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)"}}>

@@ -37,12 +37,12 @@ export default function ProgressBar(props) {
                 <Typography className='effectText' variant="h6" color="inherit" component="div" style={{ marginLeft:'10px'}}>
                 Tasks done
                 </Typography>
-                <Typography className='effectText' variant="h6" color="inherit" component="div"style={{ marginLeft:'50px', display: displej[props.vodjaStatus]}}>
+                <Typography className='effectText' variant="h6" color="inherit" component="div"style={{ marginLeft:'50px', display: displej[props.vodjaStatus? 1 : 0]}}>
                 Your effect:
                 </Typography>
                 <div
                   style={{
-                      display: displej[props.vodjaStatus],
+                      display: displej[props.vodjaStatus? 1 : 0],
                       width: effect*5, 
                       border: "1px solid black", 
                       borderRadius:"10px",
@@ -64,7 +64,7 @@ export default function ProgressBar(props) {
                       "green"
                       }}>
                  </div>    
-                 <Typography variant="h6" color="inherit" component="div" style={{ marginLeft:'20px', display: displej[props.vodjaStatus] }}>
+                 <Typography variant="h6" color="inherit" component="div" style={{ marginLeft:'20px', display: displej[props.vodjaStatus? 1 : 0] }}>
                       {parseInt(effect)}%
                 </Typography>
             </div>

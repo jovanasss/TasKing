@@ -12,6 +12,17 @@ export default function TeamsMenu(props){
 
   const [teams, setTeams] = useState([])
   const showTeams = ()=>{
+    const org = window.localStorage.getItem('clanOrgID');
+    console.log(org);
+
+    if(props.clanID==-1)
+    {
+      setTeams([])
+      setTim(-1)
+      localStorage.setItem('clanTimaID',-1)
+      setVodja(false)
+      return;
+    }
     fetch("https://localhost:5001/Organizacija/VratiClanoveTima/" + props.clanID,
     {
         method:"GET",
@@ -25,6 +36,25 @@ export default function TeamsMenu(props){
         res.json().then(data => {
           console.log(data);
           setTeams(data)
+          if(data==undefined || data==null)
+          {
+            setTim(-1)
+            localStorage.setItem('clanTimaID',-1)
+            setVodja(false)
+            return;
+          }
+         
+          if(data.length==0)
+          {
+            setTim(-1)
+            localStorage.setItem('clanTimaID',-1)
+            setVodja(false)
+            return;
+          }
+          console.log(data[0].idTima);
+          setTim(data[0].idTima)
+          localStorage.setItem('clanTimaID',data[0].idTima)
+          setVodja(data[0].vodja)
         });
       }
       else
@@ -35,11 +65,7 @@ export default function TeamsMenu(props){
   }
 
   useEffect(() => {
-    if(props.clanID!=-1)
-    {
-      console.log('✅ variable is NOT undefined or null');
-      showTeams();
-    }
+    showTeams();
   }, [props.clanID]);
 
 
@@ -65,6 +91,7 @@ export default function TeamsMenu(props){
 
   
   const [curTim, setTim] = useState(-1)
+  const [vodja, setVodja] = useState(false)
     
   return(
     <div style={{display:'flex'}}>
@@ -86,7 +113,7 @@ export default function TeamsMenu(props){
               {teams.map(team => (
                   <ListItem key={team.idTima} className={curTim==team.idTima? 'activeEnt' : null}>
                     <ThemeProvider theme={theme}>
-                      <Button onClick={() =>{setTim(team.idTima)}}>
+                      <Button onClick={() =>{setTim(team.idTima); localStorage.setItem('clanTimaID',team.idTima);  setVodja(team.vodja)}}>
                         <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
                           <SubjectOutlined/>
                         </IconButton>
@@ -100,7 +127,7 @@ export default function TeamsMenu(props){
               </List>
           </Paper>
       </div>
-      <ProjectMenu vodjaStatus={1} timID = {curTim}/>
+      <ProjectMenu vodjaStatus={vodja} timID = {curTim}/>
     </div>
   )
 }

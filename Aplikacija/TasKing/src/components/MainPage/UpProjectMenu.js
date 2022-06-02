@@ -41,6 +41,14 @@ export default function UpProjectMenu(props) {
 
   const [project, setProject] = React.useState({})
   const showProjectData = ()=>{
+    const proje = window.localStorage.getItem('projID');
+    console.log(proje);
+
+    if(props.projectID==-1)
+    {
+      setProject({})
+      return;
+    }
     fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID,
     {
         method:"GET",
@@ -64,11 +72,7 @@ export default function UpProjectMenu(props) {
   }
 
   React.useEffect(() => {
-    if(props.projectID!=-1)
-    {
-      console.log('✅ variable is NOT undefined or null');
-      showProjectData();
-    }
+    showProjectData();
   }, [props.projectID]);
 
 

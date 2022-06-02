@@ -42,7 +42,18 @@ export default function ProjectMenu(props) {
 
   const [projects, setProjects] = React.useState([])
   const showProjects = ()=>{
-    fetch("https://localhost:5001/Tim/VratiProjekteTima/" + 1,
+    const tim = window.localStorage.getItem('clanTimaID');
+    console.log(tim);
+
+    console.log(props.timID)
+    if(props.timID==-1)
+    {
+      setProjects([])
+      setProj(-1)
+      localStorage.setItem('projID',-1)
+      return;
+    }
+    fetch("https://localhost:5001/Tim/VratiProjekteTima/" + props.timID,
     {
         method:"GET",
         headers: {
@@ -55,6 +66,22 @@ export default function ProjectMenu(props) {
         res.json().then(data => {
           console.log(data);
           setProjects(data)
+          if(data==undefined || data==null)
+          {
+            setProj(-1)
+            localStorage.setItem('projID',-1)
+            return;
+          }
+         
+          if(data.length==0)
+          {
+            setProj(-1)
+            localStorage.setItem('projID',-1)
+            return;
+          }
+          console.log(data[0].idProj);
+          setProj(data[0].idProj)
+          localStorage.setItem('projID',data[0].idProj)
         });
       }
       else
@@ -64,15 +91,17 @@ export default function ProjectMenu(props) {
     })
   }
 
+  let navigate = useNavigate();
+  // promena strane
+  const routeChange = () =>{ 
+    let path = `/cTT`; 
+    navigate(path);
+  }
+
   React.useEffect(() => {
-    if(props.timID!=-1)
-    {
-      console.log('✅ variable is NOT undefined or null');
-      showProjects();
-    }
+     showProjects();
   }, [props.timID]);
 
-  let navigate = useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -101,11 +130,11 @@ export default function ProjectMenu(props) {
     <div>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', background: "rgb(147, 219, 217)", display:'flex' }}>
           {projects.map(proj =>
-          <Button  onClick={() =>{setProj(proj.idProj)}} sx={{backgroundColor: curProj==proj.idProj? boje[1] : boje[0], color: 'black'}}>   
+          <Button  onClick={() =>{setProj(proj.idProj); localStorage.setItem('projID',proj.idProj);}} sx={{backgroundColor: curProj==proj.idProj? boje[1] : boje[0], color: 'black'}}>   
           {proj.imeProj}
           </Button>
             )}
-          <IconButton sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}}>
+          <IconButton sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}} onClick={() => routeChange()}>
             <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
           </IconButton>
             <div sx={{float: 'right'}}>
