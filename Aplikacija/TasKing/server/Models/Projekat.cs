@@ -24,6 +24,7 @@ namespace Models
         public bool aktivan { get; set; }
 
         [Required]
+        [JsonIgnore]
         public Tim tim { get; set; }
 
         public List<Task> taskovi { get; set; }

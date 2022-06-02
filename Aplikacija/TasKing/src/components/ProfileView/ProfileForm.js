@@ -153,6 +153,11 @@ function ProfileForm1({user}){
                 </ThemeProvider>,
           path: "/"
       }
+
+      function logOut(){
+        navigate("/");
+        localStorage.removeItem("user-info");
+      }
       
       const drawer = (
         <div>
@@ -220,7 +225,7 @@ function ProfileForm1({user}){
               <DialogActions>
                  <ThemeProvider theme={theme1}><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
                  <ThemeProvider theme={theme1}>
-                   <Button variant="contained" onClick={() => navigate(item.path)} color="primary" sx={{fontWeight:"bold"}} autoFocus>
+                   <Button variant="contained" onClick={logOut} color="primary" sx={{fontWeight:"bold"}} autoFocus>
                      Log Out
                    </Button></ThemeProvider>
             </DialogActions>

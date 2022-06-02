@@ -28,6 +28,7 @@ namespace Models
 
         public string tip { get; set; }
 
+        [JsonIgnore]
         public Projekat projekat { get; set; }
 
         public ClanTima clanTima { get; set; }

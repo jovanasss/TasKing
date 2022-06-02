@@ -60,7 +60,7 @@ namespace TasKing.Controllers
             }
         }
 
-       [Route("VratiProjekteSaTaskovima/{clantimaID}")]
+       /*[Route("VratiProjekteSaTaskovima/{clantimaID}")]
        [HttpGet]
        public async Task<ActionResult> VratiProjekteSaTaskovima(int clantimaID)
        {
@@ -69,7 +69,9 @@ namespace TasKing.Controllers
                var clan = await Context.ClanoviTima.Where(c => c.ID == clantimaID)
                .Include(c => c.tim)
                .ThenInclude(t => t.projekti)
-               .ThenInclude(p => p.taskovi).ToListAsync();
+               .ThenInclude(p => p.taskovi)
+               .ThenInclude(task => task.clanTima)
+               .ToListAsync();
               
               var projekti = clan[0].tim.projekti
                .Select(p => new
@@ -83,14 +85,14 @@ namespace TasKing.Controllers
                         opis = task.opis,
                         vrednost = task.vrednost,
                     }),
-                    /*taskoviUradjeni = p.taskovi.Where(t => t.clanTima.ID == clantimaID).Select(p => new
+                    taskoviUradjeni = p.taskovi.Where(t => t.clanTima.ID == clantimaID).Select(p => new
                     {
                         id = p.ID,
                         naziv = p.naziv,
                         opis = p.opis,
                         vrednost = p.vrednost,
                         tip = p.tip
-                    })*/
+                    })
                }).ToList();
 
                 return Ok(projekti);
@@ -99,7 +101,7 @@ namespace TasKing.Controllers
            {
                return BadRequest("Doslo je do greske" + e.Message);
            }
-       }
+       }*/
 
         /*[Route("VratiProjekteSaTaskovima/{userID}")]
         [HttpGet]
@@ -129,7 +131,7 @@ namespace TasKing.Controllers
                                 if (task.clanTima == clanT)
                                     myTasks.Add(task);
                             }
-                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.status, allTasks, myTasks);
+                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, allTasks, myTasks);
                             allProjectsInfo.Add(projInfo);
                         }
                     }
@@ -140,27 +142,84 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Doslo je do greske" + e.Message);
             }
-        }
+        }*/
 
-        public class ProjectInfo
+        [Route("VratiProjekteSaTaskovima/{userID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
+        {
+            try
+            {
+                List<ProjectInfo> allProjectsInfo = new List<ProjectInfo>();
+                var clanoviOrg = await Context.ClanoviOrganizacije.Where(clan => clan.korisnik.ID == userID)
+                    .Include(o => o.clanoviTima)
+                    .ThenInclude(t => t.tim)
+                    .ThenInclude(ti => ti.projekti)
+                    .ThenInclude(p => p.taskovi)
+                    .ThenInclude(tas => tas.clanTima)
+                    .Select(clan => new{
+                        clanoviT = clan.clanoviTima.Select(clanT => new{
+                            ID = clanT.ID,
+                            projekti = clanT.tim.projekti.Select(proj => new{
+                                ID = proj.ID,
+                                naziv = proj.naziv,
+                                opis = proj.opis,
+                                aktivan = proj.aktivan,
+                                taskovi = proj.taskovi
+                            })
+                        })
+                    })
+                    .ToListAsync();
+
+                foreach (var clanO in clanoviOrg)
+                {
+                    foreach (var clanT in clanO.clanoviT)
+                    {
+                        foreach (var proj in clanT.projekti)
+                        {
+                            List<Models.Task> taskoviUkupni = new List<Models.Task>();
+                            List<Models.Task> taskoviUradjeni = new List<Models.Task>();
+                            foreach (var task in proj.taskovi)
+                            {
+                                taskoviUkupni.Add(task);
+                                if(task.clanTima!=null)
+                                {
+                                    if(clanT.ID == task.clanTima.ID)
+                                        taskoviUradjeni.Add(task);
+                                }
+                            }
+                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, taskoviUkupni, taskoviUradjeni);
+                            allProjectsInfo.Add(projInfo);
+                        }
+                    }
+                }
+                return Ok(allProjectsInfo);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }        
+    }
+
+    public class ProjectInfo
         { 
         public int id { get; set; }
         public string naziv { get; set; }
         public string opis { get; set; }
         public bool status { get; set; }
-        public List<Models.Task> allTasks { get; set; }
-        public List<Models.Task> myTasks { get; set; }
+        public List<Models.Task> taskoviUkupni { get; set; }
+        public List<Models.Task> taskoviUradjeni { get; set; }
 
-        public ProjectInfo(int id_, string naziv_, string opis_, bool status_, List<Models.Task> allTasks_, List<Models.Task> myTasks_)
+        public ProjectInfo(int id_, string naziv_, string opis_, bool status_, List<Models.Task> taskoviUkupni_, List<Models.Task> taskoviUradjeni_)
         {
             id = id_;
             naziv = naziv_;
             opis = opis_;
             status = status_;
-            allTasks = allTasks_;
-            myTasks = myTasks_;
+            taskoviUkupni = taskoviUkupni_;
+            taskoviUradjeni = taskoviUradjeni_;
         }
 
-      }*/
-    }
+      }
 }

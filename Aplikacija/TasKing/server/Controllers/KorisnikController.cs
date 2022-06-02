@@ -346,7 +346,7 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
-        }
+        } 
     }
 }
 

@@ -146,7 +146,7 @@ namespace TasKing.Controllers
             try
             {
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
-                .Include(k => k.clanoviOrganizacije)
+                .Include(k => k.clanoviOrganizacije.Where(c => c.izbacen == false))
                 .ThenInclude(c => c.organizacija)
                 .Select(kor => 
                   kor.clanoviOrganizacije.Select(clan => new {
@@ -197,6 +197,33 @@ namespace TasKing.Controllers
             catch(Exception e)
             {
                 return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
+
+        [Route("VratiPoziveIzOrganizacije/{userID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiPoziveIzOrganizacije(int userID)
+        {
+            try
+            {
+                var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
+                .Include(k => k.primljeniPoziviIzOrganizacije.Where(p => p.prihvacen == false))
+                .ThenInclude(p => p.organizacija)
+                .ToListAsync();
+
+                var organizacije = korisnik[0].primljeniPoziviIzOrganizacije
+                    .Select(p => new
+                    {
+                        id = p.organizacija.ID,
+                        ime = p.organizacija.ime,
+                        slika = p.organizacija.slika,
+                        vremepoziva = p.vremePoziva
+                    }).ToList();
+                return Ok(organizacije);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
             }
         }
     }

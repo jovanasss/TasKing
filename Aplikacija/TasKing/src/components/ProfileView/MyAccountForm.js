@@ -19,12 +19,16 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 function MyAccountForm(){
 
-    const [projects, setProjects] = useState(null);
     const [user, setUser] = useState(null);
+    const [projects, setProjects] = useState(null);
+    /*const[idclanovatima, setIDclanovatima] = useState(null);
 
-    useEffect(() => {
+    const idclanovaorg = [];
+    const idclanovatima1 = [];*/
+
+    /*useEffect(() => {
       const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+user.id,
+        fetch("https://localhost:5001/Korisnik/VratiIDClanovaOrganizacije/"+user.id,
         {
             method:"GET",
             headers: {
@@ -33,10 +37,30 @@ function MyAccountForm(){
         }).then(res => {
             res.json()
             .then(data => {
-                setProjects(data);
+               data.forEach(d =>{
+                 idclanovaorg.push(d);
+               })
+
+               {idclanovaorg.map(clanorg => {
+                fetch("https://localhost:5001/Korisnik/VratiIDClanovaTima/" + clanorg.id,
+              {
+                  method: "GET",
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+              }).then(res => {
+                  res.json()
+                      .then(data => {
+                          data.forEach(d =>{
+                            idclanovatima1.push(d);
+                          })
+                          setIDclanovatima(idclanovatima1);
+                      });      
+              })
+              })}
             });
         })
-    }, [])
+    }, [])*/
 
     useEffect(() =>{
       const user = (JSON.parse(window.localStorage.getItem('user-info')));
@@ -54,6 +78,22 @@ function MyAccountForm(){
         })
     }, [])
 
+    useEffect(() =>{
+      const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+user.id,
+        {
+            method:"GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => {
+            res.json()
+            .then(data => {
+                setProjects(data);
+            });
+        })
+    }, [])
+
     return(
         <div className="divMyAccount">
              {projects && user && <MyAccount1 projects={projects} user={user} />}
@@ -61,7 +101,42 @@ function MyAccountForm(){
     )
 }
 
+/*function MyAccount1({idclanovatima, user}){
+
+  const [projects, setProjects] = useState(null);
+  const projects1 = [];
+
+  useEffect(() =>{
+    {idclanovatima.map(clantima => {
+      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/" + clantima.id,
+    {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+    },
+    }).then(res => {
+        res.json()
+            .then(data => {
+                data.forEach(d =>{
+                  projects1.push(d);
+                })
+                setProjects(projects1);
+            });  
+    })
+    })}
+
+  }, [])
+
+  return(
+    <div>
+         {projects && user && <MyAccount2 projects={projects} user={user} />}
+    </div>
+   )
+}*/
+
 function MyAccount1({projects, user}){
+
+  console.log(projects);
 
     const theme = createTheme({
         components: {
@@ -150,10 +225,10 @@ function MyAccount1({projects, user}){
           <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
             {projects.map((project, index) => (
            <Grid item md={4} sm={6} xs={12}>     
-            <Box key={project.id} sx={{margin:"0.5%" }}>
-            <Card key={project.id} variant="outlined" 
+            <Box sx={{margin:"0.5%" }}>
+            <Card variant="outlined" 
             sx={{backgroundColor:"#d6e9de", boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)"}}>
-                <CardContent>
+                <CardContent key={project.id}>
                 <Typography variant="h5" component="div">
                     {"Name: " + project.naziv}
                 </Typography>
@@ -208,16 +283,16 @@ function MyAccount1({projects, user}){
               aria-labelledby={"scroll-dialog-title"}
               aria-describedby="scroll-dialog-description"
               >
-              <DialogTitle id="scroll-dialog-title">{projects[dialogTask].naziv}</DialogTitle>
+              <DialogTitle id="scroll-dialog-title">{projects[dialogTask] != null ? projects[dialogTask].naziv : null}</DialogTitle>
               <DialogContent dividers={scroll === 'paper'}>
-                    {projects[dialogTask].taskoviUradjeni.map(task => 
+                    {projects[dialogTask] != null ? projects[dialogTask].taskoviUradjeni.map(task => 
                     (<DialogContentText
                     key={task.id}
                     id="scroll-dialog-description"
                     ref={descriptionElementRef}
                     tabIndex={-1}>
                     {task.naziv + ": " + task.opis + ". (" + "type: " + task.tip + ", " + "valuation: " + task.vrednost + ")"}
-                    </DialogContentText>))}
+                    </DialogContentText>)) : null}
                 </DialogContent>
                 <DialogActions>
                 <ThemeProvider theme={theme}>
@@ -226,7 +301,7 @@ function MyAccount1({projects, user}){
                 </Button>
                 </ThemeProvider>
                 </DialogActions>
-            </Dialog>
+             </Dialog>
      </Grid>
     </Grid>
     )

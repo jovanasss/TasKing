@@ -22,8 +22,10 @@ namespace Models
 
         public DateTime vremePosecivanja { get; set; }
 
+        [JsonIgnore]
         public List<Task> taskovi { get; set; }
         
+        [JsonIgnore]
         public ClanOrganizacije clanOgranizacije { get; set; }
 
         public List<PrijavaZaTask> prijaveZaTask { get; set; }

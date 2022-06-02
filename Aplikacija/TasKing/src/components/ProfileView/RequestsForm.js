@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useState, useEffect }  from "react";
 import '../../styles/ProfileView/RequestsForm.css';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -33,337 +33,83 @@ const theme = createTheme({
     },
   });
 
-  const teamSentRequests = [
-    {
-      id: 1,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id: 2,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id: 3,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id:4,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id:5,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id:6,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    }
-  ]
+  function RequestsForm(){
 
-  const teamReceivedRequests = [
-    {
-      id: 1,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id: 2,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id: 3,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id:4,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id:5,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id:6,
-      photo: <Avatar></Avatar>,
-      name: "Stump",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    }
-  ]
+    const [teamRequests, setTeamRequests] = useState(null);
+    const [organisationRequests, setOrganisationRequests] = useState(null);
 
-  const organisationSentRequests = [
-    {
-      id:1,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id:2,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id:3,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id:4,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id:5,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    },
-    {
-      id:6,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "to",
-      status: "active"
-    }
-  ]
+    useEffect(() =>{
+      const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Tim/VratiPoziveIzTima/"+user.id,
+        {
+            method:"GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => {
+            res.json()
+            .then(data => {
+                setTeamRequests(data);
+            });
+        })
+    }, [])
 
-  const organisationReceivedRequests = [
-    {
-      id:1,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id:2,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id:3,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id:4,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id:5,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    },
-    {
-      id:6,
-      photo: <Avatar></Avatar>,
-      name: "Elfak",
-      vremepoziva: "datetime",
-      from: "from",
-      status: "active"
-    }
-  ]
+    useEffect(() =>{
+      const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Organizacija/VratiPoziveIzOrganizacije/"+user.id,
+        {
+            method:"GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => {
+            res.json()
+            .then(data => {
+                setOrganisationRequests(data);
+            });
+        })
+    }, [])
 
-function RequestsForm(){
+    return(
+   <div className= "MaindivRequestsForm">
+     {teamRequests && organisationRequests && <RequestsForm1 teamRequests={teamRequests} organisationRequests={organisationRequests} />}
+   </div>
+       )
+   }
 
- const [active1, setActive1] = useState("TeamSentRequests");
- const [active2, setActive2] = useState("OrganisationSentRequests");
+function RequestsForm1({teamRequests, organisationRequests}){
 
  return(
-<div className= "MaindivRequestsForm">
-
 <Grid container  spacing={20}>
   <Grid item md={5} xs={12} sm={8}>
     <div className="levidivRequests">
-    {active1 === "TeamSentRequests" && <PaperListTeamSentRequests />}
-    {active1 === "TeamReceivedRequests" && <PaperListTeamReceivedRequests />}
-   
-
-        <div className="divButtonSentReceive">
-                  <div>
-                  <ThemeProvider theme={theme}>
-                  <Button 
-                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"18%"}}
-                   variant="contained"
-                   onClick={() => setActive1("TeamSentRequests")}>
-                   Sent
-                 </Button>
-                 </ThemeProvider></div>
-                 <div>
-                  <ThemeProvider theme={theme}>
-                  <Button 
-                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginLeft:"2%"}}
-                   variant="contained"
-                   onClick={() => setActive1("TeamReceivedRequests")}>
-                   Received
-                 </Button>
-                 </ThemeProvider></div>
-            </div>
+     <PaperListTeamRequests teamRequests={teamRequests} />
     </div>
     </Grid>
 
     <Grid item md={5} xs={12} sm={8}>
     <div className="desnidivRequests">
-    {active2 === "OrganisationSentRequests" && <PaperListOrganisationSentRequests />}
-    {active2 === "OrganisationReceivedRequests" && <PaperListOrganisationReceivedRequests />}
-          <div className="divButtonSentReceive">
-                  <div>
-                  <ThemeProvider theme={theme}>
-                  <Button 
-                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"18%"}}
-                   variant="contained"
-                   onClick={() => setActive2("OrganisationSentRequests")}>
-                   Sent
-                 </Button>
-                 </ThemeProvider></div>
-                 <div>
-                  <ThemeProvider theme={theme}>
-                  <Button 
-                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginLeft:"2%"}}
-                   variant="contained"
-                   onClick={() => setActive2("OrganisationReceivedRequests")}>
-                   Received
-                 </Button>
-                 </ThemeProvider></div>
-            </div>
+    <PaperListOrganisationRequests organisationRequests={organisationRequests} />
     </div> 
     </Grid>
     </Grid>   
-</div>
     )
 }
 
-function PaperListTeamSentRequests(){
-    return(
-    <div className="divPaperTeamRequests">
-      <div className="divPaperTopLabelTeamRequests"><h2>Teams (Sent)</h2></div>
-          <Paper className="PaperRequests">
-          <List>
-          {teamSentRequests.map(item => (
-          <ListItem
-           key={item.id}
-           button
-          >
-          <ListItemIcon>{item.photo}</ListItemIcon>
-          <ListItemText primary={item.name}
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {item.vremepoziva}
-              </Typography>
-              <br />
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {item.from}
-              </Typography>
-              <br />
-              {item.status}
-            </React.Fragment>
-          }
-        />
-         </ListItem>
-           ))}
-        </List>
-      </Paper>
-    </div>
-    )
-  }
+  function PaperListTeamRequests({teamRequests}){
 
-  function PaperListTeamReceivedRequests(){
     return(
     <div className="divPaperTeamRequests">
-      <div className="divPaperTopLabelTeamRequests"><h2>Teams (Received)</h2></div>
+      <div className="divPaperTopLabelTeamRequests"><h2>Teams</h2></div>
           <Paper className="PaperRequests">
           <List>
-          {teamReceivedRequests.map(item => (
+          {teamRequests.map(item => (
           <ListItem
            key={item.id}
            button
           >
-          <ListItemIcon>{item.photo}</ListItemIcon>
-          <ListItemText primary={item.name}
+          <ListItemIcon>{item.slika}</ListItemIcon>
+          <ListItemText primary={item.ime}
           secondary={
             <React.Fragment>
               <Typography
@@ -374,17 +120,6 @@ function PaperListTeamSentRequests(){
               >
                 {item.vremepoziva}
               </Typography>
-              <br />
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {item.from}
-              </Typography>
-              <br />
-              {item.status}
             </React.Fragment>
           }
         />
@@ -396,19 +131,20 @@ function PaperListTeamSentRequests(){
     )
   }
   
-  function PaperListOrganisationSentRequests(){
+  function PaperListOrganisationRequests({organisationRequests}){
+    
     return(
     <div className="divPaperOrgRequests">
-      <div className="divPaperTopLabelOrganisation"><h2>Organisations (Sent)</h2></div>
+      <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
           <Paper className="PaperRequests">
           <List>
-          {organisationSentRequests.map(item => (
+          {organisationRequests.map(item => (
           <ListItem
            key={item.id}
            button
           >
-          <ListItemIcon>{item.photo}</ListItemIcon>
-          <ListItemText primary={item.name} 
+          <ListItemIcon>{item.slika}</ListItemIcon>
+          <ListItemText primary={item.ime} 
            secondary={
             <React.Fragment>
               <Typography
@@ -419,62 +155,6 @@ function PaperListTeamSentRequests(){
               >
                 {item.vremepoziva}
               </Typography>
-              <br />
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {item.from}
-              </Typography>
-              <br />
-              {item.status}
-            </React.Fragment>
-          }
-        />
-         </ListItem>
-           ))}
-        </List>
-      </Paper>
-    </div>
-    )
-  }
-
-  function PaperListOrganisationReceivedRequests(){
-    return(
-    <div className="divPaperOrgRequests">
-      <div className="divPaperTopLabelOrganisation"><h2>Organisations (Received)</h2></div>
-          <Paper className="PaperRequests">
-          <List>
-          {organisationReceivedRequests.map(item => (
-          <ListItem
-           key={item.id}
-           button
-          >
-          <ListItemIcon>{item.photo}</ListItemIcon>
-          <ListItemText primary={item.name} 
-           secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {item.vremepoziva}
-              </Typography>
-              <br />
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {item.from}
-              </Typography>
-              <br />
-              {item.status}
             </React.Fragment>
           }
         />

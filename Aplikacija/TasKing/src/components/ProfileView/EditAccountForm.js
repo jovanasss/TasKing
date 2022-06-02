@@ -311,7 +311,7 @@ function EditAccountForm1({user, organisations, teams}){
                        <div className="DivEditUserName"> 
                         <div className="divInputUserName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ width: "85%"  }}/>
+                                    <TextField id="outlined-basic" defaultValue={user[0].korisnickoIme} onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ width: "85%"  }}/>
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -331,7 +331,7 @@ function EditAccountForm1({user, organisations, teams}){
                         <div className="DivEditPhone"> 
                         <div className="divInputPhone">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" onChange={getPhone} label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
+                                    <TextField id="outlined-basic" defaultValue={user[0].brtelefona} onChange={getPhone} label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -407,7 +407,7 @@ function EditAccountForm1({user, organisations, teams}){
                   <div className="divAvatarEditAccount">
                             <ThemeProvider theme={theme}>
                             <Tooltip title={<h1 style={{color:"rgb(31, 206, 206)"}}>Click to change photo</h1>} placement="top" sx={{fontSize:"20px"}}>
-                            <Avatar sx={{width: "150px", height:"150px"}} onClick={()=> alert("change photo")}></Avatar>
+                            <Avatar sx={{width: "150px", height:"150px"}}></Avatar>
                             </Tooltip>
                             </ThemeProvider>
                   </div>
