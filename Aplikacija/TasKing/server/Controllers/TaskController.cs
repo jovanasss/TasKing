@@ -39,11 +39,12 @@ namespace TasKing.Controllers
                             Models.Task task1 = new Models.Task
                             {
                                 naziv = Task.naziv,
-                                opis = "opis",
+                                tip = Task.tip,
+                                opis = Task.opis,
                                 status = 0,
                                 projekat = proj,
                                 vrednost = Task.bodovi.ToString(),
-                                tip = "wtf je tip"
+                               // tip = "wtf je tip"
                             };
 
                             Context.Taskovi.Add(task1);

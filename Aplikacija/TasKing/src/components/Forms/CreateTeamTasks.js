@@ -27,6 +27,8 @@ function CreateTeamTasks(){
     // konstante  za cuvanje inputa 
     const [openD, setOpenD] = useState(false)
     const [taskName , setTaskName] = useState('')
+    const [taskType , setTaskType] = useState('')
+    const [taskDesc ,setTaskDesc] = useState('')
     const [bodovi , setBodovi] = useState('')
     const [projName , setProjName] = useState('')
     const [projNameError, setProjNameError] = useState(false)
@@ -54,6 +56,8 @@ function CreateTeamTasks(){
         setOpenD(false)
         let task = {
             naziv: taskName ,
+            tip : taskType ,
+            opis : taskDesc ,
             bodovi : bodovi
         };
         let arr = tasks.concat(task);
@@ -73,66 +77,81 @@ function CreateTeamTasks(){
         // let timID = localstorage.GetItem("timID"); 
 
 
+
+        const idTima = (JSON.parse(window.localStorage.getItem('clanTimaID')));
+        console.log(idTima);
+
+
+
         const projekat = {
             naziv : projName,
             opis : projDesc,
             //taskovi : tasks
-            timID : 3012,
+            timID : idTima,
         }
         console.log(projekat);
 
-        let rezultat = await fetch("https://localhost:5001/Projekat/KreirajProjekat/", {
-            method : 'POST',
-            headers : {
-              'Content-Type': 'application/json; charset=utf-8',
-              'Accept': 'application/json; charset=utf-8'
-            },
-            body : JSON.stringify(projekat)
-          });
-          let status = rezultat.status;
-          let idProjekta = await rezultat.json();
+        if ( tasks.length !== 0){
 
-          // dodati idProjekta u niz taskova i proslediti kroz body fetcha 
-          // za svaki task mora da se doda novi prop idProjekta vrv preko map f-je i onda se vrti foreach sa ovim fetchom ispod
- 
-         /* tasks.map((task)=> {
-            niz[task] = Object.assign(tasks[task] , idProjekta);
-         })*/
-
-         console.log(tasks);
-         // dodajemo prop idProjekta 
-         tasks.forEach((element) => {
-            element.projekatID = idProjekta
-          });
-
-          console.log(tasks)
-          
-
-          console.log(status);
-
-          // ako je ok dodajemo taskove 
-          if (status === 200){
-
-            tasks.map(async task => {
-                let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
-                    method : 'POST',
-                    headers : {
-                      'Content-Type': 'application/json; charset=utf-8',
-                      'Accept': 'application/json; charset=utf-8'
-                    },
-                    body : JSON.stringify(task)
-                  });
-                  let statusT = result.status;
-                  if ( statusT === 200){
-                      routeChange();
-                  }
-            })
-          }
-          else {
-
-                // prikaz greske 
+            let rezultat = await fetch("https://localhost:5001/Projekat/KreirajProjekat/", {
+                method : 'POST',
+                headers : {
+                  'Content-Type': 'application/json; charset=utf-8',
+                  'Accept': 'application/json; charset=utf-8'
+                },
+                body : JSON.stringify(projekat)
+              });
+              let status = rezultat.status;
+              let idProjekta = await rezultat.json();
+    
+              // dodati idProjekta u niz taskova i proslediti kroz body fetcha 
+              // za svaki task mora da se doda novi prop idProjekta vrv preko map f-je i onda se vrti foreach sa ovim fetchom ispod
+     
+             /* tasks.map((task)=> {
+                niz[task] = Object.assign(tasks[task] , idProjekta);
+             })*/
+    
+             console.log(tasks);
+             // dodajemo prop idProjekta 
+             tasks.forEach((element) => {
+                element.projekatID = idProjekta
+              });
+    
+              console.log(tasks)
+              
+    
               console.log(status);
-          }
+    
+              // ako je ok dodajemo taskove 
+              if (status === 200){
+    
+                tasks.map(async task => {
+                    let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
+                        method : 'POST',
+                        headers : {
+                          'Content-Type': 'application/json; charset=utf-8',
+                          'Accept': 'application/json; charset=utf-8'
+                        },
+                        body : JSON.stringify(task)
+                      });
+                      let statusT = result.status;
+                      if ( statusT === 200){
+                          routeChange();
+                      }
+                })
+              }
+              else {
+    
+                    // prikaz greske 
+                  console.log(status);
+              }
+
+        }
+        else {
+            console.log("Niste dodali taskove")
+        }
+
+
 
     }
     // error check => napraviNoviprojekat(Naslov, opis , listaTaskova[])
@@ -236,7 +255,7 @@ function CreateTeamTasks(){
                             <ListItem>             
                             <ListItemButton component="a" href="#simple-list">
                                 <ListItemText primary={task.naziv} secondary={task.bodovi} />
-                                <IconButton edge="end" aria-label="delete">
+                                <IconButton edge="end" aria-label="delete" onClick={() => tasks.filter((a) => a === task) }>
                                 <DeleteIcon />
                                     </IconButton>
                             </ListItemButton>
@@ -260,6 +279,25 @@ function CreateTeamTasks(){
                                                 marginBottom : "5%",
                                                 }}/>                      
                                         </ThemeProvider>
+                                        <ThemeProvider theme={theme}>
+                                            <TextField id="outlined-basic" label="Task Type" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                                            onChange={(e) => setTaskType(e.target.value)}
+                                            sx={{
+                                                width :"100%",
+                                                marginTop : "5%",
+                                                marginBottom : "5%",
+                                                }}/>                      
+                                        </ThemeProvider>
+                                        <ThemeProvider theme={theme}>
+                                            <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
+                                            id="outlined-basic" label="Description"  variant="outlined"  type="text" color="primary" 
+                                            multiline 
+                                            required
+                                            rows={'5'}
+                                            //maxRows={'5'}  
+                                            sx={{ width : "100%", height: "40%"}}/>
+                                        </ThemeProvider>
+
                                         <ThemeProvider theme={theme}>
                                             <Slider 
                                             value = {bodovi}

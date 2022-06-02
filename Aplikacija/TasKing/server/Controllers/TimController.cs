@@ -211,6 +211,24 @@ namespace TasKing.Controllers
             }
         }
 
+        [Route("VratiTimClana/{clanTimaID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiTimClana(int clanTimaID)
+        {
+            try
+            {
+                var clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID)
+                .Include(k =>k.tim)
+                .FirstOrDefaultAsync();
+
+                return Ok(clan.tim.ID);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
+
         [Route("VratiPoziveIzTima/{userID}")]
         [HttpGet]
         public async Task<ActionResult> VratiPoziveIzTima(int userID)

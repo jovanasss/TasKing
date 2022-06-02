@@ -7,7 +7,9 @@ public class TaskDTO {
 
     public string naziv {get ; set;}
     
-    //public string opis {get ; set;}
+    public string opis {get ; set;}
+    
+    public string tip {get ; set;}
 
     public bool aktivan {get ; set;}
 

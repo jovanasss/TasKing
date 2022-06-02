@@ -179,6 +179,24 @@ namespace TasKing.Controllers
             }
         }
 
+        [Route("VratiOrganizacijuClana/{idClanaOrg}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiOrganizacijuClana(int idClanaOrg)
+        {
+            try
+            {
+                var clan = await Context.ClanoviOrganizacije.Where(c => c.ID == idClanaOrg)
+                .Include(o => o.organizacija)
+                .FirstOrDefaultAsync();
+
+                return Ok(clan.organizacija.ID);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }
+
         [Route("VratiOrganizacijuTim/{timID}")]
         [HttpGet]
         public async Task<ActionResult> VratiOrganizaciju(int timID)

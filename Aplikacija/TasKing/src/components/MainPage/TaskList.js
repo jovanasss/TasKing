@@ -10,6 +10,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
+import { FormControlLabel, TextField } from "@mui/material";
+import Slider from '@mui/material/Slider';
 const drawerWidth = 240
 
 function Tasks(props)
@@ -142,6 +144,49 @@ return(
 
 
 function TaskList(props){
+
+
+  const [taskName , setTaskName] = React.useState('')
+  const [taskType , setTaskType] = React.useState('')
+  const [taskDesc ,setTaskDesc] = React.useState('')
+  const [bodovi , setBodovi] = React.useState('')
+  const [openD, setOpenD] = React.useState(false)
+
+    // otvaranje i zatvaranje Dijaloga 
+    const handleClick = () => {
+      console.log("Otvoren dijalog")
+      setOpenD(true);
+    }
+    const handleClose = () => {
+      setOpenD(false)
+    }
+    async function addTask() {
+
+      setOpenD(false)
+      const idProjekta = (JSON.parse(window.localStorage.getItem('projID')));
+      console.log(idProjekta);
+
+      let task = {
+        naziv: taskName ,
+        tip : taskType ,
+        opis : taskDesc ,
+        bodovi : bodovi,
+        projekatID  : idProjekta
+    };
+    console.log(task);
+
+    let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
+      method : 'POST',
+      headers : {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json; charset=utf-8'
+      },
+      body : JSON.stringify(task)
+    });
+    let statusT = result.status;
+    console.log(statusT);
+
+    }
   
     const theme = createTheme({
       components: {
@@ -175,13 +220,60 @@ function TaskList(props){
                       </CardContent>
                       <CardActions>
                         <ThemeProvider theme={theme}>
-                          <IconButton className='addBtn'>
+                          <IconButton className='addBtn' onClick={handleClick}>
                             <AddIcon sx={{minWidth: 150, maxWidth: 300, minHeight: 150, maxHeight: 300}}/>
                           </IconButton>
                         </ThemeProvider> 
                       </CardActions>
                   </Card>
                 </Box>
+                <ThemeProvider theme={theme}>
+          <Dialog open={openD} onClose={handleClose}>
+             <DialogTitle>
+               Define your task and its value 
+             </DialogTitle>
+              <DialogContent>
+                <ThemeProvider theme={theme}>
+                  <TextField id="outlined-basic" label="Task Title" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                      onChange={(e) => setTaskName(e.target.value)}
+                        sx={{
+                          width :"100%",
+                          marginTop : "5%",
+                          marginBottom : "5%",
+                          }}/>                      
+                </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <TextField id="outlined-basic" label="Task Type" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                        onChange={(e) => setTaskType(e.target.value)}
+                          sx={{
+                           width :"100%",
+                           marginTop : "5%",
+                           marginBottom : "5%",
+                           }}/>                      
+                </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
+                      id="outlined-basic" label="Description"  variant="outlined"  type="text" color="primary" 
+                          multiline 
+                          required
+                          rows={'5'}
+                          //maxRows={'5'}  
+                          sx={{ width : "100%", height: "40%"}}/>
+                </ThemeProvider>
+
+                <ThemeProvider theme={theme}>
+                  <Slider 
+                      value = {bodovi}
+                      onChange={(e ,value ) => setBodovi(value)}
+                      defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
+                  </ThemeProvider>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={addTask}>Sumbit</Button>
+             </DialogActions>
+          </Dialog>
+        </ThemeProvider>
                 <Tasks selected={props.selected} vodjaStatus={props.vodjaStatus} taskovi = {props.taskovi}/>
       </div>
 )

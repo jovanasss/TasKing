@@ -6,15 +6,19 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import UpProjectMenu from './UpProjectMenu';
 import { ThemeProvider } from '@emotion/react';
+import Slider from '@mui/material/Slider';
 import { Button, IconButton } from '@mui/material';
 import { Autorenew, SubjectOutlined } from '@mui/icons-material';
 import { createTheme } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { FormControlLabel, TextField , Dialog, DialogTitle , DialogContent ,DialogContentText,DialogActions } from "@mui/material";
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
+
 
   return (
     <div
@@ -35,6 +39,12 @@ function TabPanel(props) {
 
 
 export default function ProjectMenu(props) {
+
+  const [taskName , setTaskName] = React.useState('')
+  const [taskType , setTaskType] = React.useState('')
+  const [taskDesc ,setTaskDesc] = React.useState('')
+  const [bodovi , setBodovi] = React.useState('')
+  const [openD, setOpenD] = React.useState(false)
   const [value, setValue] = React.useState(0);
   const [curProj, setProj] = React.useState(-1)
   const boje = ['rgb(147, 219, 217)', 'rgb(17, 156, 151)']
@@ -106,6 +116,29 @@ export default function ProjectMenu(props) {
     setValue(newValue);
   };
 
+
+  // otvaranje i zatvaranje Dijaloga 
+  const handleClick = () => {
+    console.log("Otvoren dijalog")
+    setOpenD(true);
+  }
+  const handleClose = () => {
+    setOpenD(false)
+  }
+  async function addTask() {
+
+
+
+
+  }
+
+
+
+
+
+
+
+
   const theme = createTheme({
     components: {
         MuiButton: {styleOverrides:{
@@ -134,7 +167,7 @@ export default function ProjectMenu(props) {
           {proj.imeProj}
           </Button>
             )}
-          <IconButton sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}} onClick={() => routeChange()}>
+          <IconButton onClick={() => {handleClick(); routeChange();}} sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}}>
             <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
           </IconButton>
             <div sx={{float: 'right'}}>
@@ -142,8 +175,54 @@ export default function ProjectMenu(props) {
               <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
             </IconButton>
             </div>
-
       </Box>
+      <ThemeProvider theme={theme}>
+          <Dialog open={openD} onClose={handleClose}>
+             <DialogTitle>
+               Define your task and its value 
+             </DialogTitle>
+              <DialogContent>
+                <ThemeProvider theme={theme}>
+                  <TextField id="outlined-basic" label="Task Title" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                      onChange={(e) => setTaskName(e.target.value)}
+                        sx={{
+                          width :"100%",
+                          marginTop : "5%",
+                          marginBottom : "5%",
+                          }}/>                      
+                </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <TextField id="outlined-basic" label="Task Type" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                        onChange={(e) => setTaskType(e.target.value)}
+                          sx={{
+                           width :"100%",
+                           marginTop : "5%",
+                           marginBottom : "5%",
+                           }}/>                      
+                </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
+                      id="outlined-basic" label="Description"  variant="outlined"  type="text" color="primary" 
+                          multiline 
+                          required
+                          rows={'5'}
+                          //maxRows={'5'}  
+                          sx={{ width : "100%", height: "40%"}}/>
+                </ThemeProvider>
+
+                <ThemeProvider theme={theme}>
+                  <Slider 
+                      value = {bodovi}
+                      onChange={(e ,value ) => setBodovi(value)}
+                      defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
+                  </ThemeProvider>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={addTask}>Sumbit</Button>
+             </DialogActions>
+          </Dialog>
+        </ThemeProvider>
       <UpProjectMenu vodjaStatus={props.vodjaStatus} projectID={curProj}/>
     </div>
   );
