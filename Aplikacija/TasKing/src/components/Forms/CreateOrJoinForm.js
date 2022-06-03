@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
 import GroupIcon from '@mui/icons-material/Group';
+import Grid from '@mui/material/Grid';
 
 function CreateOrJoinForm(){
 
@@ -200,6 +201,10 @@ function CreateOrJoinForm(){
 
   return(
     <div className="Main">
+      <Grid container>
+       <Grid item  xs={0} sm={2} md={3.5}>
+       </Grid>
+       <Grid item xs={12} sm={8} md={5}>
        <form className="Form">
        
         <div className="JoinDiv">
@@ -255,6 +260,10 @@ function CreateOrJoinForm(){
         </Button>
       </ThemeProvider>
       </form>
+      </Grid>
+      <Grid item  xs={0} sm={2} md={3.5}>
+      </Grid>
+      </Grid>
     </div>
   )
 }

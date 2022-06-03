@@ -6,6 +6,7 @@ import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate } from "react-router-dom";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import Grid from '@mui/material/Grid';
 
 
 function AccountCreatedForm()  {
@@ -53,7 +54,10 @@ function AccountCreatedForm()  {
 
 return (
     <div className="divMain">
-
+        <Grid container>
+        <Grid item  xs={0} sm={2} md={4}>
+        </Grid>
+        <Grid item xs={12} sm={8} md={4}>
         <form className="FormaAcc">
             < CheckCircleOutlineIcon style={{ 
                 color: green[500] , 
@@ -69,6 +73,10 @@ return (
             <button className="BtnAcc" onClick={routeChange}>Procced</button>
            
         </form>
+        </Grid>
+        <Grid item  xs={0} sm={2} md={4}>
+        </Grid>
+        </Grid>
     </div>
 )
 }

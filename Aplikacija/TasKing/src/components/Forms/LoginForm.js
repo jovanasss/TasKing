@@ -5,6 +5,7 @@ import { FormControlLabel, TextField } from "@mui/material";
 import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate} from "react-router-dom";
+import Grid from '@mui/material/Grid';
 
 
 function LoginForm()  {
@@ -132,7 +133,12 @@ return (
         <div className="divLoginNaslov">
             <label className="loginNaslov">Welcome to TasKing web application</label>       
         </div>
+        <Grid container>
+        <Grid item md={4.5} xs={0} sm={2}>
 
+        </Grid>
+        <Grid item xs={12} sm={8} md={3} justifyContent={"center"} >
+        <div>
         <form className="Forma">
             <label className="labelLogin">LOGIN</label>
 
@@ -173,6 +179,12 @@ return (
 
             <label className="OrSignUp">Need an account ? <a href ="http://localhost:3000/SignUp" >SignUp</a></label>   
         </form>
+        </div>
+        </Grid>
+        <Grid item md={4.5} xs={0} sm={2}>
+
+        </Grid>
+        </Grid>
     </div>
 )
 }

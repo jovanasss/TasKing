@@ -74,7 +74,8 @@ export default function TeamsMenu(props){
 
   async function addTeam() {
 
-
+    
+    setOpenD(false)
     const idClanaOrg = (JSON.parse(window.localStorage.getItem('clanOrgID')));
     console.log(idClanaOrg);
 
@@ -176,7 +177,7 @@ export default function TeamsMenu(props){
               <ListItem key={0} style={{display: props.clanID!=-1? 'inline' : 'none'}}>
                   <ThemeProvider theme={theme}>
                     <Button >
-                      <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}} >
+                      <IconButton onClick={ () => {handleClick()}} sx={{backgroundColor: 'white', marginRight:'10px'}} >
                         <AddCircleIcon/>
                       </IconButton>
                       <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>

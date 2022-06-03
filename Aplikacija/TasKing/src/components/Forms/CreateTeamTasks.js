@@ -20,6 +20,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import App from "../../App";
 import Task from "../../Classes/TaskDTO";
 import TaskList from "../MainPage/TaskList";
+import Grid from '@mui/material/Grid';
+
+
 
 function CreateTeamTasks(){
 
@@ -226,7 +229,13 @@ function CreateTeamTasks(){
 
     return (
         <div className="divMainTeamTasks">
-
+            <div>
+                Kurcina brate             
+            </div>
+            <Grid container>
+            <Grid item  xs={0} sm={2} md={4}>
+            </Grid>
+            <Grid item xs={12} sm={8} md={4}>
             <form className="formaCreateTeamTasks">
                 <div className="GlavniDivTeamTasks">
                         <div className="divNaslovCreateTeamTasks"> 
@@ -342,6 +351,10 @@ function CreateTeamTasks(){
                         
                 </div>
             </form>
+            </Grid>
+            <Grid item  xs={0} sm={2} md={4}>
+            </Grid>
+            </Grid>
         </div>
     )
 

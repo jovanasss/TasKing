@@ -7,6 +7,7 @@ import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate } from "react-router-dom";
 import { ClassNames } from "@emotion/react";
 import { Password } from "@mui/icons-material";
+import Grid from '@mui/material/Grid';
 
 function SignUp(){
 
@@ -157,6 +158,10 @@ function SignUp(){
             <div className="divSignupNaslov">
                 <label className="naslovSignup">Sign up to our website to access all options</label>
             </div>
+            <Grid container>
+            <Grid item  xs={0} sm={2} md={4}>
+            </Grid>
+            <Grid item xs={12} sm={8} md={4} > 
             <form className="forma">
                 <div className="GlavniDiv">
                     <div className="divNaslov"> 
@@ -204,6 +209,10 @@ function SignUp(){
                     <button onClick={(event) => { event.preventDefault() ; handleSignUp(); } } className="BtnSignUp">CREATE ACCOUNT</button>
                 </div>
             </form>
+            </Grid>
+            <Grid item  xs={0} sm={2} md={4}>
+            </Grid>
+            </Grid>
         </div>
     )
 

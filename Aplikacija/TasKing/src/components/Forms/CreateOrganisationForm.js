@@ -5,7 +5,8 @@ import { FormControl, TextField,Box , MenuItem ,Select, InputLabel} from "@mui/m
 import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate } from "react-router-dom";
-;
+import Grid from '@mui/material/Grid';
+
 
 function CreateOrganisationForm (){
 
@@ -247,6 +248,10 @@ function CreateOrganisationForm (){
 
     return (
         <div className="divMainCORG">
+            <Grid container>
+            <Grid item  xs={0} sm={2} md={4}>
+            </Grid>
+            <Grid item xs={12} sm={8} md={4}>
             <form className="formaCORG">
                 <div className="GlavniDivCORG">
 
@@ -269,6 +274,10 @@ function CreateOrganisationForm (){
 
                 </div>
             </form>
+            </Grid>
+            <Grid item  xs={0} sm={2} md={4}>
+            </Grid>
+            </Grid>
         </div>
     )
 }
