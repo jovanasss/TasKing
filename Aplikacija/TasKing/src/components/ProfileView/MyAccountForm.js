@@ -195,7 +195,7 @@ function MyAccount1({projects, user}){
     
     return(
         <Grid container>
-          <Grid item xs={8} sm={8} md={10}>
+          <Grid item xs={12} sm={12} md={10}>
             <div className="Information">
                 <div className="divAvatarMyAccount">
                 <StyledBadge

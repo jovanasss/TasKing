@@ -177,13 +177,16 @@ namespace TasKing.Controllers
             {
                 var clan = await Context.ClanoviOrganizacije.Where(clan => clan.ID == clanorgID)
                     .Include(clan => clan.clanoviTima.Where(c => c.izbacen == false))
-                    .ThenInclude(clantima => clantima.tim).ToListAsync();
+                    .ThenInclude(clantima => clantima.tim)
+                    .ThenInclude(tim => tim.organizacija)
+                    .ToListAsync();
 
                 var timovi = clan[0].clanoviTima.Select(clantima => new
                 {
                     id = clantima.tim.ID,
                     ime = clantima.tim.ime,
-                    slika = clantima.tim.slika
+                    slika = clantima.tim.slika,
+                    organizacijaID = clantima.tim.organizacija.ID
                 }).ToList();
                     
                 return Ok(timovi);
@@ -301,6 +304,30 @@ namespace TasKing.Controllers
                 return Ok("Poziv je uspesno obrisan!");
             }
             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("IzbaciKorisnikaIzTima/{timID}/{clanorgID}")]
+        [HttpPut]
+        public async Task<ActionResult> IzbaciKorisnikaIzTima(int timID, int clanorgID)
+        {
+            try
+            {
+                var clantima = await Context.ClanoviTima.Where(c => c.tim.ID == timID && c.clanOgranizacije.ID == clanorgID)
+                    .FirstOrDefaultAsync();
+
+                if(clantima== null)
+                {
+                    return BadRequest("Clan organizacije ne postoji!");
+                }
+
+                clantima.izbacen = true;
+                await Context.SaveChangesAsync();
+                return Ok(clantima);
+            }
+             catch(Exception e)
             {
                 return BadRequest("Doslo je do greske:" + e.Message);
             }

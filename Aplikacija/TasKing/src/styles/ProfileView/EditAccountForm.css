@@ -8,7 +8,7 @@ body{
     justify-content: center;
     height: 100%;
     width: 100%;
-    margin-left: 25%;
+    margin-left: 27%;
   }
 
 .divInputUserName , .divInputPhone , .divInputEmail, .divInputFirstName, .divInputLastName {
@@ -26,10 +26,9 @@ body{
   width: 100%;
 }
 
-/*.DivButtonChangePassword{
-  margin-top: 35%;
-  margin-left: 10%;
-}*/
+.DivButtonChangePassword{
+  margin-right: 40%;
+}
 
 /*.DesniDivEditAccount{
   display: flex;
@@ -59,9 +58,6 @@ body{
 .divButtonSee{
   display: flex;
   flex-direction: row;
-  flex-grow: 20;
-  flex-shrink: 2;
-  margin-left: 5%;
 }
 
 .divAvatarEditAccount{

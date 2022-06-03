@@ -16,6 +16,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Grid from '@mui/material/Grid';
 import ClearIcon from '@mui/icons-material/Clear';
 import { ListItemButton } from "@mui/material";
@@ -62,6 +63,17 @@ const theme = createTheme({
     }
   },
 });
+
+const theme1 = createTheme({
+  palette: {
+    primary: {
+      main: "rgb(230, 0, 0)",
+    },
+    secondary:{
+      main : "rgb(0, 100, 0)",
+    }
+  },
+})
 
 function EditAccountForm(){
 
@@ -298,20 +310,20 @@ function EditAccountForm1({user, organisations, teams}){
                     <div className="LeviDivEditAccount">
                         <div className="divInputFirstName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value={user[0].ime} variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }} disabled/>
+                                    <TextField id="outlined-basic" value={user[0].ime} variant="outlined" type="text" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/>
                                 </ThemeProvider>
                         </div>
 
                         <div className="divInputLastName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value={user[0].prezime} variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic" value={user[0].prezime} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
                                 </ThemeProvider>
                         </div>
 
                        <div className="DivEditUserName"> 
                         <div className="divInputUserName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" defaultValue={user[0].korisnickoIme} onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ width: "85%"  }}/>
+                                    <TextField id="outlined-basic" defaultValue={user[0].korisnickoIme} onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ maxWidth: "85%"  }}/>
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -324,14 +336,14 @@ function EditAccountForm1({user, organisations, teams}){
 
                         <div className="divInputEmail">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value={user[0].email} variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic" value={user[0].email} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
                                 </ThemeProvider>
                         </div>
 
                         <div className="DivEditPhone"> 
                         <div className="divInputPhone">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" defaultValue={user[0].brtelefona} onChange={getPhone} label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
+                                    <TextField id="outlined-basic" defaultValue={user[0].brtelefona} onChange={getPhone} label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ maxWidth: "85%"  }}/> 
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -344,7 +356,7 @@ function EditAccountForm1({user, organisations, teams}){
                         </div>
                       </Grid>
 
-                     <Grid item md={3} xs={12} sm={6}>
+                     <Grid item md={3} xs={12} sm={12}>
                       <div className="DivButtonChangePassword">
                         <ThemeProvider theme={theme}>
                            <Button 
@@ -402,7 +414,7 @@ function EditAccountForm1({user, organisations, teams}){
                   </div>
                 </Grid>
 
-              <Grid item md={3} xs={8} sm={4}>
+              <Grid item md={3} xs={6} sm={6}>
                 <div className="DesniDivEditAccount">
                   <div className="divAvatarEditAccount">
                             <ThemeProvider theme={theme}>
@@ -419,7 +431,7 @@ function EditAccountForm1({user, organisations, teams}){
                   <div>
                   <ThemeProvider theme={theme}>
                   <Button 
-                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"12%", marginRight:"1%"}}
+                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"8%", marginRight:"5%", height:"70px", minWidth:"150px"}}
                    variant="contained"
                    onClick={() => setActive("OrganisationList")}>
                    See organisations
@@ -428,7 +440,7 @@ function EditAccountForm1({user, organisations, teams}){
                  <div>
                   <ThemeProvider theme={theme}>
                   <Button 
-                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"19%"}}
+                   sx={{border:"2px solid black", borderRadius:"10px", marginTop:"12%", height:"70px", minWidth:"100px"}}
                    variant="contained"
                    onClick={() => setActive("TeamList")}>
                    See teams
@@ -443,48 +455,167 @@ function EditAccountForm1({user, organisations, teams}){
 
 function PaperListTeams({ teams }){
 
+  const [open, setOpen] = useState(false);
+  const [orgID, setOrgID] = useState(false);
+  const [timID, setTimID] = useState(false);
+
+  const handleClickOpen = (orgID, timID) => {
+    setOpen(true);
+    setOrgID(orgID);
+    setTimID(timID);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  function leaveTeam(){
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Organizacija/VratiIDClanaOrganizacije/"+user.id+"/"+orgID,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+        res.json()
+        .then(data => {
+          fetch("https://localhost:5001/Tim/IzbaciKorisnikaIzTima/"+timID+"/"+data,
+          {
+              method:"PUT",
+              headers:{
+                  "Content-Type":"application/json"
+              },
+          })
+          alert("You left the team");
+          handleClose();
+        });
+    })
+  }
+
   return(
   <div className="divPaperEditAccount">
     <div className="divPaperTopLabelTeam"><h2>Teams</h2></div>
-        <Paper className="PaperEditAccount">
+        <Paper className="PaperEditAccount"  sx={{backgroundColor:"#d6e9de"}}>
         <List>
         {teams.map(item => (
         <ListItem
          key={item.id}
+         secondaryAction={
+          <IconButton edge="end" aria-label="delete" onClick={()=>handleClickOpen(item.organizacijaID, item.id)}>
+          <ThemeProvider theme={theme1}>
+          <ClearIcon color="primary" />
+          </ThemeProvider>
+        </IconButton>
+        }
         >
-        <ListItemButton component="a" href="#simple-list">
-        <ListItemIcon><Avatar></Avatar></ListItemIcon>
+        <ListItemAvatar>
+          <Avatar></Avatar>
+        </ListItemAvatar>
         <ListItemText primary={item.ime} />
-        <IconButton edge="end" aria-label="delete"><ClearIcon /></IconButton>
-        </ListItemButton>
        </ListItem>
          ))}
       </List>
     </Paper>
+    <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          >
+          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold"}}>
+                {"Leave team"}
+              </DialogTitle>
+              <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Are you sure you want to leave?
+              </DialogContentText>
+            </DialogContent>
+              <DialogActions>
+                 <ThemeProvider theme={theme}><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+                 <ThemeProvider theme={theme}>
+                   <Button onClick={()=>leaveTeam()} variant="contained" color="primary" sx={{fontWeight:"bold"}} autoFocus>
+                     Leave
+                   </Button></ThemeProvider>
+            </DialogActions>
+          </Dialog>
   </div>
   )
 }
 
 function PaperListOrganisations({ organisations }){
 
+  const [open, setOpen] = useState(false);
+  const [orgID, setOrgID] = useState(false);
+
+  const handleClickOpen = (orgid) => {
+    setOpen(true);
+    setOrgID(orgid);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  function leaveOrganisation(){
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Organizacija/IzbaciKorisnikaIzOrganizacije/"+user.id+"/"+orgID,
+    {
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    })
+    alert("You left the organisation");
+    handleClose();
+  }
+
   return(
   <div className="divPaperEditAccount">
     <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
-        <Paper className="PaperEditAccount">
+        <Paper className="PaperEditAccount"  sx={{backgroundColor:"#d6e9de"}}>
         <List>
         {organisations.map(item => (
         <ListItem
-         key={item.id}
-        >
-        <ListItemButton component="a" href="#simple-list">
-        <ListItemIcon><Avatar></Avatar></ListItemIcon>
-        <ListItemText primary={item.ime} />
-        <IconButton edge="end" aria-label="delete"><ClearIcon /></IconButton>
-        </ListItemButton>
-       </ListItem>
-         ))}
-      </List>
-    </Paper>
+        key={item.id}
+        secondaryAction={
+         <IconButton edge="end" aria-label="delete" onClick={()=>handleClickOpen(item.id)}>
+          <ThemeProvider theme={theme1}>
+         <ClearIcon color="primary" />
+         </ThemeProvider>
+       </IconButton>
+       }
+       >
+       <ListItemAvatar>
+         <Avatar></Avatar>
+       </ListItemAvatar>
+       <ListItemText primary={item.ime} />
+      </ListItem>
+        ))}
+     </List>
+   </Paper>
+   <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          >
+          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold"}}>
+                {"Leave organisation"}
+              </DialogTitle>
+              <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Are you sure you want to leave?
+              </DialogContentText>
+            </DialogContent>
+              <DialogActions>
+                 <ThemeProvider theme={theme}><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+                 <ThemeProvider theme={theme}>
+                   <Button onClick={()=>leaveOrganisation()} variant="contained" color="primary" sx={{fontWeight:"bold"}} autoFocus>
+                     Leave
+                   </Button></ThemeProvider>
+            </DialogActions>
+          </Dialog>
   </div>
   )
 }

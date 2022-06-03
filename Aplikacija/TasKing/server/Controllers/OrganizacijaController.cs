@@ -148,14 +148,16 @@ namespace TasKing.Controllers
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                 .Include(k => k.clanoviOrganizacije.Where(c => c.izbacen == false))
                 .ThenInclude(c => c.organizacija)
-                .Select(kor => 
-                  kor.clanoviOrganizacije.Select(clan => new {
+                .ToListAsync();
+
+                var org = korisnik[0].clanoviOrganizacije
+                     .Select(clan => new {
                       id = clan.organizacija.ID,
                       ime = clan.organizacija.ime,
                       slika = clan.organizacija.slika
-                  })
-                ).FirstOrDefaultAsync();
-                return Ok(korisnik);
+                  }).ToList();
+
+                return Ok(org);
             }
             catch(Exception e)
             {
@@ -310,6 +312,28 @@ namespace TasKing.Controllers
                 Context.PoziviUOrganizaciju.Remove(poziv);
                 await Context.SaveChangesAsync();
                 return Ok("Poziv je uspesno obrisan!");
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("VratiIDClanaOrganizacije/{userID}/{orgID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiIDClanaOrganizacije(int userID, int orgID)
+        {
+            try
+            {
+                var clanorg = await Context.ClanoviOrganizacije.Where(c => c.korisnik.ID == userID && c.organizacija.ID == orgID)
+                    .FirstOrDefaultAsync();
+
+                if(clanorg == null)
+                {
+                    return BadRequest("Clan organizacije ne postoji!");
+                }
+
+                return Ok(clanorg.ID);
             }
             catch(Exception e)
             {

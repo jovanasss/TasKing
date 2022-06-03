@@ -36,6 +36,17 @@ const theme = createTheme({
     },
   });
 
+  const theme1 = createTheme({
+    palette: {
+      primary: {
+        main: "rgb(230, 0, 0)",
+      },
+      secondary:{
+        main : "rgb(0, 100, 0)",
+      }
+    },
+  })
+
   function RequestsForm(){
 
     const [teamRequests, setTeamRequests] = useState(null);
@@ -180,11 +191,11 @@ function RequestsForm1({teamRequests, organisationRequests}){
 
  return(
 <Grid container  spacing={20}>
-  <Grid item md={5} xs={12} sm={8}>
+  <Grid item md={6} xs={12} sm={12}>
     <div className="levidivRequests">
     <div className="divPaperTeamRequests">
       <div className="divPaperTopLabelTeamRequests"><h2>Teams</h2></div>
-          <Paper className="PaperRequests">
+          <Paper className="PaperRequests" sx={{backgroundColor:"#d6e9de"}}>
           <List>
           {teamRequests.map(item => (
           <ListItem
@@ -192,10 +203,14 @@ function RequestsForm1({teamRequests, organisationRequests}){
            secondaryAction={
             <div>
             <IconButton sx={{marginRight:"1px"}} edge="end" aria-label="delete" onClick={()=>acceptInvitationforTeam(item.id,  item.organizacijaID)}>
-              <CheckIcon />
+              <ThemeProvider theme={theme}>
+              <CheckIcon color="primary" />
+              </ThemeProvider>
             </IconButton>
              <IconButton edge="end" aria-label="delete" onClick={()=>rejectInvitationforTeam(item.id)}>
-             <CloseIcon />
+              <ThemeProvider theme={theme1}>
+             <CloseIcon color="primary" />
+             </ThemeProvider>
            </IconButton>
            </div>
           }>
@@ -225,11 +240,11 @@ function RequestsForm1({teamRequests, organisationRequests}){
     </div>
     </Grid>
 
-    <Grid item md={5} xs={12} sm={8}>
+    <Grid item md={6} xs={12} sm={12}>
     <div className="desnidivRequests">
     <div className="divPaperOrgRequests">
       <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
-          <Paper className="PaperRequests">
+          <Paper className="PaperRequests"  sx={{backgroundColor:"#d6e9de"}}>
           <List>
           {organisationRequests.map(item => (
           <ListItem
@@ -237,10 +252,14 @@ function RequestsForm1({teamRequests, organisationRequests}){
            secondaryAction={
             <div>
             <IconButton sx={{marginRight:"1px"}} edge="end" aria-label="delete" onClick={()=>acceptInvitationforOrganisation(item.id)}>
-              <CheckIcon />
+              <ThemeProvider theme={theme}>
+              <CheckIcon color="primary"/>
+              </ThemeProvider>
             </IconButton>
             <IconButton edge="end" aria-label="delete" onClick={()=>rejectInvitationforOrganisation(item.id)}>
-            <CloseIcon />
+            <ThemeProvider theme={theme1}>
+            <CloseIcon color="primary" />
+            </ThemeProvider>
           </IconButton>
           </div>
           }>

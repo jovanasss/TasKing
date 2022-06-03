@@ -241,7 +241,7 @@ function ProfileForm1({user}){
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { sm: 'block' } }}
           >
             <MenuIcon />
           </IconButton>
@@ -255,7 +255,7 @@ function ProfileForm1({user}){
             keepMounted: true,
           }}
           sx={{
-            display: { xs: 'block', sm: 'none'},
+            display: { xs: 'block', sm: 'block', md:'none'},
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerwidth },
           }}
         >
@@ -264,7 +264,7 @@ function ProfileForm1({user}){
        <Drawer 
         variant="permanent"
         sx={{
-          display: { xs: 'none', sm: 'block' },
+          display: { xs: 'none', sm: 'none', md:'block' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerwidth },
         }}
         open
