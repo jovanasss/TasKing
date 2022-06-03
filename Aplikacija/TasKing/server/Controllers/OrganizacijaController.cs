@@ -102,7 +102,7 @@ namespace TasKing.Controllers
                 }
                 else
                 {
-                    return BadRequest("Korisnik je vec uclanjen u organizaciju");
+                    return Ok(clan.ID);
                 }
         }
 
@@ -238,6 +238,78 @@ namespace TasKing.Controllers
                         vremepoziva = p.vremePoziva
                     }).ToList();
                 return Ok(organizacije);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("IzbaciKorisnikaIzOrganizacije/{userID}/{orgID}")]
+        [HttpPut]
+        public async Task<ActionResult> IzbaciKorisnikaIzOrganizacije(int userID, int orgID)
+        {
+            try
+            {
+                var clanorg = await Context.ClanoviOrganizacije.Where(c => c.korisnik.ID == userID && c.organizacija.ID == orgID)
+                    .FirstOrDefaultAsync();
+
+                if(clanorg == null)
+                {
+                    return BadRequest("Clan organizacije ne postoji!");
+                }
+
+                clanorg.izbacen = true;
+                await Context.SaveChangesAsync();
+                return Ok(clanorg);
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("PrihvatiPozivUOrganizaciju/{userID}/{orgID}")]
+        [HttpPut]
+        public async Task<ActionResult> PrihvatiPozivUOrganizaciju(int userID, int orgID)
+        {
+            try
+            {
+                var poziv = await Context.PoziviUOrganizaciju.Where(p => p.pozvaniKorisnik.ID == userID && p.organizacija.ID == orgID)
+                    .FirstOrDefaultAsync();
+
+                if(poziv == null)
+                {
+                    return BadRequest("Poziv ne postoji!");
+                }
+
+                poziv.prihvacen = true;
+                await Context.SaveChangesAsync();
+                return Ok(poziv);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("OdbijPozivUOrganizaciju/{userID}/{orgID}")]
+        [HttpDelete]
+        public async Task<ActionResult> OdbijPozivUOrganizacije(int userID, int orgID)
+        {
+            try
+            {
+                var poziv = await Context.PoziviUOrganizaciju.Where(p => p.pozvaniKorisnik.ID == userID && p.organizacija.ID == orgID)
+                    .FirstOrDefaultAsync();
+
+                if(poziv == null)
+                {
+                    return BadRequest("Poziv ne postoji!");
+                }
+
+                Context.PoziviUOrganizaciju.Remove(poziv);
+                await Context.SaveChangesAsync();
+                return Ok("Poziv je uspesno obrisan!");
             }
             catch(Exception e)
             {

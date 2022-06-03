@@ -18,6 +18,7 @@ namespace Models
         [Required]
         public bool izbacen { get; set; }
         
+        [JsonIgnore]
         public Korisnik korisnik { get; set; }
 
         public Organizacija organizacija { get; set; }

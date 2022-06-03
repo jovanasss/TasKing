@@ -2,16 +2,19 @@ import React, { useState, useEffect }  from "react";
 import '../../styles/ProfileView/RequestsForm.css';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import Paper from '@mui/material/Paper';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import {ThemeProvider} from "@mui/system";
 import Button from '@mui/material/Button';
 import { createTheme , experimental_sx as sx} from "@mui/material/styles";
 import Grid from '@mui/material/Grid';
+import Avatar from '@mui/material/Avatar';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 const theme = createTheme({
     components:{
@@ -79,26 +82,106 @@ const theme = createTheme({
 
 function RequestsForm1({teamRequests, organisationRequests}){
 
+  function acceptInvitationforOrganisation(orgID){
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    const ClanOrganizacije = {
+      idKorisnika : user.id,
+      idOrganizacije : orgID,
+      admin : false
+    }
+    fetch("https://localhost:5001/Organizacija/PrihvatiPozivUOrganizaciju/"+user.id+"/"+orgID,
+    {
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    })
+    fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(ClanOrganizacije)
+    });
+
+    alert("The invitation is successfully accepted 😀");
+    
+  }
+
+  function acceptInvitationforTeam(timID, orgID){
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    const ClanOrganizacije = {
+      idKorisnika : user.id,
+      idOrganizacije : orgID,
+      admin : false
+    }
+  
+    fetch("https://localhost:5001/Tim/PrihvatiPozivUTim/"+user.id+"/"+timID,
+    {
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    })
+   fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(ClanOrganizacije)
+    }).then(res => {
+      res.json()
+      .then(data => {
+       const ClanTima = {
+        idClanaOrganizacije : data,
+        idtima : timID,
+        vodja : false
+      }
+    
+      fetch("https://localhost:5001/Tim/UclaniUTim/",{
+              method : 'POST',
+              headers : {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json; charset=utf-8'
+              },
+              body : JSON.stringify(ClanTima)
+       });
+      })
+  })
+
+    alert("The invitation is successfully accepted 😀");
+  }
+
+  function rejectInvitationforOrganisation(orgID){
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Organizacija/OdbijPozivUOrganizaciju/"+user.id+"/"+orgID,
+    {
+        method:"DELETE",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    })
+     alert("The invitation is rejected");
+  }
+
+  function rejectInvitationforTeam(timID){
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Tim/OdbijPozivUTim/"+user.id+"/"+timID,
+    {
+        method:"DELETE",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    })
+     alert("The invitation is rejected");
+  }
+
  return(
 <Grid container  spacing={20}>
   <Grid item md={5} xs={12} sm={8}>
     <div className="levidivRequests">
-     <PaperListTeamRequests teamRequests={teamRequests} />
-    </div>
-    </Grid>
-
-    <Grid item md={5} xs={12} sm={8}>
-    <div className="desnidivRequests">
-    <PaperListOrganisationRequests organisationRequests={organisationRequests} />
-    </div> 
-    </Grid>
-    </Grid>   
-    )
-}
-
-  function PaperListTeamRequests({teamRequests}){
-
-    return(
     <div className="divPaperTeamRequests">
       <div className="divPaperTopLabelTeamRequests"><h2>Teams</h2></div>
           <Paper className="PaperRequests">
@@ -106,9 +189,20 @@ function RequestsForm1({teamRequests, organisationRequests}){
           {teamRequests.map(item => (
           <ListItem
            key={item.id}
-           button
-          >
-          <ListItemIcon>{item.slika}</ListItemIcon>
+           secondaryAction={
+            <div>
+            <IconButton sx={{marginRight:"1px"}} edge="end" aria-label="delete" onClick={()=>acceptInvitationforTeam(item.id,  item.organizacijaID)}>
+              <CheckIcon />
+            </IconButton>
+             <IconButton edge="end" aria-label="delete" onClick={()=>rejectInvitationforTeam(item.id)}>
+             <CloseIcon />
+           </IconButton>
+           </div>
+          }>
+          <ListItemAvatar>
+                    <Avatar>
+                    </Avatar>
+                  </ListItemAvatar>
           <ListItemText primary={item.ime}
           secondary={
             <React.Fragment>
@@ -118,7 +212,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
                 variant="body2"
                 color="text.primary"
               >
-                {item.vremepoziva}
+                {new Date(item.vremepoziva).toDateString()}
               </Typography>
             </React.Fragment>
           }
@@ -128,12 +222,11 @@ function RequestsForm1({teamRequests, organisationRequests}){
         </List>
       </Paper>
     </div>
-    )
-  }
-  
-  function PaperListOrganisationRequests({organisationRequests}){
-    
-    return(
+    </div>
+    </Grid>
+
+    <Grid item md={5} xs={12} sm={8}>
+    <div className="desnidivRequests">
     <div className="divPaperOrgRequests">
       <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
           <Paper className="PaperRequests">
@@ -141,9 +234,20 @@ function RequestsForm1({teamRequests, organisationRequests}){
           {organisationRequests.map(item => (
           <ListItem
            key={item.id}
-           button
-          >
-          <ListItemIcon>{item.slika}</ListItemIcon>
+           secondaryAction={
+            <div>
+            <IconButton sx={{marginRight:"1px"}} edge="end" aria-label="delete" onClick={()=>acceptInvitationforOrganisation(item.id)}>
+              <CheckIcon />
+            </IconButton>
+            <IconButton edge="end" aria-label="delete" onClick={()=>rejectInvitationforOrganisation(item.id)}>
+            <CloseIcon />
+          </IconButton>
+          </div>
+          }>
+            <ListItemAvatar>
+                    <Avatar>
+                    </Avatar>
+                  </ListItemAvatar>
           <ListItemText primary={item.ime} 
            secondary={
             <React.Fragment>
@@ -153,7 +257,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
                 variant="body2"
                 color="text.primary"
               >
-                {item.vremepoziva}
+                {new Date(item.vremepoziva).toDateString()}
               </Typography>
             </React.Fragment>
           }
@@ -163,7 +267,10 @@ function RequestsForm1({teamRequests, organisationRequests}){
         </List>
       </Paper>
     </div>
+    </div> 
+    </Grid>
+    </Grid>   
     )
-  }
+}
 
 export default RequestsForm;

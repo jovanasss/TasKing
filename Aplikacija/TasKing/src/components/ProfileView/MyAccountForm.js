@@ -232,7 +232,7 @@ function MyAccount1({projects, user}){
                 <Typography variant="h5" component="div">
                     {"Name: " + project.naziv}
                 </Typography>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 14, height: "8vh", overflow: "auto" }} color="text.secondary" gutterBottom>
                      {"Descripiton: " + project.opis}
                 </Typography>
                   <Typography sx={{ mb: 1.5, fontSize:14 }} color="text.secondary">

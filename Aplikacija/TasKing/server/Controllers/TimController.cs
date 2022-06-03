@@ -238,6 +238,7 @@ namespace TasKing.Controllers
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                 .Include(k => k.primljeniPoziviIzTima.Where(p => p.prihvacen == false))
                 .ThenInclude(p => p.tim)
+                .ThenInclude(t => t.organizacija)
                 .ToListAsync();
 
                 var timovi = korisnik[0].primljeniPoziviIzTima
@@ -246,9 +247,58 @@ namespace TasKing.Controllers
                         id = p.tim.ID,
                         ime = p.tim.ime,
                         slika = p.tim.slika,
+                        organizacijaID = p.tim.organizacija.ID,
                         vremepoziva = p.vremePoziva
                     }).ToList();
                 return Ok(timovi);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("PrihvatiPozivUTim/{userID}/{timID}")]
+        [HttpPut]
+        public async Task<ActionResult> PrihvatiPozivUTim(int userID, int timID)
+        {
+            try
+            {
+                var poziv = await Context.PoziviUTim.Where(p => p.pozvaniKorisnik.ID == userID && p.tim.ID == timID)
+                    .FirstOrDefaultAsync();
+
+                if(poziv == null)
+                {
+                    return BadRequest("Clan tima ne postoji!");
+                }
+
+                poziv.prihvacen = true;
+                await Context.SaveChangesAsync();
+                return Ok(poziv);
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("OdbijPozivUTim/{userID}/{timID}")]
+        [HttpDelete]
+        public async Task<ActionResult> OdbijPozivUTim(int userID, int timID)
+        {
+            try
+            {
+                var poziv = await Context.PoziviUTim.Where(p => p.pozvaniKorisnik.ID == userID && p.tim.ID == timID)
+                    .FirstOrDefaultAsync();
+
+                if(poziv == null)
+                {
+                    return BadRequest("Poziv ne postoji!");
+                }
+
+                Context.PoziviUTim.Remove(poziv);
+                await Context.SaveChangesAsync();
+                return Ok("Poziv je uspesno obrisan!");
             }
             catch(Exception e)
             {
