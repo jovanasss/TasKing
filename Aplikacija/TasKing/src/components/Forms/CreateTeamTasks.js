@@ -106,8 +106,8 @@ function CreateTeamTasks(){
               });
               let status = rezultat.status;
               let idProjekta = await rezultat.json();
-    
-              // dodati idProjekta u niz taskova i proslediti kroz body fetcha 
+              if (idProjekta != 0){
+                              // dodati idProjekta u niz taskova i proslediti kroz body fetcha 
               // za svaki task mora da se doda novi prop idProjekta vrv preko map f-je i onda se vrti foreach sa ovim fetchom ispod
      
              /* tasks.map((task)=> {
@@ -149,12 +149,16 @@ function CreateTeamTasks(){
                   console.log(status);
               }
 
-        }
+            }
+            else {
+                alert("Projekat  sa unetim imenom vec postoji !");
+                setProjNameError(true);
+            }
+        }       
         else {
-            console.log("Niste dodali taskove")
+            alert("Niste dodali taskove");
         }
-
-
+    
 
     }
     // error check => napraviNoviprojekat(Naslov, opis , listaTaskova[])
@@ -229,8 +233,7 @@ function CreateTeamTasks(){
 
     return (
         <div className="divMainTeamTasks">
-            <div>
-                Kurcina brate             
+            <div>           
             </div>
             <Grid container>
             <Grid item  xs={0} sm={2} md={4}>

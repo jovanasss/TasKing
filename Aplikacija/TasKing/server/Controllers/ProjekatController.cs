@@ -56,7 +56,7 @@ namespace TasKing.Controllers
             }
             else
             {
-                return BadRequest("Projekat sa unetim imenom vec postoji!");
+                return Ok(0);
             }
         }
 

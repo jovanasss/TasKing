@@ -46,8 +46,10 @@ function CreateOrJoinForm(){
     
     if (teamCode === ''){
       setTeamCodeError(true)
+      setOrgCodeError(false)
     }
     else {
+      setOrgCode("")
       // joinTeam(userID ,orgID)
       console.log(teamCode)
 
@@ -62,8 +64,9 @@ function CreateOrJoinForm(){
       temp = await temp.json();
       console.log(temp);
       let idNovogTima = temp;
+      console.log(statusTima);
 
-      if (statusTima === 200){
+      if (temp != 0){
 
 
         let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima , {
@@ -130,7 +133,10 @@ function CreateOrJoinForm(){
         }
       }
       else {
-        console.log(statusTima);
+        alert("Netacan kod !")
+        setOrgCodeError(false)
+        setTeamCodeError(true)
+        setTeamCode("");
       }
 
        // routeChange()
@@ -143,6 +149,8 @@ function CreateOrJoinForm(){
 
     if (orgCode === ''){
       setOrgCodeError(true)
+      setTeamCodeError(false)
+      setTeamCode("");
     }
     else {
       // joinOrg(userID ,orgID)
@@ -158,32 +166,41 @@ function CreateOrJoinForm(){
       temp = await temp.json();
       console.log(temp);
       let idNoveOrg = temp;
-
-      const userN = (JSON.parse(window.localStorage.getItem('user-info')));
-      console.log(userN.id);
-
-      const ClanOrganizacije = {
-        idKorisnika : userN.id,
-        idOrganizacije : idNoveOrg,
-        admin : false,
+      if (temp != 0){
+        const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+        console.log(userN.id);
+  
+        const ClanOrganizacije = {
+          idKorisnika : userN.id,
+          idOrganizacije : idNoveOrg,
+          admin : false,
+        }
+  
+          let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(ClanOrganizacije)
+          });
+          let noviStatus = tmp.status;
+          if ( noviStatus === 200){
+            routeChange();
+          }
+  
+  
+        // routeChange()
+      }
+      else {
+        alert("Netacan kod !")
+        setOrgCodeError(true);
+        setTeamCodeError(false);
+        setTeamCode("");
+      }
       }
 
-        let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
-          method : 'POST',
-          headers : {
-            'Content-Type': 'application/json; charset=utf-8',
-            'Accept': 'application/json; charset=utf-8'
-          },
-          body : JSON.stringify(ClanOrganizacije)
-        });
-        let noviStatus = tmp.status;
-        if ( noviStatus === 200){
-          routeChange();
-        }
 
-
-      // routeChange()
-    }
   }
 
   // promena strane 
@@ -213,6 +230,7 @@ function CreateOrJoinForm(){
             <label className="label">Join a organization with a code</label>
             <ThemeProvider theme={theme}>
                 <TextField onChange={ (e) => setOrgCode(e.target.value) } error={orgCodeError}
+                value = {orgCode}
                 sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
                 id="outlined-basic" label="Enter Code" variant="outlined" size="small" type="text" color="primary" required/>
             </ThemeProvider>
@@ -223,6 +241,7 @@ function CreateOrJoinForm(){
             <label className="label">Join a team with a code</label>
             <ThemeProvider theme={theme}>
                 <TextField onChange={ (e) => setTeamCode(e.target.value) } error={teamCodeError}
+                value = {teamCode}
                 sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
                 id="outlined-basic" label="Enter Code" variant="outlined" size="small" type="text" color="primary" required/>
             </ThemeProvider>

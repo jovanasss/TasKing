@@ -87,7 +87,10 @@ function SignUp(){
             setPassError(true)
         }
         if (email === ''){
-            setEmailError(true)
+            setEmailError(true)           
+        }
+        if(emailError || passError || userError || lnameError || fnameError){
+            alert("Nisu popunjena sva potrebna polja")
         }
         // ako je sve ok pravi se nalog i prebacuje nas na main 
         if (firstName && lastName && userName && passWord  && emailCheck()){

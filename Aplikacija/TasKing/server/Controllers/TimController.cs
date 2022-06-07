@@ -59,7 +59,7 @@ namespace TasKing.Controllers
             }
             else
             {
-                return BadRequest("Tim sa unetim imenom vec postoji!");
+                return Ok(0);
             }
         }
 
@@ -210,7 +210,24 @@ namespace TasKing.Controllers
             }
             catch(Exception e)
             {
-                return BadRequest("Doslo je do greske" + e.Message);
+                return Ok(0);
+            }
+        }
+
+
+        [Route("VratiTimIME/{ime}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiTimIME(string ime)
+        {
+            try
+            {
+                var tim = await Context.Timovi.Where(k => k.ime == ime).FirstOrDefaultAsync();
+
+                return Ok(tim.ID);
+            }
+            catch(Exception e)
+            {
+                return Ok(0);
             }
         }
 

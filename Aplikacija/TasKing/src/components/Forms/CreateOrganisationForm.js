@@ -57,93 +57,115 @@ function CreateOrganisationForm (){
           ime : orgName
         }
 
-        let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/", {
-          method : 'POST',
+        let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName , {
+          method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
             'Accept': 'application/json; charset=utf-8'
           },
-          body : JSON.stringify(organizacija)
         });
-        let status = result.status ;
-        result  = await result.json();
-        let idNoveOrg = result ;
-        const admin = true ;
-        const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        console.log(user.id);
-        console.log("ID Nove Organizacije :" ,idNoveOrg);
-        console.log(status)
-        const ClanOrganizacije = {
-          idKorisnika : user.id,
-          idOrganizacije : idNoveOrg,
-          admin : admin
-        }
-        if (status === 200){
-          let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+        proveraTima = await proveraTima.json();
+        console.log("Vrati tim :" ,proveraTima);
+        if (proveraTima === 0){
+          let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/", {
             method : 'POST',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
               'Accept': 'application/json; charset=utf-8'
             },
-            body : JSON.stringify(ClanOrganizacije)
+            body : JSON.stringify(organizacija)
           });
-          let statusU = temp.status ;
-          temp = await temp.json();
-          let idClanaORG = temp ;
-          console.log("IDclanaOrganizacije :" ,idClanaORG);
-          console.log(statusU);
-
-
-          const tim = {
-            ime : teamName ,
-            idOrganizacije : idNoveOrg,
-            
-          }
-          console.log(tim);
-
-
-          let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
-            method : 'POST',
-            headers : {
-              'Content-Type': 'application/json; charset=utf-8',
-              'Accept': 'application/json; charset=utf-8'
-            },
-            body : JSON.stringify(tim)
-          });
-          let statusT = rezultat.status;
-          rezultat = await rezultat.json();
-          let idNovogTima = rezultat ;
-          console.log("ID novog tima :" ,idNovogTima);
-          const vodja = true ;
-          //result  = await result.json();
-          console.log(statusT);
-          if (statusT === 200){
-
-            const ClanTima = {
-              idClanaOrganizacije : idClanaORG,
-              idtima : idNovogTima,
-              vodja : vodja
-            }
-            console.log(ClanTima);
-
-            let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+          let status = result.status ;
+          result  = await result.json();
+          if (result != 0)     
+          {
+  
+            let idNoveOrg = result ;
+            const admin = true ;
+            const user = (JSON.parse(window.localStorage.getItem('user-info')));
+            console.log(user.id);
+            console.log("ID Nove Organizacije :" ,idNoveOrg);
+            console.log(status)
+            const ClanOrganizacije = {
+              idKorisnika : user.id,
+              idOrganizacije : idNoveOrg,
+              admin : admin
+            }        
+            let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
               method : 'POST',
               headers : {
                 'Content-Type': 'application/json; charset=utf-8',
                 'Accept': 'application/json; charset=utf-8'
               },
-              body : JSON.stringify(ClanTima)
+              body : JSON.stringify(ClanOrganizacije)
             });
-            
-            console.log(tmp.status);
-            if(tmp.status === 200){
-              navigate(path)
+            let statusU = temp.status ;
+            temp = await temp.json();
+            let idClanaORG = temp ;
+            console.log("IDclanaOrganizacije :" ,idClanaORG);
+            console.log(statusU);
+  
+  
+            const tim = {
+              ime : teamName ,
+              idOrganizacije : idNoveOrg,
+              
             }
+            console.log(tim);
+  
+  
+            let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
+              method : 'POST',
+              headers : {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json; charset=utf-8'
+              },
+              body : JSON.stringify(tim)
+            });
+            let statusT = rezultat.status;
+            rezultat = await rezultat.json();
+  
+  
+              let idNovogTima = rezultat ;
+              console.log("ID novog tima :" ,idNovogTima);
+              const vodja = true ;
+              //result  = await result.json();
+              console.log(statusT);
+  
+              const ClanTima = {
+                idClanaOrganizacije : idClanaORG,
+                idtima : idNovogTima,
+                vodja : vodja
+              }
+              console.log(ClanTima);
+  
+              let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+                method : 'POST',
+                headers : {
+                  'Content-Type': 'application/json; charset=utf-8',
+                  'Accept': 'application/json; charset=utf-8'
+                },
+                body : JSON.stringify(ClanTima)
+              });
+              
+              console.log(tmp.status);
+              if(tmp.status === 200){
+                navigate(path)
+              }
+  
           }
+          else{
+              alert("Organizacija sa unetim imenom vec postoji !")
+              setPage(0);
+          }
+          
         }
-        else{
-            console.log(status)
+        else {
+          alert("Tim sa unetim imenom vec postoji")
+          setTEAMerror(true);
         }
+
+
       
       }
       

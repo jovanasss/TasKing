@@ -16,6 +16,7 @@ function LoginForm()  {
     const [userError , setUserError] = useState(false)
     const [password , setPassWord] = useState('')
     const [passError , setPassError] = useState(false)
+    const [rememberMe , setRememberMe] = useState(false);
 
     const history = useNavigate();
     useEffect(() => {
@@ -25,6 +26,7 @@ function LoginForm()  {
     },[])
 
     async function login(){
+
       const user = {
         korisnickoIme : userName,
         lozinka : password,
@@ -40,32 +42,40 @@ function LoginForm()  {
       console.log(JSON.stringify(user))
       let a = await result.json();
       console.log(a);
+      let status = result.status;
       console.log(JSON.stringify(a));
       console.log(result);
-      localStorage.setItem('user-info',JSON.stringify(a))
+     // localStorage.setItem('user-info',JSON.stringify(a))
       // history.push("/main")
-
-      const userN = (JSON.parse(window.localStorage.getItem('user-info')));
-      console.log(userN.id);
-
-      let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+userN.id , {
-        method : 'GET',
-        headers : {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Accept': 'application/json; charset=utf-8'
-        },
-      });
-      temp = await temp.json();
-      let niz = [];
-      console.log(temp);
-      niz = temp ;
-      let statusOrg = temp.status
-      if (niz.length === 0){
-        navigate("/CoJ")
+      if (a != 0){
+        localStorage.setItem('user-info',JSON.stringify(a))
+        localStorage.setItem('rememberMe',rememberMe);
+        const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+        console.log(userN.id);
+  
+        let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+userN.id , {
+          method : 'GET',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+        });
+        temp = await temp.json();
+        let niz = [];
+        console.log(temp);
+        niz = temp ;
+        let statusOrg = temp.status
+        if (niz.length === 0){
+          navigate("/CoJ")
+        }
+        else{
+          routeChange()
+        }
       }
-      else{
-        routeChange()
+      else {
+        alert("Wrong username or password!")
       }
+    
 
     }
 
@@ -126,7 +136,9 @@ function LoginForm()  {
         },
       });
 
-
+   /* const rememberMEChange = () =>{
+        setRememberMe(!rememberMe);
+      }*/
 
 return (
     <div className="divMain">
@@ -161,7 +173,8 @@ return (
                     <FormControlLabel
                         label = "Remember me ?"
                         control = {
-                            <Checkbox                    
+                            <Checkbox    
+                                //onChange={() => {rememberMEChange()} }                
                                 sx={{
                                     //color: "rgb(161, 17, 161)",
                                     color: "rgb(0, 100, 100)",

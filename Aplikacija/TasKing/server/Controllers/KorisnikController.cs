@@ -112,7 +112,7 @@ namespace TasKing.Controllers
             try{
                 Korisnik k1 = await Context.Korisnici.Where(k => k.korisnickoIme == user.korisnickoIme).FirstOrDefaultAsync();
                 if(k1 == null || k1.lozinka != user.lozinka){
-                    return BadRequest("Incorect Credentials");
+                    return Ok(0); // nepostojeci korisnik
                 }
                 else{
                     var podaci = new

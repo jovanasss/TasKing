@@ -184,7 +184,12 @@ function TaskList(props){
       body : JSON.stringify(task)
     });
     let statusT = result.status;
+    result = await result.json();
     console.log(statusT);
+    if (result === 0){
+      alert("Task sa unetim imenom vec postoji !");
+    }
+    
 
     }
   

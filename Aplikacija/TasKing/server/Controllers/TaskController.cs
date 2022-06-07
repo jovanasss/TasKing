@@ -24,8 +24,9 @@ namespace TasKing.Controllers
         [Route("KreirajTask")]
         [HttpPost]
         public async Task<ActionResult> KreirajTask([FromBody] TaskDTO Task)
-        {
-            var task = Context.Taskovi.Where(t => t.naziv == Task.naziv).FirstOrDefault();
+        {   
+            var projekat = Context.Projekti.Where(p  => p.ID == Task.projekatID).FirstOrDefault();
+            var task = Context.Taskovi.Where( t => t.naziv == Task.naziv && t.projekat == projekat).FirstOrDefault();
             if(task == null)
             {
                  if(string.IsNullOrWhiteSpace(Task.naziv) || Task.naziv.Length > 50)
@@ -59,7 +60,7 @@ namespace TasKing.Controllers
             }
             else
             {
-                return BadRequest("Task sa unetim imenom vec postoji!");
+                return Ok(0);
             }
         }
     }

@@ -157,6 +157,7 @@ function ProfileForm1({user}){
       function logOut(){
         navigate("/");
         localStorage.removeItem("user-info");
+        localStorage.removeItem("rememberMe");
       }
       
       const drawer = (

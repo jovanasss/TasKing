@@ -14,6 +14,7 @@ export default function TeamsMenu(props){
   const [openD, setOpenD] = useState(false)
   const [teams, setTeams] = useState([])
   const [teamName ,setTeamName] = useState('')
+  const [teamError ,setTeamError] = useState(false)
   const showTeams = ()=>{
     const org = window.localStorage.getItem('clanOrgID');
     console.log(org);
@@ -75,7 +76,6 @@ export default function TeamsMenu(props){
   async function addTeam() {
 
     
-    setOpenD(false)
     const idClanaOrg = (JSON.parse(window.localStorage.getItem('clanOrgID')));
     console.log(idClanaOrg);
 
@@ -99,40 +99,57 @@ export default function TeamsMenu(props){
     console.log(tim);
 
 
-    let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
-      method : 'POST',
+    let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName , {
+      method : 'GET',
       headers : {
         'Content-Type': 'application/json; charset=utf-8',
         'Accept': 'application/json; charset=utf-8'
       },
-      body : JSON.stringify(tim)
     });
-
-
-    let statusT = rezultat.status;
-    rezultat = await rezultat.json();
-    let idNovogTima = rezultat ;
-    console.log("ID novog tima :" ,idNovogTima);
-    const vodja = true ;
-    //result  = await result.json();
-    console.log(statusT);
-    
-
-      const ClanTima = {
-        idClanaOrganizacije : idClanaOrg,
-        idtima : idNovogTima,
-        vodja : vodja
-      }
-      console.log(ClanTima);
-
-      let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+    proveraTima = await proveraTima.json();
+    console.log("Vrati tim :" ,proveraTima);
+    if (proveraTima === 0){
+      setOpenD(false)
+      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
         method : 'POST',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
           'Accept': 'application/json; charset=utf-8'
         },
-        body : JSON.stringify(ClanTima)
+        body : JSON.stringify(tim)
       });
+  
+  
+      let statusT = rezultat.status;
+      rezultat = await rezultat.json();
+      let idNovogTima = rezultat ;
+      console.log("ID novog tima :" ,idNovogTima);
+      const vodja = true ;
+      //result  = await result.json();
+      console.log(statusT);
+      
+  
+        const ClanTima = {
+          idClanaOrganizacije : idClanaOrg,
+          idtima : idNovogTima,
+          vodja : vodja
+        }
+        console.log(ClanTima);
+  
+        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+          method : 'POST',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+          body : JSON.stringify(ClanTima)
+        });
+
+    }
+    else{
+      alert("Tim sa unetim imenom vec postoji !");
+      setTeamError(true);  
+    }
 
 
   }
@@ -140,9 +157,11 @@ export default function TeamsMenu(props){
   const handleClick = () => {
       console.log("Otvoren dijalog")
       setOpenD(true);
+      setTeamError(false);
   }
   const handleClose = () => {
       setOpenD(false)
+      setTeamError(false)
   }
 
   const theme = createTheme({
@@ -211,6 +230,7 @@ export default function TeamsMenu(props){
                                         <ThemeProvider theme={theme}>
                                             <TextField id="outlined-basic" label="Team Name" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                                             onChange={(e) => setTeamName(e.target.value)}
+                                            error={teamError}
                                             sx={{
                                                 width :"100%",
                                                 marginTop : "5%",

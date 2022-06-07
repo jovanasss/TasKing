@@ -56,7 +56,7 @@ namespace TasKing.Controllers
             }
             else
             {
-                return BadRequest("Organizacija sa unetim imenom vec postoji!");
+                return Ok(0);
             }
         }
 
@@ -177,7 +177,7 @@ namespace TasKing.Controllers
             }
             catch(Exception e)
             {
-                return BadRequest("Doslo je do greske" + e.Message);
+                return Ok(0);
             }
         }
 
