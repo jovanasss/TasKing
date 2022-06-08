@@ -76,6 +76,8 @@ const theme1 = createTheme({
 function ProfileForm(){
 
   const [user, setUser] = useState(null);
+  const korisnikID = window.localStorage.getItem('ProfileUser-info');
+  console.log(korisnikID +  " korisnikID");
 
   useEffect(() =>{
     fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+1,

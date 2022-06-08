@@ -81,7 +81,7 @@ function CreateTeamTasks(){
 
 
 
-        const idTima = (JSON.parse(window.localStorage.getItem('clanTimaID')));
+        const idTima = (JSON.parse(window.localStorage.getItem('TimID')));
         console.log(idTima);
 
 

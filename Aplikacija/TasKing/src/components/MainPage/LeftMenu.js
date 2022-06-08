@@ -100,9 +100,11 @@ export default function LeftMenu(props){
            {organisations.map(item => (
              <ListItem key={item.idClan} className={curOrg==item.idClan? 'activeEnt' : null}>
               <ThemeProvider theme={theme}>
-                <IconButton onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan)}} sx={{backgroundColor: 'white'}}>
-                  <SubjectOutlined/>
-                </IconButton>
+                <Tooltip title={item.imeOrganizacije}>
+                  <IconButton onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan)}} sx={{backgroundColor: 'white'}}>
+                      <SubjectOutlined/>
+                  </IconButton>
+                </Tooltip>   
               </ThemeProvider>
              </ListItem>
            ))}

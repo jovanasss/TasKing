@@ -12,7 +12,128 @@ import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { FormControlLabel, TextField } from "@mui/material";
 import Slider from '@mui/material/Slider';
+import PropTypes from 'prop-types';
+import Avatar from '@mui/material/Avatar';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import PersonIcon from '@mui/icons-material/Person';
+import { blue } from '@mui/material/colors';
+
 const drawerWidth = 240
+
+function SimpleDialog(props) {
+  const theme = createTheme({
+    components: {
+        MuiButton: {styleOverrides:{
+         root: {
+          backgroundColor: "rgb(0, 117, 83)",
+          color: "rgb(255, 255, 255)",
+          "&:hover": {
+            backgroundColor: "rgb(0, 117, 83)",
+          },
+         }
+        }},
+       },
+    palette: {
+      primary: {
+        main: "rgb(0, 100, 100)",
+      },
+      secondary:{
+        main : "rgb(0, 200, 0)",
+      }
+    },
+  }); 
+
+  const { onClose, selectedValue, open } = props;
+  const [members, setMembers] = useState([])
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleHire = () => {
+    const clanID = window.localStorage.getItem('clanTimaID');
+    fetch("https://localhost:5001/Task/DodeliTask/" + clanID + "/" + props.taskID,
+        {
+            method: "PUT"
+        }).then(s =>{
+            if(s.ok)
+            {
+               //alert("uspesno je dodeljen task");
+            }
+        });
+  };
+
+  React.useEffect(() => {
+    fetch("https://localhost:5001/Task/VratiPrijaveZaTask/" + props.taskID,
+  {
+      method:"GET",
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  }).then(res => {
+    if(res.ok)
+    {
+      console.log(res);
+      res.json().then(data => {
+        console.log(data)
+        setMembers(data)
+        /*setOrganisations(data)
+        if(data==undefined || data==null)
+        return;
+      
+        if(data.length==0)
+          return;  
+        console.log(data[0].idClan);
+        setOrg(data[0].idClan)
+        localStorage.setItem('clanOrgID',data[0].idClan)*/
+      });
+    }
+    else
+    {
+      alert("uneli ste pogresno korisnicko ime ili lozinku");
+    }
+  })
+ }, [props.taskID]);
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>Candidates</DialogTitle>
+      <List sx={{ pt: 0 }}>
+        {members.map((member) => (
+          <ListItem key={member.clanTimaID}>
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
+                <PersonIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={member.korisnik.korisnickoIme} />
+            <ThemeProvider theme={theme}>
+              <Button
+                sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}>
+                View Profile
+              </Button>
+              <Button
+              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
+              onClick={()=>handleHire()}>
+                 Hire
+              </Button>
+            </ThemeProvider>
+          </ListItem>
+        ))} 
+      </List>
+    </Dialog>
+  );
+}
+
+SimpleDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired
+};
+
+
 
 function Tasks(props)
 {
@@ -37,9 +158,15 @@ function Tasks(props)
     },
   }); 
 
+const [curTask, setTask] = useState(-1)
 const [open, setOpen] = React.useState(false);
 const [scroll, setScroll] = React.useState('paper');
 const [dialogTask, setDialog] = React.useState(0);
+const [tasks, setTasks] = React.useState([])
+
+React.useEffect(() => {
+  setTasks(props.taskovi);
+}, [props.taskovi]);
 
 const handleClickOpen = (scrollType, ind) => () => {
   setDialog(ind);
@@ -49,6 +176,145 @@ const handleClickOpen = (scrollType, ind) => () => {
 
 const handleClose = () => {
   setOpen(false);
+};
+
+const [openSimple, setOpenSimple] = React.useState(false);
+
+  const handleClickOpenSimple = () => {
+    setOpenSimple(true);
+  };
+
+  const handleCloseSimple = (value) => {
+    setOpenSimple(false);
+    refreshTasks();
+  };
+
+const refreshTasks = () => {
+  fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+      if(res.ok)
+      {
+        console.log(res);
+        res.json().then(data => {
+          console.log(data);
+          setTasks(data.taskovi)
+        });
+      }
+      else
+      {
+        alert("");
+      }
+    })
+}  
+
+const handleAll = (taskID, currentStatus) => {
+
+  if(props.vodjaStatus)
+  {
+    if(currentStatus==0)
+    {
+      handleSeeCandidats(taskID);
+      return;
+    }
+
+    if(currentStatus==1)
+    {
+      return;
+    }
+
+    if(currentStatus==2)
+    {
+      handleChangeStatus(taskID, 3);
+      return;
+    }
+
+    if(currentStatus==3)
+    {
+      return;
+    }
+
+    if(currentStatus==4)
+    {
+      return;
+    }
+  }
+  else
+  {
+    if(currentStatus==0)
+    {
+      handleImIntrested(taskID);
+      return;
+    }
+
+    if(currentStatus==1)
+    {
+      handleChangeStatus(taskID, 2);
+      return;
+    }
+
+    if(currentStatus==2)
+    {
+      return;
+    }
+
+    if(currentStatus==3)
+    {
+      return;
+    }
+
+    if(currentStatus==4)
+    {
+      handleChangeStatus(taskID, 2);
+      return;
+    }
+  }
+}
+
+  const handleImIntrested = (taskID) => {
+  const clanID = window.localStorage.getItem('clanTimaID');
+  console.log(taskID + "taskID");
+  console.log(clanID +  " clanID");
+   fetch("https://localhost:5001/Task/PrijaviZaTask/" + clanID + "/" + taskID, {
+   method: "POST"
+  }).then(s =>{
+    refreshTasks();
+  })
+};
+
+const handleImNotIntrested = (taskID) => {
+  const clanID = window.localStorage.getItem('clanTimaID');
+  console.log(taskID + "taskID");
+  console.log(clanID +  " clanID");
+   fetch("https://localhost:5001/Task/PrijaviZaTask/" + clanID + "/" + taskID, {
+   method: "POST"
+  }).then(s =>{
+    refreshTasks();
+  })
+};
+
+const handleSeeCandidats = (taskID) => {
+  console.log(taskID + "taskID");
+  setTask(taskID);
+  handleClickOpenSimple();
+};
+
+const handleChangeStatus = (taskID, status) => {
+  console.log(taskID + "taskID");
+  fetch("https://localhost:5001/Task/PromeniStatus/" + taskID + "/" + status,
+        {
+            method: "PUT"
+        }).then(s =>{
+          refreshTasks();
+            if(s.ok)
+            {
+               //alert("uspesno je dodeljen task");
+            }
+        });
 };
 
 const descriptionElementRef = React.useRef(null);
@@ -70,15 +336,15 @@ const displej = [displejClan, displejVodja]
 const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
 const boje = ['rgb(255, 255, 255)', 'rgb(255, 207, 49)', 'rgb(77, 154, 255)', 'rgb(78, 255, 93)']
 
-if(props.taskovi==undefined || props.taskovi==null)
+if(tasks==undefined || tasks==null)
   return;
 
-if(props.taskovi.length == 0)
+if(tasks.length == 0)
   return;
 
 return(
       <div className="divTasks">
-              {props.taskovi.filter(task => (task.status==props.selected-1 || (props.selected==0 && task.status<4))).map((task, index) => (
+              {tasks.filter(task => (task.status==props.selected-1 || (props.selected==0 && task.status<4))).map((task, index) => (
               <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%" }}>
                 <Card variant="outlined" 
                   sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status], marginBottom:'10px' }}>
@@ -107,7 +373,9 @@ return(
                         <Button 
                           //aria-describedby={id} 
                           variant="contained" 
-                          //onClick={handleClick}
+                          onClick={()=>handleAll(task.taskID, task.status)}
+                          //onClick={()=>handleImIntrested(task.taskID)}
+                          //onClick={()=>handleChangeStatus(task.taskID, 2)}
                           sx={{ border:"2px solid black", borderRadius:"10px", display: displej[props.vodjaStatus? 1 : 0][task.status]}}
                           color="primary">
                             {tekstovi[props.vodjaStatus? 1 : 0][task.status]}
@@ -125,19 +393,24 @@ return(
                 aria-labelledby={"scroll-dialog-title"}
                 aria-describedby="scroll-dialog-description"
                 >
-                  <DialogTitle id="scroll-dialog-title">{props.taskovi[dialogTask].naziv}</DialogTitle>
+                  <DialogTitle id="scroll-dialog-title">{tasks[dialogTask].naziv}</DialogTitle>
                   <DialogContent dividers={scroll === 'paper'}>
                     <DialogContentText
                       id="scroll-dialog-description"
                       ref={descriptionElementRef}
                       tabIndex={-1}>
-                      {props.taskovi[dialogTask].opisTaska}
+                      {tasks[dialogTask].opisTaska}
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
                   <Button onClick={handleClose}>ok</Button>
                   </DialogActions>
               </Dialog>
+              <SimpleDialog
+                open={openSimple}
+                onClose={handleCloseSimple}
+                taskID = {curTask}
+              />
     </div>
 )
 }
@@ -151,6 +424,12 @@ function TaskList(props){
   const [taskDesc ,setTaskDesc] = React.useState('')
   const [bodovi , setBodovi] = React.useState('')
   const [openD, setOpenD] = React.useState(false)
+  const [change, setChange] = React.useState(false)
+  const [tasks, setTasks] = React.useState([])
+
+  React.useEffect(() => {
+    setTasks(props.taskovi);
+  }, [props.taskovi]);
 
     // otvaranje i zatvaranje Dijaloga 
     const handleClick = () => {
@@ -189,8 +468,28 @@ function TaskList(props){
     if (result === 0){
       alert("Task sa unetim imenom vec postoji !");
     }
-    
 
+    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+      if(res.ok)
+      {
+        console.log(res);
+        res.json().then(data => {
+          console.log(data);
+          setTasks(data.taskovi)
+        });
+      }
+      else
+      {
+        alert("");
+      }
+    })
+    
     }
   
     const theme = createTheme({
@@ -279,7 +578,7 @@ function TaskList(props){
              </DialogActions>
           </Dialog>
         </ThemeProvider>
-                <Tasks selected={props.selected} vodjaStatus={props.vodjaStatus} taskovi = {props.taskovi}/>
+                <Tasks selected={props.selected} vodjaStatus={props.vodjaStatus} taskovi = {tasks} change = {change} projectID = {props.projectID}/>
       </div>
 )
 }
