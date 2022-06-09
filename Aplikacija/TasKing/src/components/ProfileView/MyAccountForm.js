@@ -24,6 +24,9 @@ function MyAccountForm(){
 
     const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
     const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
+    const OrgID = (JSON.parse(window.localStorage.getItem('OrgID')));
+
+    let projects1 = null;
 
     if(profileUserInfo == userInfo){
       fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
@@ -48,7 +51,7 @@ function MyAccountForm(){
         }).then(res => {
             res.json()
             .then(data => {
-                setProjects(data);
+                setProjects(data.filter(d => d.organizacijaID == OrgID));
             });
         })
 
@@ -82,7 +85,7 @@ function MyAccountForm(){
         }).then(res => {
             res.json()
             .then(data => {
-                setProjects(data);
+              setProjects(data.filter(d => d.organizacijaID == OrgID));
             });
         })
 
@@ -95,9 +98,7 @@ function MyAccountForm(){
 }
 
 function MyAccount1({projects, user}){
-
-  console.log(projects);
-
+  
     const theme = createTheme({
         components: {
             MuiButton: {styleOverrides:{

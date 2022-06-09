@@ -78,7 +78,6 @@ function ProfileForm(){
   const [user, setUser] = useState(null);
   const [user1, setUser1] = useState(null);
   const korisnikID = window.localStorage.getItem('ProfileUser-info');
-  console.log(korisnikID +  " korisnikID");
 
   useEffect(() =>{
     const user = (JSON.parse(window.localStorage.getItem('user-info')));

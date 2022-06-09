@@ -165,7 +165,8 @@ namespace TasKing.Controllers
                                 naziv = proj.naziv,
                                 opis = proj.opis,
                                 aktivan = proj.aktivan,
-                                taskovi = proj.taskovi
+                                taskovi = proj.taskovi,
+                                organizacijaID = proj.tim.organizacija.ID
                             })
                         })
                     })
@@ -188,7 +189,7 @@ namespace TasKing.Controllers
                                         taskoviUradjeni.Add(task);
                                 }
                             }
-                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, taskoviUkupni, taskoviUradjeni);
+                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, proj.organizacijaID, taskoviUkupni, taskoviUradjeni);
                             allProjectsInfo.Add(projInfo);
                         }
                     }
@@ -208,15 +209,18 @@ namespace TasKing.Controllers
         public string naziv { get; set; }
         public string opis { get; set; }
         public bool status { get; set; }
+        public int organizacijaID { get; set; }
         public List<Models.Task> taskoviUkupni { get; set; }
         public List<Models.Task> taskoviUradjeni { get; set; }
+        
 
-        public ProjectInfo(int id_, string naziv_, string opis_, bool status_, List<Models.Task> taskoviUkupni_, List<Models.Task> taskoviUradjeni_)
+        public ProjectInfo(int id_, string naziv_, string opis_, bool status_, int organizacijaID_, List<Models.Task> taskoviUkupni_, List<Models.Task> taskoviUradjeni_)
         {
             id = id_;
             naziv = naziv_;
             opis = opis_;
             status = status_;
+            organizacijaID = organizacijaID_;
             taskoviUkupni = taskoviUkupni_;
             taskoviUradjeni = taskoviUradjeni_;
         }
