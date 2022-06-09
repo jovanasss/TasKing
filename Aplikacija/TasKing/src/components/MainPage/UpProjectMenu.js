@@ -11,14 +11,14 @@ import ProjectDescription from './ProjectDescription';
 const options = [
   'All tasks',
   'Available tasks',
-  'The tasks im intrested in',
   'The tasks Im working on',
   'The tasks wainting for review',
+  'Returned tasks',
 ];
 
 
 const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
-const boje = ['rgb(255, 255, 255)', 'rgb(255, 207, 49)', 'rgb(77, 154, 255)', 'rgb(78, 255, 93)']
+const boje = ['rgb(255, 255, 255)', 'rgb(77, 154, 255)', 'rgb(255, 207, 49)', 'rgb(255, 87, 69)']
 
 export default function UpProjectMenu(props) {
   let navigate = useNavigate();
@@ -49,7 +49,7 @@ export default function UpProjectMenu(props) {
       setProject({})
       return;
     }
-    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID,
+    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID + "/" + window.localStorage.getItem('clanTimaID'),
     {
         method:"GET",
         headers: {
@@ -148,9 +148,9 @@ export default function UpProjectMenu(props) {
               </div>
           </Toolbar>
         </AppBar>
-        <TaskList selected={selectedIndex} vodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} projectID={props.projectID}/>
+        <TaskList selected={selectedIndex} vodjaStatus={props.vodjaStatus} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} projectID={props.projectID}/>
         <ProgressBar vodjaStatus={props.vodjaStatus}/>
-        <TaskList selected={5} vodjaStatus={0} taskovi = {project.taskovi} />
+        <TaskList selected={4} vodjaStatus={0} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} />
         <ProjectDescription ProjectName={project.imeProj} ProjectDescription={project.opisProj}/>
     </div>
   );

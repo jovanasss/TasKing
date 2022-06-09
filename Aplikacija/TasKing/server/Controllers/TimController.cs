@@ -138,29 +138,41 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("vratiProjekat/{projID}")]
+        [Route("vratiProjekat/{projID}/{clanTimaID}")]
         [HttpGet]
-        public async Task<ActionResult> vratiProjekat(int projID)
+        public async Task<ActionResult> vratiProjekat(int projID, int clanTimaID)
         {     
                  try
                 {
+                    var clan = await Context.ClanoviTima.Where(clan => clan.ID == clanTimaID).Select(clan => new{
+                        vodjaTima = clan.vodjaTima
+                    }).FirstOrDefaultAsync();
                     var projekatInfo = await Context.Projekti
                             .Include(p=>p.taskovi)
                             .ThenInclude(t=>t.clanTima)
+                            .ThenInclude(t =>t.prijaveZaTask)
+                            .ThenInclude(p =>p.clanTima)
+                            .ThenInclude(c => c.clanOgranizacije)
+                            .ThenInclude(co => co.korisnik)
                             .Where(p=>p.ID==projID && p.aktivan==true)
                             .Select(p=>
                             new{
                                 imeProj = p.naziv,
                                 opisProj = p.opis,
-                                Taskovi = p.taskovi.Select(t=>new{
+                                Taskovi = p.taskovi.Where(t => t.clanTima==null || t.clanTima.ID==clanTimaID || clan.vodjaTima).Select(t=>new{
                                 taskID = t.ID,
                                 naziv = t.naziv,
                                 opisTaska = t.opis,
                                 vrednost = t.vrednost,
                                 status = t.status,
                                 tip = t.tip,
-                                clanTimaID = t.clanTima!=null? t.clanTima.ID : -1
-                       }),
+                                prijave = t.prijaveZaTask.Where(p => p.clanTima.ID==clanTimaID),
+                                //clanTimaID = t.clanTima!=null? t.clanTima.ID : -1,
+                                //clanOrgID = t.clanTima!=null? (t.clanTima.clanOgranizacije!=null? t.clanTima.clanOgranizacije.ID : -1) : -1,
+                                korisnikID =  t.clanTima.clanOgranizacije.korisnik!=null? t.clanTima.clanOgranizacije.korisnik.ID : -1,
+                                korisnickoIme = t.clanTima.clanOgranizacije.korisnik!=null? t.clanTima.clanOgranizacije.korisnik.korisnickoIme : "",
+                                slika = t.clanTima.clanOgranizacije.korisnik!=null? t.clanTima.clanOgranizacije.korisnik.profilnaSlika : ""
+                            }),
                             }).FirstOrDefaultAsync();
                         
                             return Ok(projekatInfo);

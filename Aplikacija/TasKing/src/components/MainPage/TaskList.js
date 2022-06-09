@@ -20,6 +20,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import { blue } from '@mui/material/colors';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240
 
@@ -48,13 +49,20 @@ function SimpleDialog(props) {
 
   const { onClose, selectedValue, open } = props;
   const [members, setMembers] = useState([])
+  
+  let navigate = useNavigate();
+  // promena strane
+  const visitProfile = (korisnikID) =>{ 
+    let path = `/Profile`; 
+    localStorage.setItem('ProfileUser-info', korisnikID)
+    navigate(path);
+  }
 
   const handleClose = () => {
     onClose(selectedValue);
   };
 
-  const handleHire = () => {
-    const clanID = window.localStorage.getItem('clanTimaID');
+  const handleHire = (clanID) => {
     fetch("https://localhost:5001/Task/DodeliTask/" + clanID + "/" + props.taskID,
         {
             method: "PUT"
@@ -112,12 +120,13 @@ function SimpleDialog(props) {
             <ListItemText primary={member.korisnik.korisnickoIme} />
             <ThemeProvider theme={theme}>
               <Button
-                sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}>
+                sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
+                onClick ={()=>visitProfile(member.korisnik.id)} >
                 View Profile
               </Button>
               <Button
               sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
-              onClick={()=>handleHire()}>
+              onClick={()=>handleHire(member.clanTimaID)}>
                  Hire
               </Button>
             </ThemeProvider>
@@ -190,7 +199,7 @@ const [openSimple, setOpenSimple] = React.useState(false);
   };
 
 const refreshTasks = () => {
-  fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID,
+  fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID + "/" + window.localStorage.getItem('clanTimaID'),
     {
         method:"GET",
         headers: {
@@ -212,7 +221,7 @@ const refreshTasks = () => {
     })
 }  
 
-const handleAll = (taskID, currentStatus) => {
+const handleAll = (taskID, currentStatus, prijaveLenght) => {
 
   if(props.vodjaStatus)
   {
@@ -247,7 +256,13 @@ const handleAll = (taskID, currentStatus) => {
   {
     if(currentStatus==0)
     {
-      handleImIntrested(taskID);
+      console.log(prijaveLenght);
+
+      if(prijaveLenght==0)
+        handleImIntrested(taskID);
+      else
+        handleImNotIntrested(taskID);
+
       return;
     }
 
@@ -275,6 +290,79 @@ const handleAll = (taskID, currentStatus) => {
   }
 }
 
+
+const buttonTexts = (taskID, currentStatus, prijaveLenght) => {
+
+  if(props.vodjaStatus)
+  {
+    if(currentStatus==0)
+    {
+      return "Pick Candidate"
+    }
+
+    if(currentStatus==1)
+    {
+      return;
+    }
+
+    if(currentStatus==2)
+    {
+      return "Aproove"
+    }
+
+    if(currentStatus==3)
+    {
+      return;
+    }
+
+    if(currentStatus==4)
+    {
+      return;
+    }
+  }
+  else
+  {
+    if(currentStatus==0)
+    {
+      if(prijaveLenght==0)
+        return "I'm intrested"
+      else
+      return "I'm not intrested"
+
+    }
+
+    if(currentStatus==1)
+    {
+      return "Send for review";
+    }
+
+    if(currentStatus==2)
+    {
+      return;
+    }
+
+    if(currentStatus==3)
+    {
+      return;
+    }
+
+    if(currentStatus==4)
+    {
+      return "Send for review";
+    }
+  }
+}
+
+let navigate = useNavigate();
+  // promena strane
+  const visitProfile = (korisnikID) =>{ 
+    let path = `/Profile`; 
+    localStorage.setItem('ProfileUser-info', korisnikID)
+    navigate(path);
+  }
+
+
+
   const handleImIntrested = (taskID) => {
   const clanID = window.localStorage.getItem('clanTimaID');
   console.log(taskID + "taskID");
@@ -290,11 +378,15 @@ const handleImNotIntrested = (taskID) => {
   const clanID = window.localStorage.getItem('clanTimaID');
   console.log(taskID + "taskID");
   console.log(clanID +  " clanID");
-   fetch("https://localhost:5001/Task/PrijaviZaTask/" + clanID + "/" + taskID, {
-   method: "POST"
-  }).then(s =>{
-    refreshTasks();
-  })
+  fetch("https://localhost:5001/Task/PonistiPrijavuZaTask/"+clanID+"/"+taskID,
+    {
+        method:"DELETE",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    }).then(s =>{
+      refreshTasks();
+    })
 };
 
 const handleSeeCandidats = (taskID) => {
@@ -330,11 +422,11 @@ React.useEffect(() => {
 const tekstoviClan = ["I'm intreseted", "Cancel", "Done", ""]
 const tekstoviVodja = ["Edit", "Pick", "", "Review"]
 const tekstovi = [tekstoviClan, tekstoviVodja]
-const displejClan = ['inline', 'inline', 'inline', 'none', 'none']
-const displejVodja = ['inline', 'inline', 'none', 'inline', 'none']
+const displejClan = ['inline', 'inline', 'none', 'none', 'inline']
+const displejVodja = ['inline', 'none', 'inline', 'none', 'none']
 const displej = [displejClan, displejVodja]
 const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
-const boje = ['rgb(255, 255, 255)', 'rgb(255, 207, 49)', 'rgb(77, 154, 255)', 'rgb(78, 255, 93)']
+const boje = ['rgb(255, 255, 255)', 'rgb(77, 154, 255)', 'rgb(255, 207, 49)', 'rgb(78, 255, 93)', 'rgb(255, 87, 69)']
 
 if(tasks==undefined || tasks==null)
   return;
@@ -342,9 +434,12 @@ if(tasks==undefined || tasks==null)
 if(tasks.length == 0)
   return;
 
+//primary={member.korisnik.korisnickoIme} 
+//onClick={()=>handleHire()}
+
 return(
       <div className="divTasks">
-              {tasks.filter(task => (task.status==props.selected-1 || (props.selected==0 && task.status<4))).map((task, index) => (
+              {tasks.filter(task => (task.status==props.selected-1 || (props.selected==0 && task.status<3))).map((task, index) => (
               <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%" }}>
                 <Card variant="outlined" 
                   sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status], marginBottom:'10px' }}>
@@ -358,6 +453,20 @@ return(
                       <Typography sx={{ mb: 1.5, fontSize:15 , fontWeight: 'bold' }} color="text.primary">
                         poeni: {task.vrednost} 
                       </Typography>
+                      <div style={{display: (task.clanTimaID!=-1 && props.realVodjaStatus)? 'flex' : 'none'}}>
+                      <ListItemAvatar>
+                        <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
+                          <PersonIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={task.korisnickoIme}/>
+                        <Button
+                          sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
+                          onClick ={()=>{ if(task.korisnikID!=-1)
+                          {visitProfile(task.korisnikID)}}}>
+                          View Profile
+                        </Button>
+                      </div>
                     </CardContent>
                     <CardActions>
                       <ThemeProvider theme={theme}>
@@ -373,12 +482,12 @@ return(
                         <Button 
                           //aria-describedby={id} 
                           variant="contained" 
-                          onClick={()=>handleAll(task.taskID, task.status)}
+                          onClick={()=>handleAll(task.taskID, task.status, task.prijave.length)}
                           //onClick={()=>handleImIntrested(task.taskID)}
                           //onClick={()=>handleChangeStatus(task.taskID, 2)}
                           sx={{ border:"2px solid black", borderRadius:"10px", display: displej[props.vodjaStatus? 1 : 0][task.status]}}
                           color="primary">
-                            {tekstovi[props.vodjaStatus? 1 : 0][task.status]}
+                            {buttonTexts(task.taskID, task.status, task.prijave.length)}
                         </Button>
                       </ThemeProvider> 
                     </CardActions>
@@ -469,7 +578,7 @@ function TaskList(props){
       alert("Task sa unetim imenom vec postoji !");
     }
 
-    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID,
+    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID  + "/" + window.localStorage.getItem('clanTimaID'),
     {
         method:"GET",
         headers: {
@@ -578,7 +687,7 @@ function TaskList(props){
              </DialogActions>
           </Dialog>
         </ThemeProvider>
-                <Tasks selected={props.selected} vodjaStatus={props.vodjaStatus} taskovi = {tasks} change = {change} projectID = {props.projectID}/>
+                <Tasks selected={props.selected} vodjaStatus={props.vodjaStatus} realVodjaStatus={props.realVodjaStatus} taskovi = {tasks} change = {change} projectID = {props.projectID}/>
       </div>
 )
 }
