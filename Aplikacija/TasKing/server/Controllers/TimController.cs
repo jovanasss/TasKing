@@ -146,6 +146,7 @@ namespace TasKing.Controllers
                 {
                     var projekatInfo = await Context.Projekti
                             .Include(p=>p.taskovi)
+                            .ThenInclude(t=>t.clanTima)
                             .Where(p=>p.ID==projID && p.aktivan==true)
                             .Select(p=>
                             new{
@@ -158,6 +159,7 @@ namespace TasKing.Controllers
                                 vrednost = t.vrednost,
                                 status = t.status,
                                 tip = t.tip,
+                                clanTimaID = t.clanTima!=null? t.clanTima.ID : -1
                        }),
                             }).FirstOrDefaultAsync();
                         
@@ -348,6 +350,50 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
+        }
+
+        [Route("VratiClanoveTima/{timID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiClanoveTima(int timID)
+        {     
+                 try
+                {
+                    var clanovi = await Context.ClanoviTima.Where(p => p.tim.ID == timID && p.izbacen==false && p.clanOgranizacije.izbacen==false)
+                    .Include(c =>c.clanOgranizacije)
+                    .ThenInclude(c =>c.korisnik)
+                    .Select(clan => new{
+                        clanTimaID = clan.ID,
+                        clanOrgID = clan.clanOgranizacije.ID,
+                        Korisnik = clan.clanOgranizacije.korisnik
+                    })
+                    .ToListAsync();
+
+                     return Ok(clanovi);
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
+
+        [Route("IzbaciClana/{ClanID}")]
+        [HttpPut]
+        public async Task<ActionResult> IzbaciClana(int ClanID)
+        {
+                try
+                {
+                    var clan =  Context.ClanoviTima.Where(c=>c.ID==ClanID).FirstOrDefault();  
+                    if(clan!=null)
+                    {
+                        clan.izbacen = true;
+                        await Context.SaveChangesAsync(); 
+                    }
+                    return Ok();
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
         }
     }
 }

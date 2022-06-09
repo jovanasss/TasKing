@@ -63,5 +63,139 @@ namespace TasKing.Controllers
                 return Ok(0);
             }
         }
+
+        [Route("PrijaviZaTask/{clanTimaID}/{taskID}")]
+        [HttpPost]
+        public async Task<ActionResult> PrijaviSeZaTask(int clanTimaID, int taskID)
+        {     
+                ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID).FirstOrDefaultAsync();
+                Models.Task task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
+                if(clan==null)
+                    return BadRequest("Clan tima ne postoji u bazi");
+
+                if(task==null)
+                    return BadRequest("task ne postoji u bazi");
+
+                PrijavaZaTask prijava =  await Context.PrijaveZaTask.Where(p => p.clanTima == clan && p.task == task).FirstOrDefaultAsync();
+                if(prijava==null)
+                {
+                    try
+                    {
+                        {
+                            PrijavaZaTask prijava1 = new PrijavaZaTask
+                            {
+                                pregledan = false,
+                                clanTima = clan,
+                                task = task
+                            };
+
+                            Context.PrijaveZaTask.Add(prijava1);
+                            await Context.SaveChangesAsync(); 
+                            //var svePrijave = await Context.PrijaveZaTask
+                            //.Where(p=>p.task==task).ToArrayAsync();
+                        
+                            return Ok();
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        return BadRequest(e.Message);
+                    }
+                }
+                else
+                {
+                    return BadRequest("Korisnik je vec prijavljen za task");
+                }
+        }
+
+        [Route("PonistiPrijavuZaTask/{clanTimaID}/{taskID}")]
+        [HttpDelete]
+        public async Task<ActionResult> PonistiPrijavuZaTask(int clanTimaID, int taskID)
+        {
+            try
+            {
+                PrijavaZaTask prijava =  await Context.PrijaveZaTask.Where(p => p.clanTima.ID == clanTimaID && p.task.ID == taskID).FirstOrDefaultAsync();
+
+                if(prijava == null)
+                {
+                    return BadRequest("Prijava ne postoji!");
+                }
+
+                Context.PrijaveZaTask.Remove(prijava);
+                await Context.SaveChangesAsync();
+                return Ok("Prijava je uspesno obrisana!");
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("VratiPrijaveZaTask/{taskID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiPrijaveZaTask(int taskID)
+        {     
+                 try
+                {
+                    var prijave = await Context.PrijaveZaTask.Where(p => p.task.ID == taskID)
+                    .Include(p=>p.clanTima)
+                    .ThenInclude(c =>c.clanOgranizacije)
+                    .ThenInclude(c =>c.korisnik)
+                    .Select(prijava => new{
+                        clanTimaID = prijava.clanTima.ID,
+                        clanOrgID = prijava.clanTima.clanOgranizacije.ID,
+                        Korisnik = prijava.clanTima.clanOgranizacije.korisnik
+                    })
+                    .ToListAsync();
+
+                     return Ok(prijave);
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
+
+        [Route("DodeliTask/{clanTimaID}/{taskID}")]
+        [HttpPut]
+        public async Task<ActionResult> DodeliTask(int clanTimaID, int taskID)
+        {
+                try
+                {
+                    var task =  Context.Taskovi.Where(t=>t.ID==taskID).FirstOrDefault();  
+                    var clanTima =  Context.ClanoviTima.Where(c=>c.ID==clanTimaID).FirstOrDefault();  
+                    if(task!=null && clanTima!=null)
+                    {
+                        task.clanTima = clanTima;
+                        task.status = 1;
+                        await Context.SaveChangesAsync(); 
+                    }
+                    return Ok();
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
+
+        [Route("PromeniStatus/{taskID}/{status}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniStatus(int taskID, int status)
+        {
+                try
+                {
+                    var task =  Context.Taskovi.Where(t=>t.ID==taskID).FirstOrDefault();  
+                    if(task!=null)
+                    {
+                        task.status = status;
+                        await Context.SaveChangesAsync(); 
+                    }
+                    return Ok();
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
     }
 }

@@ -340,5 +340,60 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
         }
+
+         [Route("VratiClanoveOrganizacije/{clanID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiClanoveOrganizacije(int clanID)
+        {     
+                 try
+                {
+                    var clan = await Context.ClanoviOrganizacije.Where(p => p.ID == clanID)
+                    .Include(c => c.organizacija)
+                    .Select(clan => new{
+                        orgID = clan.organizacija.ID
+                    }).FirstOrDefaultAsync();
+
+                    if(clan==null)
+                    {
+                        return BadRequest("nepostojeci clan");
+                    }
+                    
+                    var clanovi = await Context.ClanoviOrganizacije.Where(p => p.organizacija.ID == clan.orgID && p.izbacen==false)
+                    .Include(c =>c.korisnik)
+                    .Select(clan => new{
+                        clanOrgID = clan.ID,
+                        Korisnik = clan.korisnik
+                    })
+                    .ToListAsync();
+                    
+                     return Ok(clanovi);
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
+
+        [Route("IzbaciClana/{ClanID}")]
+        [HttpPut]
+        public async Task<ActionResult> IzbaciClana(int ClanID)
+        {
+                try
+                {
+                    var clan =  Context.ClanoviOrganizacije.Where(c=>c.ID==ClanID).FirstOrDefault();  
+                    if(clan!=null)
+                    {
+                        clan.izbacen = true;
+                        await Context.SaveChangesAsync(); 
+                    }
+                    return Ok();
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
+
+        
     }
 }
