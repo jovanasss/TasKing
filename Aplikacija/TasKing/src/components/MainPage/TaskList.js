@@ -168,6 +168,7 @@ function Tasks(props)
   }); 
 
 const [curTask, setTask] = useState(-1)
+const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 const [open, setOpen] = React.useState(false);
 const [scroll, setScroll] = React.useState('paper');
 const [dialogTask, setDialog] = React.useState(0);
@@ -419,6 +420,10 @@ React.useEffect(() => {
   }
 }, [open]);
 
+const boja1 = () => {
+  return  darkMode? "rgb(192, 192, 192)" : "rgb(255,255,255)";
+}
+
 const tekstoviClan = ["I'm intreseted", "Cancel", "Done", ""]
 const tekstoviVodja = ["Edit", "Pick", "", "Review"]
 const tekstovi = [tekstoviClan, tekstoviVodja]
@@ -426,7 +431,7 @@ const displejClan = ['inline', 'inline', 'none', 'none', 'inline']
 const displejVodja = ['inline', 'none', 'inline', 'none', 'none']
 const displej = [displejClan, displejVodja]
 const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
-const boje = ['rgb(255, 255, 255)', 'rgb(77, 154, 255)', 'rgb(255, 207, 49)', 'rgb(78, 255, 93)', 'rgb(255, 87, 69)']
+const boje = [boja1(),'rgb(77, 154, 255)', 'rgb(255, 207, 49)', 'rgb(78, 255, 93)', 'rgb(255, 87, 69)']
 
 if(tasks==undefined || tasks==null)
   return;
@@ -540,6 +545,8 @@ function TaskList(props){
     setTasks(props.taskovi);
   }, [props.taskovi]);
 
+  const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+
     // otvaranje i zatvaranje Dijaloga 
     const handleClick = () => {
       console.log("Otvoren dijalog")
@@ -628,7 +635,7 @@ function TaskList(props){
                 <Box className='addBtnBox' sx={{margin:"0.5%", display: displejPlus[props.vodjaStatus? 1 : 0] }}>
                   <Card variant="outlined" 
                     className='addCard'
-                    sx={{minWidth: 250, maxWidth: 340, minHeight: 250, maxHeight: 340, boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)"}}>
+                    sx={{minWidth: 250, maxWidth: 340, minHeight: 250, maxHeight: 340, boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor: darkMode? "rgb(192,192,192)" : "white", }}>
                       <CardContent>
                       </CardContent>
                       <CardActions>
@@ -642,12 +649,17 @@ function TaskList(props){
                 </Box>
                 <ThemeProvider theme={theme}>
           <Dialog open={openD} onClose={handleClose}>
-             <DialogTitle>
+             <DialogTitle style={{
+                backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                color : darkMode ? "white" : "black",
+             }}>
                Define your task and its value 
              </DialogTitle>
-              <DialogContent>
+              <DialogContent style={{
+                 backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+              }}>
                 <ThemeProvider theme={theme}>
-                  <TextField id="outlined-basic" label="Task Title" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                  <TextField id="outlined-basic" label="Task Title" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                       onChange={(e) => setTaskName(e.target.value)}
                         sx={{
                           width :"100%",
@@ -656,7 +668,7 @@ function TaskList(props){
                           }}/>                      
                 </ThemeProvider>
                 <ThemeProvider theme={theme}>
-                  <TextField id="outlined-basic" label="Task Type" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                  <TextField id="outlined-basic" label="Task Type" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                         onChange={(e) => setTaskType(e.target.value)}
                           sx={{
                            width :"100%",
@@ -666,7 +678,7 @@ function TaskList(props){
                 </ThemeProvider>
                 <ThemeProvider theme={theme}>
                   <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
-                      id="outlined-basic" label="Description"  variant="outlined"  type="text" color="primary" 
+                      id="outlined-basic" label="Description" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
                           multiline 
                           required
                           rows={'5'}
@@ -681,7 +693,9 @@ function TaskList(props){
                       defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
                   </ThemeProvider>
               </DialogContent>
-              <DialogActions>
+              <DialogActions style={{
+                 backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+              }}>
                 <Button onClick={handleClose}>Cancel</Button>
                 <Button onClick={addTask}>Sumbit</Button>
              </DialogActions>

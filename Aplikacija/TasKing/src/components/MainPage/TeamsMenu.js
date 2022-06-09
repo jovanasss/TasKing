@@ -323,7 +323,7 @@ export default function TeamsMenu(props){
           },
           body : JSON.stringify(ClanTima)
         });
-
+        window.location.reload(false);
     }
     else{
       alert("Tim sa unetim imenom vec postoji !");
@@ -366,11 +366,16 @@ export default function TeamsMenu(props){
   
   const [curTim, setTim] = useState(-1)
   const [vodja, setVodja] = useState(false)
+  const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
     
   return(
     <div style={{display:'flex'}}>
       <div className='teamMenu'>
-          <Paper className='teamList'>
+          <Paper className='teamList' 
+          style={{
+            backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+            boxShadow : darkMode ? "0 8px 16px 0 rgb(0, 100, 100), 0 6px 20px 0 rgb(0, 100, 100)" : "",
+          }}>
               <List>
               <ListItem key={0}>
                   <ThemeProvider theme={theme}>
@@ -390,7 +395,7 @@ export default function TeamsMenu(props){
               <ListItem key={2} style={{display: props.clanID!=-1? 'inline' : 'none'}}>
                   <ThemeProvider theme={theme}>
                     <Button >
-                      <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}} >
+                      <IconButton onClick={() => {handleClick()}} sx={{backgroundColor: 'white', marginRight:'10px'}} >
                         <AddCircleIcon/>
                       </IconButton>
                       <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>
@@ -415,29 +420,36 @@ export default function TeamsMenu(props){
               ))}
               </List>
           </Paper>
-              <ThemeProvider theme={theme}>
-                <Dialog open={openD} onClose={handleClose}>
-                    <DialogTitle>
-                            Chose a name for your team 
-                    </DialogTitle>
-                    <DialogContent>
-                        <ThemeProvider theme={theme}>
-                            <TextField id="outlined-basic" label="Team Name" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
-                            onChange={(e) => setTeamName(e.target.value)}
-                            error={teamError}
-                            sx={{
-                                width :"100%",
-                                marginTop : "5%",
-                                marginBottom : "5%",
-                                }}/>                      
-                        </ThemeProvider>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={addTeam}>Sumbit</Button>
-                    </DialogActions>
-                </Dialog>
-            </ThemeProvider>
+                              <ThemeProvider theme={theme}>
+                                <Dialog open={openD} onClose={handleClose}>
+                                    <DialogTitle style={{
+                                      backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                                      color : darkMode ? "white" : "black",
+                                    }}>
+                                            Chose a name for your team 
+                                    </DialogTitle>
+                                    <DialogContent style={{
+                                      backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                                    }}>
+                                        <ThemeProvider theme={theme}>
+                                            <TextField id="outlined-basic" label="Team Name" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                                            onChange={(e) => setTeamName(e.target.value)}
+                                            error={teamError}
+                                            sx={{
+                                                width :"100%",
+                                                marginTop : "5%",
+                                                marginBottom : "5%",
+                                                }}/>                      
+                                        </ThemeProvider>
+                                    </DialogContent>
+                                    <DialogActions style={{
+                                      backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                                    }}>
+                                        <Button onClick={handleClose}>Cancel</Button>
+                                        <Button onClick={() => {addTeam() ; }}>Sumbit</Button>
+                                    </DialogActions>
+                                </Dialog>
+                            </ThemeProvider>
       </div>
       <ProjectMenu vodjaStatus={vodja} timID = {curTim}/>
       <SimpleDialog

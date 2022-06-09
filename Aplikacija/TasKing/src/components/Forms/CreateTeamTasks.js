@@ -42,7 +42,8 @@ function CreateTeamTasks(){
     const [tasks , setTasks] = useState([])
     
 
-
+    const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+    document.body.style.backgroundColor = darkMode ? "rgb(26, 25, 25)" :"azure";
 
     // otvaranje i zatvaranje Dijaloga 
     const handleClick = () => {
@@ -239,21 +240,21 @@ function CreateTeamTasks(){
             <Grid item  xs={0} sm={2} md={4}>
             </Grid>
             <Grid item xs={12} sm={8} md={4}>
-            <form className="formaCreateTeamTasks">
+            <form className={darkMode ? "formaCreateTeamTasksDM":"formaCreateTeamTasks"}>
                 <div className="GlavniDivTeamTasks">
                         <div className="divNaslovCreateTeamTasks"> 
-                            <label className="naslovCreateTeamTasks">CREATE A PROJECT</label>
+                            <label className={darkMode ? "naslovCreateTeamTasksDM":"naslovCreateTeamTasks"}>CREATE A PROJECT</label>
                         </div>
                         <div className="inputProjectTitle">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setProjName(e.target.value) } error={projNameError}
-                                 id="outlined-basic" label="Project Title" variant="outlined"  type="text" color="primary" maxRows ={'1'} required sx={{width :"85%"}}/>
+                                 id="outlined-basic" label="Project Title" variant="outlined" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} type="text" color="primary" maxRows ={'1'} required sx={{width :"85%"}}/>
                             </ThemeProvider>
                         </div>
                         <div className="inputProjectDescription">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setProjDesc(e.target.value) } error={projDescError}
-                                id="outlined-basic" label="Description"  variant="outlined"  type="text" color="primary" 
+                                id="outlined-basic" label="Description" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
                                 multiline 
                                 required
                                 rows={'5'}
@@ -261,7 +262,7 @@ function CreateTeamTasks(){
                                 sx={{ width : "85%", height: "40%"}}/>
                             </ThemeProvider>
                         </div>
-                        <div id="inputTasks" className="inputTasks" rows={'5'} multiline = "true" >
+                        <div id="inputTasks" className={darkMode ? "inputTasksDM":"inputTasks"} rows={'5'} multiline = "true" >
                             <List style={{maxHeight: '85%', overflow: 'auto'}} >
                                  {tasks.map(task => 
                             <ListItem>             
@@ -277,13 +278,17 @@ function CreateTeamTasks(){
                         </div>
                         <div>
                             <ThemeProvider theme={theme}>
-                                <Dialog open={openD} onClose={handleClose}>
-                                    <DialogTitle>
+                                <Dialog open={openD} onClose={handleClose} style={{ backgroundColor : "transparent"}}>
+                                    <DialogTitle 
+                                    style={{
+                                         backgroundColor : darkMode? "rgb(46, 45, 45)": "white",
+                                         color : darkMode? "white" : "black" ,                                      
+                                         }}>
                                             Define your task and its value 
                                     </DialogTitle>
-                                    <DialogContent>
+                                    <DialogContent style={{ backgroundColor : darkMode? "rgb(46, 45, 45)" : "white"}}>
                                         <ThemeProvider theme={theme}>
-                                            <TextField id="outlined-basic" label="Task Title" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                                            <TextField id="outlined-basic" label="Task Title" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                                             onChange={(e) => setTaskName(e.target.value)}
                                             sx={{
                                                 width :"100%",
@@ -292,7 +297,7 @@ function CreateTeamTasks(){
                                                 }}/>                      
                                         </ThemeProvider>
                                         <ThemeProvider theme={theme}>
-                                            <TextField id="outlined-basic" label="Task Type" variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                                            <TextField id="outlined-basic" label="Task Type" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                                             onChange={(e) => setTaskType(e.target.value)}
                                             sx={{
                                                 width :"100%",
@@ -302,7 +307,7 @@ function CreateTeamTasks(){
                                         </ThemeProvider>
                                         <ThemeProvider theme={theme}>
                                             <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
-                                            id="outlined-basic" label="Description"  variant="outlined"  type="text" color="primary" 
+                                            id="outlined-basic" label="Description" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}   variant="outlined"  type="text" color="primary" 
                                             multiline 
                                             required
                                             rows={'5'}
@@ -317,7 +322,7 @@ function CreateTeamTasks(){
                                             defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
                                         </ThemeProvider>
                                     </DialogContent>
-                                    <DialogActions>
+                                    <DialogActions style={{ backgroundColor : darkMode? "rgb(46, 45, 45)" : "white" }}>
                                         <Button onClick={handleClose}>Cancel</Button>
                                         <Button onClick={handleSubmit}>Sumbit</Button>
                                     </DialogActions>

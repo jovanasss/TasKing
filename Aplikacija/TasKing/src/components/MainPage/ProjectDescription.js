@@ -4,8 +4,11 @@ import { AppBar, Toolbar, Typography } from '@mui/material';
 
 
 export default function ProjectDescription(props) {
+
+  const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+
   return (
-    <div className='descriptionDiv'>
+    <div className={darkMode ? "descriptionDivDM" :'descriptionDiv'}>
         <h2>{props.ProjectName}</h2>
         <Typography>
           {props.ProjectDescription}

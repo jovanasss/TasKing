@@ -29,6 +29,9 @@ function SignUp(){
     // nije potrebno polje tako da ne mora error handle
     const [phoneError , setPhoneError] = useState(false)
 
+    const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+    document.body.style.backgroundColor = darkMode ? "rgb(26, 25, 25)" :"azure";
+
 
     async function signUP(){
 
@@ -157,16 +160,16 @@ function SignUp(){
 
     
     return (
-        <div className="divMain">
-            <div className="divSignupNaslov">
+        <div className={darkMode ? "divMainDM":"divMain"}>
+            <div className={darkMode ? "divSignupNaslovDM":"divSignupNaslov"}>
                 <label className="naslovSignup">Sign up to our website to access all options</label>
             </div>
             <Grid container>
             <Grid item  xs={0} sm={2} md={4}>
             </Grid>
             <Grid item xs={12} sm={8} md={4} > 
-            <form className="forma">
-                <div className="GlavniDiv">
+            <form className={darkMode ? "formaDM" :"forma"}>
+                <div className={darkMode ? "GlavniDivDM" :"GlavniDiv"}>
                     <div className="divNaslov"> 
                         <label className="naslov">SIGN UP</label>
                     </div>
@@ -175,38 +178,38 @@ function SignUp(){
                         <div className="inputFirstName">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setFirstName(e.target.value) } error={fnameError}
-                                id="outlined-basic" label="First Name" variant="outlined"  type="text" color="primary" required sx= {{ width : "100%"}}/>
+                                id="outlined-basic" label="First Name" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" required sx= {{ width : "100%"}}/>
                             </ThemeProvider>
                         </div>
                         <div className="inputLastName">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setLastName(e.target.value) } error={lnameError}
-                                id="outlined-basic" label="Last Name" variant="outlined"  type="text" color="primary" required sx ={{ width : "100%"}}/>
+                                id="outlined-basic" label="Last Name" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" required sx ={{ width : "100%"}}/>
                             </ThemeProvider>
                         </div>
                     </div>
                     <div className="inputUserSignUp">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setUserName(e.target.value) } error={userError}
-                                id="outlined-basic" label="Username" variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }}/> 
+                                id="outlined-basic" label="Username" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputPassSignUp">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setPassWord(e.target.value) } error={passError}
-                                id="outlined-basic" label="Password" variant="outlined" type="password" color="primary" required sx ={{ width: "85%"  }}/> 
+                                id="outlined-basic" label="Password" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="password" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputEmailSignUp">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setEmail(e.target.value) } error={emailError}
-                                id="outlined-basic" label="Email" variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }}/> 
+                                id="outlined-basic" label="Email" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputPhoneSignUp">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setPhoneNo(e.target.value) } 
-                                id="outlined-basic" label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
+                                id="outlined-basic" label="Phone Number" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <button onClick={(event) => { event.preventDefault() ; handleSignUp(); } } className="BtnSignUp">CREATE ACCOUNT</button>

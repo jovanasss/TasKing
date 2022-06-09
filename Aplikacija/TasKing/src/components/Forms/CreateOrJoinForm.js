@@ -22,8 +22,16 @@ function CreateOrJoinForm(){
             backgroundColor: "rgb(31, 206, 206);",
           },
          }
+        }},
+        MuiInput: {styleOverrides:{
+          input: {
+            "&::placeholder": {
+              color: "gray"
+            },
+            color: "white", // if you also want to change the color of the input, this is the prop you'd use
+          }
         }}
-       },
+      },
     palette: {
       primary: {
         main: "rgb(0, 100, 100)",
@@ -34,6 +42,8 @@ function CreateOrJoinForm(){
     },
   });
 
+  const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+  document.body.style.backgroundColor = darkMode ? "rgb(26, 25, 25)" :"azure";
 
   //Cuvanje inputa
   const [teamCode , setTeamCode] = useState('')
@@ -217,35 +227,35 @@ function CreateOrJoinForm(){
 
 
   return(
-    <div className="Main">
+    <div className={darkMode ? "MainDM" :"Main"}>
       <Grid container>
        <Grid item  xs={0} sm={2} md={3.5}>
        </Grid>
        <Grid item xs={12} sm={8} md={5}>
-       <form className="Form">
+       <form className={darkMode ? "FormDM":"Form"}>
        
         <div className="JoinDiv">
-          <div className="JoinOrganization">
+          <div className={darkMode ? "JoinOrganizationDM" :"JoinOrganization"}>
           <div  className="divIcons"><div className="divIcon"><GroupsIcon /></div></div>
-            <label className="label">Join a organization with a code</label>
+            <label className={darkMode ? "labelDM":"label"}>Join a organization with a code</label>
             <ThemeProvider theme={theme}>
                 <TextField onChange={ (e) => setOrgCode(e.target.value) } error={orgCodeError}
                 value = {orgCode}
                 sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
-                id="outlined-basic" label="Enter Code" variant="outlined" size="small" type="text" color="primary" required/>
+                id="outlined-basic" label="Enter Code" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
             </ThemeProvider>
-            <button className="buttonJoin1" onClick={(event) => { event.preventDefault() ; handleJoinOrg(); } }>Join</button>
+            <button className={darkMode ? "buttonJoin1DM":"buttonJoin1"} onClick={(event) => { event.preventDefault() ; handleJoinOrg(); } }>Join</button>
           </div>
-          <div className="JoinTeam">
+          <div className={darkMode ? "JoinTeamDM" : "JoinTeam"}>
             <div className="divIcons"><div  className="divIcon"><GroupIcon /></div></div>
-            <label className="label">Join a team with a code</label>
+            <label className={darkMode ? "labelDM":"label"}>Join a team with a code</label>
             <ThemeProvider theme={theme}>
                 <TextField onChange={ (e) => setTeamCode(e.target.value) } error={teamCodeError}
                 value = {teamCode}
                 sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
-                id="outlined-basic" label="Enter Code" variant="outlined" size="small" type="text" color="primary" required/>
+                id="outlined-basic" label="Enter Code" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
             </ThemeProvider>
-            <button className="buttonJoin2" onClick={(event) => { event.preventDefault() ; handleJoinTeam(); } }>Join</button>
+            <button className={darkMode ? "buttonJoin2DM":"buttonJoin2"} onClick={(event) => { event.preventDefault() ; handleJoinTeam(); } }>Join</button>
           </div>
         </div>
       <ThemeProvider theme={theme}>

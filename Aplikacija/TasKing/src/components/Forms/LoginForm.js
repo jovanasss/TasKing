@@ -1,22 +1,29 @@
 import React, { Component, useState , useEffect}   from "react";
 import Checkbox from '@mui/material/Checkbox';
 import { pink , orange } from "@mui/material/colors";
-import { FormControlLabel, TextField } from "@mui/material";
+import { CssBaseline, FormControlLabel, TextField } from "@mui/material";
 import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate} from "react-router-dom";
 import Grid from '@mui/material/Grid';
+import { Switch } from "@mui/material";
+import { Paper } from "@mui/material";
 
 
 function LoginForm()  {
 
-    
+
     // konstante  za cuvanje inputa 
     const [userName , setUserName] = useState('')
     const [userError , setUserError] = useState(false)
     const [password , setPassWord] = useState('')
     const [passError , setPassError] = useState(false)
     const [rememberMe , setRememberMe] = useState(false);
+    const [darkMode ,setDarkMode] = useState((JSON.parse(window.localStorage.getItem('darkMode'))));
+    
+
+
+    document.body.style.backgroundColor = darkMode ? "rgb(26, 25, 25)" :"azure";
 
     const history = useNavigate();
     useEffect(() => {
@@ -135,14 +142,48 @@ function LoginForm()  {
           }
         },
       });
+    // kreiranje darkMode
+    const darkTheme = createTheme({
+      components:{
+        MuiTextField : {styleOverrides:{
+            root : sx ({
+              "& .MuiOutlinedInput-root": {
+                  "& > fieldset": {
+                    //borderColor: "rgb(161, 17, 161)",
+                    borderColor: "rgb(0, 100, 100)",
+                  },
+              ":hover"  :{
+                  "& > fieldset": {
+                      //borderColor: "rgb(161, 17, 161)",
+                      borderColor: "rgb(0, 100, 100)",
+                    },
+              }  
+              }
+            })
+        }}  
+      },
+      palette: {
+        primary: {
+          //main: "rgb(161, 17, 161)",
+          main: "rgb(0, 100, 100)"
+        },
+        secondary:{
+          main : pink[100],
+        }
+      },
+    });
 
    /* const rememberMEChange = () =>{
         setRememberMe(!rememberMe);
       }*/
 
+
+
 return (
-    <div className="divMain">
-        <div className="divLoginNaslov">
+  <CssBaseline>
+   <ThemeProvider theme = {darkMode ? darkTheme : theme}>
+    <div className = { darkMode ?  "divMainDM" : "divMain" } >
+        <div className={darkMode ? "divLoginNaslovDM" : "divLoginNaslov"}>
             <label className="loginNaslov">Welcome to TasKing web application</label>       
         </div>
         <Grid container>
@@ -151,25 +192,25 @@ return (
         </Grid>
         <Grid item xs={12} sm={8} md={3} justifyContent={"center"} >
         <div>
-        <form className="Forma">
-            <label className="labelLogin">LOGIN</label>
+        <form className={ darkMode ?  "FormaDM" : "Forma" }>
+            <label className={darkMode? "labelLoginDM" :"labelLogin"}>LOGIN</label>
 
             <div className="divUser">
             {/* element na koji hocemo da primenimo temu mora da se wrapuje */}
-                    <ThemeProvider theme={theme} >
+                    {/*<ThemeProvider theme={theme} > */}
                     <TextField onChange={ (e) => setUserName(e.target.value) }
-                    error={userError} id="outlined-basic" label="Username" variant="outlined" type="text" color="primary"/>
-                    </ThemeProvider>
+                    error={userError} id="outlined-basic" label="Username" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
+                    {/*</ThemeProvider>*/}
             </div>
 
             <div className="divPass">
-                    <ThemeProvider theme={theme} >
+                    {/*<ThemeProvider theme={ darkMode ? darkTheme : theme} >*/}
                     <TextField onChange={ (e) => setPassWord(e.target.value) }
-                    error={passError} id="outlined-basic" label="Password" variant="outlined" type="password" color="primary"/>
-                    </ThemeProvider>
+                    error={passError} id="outlined-basic" label="Password" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="password" color="primary"/>
+                   {/* </ThemeProvider>*/}
             </div>
 
-            <div className="divCheck">
+            <div className={darkMode ? "divCheckDM":"divCheck"}>
                     <FormControlLabel
                         label = "Remember me ?"
                         control = {
@@ -190,8 +231,9 @@ return (
 
             <button className="BtnLogin" onClick={(event) => { event.preventDefault() ; handleLogin(); } }>LOGIN</button>
 
-            <label className="OrSignUp">Need an account ? <a href ="http://localhost:3000/SignUp" >SignUp</a></label>   
+            <label className={darkMode ?"OrSignUpDM" : "OrSignUp"}>Need an account ? <a className={darkMode ? "linkDM" : "link"} href ="http://localhost:3000/SignUp" >SignUp</a></label>   
         </form>
+        <Switch checked = {darkMode} onChange={() => {localStorage.setItem('darkMode',!darkMode); window.location.reload(false);}} />
         </div>
         </Grid>
         <Grid item md={4.5} xs={0} sm={2}>
@@ -199,6 +241,9 @@ return (
         </Grid>
         </Grid>
     </div>
+  </ThemeProvider>
+</CssBaseline>
+
 )
 }
 

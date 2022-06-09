@@ -13,6 +13,7 @@ const drawerWidth = 240
 
 export default function LeftMenu(props){
 
+  const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
   const [organisations, setOrganisations] = useState([])
   const showOrganisations = ()=>{
     
@@ -84,11 +85,15 @@ export default function LeftMenu(props){
 
   
   const [curOrg, setOrg] = useState(-1)
-    
+
   return(
     <div style={{display: 'flex', position: 'fixed', zIndex: '1', top: '0', left: '0', overflowX: 'hidden'}}>
-    <div className='leftMenu'>
-    <Paper className='leftList'>
+    <div className={darkMode ? 'leftMenuDM' :'leftMenu'}>
+    <Paper className='leftList' 
+    style={{
+      backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+      boxShadow : darkMode ? "0 8px 16px 0 rgb(0, 100, 100), 0 6px 20px 0 rgb(0, 100, 100)" : "",
+      }} >
         <List className='listDiv'>
           <ListItem key={0}>
               <ThemeProvider theme={theme}>

@@ -11,6 +11,11 @@ import Grid from '@mui/material/Grid';
 function CreateOrganisationForm (){
 
 
+
+
+      const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+      document.body.style.backgroundColor = darkMode ? "rgb(26, 25, 25)" :"azure";
+
       // kreiranje MUI teme
       const theme = createTheme({
         components:{
@@ -192,13 +197,13 @@ function CreateOrganisationForm (){
           if (page === 0 ){
               return (                       
                  <ThemeProvider theme={theme}>
-                    <TextField error={orgError} onChange={ (e) => setORGname(e.target.value) } id="outlined-basic" label="Name" variant="outlined" size="small" type="text" color="primary" required/>
+                    <TextField error={orgError} onChange={ (e) => setORGname(e.target.value) } id="outlined-basic" label="Name" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
                  </ThemeProvider>)
           }else if (page === 1){
               return (
                 <ThemeProvider theme={theme}>
                   <FormControl style={{width: "50%" }}>
-                        <TextField error={typeError} label = 'Select Type' select value={type} onChange = {handleChange}>           
+                        <TextField error={typeError} label = 'Select Type' InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  select value={type} onChange = {handleChange}>           
                                 <MenuItem value={1}>Faculty</MenuItem>
                                 <MenuItem value={2}>School</MenuItem>
                                 <MenuItem value={3}>Kita</MenuItem>
@@ -212,7 +217,7 @@ function CreateOrganisationForm (){
           }else if (page === 2){
               return (
                 <ThemeProvider theme={theme}>
-                    <TextField error={teamError} onChange={ (e) => setTEAMname(e.target.value) } id="outlined-basic" label="Team Name" variant="outlined" size="small" type="text" color="primary" required/>
+                    <TextField error={teamError} onChange={ (e) => setTEAMname(e.target.value) } id="outlined-basic" label="Team Name" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
                 </ThemeProvider>)
           }
       }
@@ -271,10 +276,10 @@ function CreateOrganisationForm (){
     return (
         <div className="divMainCORG">
             <Grid container>
-            <Grid item  xs={0} sm={2} md={4}>
+            <Grid item  xs={0} sm={2} md={4.5}>
             </Grid>
-            <Grid item xs={12} sm={8} md={4}>
-            <form className="formaCORG">
+            <Grid item xs={12} sm={8} md={3}>
+            <form className={darkMode ? "formaCORGDM" :"formaCORG"}>
                 <div className="GlavniDivCORG">
 
                     <div className="divNaslovCORG"> 
@@ -282,7 +287,7 @@ function CreateOrganisationForm (){
                     </div>
 
                     <div className="divSteps">
-                        <label className="labelSteps">Step {page + 1} out of 3 </label>
+                        <label className={darkMode ? "labelStepsDM" :"labelSteps"}>Step {page + 1} out of 3 </label>
                     </div>
 
                     <div className="inputORGname">
@@ -297,7 +302,7 @@ function CreateOrganisationForm (){
                 </div>
             </form>
             </Grid>
-            <Grid item  xs={0} sm={2} md={4}>
+            <Grid item  xs={0} sm={2} md={4.5}>
             </Grid>
             </Grid>
         </div>

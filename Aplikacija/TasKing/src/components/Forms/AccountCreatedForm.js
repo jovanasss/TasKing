@@ -11,6 +11,9 @@ import Grid from '@mui/material/Grid';
 
 function AccountCreatedForm()  {
 
+  const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+  document.body.style.backgroundColor = darkMode ? "rgb(26, 25, 25)" :"azure";
+
 
   // promena stranice
     let navigate = useNavigate(); 
@@ -58,7 +61,7 @@ return (
         <Grid item  xs={0} sm={2} md={4}>
         </Grid>
         <Grid item xs={12} sm={8} md={4}>
-        <form className="FormaAcc">
+        <form className={darkMode ? "FormaAccDM" :"FormaAcc"}>
             < CheckCircleOutlineIcon style={{ 
                 color: green[500] , 
                 marginLeft:'35%' , 
@@ -68,7 +71,7 @@ return (
                 width : '30%',
                 fontSize : 160,
                 }  } />
-            <label className="labelLoginAcc">Account created successfully </label>
+            <label className={darkMode ? "labelLoginAccDM" :"labelLoginAcc"}>Account created successfully </label>
 
             <button className="BtnAcc" onClick={routeChange}>Procced</button>
            
