@@ -93,6 +93,9 @@ const theme = createTheme({
 
 function RequestsForm1({teamRequests, organisationRequests}){
 
+  const [teams, setTeams] = useState(teamRequests);
+  const [organisations, setOrganisations] = useState(organisationRequests);
+
   function acceptInvitationforOrganisation(orgID){
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
     const ClanOrganizacije = {
@@ -115,9 +118,9 @@ function RequestsForm1({teamRequests, organisationRequests}){
             },
             body : JSON.stringify(ClanOrganizacije)
     });
-
     alert("The invitation is successfully accepted 😀");
-    
+    let o = organisations.filter(org => org.id != orgID);
+    setOrganisations(o);
   }
 
   function acceptInvitationforTeam(timID, orgID){
@@ -161,8 +164,9 @@ function RequestsForm1({teamRequests, organisationRequests}){
        });
       })
   })
-
     alert("The invitation is successfully accepted 😀");
+    let t = teams.filter(team => team.id != timID);
+    setTeams(t);
   }
 
   function rejectInvitationforOrganisation(orgID){
@@ -175,6 +179,8 @@ function RequestsForm1({teamRequests, organisationRequests}){
         },
     })
      alert("The invitation is rejected");
+     let o = organisations.filter(org => org.id != orgID);
+     setOrganisations(o);
   }
 
   function rejectInvitationforTeam(timID){
@@ -187,6 +193,8 @@ function RequestsForm1({teamRequests, organisationRequests}){
         },
     })
      alert("The invitation is rejected");
+     let t = teams.filter(team => team.id != timID);
+     setTeams(t);
   }
 
  return(
@@ -197,7 +205,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
       <div className="divPaperTopLabelTeamRequests"><h2>Teams</h2></div>
           <Paper className="PaperRequests" sx={{backgroundColor:"#d6e9de"}}>
           <List>
-          {teamRequests.map(item => (
+          {teams.map(item => (
           <ListItem
            key={item.id}
            secondaryAction={
@@ -215,8 +223,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
            </div>
           }>
           <ListItemAvatar>
-                    <Avatar>
-                    </Avatar>
+                    <Avatar  src={"../../TandO/"+item.slika}>Team</Avatar> 
                   </ListItemAvatar>
           <ListItemText primary={item.ime}
           secondary={
@@ -246,7 +253,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
       <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
           <Paper className="PaperRequests"  sx={{backgroundColor:"#d6e9de"}}>
           <List>
-          {organisationRequests.map(item => (
+          {organisations.map(item => (
           <ListItem
            key={item.id}
            secondaryAction={
@@ -264,8 +271,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
           </div>
           }>
             <ListItemAvatar>
-                    <Avatar>
-                    </Avatar>
+                    <Avatar  src={"../../TandO/"+item.slika}>Org</Avatar>
                   </ListItemAvatar>
           <ListItemText primary={item.ime} 
            secondary={

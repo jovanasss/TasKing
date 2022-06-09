@@ -21,66 +21,25 @@ function MyAccountForm(){
 
     const [user, setUser] = useState(null);
     const [projects, setProjects] = useState(null);
-    /*const[idclanovatima, setIDclanovatima] = useState(null);
 
-    const idclanovaorg = [];
-    const idclanovatima1 = [];*/
+    const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
+    const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
 
-    /*useEffect(() => {
-      const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Korisnik/VratiIDClanovaOrganizacije/"+user.id,
-        {
-            method:"GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(res => {
-            res.json()
-            .then(data => {
-               data.forEach(d =>{
-                 idclanovaorg.push(d);
-               })
+    if(profileUserInfo == userInfo){
+      fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
+      {
+          method:"GET",
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      }).then(res => {
+          res.json()
+          .then(data => {
+              setUser(data);
+          });
+      })
 
-               {idclanovaorg.map(clanorg => {
-                fetch("https://localhost:5001/Korisnik/VratiIDClanovaTima/" + clanorg.id,
-              {
-                  method: "GET",
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-              }).then(res => {
-                  res.json()
-                      .then(data => {
-                          data.forEach(d =>{
-                            idclanovatima1.push(d);
-                          })
-                          setIDclanovatima(idclanovatima1);
-                      });      
-              })
-              })}
-            });
-        })
-    }, [])*/
-
-    useEffect(() =>{
-      const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+user.id,
-        {
-            method:"GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(res => {
-            res.json()
-            .then(data => {
-                setUser(data);
-            });
-        })
-    }, [])
-
-    useEffect(() =>{
-      const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+user.id,
+      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+userInfo.id,
         {
             method:"GET",
             headers: {
@@ -92,47 +51,48 @@ function MyAccountForm(){
                 setProjects(data);
             });
         })
-    }, [])
 
-    return(
-        <div className="divMyAccount">
-             {projects && user && <MyAccount1 projects={projects} user={user} />}
-        </div>
-    )
-}
+        return(
+          <div className="divMyAccount">
+               {projects && user && <MyAccount1 projects={projects} user={user} />}
+          </div>
+        )
+    }
 
-/*function MyAccount1({idclanovatima, user}){
+    else{
+      fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+profileUserInfo,
+      {
+          method:"GET",
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      }).then(res => {
+          res.json()
+          .then(data => {
+              setUser(data);
+          });
+      })
 
-  const [projects, setProjects] = useState(null);
-  const projects1 = [];
-
-  useEffect(() =>{
-    {idclanovatima.map(clantima => {
-      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/" + clantima.id,
-    {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json',
-    },
-    }).then(res => {
-        res.json()
+      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+profileUserInfo,
+        {
+            method:"GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => {
+            res.json()
             .then(data => {
-                data.forEach(d =>{
-                  projects1.push(d);
-                })
-                setProjects(projects1);
-            });  
-    })
-    })}
+                setProjects(data);
+            });
+        })
 
-  }, [])
-
-  return(
-    <div>
-         {projects && user && <MyAccount2 projects={projects} user={user} />}
-    </div>
-   )
-}*/
+        return(
+          <div className="divMyAccount">
+               {projects && user && <MyAccount1 projects={projects} user={user} />}
+          </div>
+        )
+    }
+}
 
 function MyAccount1({projects, user}){
 
@@ -204,8 +164,9 @@ function MyAccount1({projects, user}){
                  variant="dot"
                 >
                      <Avatar 
-                      sx={{width:"100px", height:"100px"}}>
-                    </Avatar>
+                      sx={{width:"100px", height:"100px", fontSize:"40px"}}
+                      src={"../../profile/"+user[0].profilnaSlika}
+                      >{user[0].ime.charAt(0)}{user[0].prezime.charAt(0)}</Avatar>
                </StyledBadge>
             </div>
             <div className="Name">

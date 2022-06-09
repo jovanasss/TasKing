@@ -76,11 +76,13 @@ const theme1 = createTheme({
 function ProfileForm(){
 
   const [user, setUser] = useState(null);
+  const [user1, setUser1] = useState(null);
   const korisnikID = window.localStorage.getItem('ProfileUser-info');
   console.log(korisnikID +  " korisnikID");
 
   useEffect(() =>{
-    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+1,
+    const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+user.id,
     {
         method:"GET",
         headers: {
@@ -94,11 +96,37 @@ function ProfileForm(){
     })
 }, [])
 
-return(
-  <div className="divProfileForm">
-       {user && <ProfileForm1 user={user} />}
-  </div>
- )
+const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
+const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
+
+if(profileUserInfo == userInfo.id){
+  return(
+    <div className="divProfileForm">
+         {user && <ProfileForm1 user={user} />}
+    </div>
+   )
+}
+
+else{
+  fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+profileUserInfo,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+        res.json()
+        .then(data => {
+            setUser1(data);
+        });
+    })
+
+  return(
+    <div className="divProfileForm">
+         {user1 && <ProfileForm2 user1={user1} />}
+    </div>
+   )
+}
 }
 
 function ProfileForm1({user}){
@@ -179,7 +207,7 @@ function ProfileForm1({user}){
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 variant="dot"
                 >
-                 <Avatar sx={{width:"50px", height:"50px"}}></Avatar>
+                 <Avatar sx={{width:"50px", height:"50px"}} src={"../../profile/"+user[0].profilnaSlika}>{user[0].ime.charAt(0)}{user[0].prezime.charAt(0)}</Avatar>
                </StyledBadge>
                <div>
                  <h3 className="h3FirstName">{user[0].ime}</h3>
@@ -285,6 +313,111 @@ function ProfileForm1({user}){
           </div>
      </div>
       );
+}
+
+function ProfileForm2({user1}){
+
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+      const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+      };
+
+      const navigate = useNavigate();
+      const location = useLocation();
+
+  const item = {
+    id: 0,
+    text: <label style={{fontWeight:"bold"}}>My Account</label>,
+    icon: <ThemeProvider theme={theme}>
+                <AccountCircleIcon color= "primary" />
+          </ThemeProvider>,
+    path: ""
+  }
+
+  const drawer = (
+    <div>
+    <div className='divAvatar1'>
+           <div className="divButtonBackToMain">
+           <ThemeProvider theme={theme}>
+             <Button 
+             variant="contained" 
+             color="secondary" 
+             startIcon={ <ThemeProvider theme={theme}><ArrowBackIcon color="primary" /></ThemeProvider>}
+             onClick={() => navigate("/Main")}></Button>
+            </ThemeProvider>
+           </div>
+            <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            variant="dot"
+            >
+             <Avatar sx={{width:"50px", height:"50px"}} src={"../../profile/"+user1[0].profilnaSlika}>{user1[0].ime.charAt(0)}{user1[0].prezime.charAt(0)}</Avatar>
+           </StyledBadge>
+           <div>
+             <h3 className="h3FirstName">{user1[0].ime}</h3>
+             <h5 className="h5UserName">{user1[0].korisnickoIme}</h5>
+           </div>
+        </div>
+          <List>
+            <ListItem
+             key={item.id}
+             className={location.pathname == "/Profile" + item.path ? "active" 
+             : location.pathname == "/Profile/" + item.path ? "active" : null}
+           >
+               <ListItemIcon>{item.icon}</ListItemIcon>
+               <ListItemText primary={item.text} />
+             </ListItem>
+          </List>
+  </div>
+  )
+
+  return (
+    <div>
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{ mr: 2, display: { sm: 'block' } }}
+        >
+          <MenuIcon />
+        </IconButton>
+      </Toolbar>
+    <ThemeProvider theme={theme}>
+    <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          display: { xs: 'block', sm: 'block', md:'none'},
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerwidth },
+        }}
+      >
+       {drawer}
+      </Drawer>
+     <Drawer 
+      variant="permanent"
+      sx={{
+        display: { xs: 'none', sm: 'none', md:'block' },
+        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerwidth },
+      }}
+      open
+      >
+         {drawer}
+        </Drawer>
+        </ThemeProvider>
+        <div className="divRoutes">
+          <Routes>
+              <Route path="" element={<MyAccountForm />} />
+          </Routes>
+        </div>
+   </div>
+    );
 }
 
 export const StyledBadge = styled(Badge)(({ theme }) => ({

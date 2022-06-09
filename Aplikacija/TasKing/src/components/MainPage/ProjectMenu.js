@@ -349,7 +349,7 @@ export default function ProjectMenu(props) {
             <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
           </IconButton>
             <div sx={{float: 'right'}}>
-            <IconButton onClick={() => {localStorage.setItem('ProfileUser-info', -1); navigate('/Profile')}} sx={{marginLeft:"0.5%"}}>
+            <IconButton onClick={() => {localStorage.setItem('ProfileUser-info', JSON.parse(window.localStorage.getItem('user-info')).id); navigate('/Profile')}} sx={{marginLeft:"0.5%"}}>
               <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
             </IconButton>
             </div>

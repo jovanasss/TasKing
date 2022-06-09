@@ -78,8 +78,8 @@ const theme1 = createTheme({
 function EditAccountForm(){
 
     const [user, setUser] = useState(null);
-    const [teams, setTeams] = useState(null);
-    const [organisations, setOrganisations] = useState(null);
+    const [teamsfirst, setTeamsfirst] = useState(null);
+    const [organisationsfirst, setOrganisationsfirst] = useState(null);
     const teams1 = [];
     const idclanova = [];
 
@@ -110,7 +110,7 @@ function EditAccountForm(){
             }).then(res => {
                 res.json()
                     .then(data => {
-                        setOrganisations(data);
+                        setOrganisationsfirst(data);
                     });
             })
     }, [])
@@ -143,23 +143,27 @@ function EditAccountForm(){
                                       teams1.push(d);
                                     })
                                 });
-                        })
+                             })
                         })}
-                        setTeams(teams1);
-                        })
-                    });
+                        setTeamsfirst(teams1);
+                      })
+                  });
     }, [])
 
   return(
     <div className="divMainEditAccount">
-          {user && teams && organisations && <EditAccountForm1 user={user} organisations={organisations} teams={teams} />}
+          {user && teamsfirst && organisationsfirst && <EditAccountForm1 user={user} organisationsfirst={organisationsfirst} teamsfirst={teamsfirst} />}
     </div>
   )
 }
 
-function EditAccountForm1({user, organisations, teams}){
+function EditAccountForm1({user, organisationsfirst, teamsfirst}){
 
     const [open, setOpen] = useState(false);
+    const [teams, setTeams] = useState(teamsfirst);
+    const [organisations, setOrganisations] = useState(organisationsfirst);
+    const teamsFirst = [];
+    const idclanova1 = [];
 
         const handleClickOpen = () => {
             setOpen(true);
@@ -176,10 +180,10 @@ function EditAccountForm1({user, organisations, teams}){
         const [currentpass, setCurrenpass] = useState(null);
         const [newpass, setNewpass] = useState(null);
         const [confirmnewpass, setConfirmnewpass] = useState(null);
+        const [photo, setPhoto] = useState(null);
 
         function getUsername(e){
           setUsername(e.target.value);
-          console.log(username);
         }
 
         function getPhone(e){
@@ -304,26 +308,100 @@ function EditAccountForm1({user, organisations, teams}){
           return
         }
 
+        function changeSeeOrganisations(){
+          const user = (JSON.parse(window.localStorage.getItem('user-info')));
+          fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/" + user.id,
+              {
+                  method: "GET",
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+              }).then(res => {
+                  res.json()
+                      .then(data => {
+                          setOrganisations(data); 
+                          setActive("OrganisationList");
+                      });
+              })
+        }
+
+        function changeSeeTeams(){
+        const user = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Korisnik/VratiIDClanovaOrganizacije/" + user.id,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(res => {
+                res.json()
+                    .then(data => {
+                        data.forEach(d =>{
+                          idclanova1.push(d);
+                        })
+                        {idclanova1.map(clanid => {
+                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + clanid.id,
+                        {
+                            method: "GET",
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        }).then(res => {
+                            res.json()
+                                .then(data => {
+                                    data.forEach(d =>{
+                                      teamsFirst.push(d);
+                                    })
+                                });
+                            })
+                        })}
+                        setTeams(teamsFirst);
+                      })
+                      setActive("TeamList");
+                  });
+        }
+
+        const hiddenFileInput = React.useRef(null);
+
+        const handleClickFile = event => {
+          hiddenFileInput.current.click();
+        };
+
+       const handleChangeFile = event => {
+          const fileUploaded = event.target.files[0];
+
+          const user = (JSON.parse(window.localStorage.getItem('user-info')));
+          fetch("https://localhost:5001/Korisnik/PromeniSlikuKorisniku/"+user.id+"/"+fileUploaded.name,
+          {
+              method:"PUT",
+              headers:{
+                  "Content-Type":"application/json"
+              },
+          })
+          alert("Photo is successfully changed 😀")
+          window.location.reload(false);
+        }
+
         return (
               <Grid container>
                 <Grid item md={4} xs={12} sm={12}>
                     <div className="LeviDivEditAccount">
                         <div className="divInputFirstName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value={user[0].ime} variant="outlined" type="text" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/>
+                                    <TextField id="outlined-basic1" value={user[0].ime} variant="outlined" type="text" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/>
                                 </ThemeProvider>
                         </div>
 
                         <div className="divInputLastName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value={user[0].prezime} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic2" value={user[0].prezime} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
                                 </ThemeProvider>
                         </div>
 
                        <div className="DivEditUserName"> 
                         <div className="divInputUserName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" defaultValue={user[0].korisnickoIme} onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ maxWidth: "85%"  }}/>
+                                    <TextField id="outlined-basic3" defaultValue={user[0].korisnickoIme} onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ maxWidth: "85%"  }}/>
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -336,14 +414,14 @@ function EditAccountForm1({user, organisations, teams}){
 
                         <div className="divInputEmail">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" value={user[0].email} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic4" value={user[0].email} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
                                 </ThemeProvider>
                         </div>
 
                         <div className="DivEditPhone"> 
                         <div className="divInputPhone">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic" defaultValue={user[0].brtelefona} onChange={getPhone} label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ maxWidth: "85%"  }}/> 
+                                    <TextField id="outlined-basic5" defaultValue={user[0].brtelefona} onChange={getPhone} label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ maxWidth: "85%"  }}/> 
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -377,7 +455,7 @@ function EditAccountForm1({user, organisations, teams}){
                          <TextField
                           autoFocus
                           margin="dense"
-                          id="name"
+                          id="name1"
                           label="Current Password"
                           type="password"
                           fullWidth
@@ -387,7 +465,7 @@ function EditAccountForm1({user, organisations, teams}){
                           <TextField
                           autoFocus
                           margin="dense"
-                          id="name"
+                          id="name2"
                           label="New Password"
                           type="password"
                           fullWidth
@@ -397,7 +475,7 @@ function EditAccountForm1({user, organisations, teams}){
                           <TextField
                           autoFocus
                           margin="dense"
-                          id="name"
+                          id="name3"
                           label="Confirm New Password"
                           type="password"
                           fullWidth
@@ -419,10 +497,13 @@ function EditAccountForm1({user, organisations, teams}){
                   <div className="divAvatarEditAccount">
                             <ThemeProvider theme={theme}>
                             <Tooltip title={<h1 style={{color:"rgb(31, 206, 206)"}}>Click to change photo</h1>} placement="top" sx={{fontSize:"20px"}}>
-                            <Avatar sx={{width: "150px", height:"150px"}}></Avatar>
+                            <Avatar onClick={handleClickFile} sx={{width: "150px", height:"150px", fontSize:"60px"}} src={"../../profile/"+user[0].profilnaSlika}>
+                            {user[0].ime.charAt(0)}{user[0].prezime.charAt(0)}
+                            </Avatar>
                             </Tooltip>
                             </ThemeProvider>
-                  </div>
+                            <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
+                   </div>
 
                         {active === "TeamList" && <PaperListTeams teams={teams} />}
                         {active === "OrganisationList" && <PaperListOrganisations organisations={organisations} />}
@@ -433,7 +514,7 @@ function EditAccountForm1({user, organisations, teams}){
                   <Button 
                    sx={{border:"2px solid black", borderRadius:"10px", marginTop:"8%", marginRight:"5%", height:"70px", minWidth:"150px"}}
                    variant="contained"
-                   onClick={() => setActive("OrganisationList")}>
+                   onClick={() => changeSeeOrganisations()}>
                    See organisations
                  </Button>
                  </ThemeProvider></div>
@@ -442,7 +523,7 @@ function EditAccountForm1({user, organisations, teams}){
                   <Button 
                    sx={{border:"2px solid black", borderRadius:"10px", marginTop:"12%", height:"70px", minWidth:"100px"}}
                    variant="contained"
-                   onClick={() => setActive("TeamList")}>
+                   onClick={() => changeSeeTeams()}>
                    See teams
                  </Button>
                  </ThemeProvider></div>
@@ -455,6 +536,7 @@ function EditAccountForm1({user, organisations, teams}){
 
 function PaperListTeams({ teams }){
 
+  const [teams1, setTeams1] = useState(teams);
   const [open, setOpen] = useState(false);
   const [orgID, setOrgID] = useState(false);
   const [timID, setTimID] = useState(false);
@@ -488,6 +570,8 @@ function PaperListTeams({ teams }){
               },
           })
           alert("You left the team");
+          let t = teams1.filter(team => team.id != timID);
+          setTeams1(t);
           handleClose();
         });
     })
@@ -498,7 +582,7 @@ function PaperListTeams({ teams }){
     <div className="divPaperTopLabelTeam"><h2>Teams</h2></div>
         <Paper className="PaperEditAccount"  sx={{backgroundColor:"#d6e9de"}}>
         <List>
-        {teams.map(item => (
+        {teams1.map(item => (
         <ListItem
          key={item.id}
          secondaryAction={
@@ -510,7 +594,7 @@ function PaperListTeams({ teams }){
         }
         >
         <ListItemAvatar>
-          <Avatar></Avatar>
+          <Avatar src={"../../TandO/"+item.slika}>Team</Avatar>
         </ListItemAvatar>
         <ListItemText primary={item.ime} />
        </ListItem>
@@ -545,6 +629,7 @@ function PaperListTeams({ teams }){
 
 function PaperListOrganisations({ organisations }){
 
+  const [organisations1, setOrganisations1] = useState(organisations);
   const [open, setOpen] = useState(false);
   const [orgID, setOrgID] = useState(false);
 
@@ -567,6 +652,8 @@ function PaperListOrganisations({ organisations }){
         },
     })
     alert("You left the organisation");
+    let o = organisations1.filter(org => org.id != orgID);
+    setOrganisations1(o);
     handleClose();
   }
 
@@ -575,7 +662,7 @@ function PaperListOrganisations({ organisations }){
     <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
         <Paper className="PaperEditAccount"  sx={{backgroundColor:"#d6e9de"}}>
         <List>
-        {organisations.map(item => (
+        {organisations1.map(item => (
         <ListItem
         key={item.id}
         secondaryAction={
@@ -587,7 +674,7 @@ function PaperListOrganisations({ organisations }){
        }
        >
        <ListItemAvatar>
-         <Avatar></Avatar>
+         <Avatar  src={"../../TandO/"+item.slika}>Org</Avatar>
        </ListItemAvatar>
        <ListItemText primary={item.ime} />
       </ListItem>
