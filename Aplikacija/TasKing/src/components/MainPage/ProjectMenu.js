@@ -140,9 +140,9 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Candidates</DialogTitle>
+      <DialogTitle>Members</DialogTitle>
       <List sx={{ pt: 0 }}>
-        {members.map((member) => (
+        {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info')).id).map((member) => (
           <ListItem key={member.clanTimaID}>
             <ListItemAvatar>
               <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
@@ -349,7 +349,7 @@ export default function ProjectMenu(props) {
             <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
           </IconButton>
             <div sx={{float: 'right'}}>
-            <IconButton onClick={() => navigate('/Profile')} sx={{marginLeft:"0.5%"}}>
+            <IconButton onClick={() => {localStorage.setItem('ProfileUser-info', -1); navigate('/Profile')}} sx={{marginLeft:"0.5%"}}>
               <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
             </IconButton>
             </div>

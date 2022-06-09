@@ -137,7 +137,7 @@ function SimpleDialog(props) {
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>Members</DialogTitle>
       <List sx={{ pt: 0 }}>
-        {members.map((member) => (
+        {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info')).id).map((member) => (
           <ListItem key={member.clanOrgID}>
             <ListItemAvatar>
               <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
