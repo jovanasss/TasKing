@@ -33,6 +33,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const drawerwidth = 240;
+const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+document.body.style.backgroundColor = darkMode ? "rgb(46, 45, 45)" :"azure";
 
 const theme = createTheme({
   components: {
@@ -244,15 +246,15 @@ function ProfileForm1({user}){
                aria-labelledby="alert-dialog-title"
                aria-describedby="alert-dialog-description"
               >
-              <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold"}}>
+              <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold" , backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                 {"Log Out"}
               </DialogTitle>
-              <DialogContent>
-              <DialogContentText id="alert-dialog-description">
+              <DialogContent style={{backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+              <DialogContentText id="alert-dialog-description" style={{backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black" }}>
                 Are you sure you want to logout?
               </DialogContentText>
             </DialogContent>
-              <DialogActions>
+              <DialogActions style={{ backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                  <ThemeProvider theme={theme1}><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
                  <ThemeProvider theme={theme1}>
                    <Button variant="contained" onClick={logOut} color="primary" sx={{fontWeight:"bold"}} autoFocus>

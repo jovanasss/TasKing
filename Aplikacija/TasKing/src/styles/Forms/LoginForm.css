@@ -28,14 +28,14 @@ body{
   justify-content: center;
   text-align: center;
   height: 15%;
-  margin-top: 5%;
+  margin-top: 0%;
 }
 .divLoginNaslovDM{
   display: flex;
   justify-content: center;
   text-align: center;
   height: 15%;
-  margin-top: 5%;
+  margin-top: 0%;
   color: white;
 }
 .loginNaslov{
@@ -53,7 +53,7 @@ body{
   height:450px;
   /*margin-left : 35%,
   maring-right : 35%,*/
-  margin-top:12.3%;
+  margin-top:0%;
   margin-bottom: 0%;
   text-align: center;
   border-radius: 10px;
@@ -70,7 +70,7 @@ body{
   height:450px;
   /*margin-left : 35%,
   maring-right : 35%,*/
-  margin-top:12.3%;
+  margin-top:0%;
   margin-bottom: 0%;
   text-align: center;
   border-radius: 10px;

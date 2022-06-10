@@ -23,6 +23,7 @@ import { blue } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240
+const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
 function SimpleDialog(props) {
   const theme = createTheme({
@@ -108,8 +109,14 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Candidates</DialogTitle>
-      <List sx={{ pt: 0 }}>
+      <DialogTitle style={{
+        backgroundColor : darkMode ? "rgb(26, 25, 25)" :"azure",
+        color : darkMode ? "white" : "black"
+      }}>Candidates</DialogTitle>
+      <List sx={{ 
+        pt: 0 ,
+        backgroundColor : darkMode ? "rgb(26,25,25)" : "azure"
+      }}>
         {members.map((member) => (
           <ListItem key={member.clanTimaID}>
             <ListItemAvatar>
@@ -117,7 +124,7 @@ function SimpleDialog(props) {
                 <PersonIcon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={member.korisnik.korisnickoIme} />
+            <ListItemText primary={member.korisnik.korisnickoIme} style={{ color : darkMode ? "white" : "black"}}/>
             <ThemeProvider theme={theme}>
               <Button
                 sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
@@ -507,16 +514,25 @@ return(
                 aria-labelledby={"scroll-dialog-title"}
                 aria-describedby="scroll-dialog-description"
                 >
-                  <DialogTitle id="scroll-dialog-title">{tasks[dialogTask].naziv}</DialogTitle>
-                  <DialogContent dividers={scroll === 'paper'}>
+                  <DialogTitle id="scroll-dialog-title" style={{ 
+                    backgroundColor : darkMode ? "rgb(26,25,25)" : "white" ,
+                    color : darkMode ? "white "  : "black",
+                     }} >
+                      {tasks[dialogTask].naziv}</DialogTitle>
+                  <DialogContent dividers={scroll === 'paper'} style={{backgroundColor : darkMode ? "rgb(26,25,25)" : "white",}} >
                     <DialogContentText
                       id="scroll-dialog-description"
                       ref={descriptionElementRef}
-                      tabIndex={-1}>
+                      tabIndex={-1}
+                      style={{
+                        color : darkMode ? "white" : "black",
+                      }}>
                       {tasks[dialogTask].opisTaska}
                     </DialogContentText>
                   </DialogContent>
-                  <DialogActions>
+                  <DialogActions style={{
+                    backgroundColor : darkMode ? "rgb(26,25,25)" : "white",
+                  }}>
                   <Button onClick={handleClose}>ok</Button>
                   </DialogActions>
               </Dialog>
@@ -659,7 +675,7 @@ function TaskList(props){
                  backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
               }}>
                 <ThemeProvider theme={theme}>
-                  <TextField id="outlined-basic" label="Task Title" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                  <TextField id="outlined-basic" label="Task Title" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                       onChange={(e) => setTaskName(e.target.value)}
                         sx={{
                           width :"100%",
@@ -668,7 +684,7 @@ function TaskList(props){
                           }}/>                      
                 </ThemeProvider>
                 <ThemeProvider theme={theme}>
-                  <TextField id="outlined-basic" label="Task Type" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                  <TextField id="outlined-basic" label="Task Type"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                         onChange={(e) => setTaskType(e.target.value)}
                           sx={{
                            width :"100%",
@@ -678,7 +694,7 @@ function TaskList(props){
                 </ThemeProvider>
                 <ThemeProvider theme={theme}>
                   <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
-                      id="outlined-basic" label="Description" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
+                      id="outlined-basic" label="Description"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
                           multiline 
                           required
                           rows={'5'}

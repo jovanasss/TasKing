@@ -25,6 +25,8 @@ function MyAccountForm(){
     const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
     const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
     const OrgID = (JSON.parse(window.localStorage.getItem('OrgID')));
+    const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+    
 
     let projects1 = null;
 
@@ -99,6 +101,8 @@ function MyAccountForm(){
 
 function MyAccount1({projects, user}){
   
+  const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+    
     const theme = createTheme({
         components: {
             MuiButton: {styleOverrides:{
@@ -245,8 +249,14 @@ function MyAccount1({projects, user}){
               aria-labelledby={"scroll-dialog-title"}
               aria-describedby="scroll-dialog-description"
               >
-              <DialogTitle id="scroll-dialog-title">{projects[dialogTask] != null ? projects[dialogTask].naziv : null}</DialogTitle>
-              <DialogContent dividers={scroll === 'paper'}>
+              <DialogTitle id="scroll-dialog-title" style={{
+                backgroundColor : darkMode ? "rgb(26,25,25)" :"azure",
+                color : darkMode ? "white" : "black",
+              }} >{projects[dialogTask] != null ? projects[dialogTask].naziv : null}</DialogTitle>
+              <DialogContent dividers={scroll === 'paper'} style={{
+                backgroundColor : darkMode ? "rgb(26,25,25)" :"azure",
+                color : darkMode ? "white" : "black",
+              }} >
                     {projects[dialogTask] != null ? projects[dialogTask].taskoviUradjeni.map(task => 
                     (<DialogContentText
                     key={task.id}
@@ -256,7 +266,10 @@ function MyAccount1({projects, user}){
                     {task.naziv + ": " + task.opis + ". (" + "type: " + task.tip + ", " + "valuation: " + task.vrednost + ")"}
                     </DialogContentText>)) : null}
                 </DialogContent>
-                <DialogActions>
+                <DialogActions style={{
+                    backgroundColor : darkMode ? "rgb(26,25,25)" :"azure",
+                    color : darkMode ? "white" : "black",
+                }}>
                 <ThemeProvider theme={theme}>
                 <Button variant="contained" onClick={handleClose} color="primary">
                   ok

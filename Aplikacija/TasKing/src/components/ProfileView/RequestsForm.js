@@ -16,6 +16,8 @@ import Avatar from '@mui/material/Avatar';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 
+const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+
 const theme = createTheme({
     components:{
       MuiButton: {styleOverrides:{
@@ -202,7 +204,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
   <Grid item md={6} xs={12} sm={12}>
     <div className="levidivRequests">
     <div className="divPaperTeamRequests">
-      <div className="divPaperTopLabelTeamRequests"><h2>Teams</h2></div>
+      <div className="divPaperTopLabelTeamRequests" style={{color : darkMode ? "white":"black"}}><h2>Teams</h2></div>
           <Paper className="PaperRequests" sx={{backgroundColor:"#d6e9de"}}>
           <List>
           {teams.map(item => (
@@ -250,7 +252,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
     <Grid item md={6} xs={12} sm={12}>
     <div className="desnidivRequests">
     <div className="divPaperOrgRequests">
-      <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
+      <div className="divPaperTopLabelOrganisation" style={{color : darkMode ? "white" :"black"}} ><h2>Organisations</h2></div>
           <Paper className="PaperRequests"  sx={{backgroundColor:"#d6e9de"}}>
           <List>
           {organisations.map(item => (

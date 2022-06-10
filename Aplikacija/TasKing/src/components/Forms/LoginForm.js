@@ -184,7 +184,7 @@ return (
    <ThemeProvider theme = {darkMode ? darkTheme : theme}>
     <div className = { darkMode ?  "divMainDM" : "divMain" } >
         <div className={darkMode ? "divLoginNaslovDM" : "divLoginNaslov"}>
-            <label className="loginNaslov">Welcome to TasKing web application</label>       
+            <label className="loginNaslov"> <img src="../../Logo/TasKingLogo.png" width="450px" height="250px"></img></label>       
         </div>
         <Grid container>
         <Grid item md={4.5} xs={0} sm={2}>
@@ -199,14 +199,14 @@ return (
             {/* element na koji hocemo da primenimo temu mora da se wrapuje */}
                     {/*<ThemeProvider theme={theme} > */}
                     <TextField onChange={ (e) => setUserName(e.target.value) }
-                    error={userError} id="outlined-basic" label="Username" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
+                    error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
                     {/*</ThemeProvider>*/}
             </div>
 
             <div className="divPass">
                     {/*<ThemeProvider theme={ darkMode ? darkTheme : theme} >*/}
                     <TextField onChange={ (e) => setPassWord(e.target.value) }
-                    error={passError} id="outlined-basic" label="Password" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="password" color="primary"/>
+                    error={passError} id="outlined-basic" label="Password" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="password" color="primary"/>
                    {/* </ThemeProvider>*/}
             </div>
 

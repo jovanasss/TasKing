@@ -248,13 +248,13 @@ function CreateTeamTasks(){
                         <div className="inputProjectTitle">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setProjName(e.target.value) } error={projNameError}
-                                 id="outlined-basic" label="Project Title" variant="outlined" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} type="text" color="primary" maxRows ={'1'} required sx={{width :"85%"}}/>
+                                 id="outlined-basic" label="Project Title" variant="outlined" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} type="text" color="primary" maxRows ={'1'} required sx={{width :"85%"}}/>
                             </ThemeProvider>
                         </div>
                         <div className="inputProjectDescription">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setProjDesc(e.target.value) } error={projDescError}
-                                id="outlined-basic" label="Description" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
+                                id="outlined-basic" label="Description" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
                                 multiline 
                                 required
                                 rows={'5'}
@@ -288,7 +288,7 @@ function CreateTeamTasks(){
                                     </DialogTitle>
                                     <DialogContent style={{ backgroundColor : darkMode? "rgb(46, 45, 45)" : "white"}}>
                                         <ThemeProvider theme={theme}>
-                                            <TextField id="outlined-basic" label="Task Title" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                                            <TextField id="outlined-basic" label="Task Title" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                                             onChange={(e) => setTaskName(e.target.value)}
                                             sx={{
                                                 width :"100%",
@@ -297,7 +297,7 @@ function CreateTeamTasks(){
                                                 }}/>                      
                                         </ThemeProvider>
                                         <ThemeProvider theme={theme}>
-                                            <TextField id="outlined-basic" label="Task Type" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                                            <TextField id="outlined-basic" label="Task Type" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                                             onChange={(e) => setTaskType(e.target.value)}
                                             sx={{
                                                 width :"100%",
@@ -307,7 +307,7 @@ function CreateTeamTasks(){
                                         </ThemeProvider>
                                         <ThemeProvider theme={theme}>
                                             <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
-                                            id="outlined-basic" label="Description" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}   variant="outlined"  type="text" color="primary" 
+                                            id="outlined-basic" label="Description" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}   variant="outlined"  type="text" color="primary" 
                                             multiline 
                                             required
                                             rows={'5'}

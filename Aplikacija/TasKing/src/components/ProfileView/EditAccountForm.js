@@ -22,6 +22,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { ListItemButton } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 
+const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+
 const theme = createTheme({
   components:{
     MuiTextField : {styleOverrides:{
@@ -388,20 +390,20 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                     <div className="LeviDivEditAccount">
                         <div className="divInputFirstName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic1" value={user[0].ime} variant="outlined" type="text" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/>
+                                    <TextField id="outlined-basic1" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} value={user[0].ime} variant="outlined" type="text" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/>
                                 </ThemeProvider>
                         </div>
 
                         <div className="divInputLastName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic2" value={user[0].prezime} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic2" inputProps={{ style: { fontFamily: 'Arial', color: 'white'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} value={user[0].prezime} variant="outlined"  type="text" color="primary" required sx ={{ maxWidth: "85%"}} disabled /> 
                                 </ThemeProvider>
                         </div>
 
                        <div className="DivEditUserName"> 
                         <div className="divInputUserName">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic3" defaultValue={user[0].korisnickoIme} onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ maxWidth: "85%"  }}/>
+                                    <TextField id="outlined-basic3"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white': "black"}}} defaultValue={user[0].korisnickoIme}  InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} onChange={getUsername} label="Username" variant="outlined" type="text" color="primary" sx ={{ maxWidth: "85%"  }}/>
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -414,14 +416,14 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
 
                         <div className="divInputEmail">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic4" value={user[0].email} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
+                                    <TextField id="outlined-basic4" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} value={user[0].email} variant="outlined" type="email" color="primary" required sx ={{ maxWidth: "85%"  }} disabled/> 
                                 </ThemeProvider>
                         </div>
 
                         <div className="DivEditPhone"> 
                         <div className="divInputPhone">
                                 <ThemeProvider theme={theme}>
-                                    <TextField id="outlined-basic5" defaultValue={user[0].brtelefona} onChange={getPhone} label="Phone Number" variant="outlined" type="number" color="primary" sx ={{ maxWidth: "85%"  }}/> 
+                                    <TextField id="outlined-basic5" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} defaultValue={user[0].brtelefona} onChange={getPhone} label="Phone Number" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="number" color="primary" sx ={{ maxWidth: "85%"  }}/> 
                                 </ThemeProvider>
                         </div>
                         <ThemeProvider theme={theme}>
@@ -446,9 +448,17 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                           </Button>
                           </ThemeProvider>
                            <Dialog open={open} onClose={handleClose}>
-                             <DialogTitle>Update your password</DialogTitle>
-                             <DialogContent>
-                            <DialogContentText>
+                             <DialogTitle style={{
+                              backgroundColor : darkMode ? "rgb(26,25,25)":"azure",
+                              color : darkMode ? "white" :"black" ,
+                             }} >Update your password</DialogTitle>
+                             <DialogContent style={{
+                              backgroundColor : darkMode ? "rgb(26,25,25)":"azure",
+                              color : darkMode ? "white" :"black" ,
+                             }}>
+                            <DialogContentText style={{
+                              color : darkMode ? "gray" :"black",
+                            }}>
                              Enter your current password and a new password.
                            </DialogContentText>
                           <ThemeProvider theme={theme}>
@@ -457,6 +467,8 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                           margin="dense"
                           id="name1"
                           label="Current Password"
+                          inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}}
+                          InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}
                           type="password"
                           fullWidth
                           variant="standard"
@@ -467,6 +479,8 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                           margin="dense"
                           id="name2"
                           label="New Password"
+                          inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}}
+                          InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}
                           type="password"
                           fullWidth
                           variant="standard"
@@ -477,6 +491,8 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                           margin="dense"
                           id="name3"
                           label="Confirm New Password"
+                          inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}}
+                          InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}
                           type="password"
                           fullWidth
                           variant="standard"
@@ -484,7 +500,9 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                           />
                           </ThemeProvider>
                        </DialogContent>
-                      <DialogActions>
+                      <DialogActions style={{
+                        backgroundColor : darkMode ? "rgb(26,25,25)": "azure",
+                      }}>
                      <ThemeProvider theme={theme}><Button color="primary" onClick={handleClose}>Cancel</Button></ThemeProvider>
                      <ThemeProvider theme={theme}><Button variant="contained" onClick={changePassword}>Done</Button></ThemeProvider>
                     </DialogActions>
@@ -579,7 +597,7 @@ function PaperListTeams({ teams }){
 
   return(
   <div className="divPaperEditAccount">
-    <div className="divPaperTopLabelTeam"><h2>Teams</h2></div>
+    <div className="divPaperTopLabelTeam" style={{ color : darkMode ? "white" : "black"}} ><h2>Teams</h2></div>
         <Paper className="PaperEditAccount"  sx={{backgroundColor:"#d6e9de"}}>
         <List>
         {teams1.map(item => (
@@ -607,15 +625,15 @@ function PaperListTeams({ teams }){
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           >
-          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold"}}>
+          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold" ,backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                 {"Leave team"}
               </DialogTitle>
-              <DialogContent>
-              <DialogContentText id="alert-dialog-description">
+              <DialogContent style={{ backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+              <DialogContentText id="alert-dialog-description" style={{ color : darkMode ? "white" : "black"}}>
                 Are you sure you want to leave?
               </DialogContentText>
             </DialogContent>
-              <DialogActions>
+              <DialogActions style={{ backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                  <ThemeProvider theme={theme}><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
                  <ThemeProvider theme={theme}>
                    <Button onClick={()=>leaveTeam()} variant="contained" color="primary" sx={{fontWeight:"bold"}} autoFocus>
@@ -659,7 +677,7 @@ function PaperListOrganisations({ organisations }){
 
   return(
   <div className="divPaperEditAccount">
-    <div className="divPaperTopLabelOrganisation"><h2>Organisations</h2></div>
+    <div className="divPaperTopLabelOrganisation" style={{ color: darkMode ? "white" : "black" }}><h2>Organisations</h2></div>
         <Paper className="PaperEditAccount"  sx={{backgroundColor:"#d6e9de"}}>
         <List>
         {organisations1.map(item => (
@@ -687,15 +705,15 @@ function PaperListOrganisations({ organisations }){
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           >
-          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold"}}>
+          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold" , backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                 {"Leave organisation"}
               </DialogTitle>
-              <DialogContent>
-              <DialogContentText id="alert-dialog-description">
+              <DialogContent style={{backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+              <DialogContentText id="alert-dialog-description" style={{ color : darkMode ? "white"  : "black"}}>
                 Are you sure you want to leave?
               </DialogContentText>
             </DialogContent>
-              <DialogActions>
+              <DialogActions style={{backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                  <ThemeProvider theme={theme}><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
                  <ThemeProvider theme={theme}>
                    <Button onClick={()=>leaveOrganisation()} variant="contained" color="primary" sx={{fontWeight:"bold"}} autoFocus>

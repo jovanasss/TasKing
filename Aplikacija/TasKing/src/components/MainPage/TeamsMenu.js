@@ -15,6 +15,7 @@ import { blue } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240
+const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
 function SimpleDialog(props) {
   const theme = createTheme({
@@ -135,8 +136,15 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Members</DialogTitle>
-      <List sx={{ pt: 0 }}>
+      <DialogTitle style={{
+        backgroundColor : darkMode ? "rgb(26,25,25)" : "white",
+        color : darkMode ? "white": "black",
+      }}>Members</DialogTitle>
+      <List sx={{ 
+        pt: 0 ,
+        backgroundColor : darkMode ? "rgb(26,25,25)" : "white",
+        color : darkMode ? "white" : "black",
+        }}>
         {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info')).id).map((member) => (
           <ListItem key={member.clanOrgID}>
             <ListItemAvatar>
@@ -388,7 +396,10 @@ export default function TeamsMenu(props){
                   </ThemeProvider>
               </ListItem>
               <ListItem key={1}>
-                      <Typography variant="h7" sx={{fontWeight:'bold'}}>
+                      <Typography variant="h7" sx={{
+                        fontWeight:'bold',
+                        color : darkMode ? "white " : "black",
+                        }}>
                           Teams
                       </Typography>
               </ListItem>
@@ -432,7 +443,7 @@ export default function TeamsMenu(props){
                                       backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
                                     }}>
                                         <ThemeProvider theme={theme}>
-                                            <TextField id="outlined-basic" label="Team Name" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                                            <TextField id="outlined-basic" label="Team Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
                                             onChange={(e) => setTeamName(e.target.value)}
                                             error={teamError}
                                             sx={{

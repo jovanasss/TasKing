@@ -197,13 +197,13 @@ function CreateOrganisationForm (){
           if (page === 0 ){
               return (                       
                  <ThemeProvider theme={theme}>
-                    <TextField error={orgError} onChange={ (e) => setORGname(e.target.value) } id="outlined-basic" label="Name" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
+                    <TextField error={orgError} onChange={ (e) => setORGname(e.target.value) } id="outlined-basic" label="Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
                  </ThemeProvider>)
           }else if (page === 1){
               return (
                 <ThemeProvider theme={theme}>
                   <FormControl style={{width: "50%" }}>
-                        <TextField error={typeError} label = 'Select Type' InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  select value={type} onChange = {handleChange}>           
+                        <TextField error={typeError} label = 'Select Type' inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  select value={type} onChange = {handleChange}>           
                                 <MenuItem value={1}>Faculty</MenuItem>
                                 <MenuItem value={2}>School</MenuItem>
                                 <MenuItem value={3}>Kita</MenuItem>
@@ -217,7 +217,7 @@ function CreateOrganisationForm (){
           }else if (page === 2){
               return (
                 <ThemeProvider theme={theme}>
-                    <TextField error={teamError} onChange={ (e) => setTEAMname(e.target.value) } id="outlined-basic" label="Team Name" InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
+                    <TextField error={teamError} onChange={ (e) => setTEAMname(e.target.value) } id="outlined-basic" label="Team Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
                 </ThemeProvider>)
           }
       }
