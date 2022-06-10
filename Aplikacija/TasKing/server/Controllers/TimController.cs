@@ -407,5 +407,28 @@ namespace TasKing.Controllers
                     return BadRequest(e.Message);
                 }
         }
+
+        [Route("PromeniSlikuTima/{timID}/{novaslika}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniSlikuTima(int timID, string novaslika)
+        {
+            var tim = await Context.Timovi.Where(t => t.ID == timID).FirstOrDefaultAsync();
+
+            if(tim == null)
+            {
+                return BadRequest("Tim ne postoji!");
+            }
+
+            try
+            {
+                tim.slika = novaslika;
+                await Context.SaveChangesAsync();
+                return Ok("Slika je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
     }
 }

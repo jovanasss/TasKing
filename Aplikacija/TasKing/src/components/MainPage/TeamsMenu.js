@@ -375,6 +375,27 @@ export default function TeamsMenu(props){
   const [curTim, setTim] = useState(-1)
   const [vodja, setVodja] = useState(false)
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+
+  const hiddenFileInput = React.useRef(null);
+
+  const handleClickFile = event => {
+    hiddenFileInput.current.click();
+  };
+
+   const handleChangeFile = event => {
+    const fileUploaded = event.target.files[0];
+
+    const timID = (JSON.parse(window.localStorage.getItem('TimID')));
+    fetch("https://localhost:5001/Tim/PromeniSlikuTima/"+timID+"/"+fileUploaded.name,
+    {
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    })
+    alert("Photo is successfully changed 😀");
+    window.location.reload(false);
+  }
     
   return(
     <div style={{display:'flex'}}>
@@ -418,14 +439,21 @@ export default function TeamsMenu(props){
               {teams.map(team => (
                   <ListItem key={team.idTima+2} className={curTim==team.idTima? 'activeEnt' : null}>
                     <ThemeProvider theme={theme}>
-                      <Button onClick={() =>{setTim(team.idTima); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}}>
+                      {/*<Button onClick={() =>{setTim(team.idTima); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}}>
                         <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
                           <SubjectOutlined/>
                         </IconButton>
                         <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>
                             {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
                         </Typography>
-                      </Button>
+              </Button>*/}
+               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}} onDoubleClick={handleClickFile}>
+                T
+               </Avatar> 
+                <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
+                <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>
+                            {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
+                        </Typography>
                     </ThemeProvider>
                   </ListItem>
               ))}

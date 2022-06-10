@@ -182,7 +182,6 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
         const [currentpass, setCurrenpass] = useState(null);
         const [newpass, setNewpass] = useState(null);
         const [confirmnewpass, setConfirmnewpass] = useState(null);
-        const [photo, setPhoto] = useState(null);
 
         function getUsername(e){
           setUsername(e.target.value);

@@ -127,7 +127,8 @@ namespace TasKing.Controllers
                                 idTima = p.tim.ID,
                                 imeTima = p.tim.ime,
                                 vodja = p.vodjaTima,
-                                vremePosecivanja = p.vremePosecivanja
+                                vremePosecivanja = p.vremePosecivanja,
+                                slika = p.tim.slika
                             }).ToArrayAsync();
                         
                             return Ok(clanInfo);
@@ -341,7 +342,7 @@ namespace TasKing.Controllers
             }
         }
 
-         [Route("VratiClanoveOrganizacije/{clanID}")]
+        [Route("VratiClanoveOrganizacije/{clanID}")]
         [HttpGet]
         public async Task<ActionResult> VratiClanoveOrganizacije(int clanID)
         {     
@@ -394,6 +395,27 @@ namespace TasKing.Controllers
                 }
         }
 
-        
+        [Route("PromeniSlikuOrganizacije/{orgID}/{novaslika}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniSlikuOrganizacije(int orgID, string novaslika)
+        {
+            var org = await Context.Organizacije.Where(o => o.ID == orgID).FirstOrDefaultAsync();
+
+            if(org == null)
+            {
+                return BadRequest("Organizacija ne postoji!");
+            }
+
+            try
+            {
+                org.slika = novaslika;
+                await Context.SaveChangesAsync();
+                return Ok("Slika je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
     }
 }
