@@ -45,6 +45,7 @@ export default function LeftMenu(props){
           {
             setOrg(data[0].idClan)
             localStorage.setItem('clanOrgID',data[0].idClan)
+            localStorage.setItem('OrgID',data[0].orgID)
           }
           else
           {
@@ -128,9 +129,11 @@ export default function LeftMenu(props){
         <List className='listDiv'>
           <ListItem key={0}>
               <ThemeProvider theme={theme}>
+              <Tooltip title="Add Organisation">
                 <IconButton sx={{backgroundColor: 'white'}} onClick={() => routeChange()}>
                   <AddCircleIcon/>
                 </IconButton>
+                </Tooltip>
               </ThemeProvider>
             </ListItem>
            {organisations.map(item => (

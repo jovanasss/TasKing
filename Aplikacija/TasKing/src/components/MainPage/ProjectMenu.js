@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import UpProjectMenu from './UpProjectMenu';
 import Slider from '@mui/material/Slider';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import { Autorenew, SubjectOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
@@ -20,6 +20,8 @@ import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import { blue } from '@mui/material/colors';
 import { ThemeProvider,createTheme } from '@mui/material/styles';
+
+const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
 function SimpleDialog(props) {
   const theme = createTheme({
@@ -54,6 +56,8 @@ function SimpleDialog(props) {
 
   const { onClose, selectedValue, open } = props;
   const [members, setMembers] = React.useState([])
+  const [userError , setUserError] = React.useState(false)
+  const [userName , setUserName] = React.useState('')
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -94,6 +98,46 @@ function SimpleDialog(props) {
           });
   };
 
+  async function handleInvite(){
+
+    // error ako je neki input prazan
+    if ( userName === ''){
+      setUserError(true)
+    }
+
+     // oba imaju vrednost => logovanje 
+    if (userName){
+
+      const idTim = (JSON.parse(window.localStorage.getItem('TimID')));
+      console.log(idTim);
+
+      fetch("https://localhost:5001/Tim/PozoviUTim/" + userName + "/" + idTim, {
+        method: "POST"
+        }).then(res =>{
+          if(res.ok)
+            {
+              alert("zahtev je uspesno poslat");
+            }
+            else
+            {
+              res.json().then(data => {
+                  if(data==1)
+                  alert("korisnik ne postoji");
+
+                  if(data==2)
+                  alert("organizacija ne postoji");
+
+                  if(data==3)
+                  alert("zahtev je vec poslat");
+
+                  if(data==4)
+                  alert("korisnik je vec clan organizacije");
+              });
+            }
+        })
+    }
+  }
+
   React.useEffect(() => {
     if(props.timID==-1)
     return;
@@ -124,6 +168,16 @@ function SimpleDialog(props) {
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>Members</DialogTitle>
       <List sx={{ pt: 0 }}>
+      <div style={{marginBottom: '30px', display: props.vodjaStatus? 'inile' : 'none'}}>
+      <TextField onChange={ (e) => setUserName(e.target.value) }
+                  sx= {{marginLeft: '50px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
+      <ThemeProvider theme={theme}>
+      <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
+       onClick={() => handleInvite()}>
+        Invite
+      </Button>
+      </ThemeProvider>
+      </div>
         {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info')).id).map((member) => (
           <ListItem key={member.clanTimaID}>
             <ListItemAvatar>
@@ -139,7 +193,7 @@ function SimpleDialog(props) {
                 View Profile
               </Button>
               <Button
-              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
+              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: props.vodjaStatus? 'inile' : 'none'}}
               onClick={()=>handleRemove(member.clanTimaID)}>
                  Remove
               </Button>
@@ -328,25 +382,31 @@ export default function ProjectMenu(props) {
 
   return (
     <div>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', background: "rgb(147, 219, 217)", display:'flex' }}>
-          <Button  sx={{backgroundColor: boje[0]}} 
-          onClick={()=>handleClickOpenSimple()}>   
-            <Typography sx={{fontWeight:'bold', color: 'white'}}>
-                See Members
-            </Typography>
-          </Button>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', background: "rgb(147, 219, 217)", display:'flex', minHeight:'125px' }}>
+          <Tooltip title="Add Project">
+            <IconButton onClick={() => {handleClick(); routeChange();}} sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}}>
+              <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
+            </IconButton>
+          </Tooltip>
+          <List sx={{display:'flex', width: '65vw', overflow: 'auto'}}>
           {projects.map(proj =>
-          <Button  onClick={() =>{setProj(proj.idProj); localStorage.setItem('projID',proj.idProj);}} sx={{backgroundColor: curProj==proj.idProj? boje[1] : boje[0]}}>   
+          <ListItem key={proj.idProj} sx={{alignSelf: 'stretch', paddingBottom: '0', paddingTop: '0'}}>
+          <Button  onClick={() =>{setProj(proj.idProj); localStorage.setItem('projID',proj.idProj);}} sx={{paddingBottom: '0', paddingTop: '0', alignSelf: 'stretch' ,backgroundColor: curProj==proj.idProj? boje[1] : boje[0]}}>   
           <Typography sx={{fontWeight:'bold', color: 'white'}}>
               {proj.imeProj}
           </Typography>
         </Button>
+        </ListItem>
             )}
-          <IconButton onClick={() => {handleClick(); routeChange();}} sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}}>
-            <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
-          </IconButton>
-            <div sx={{float: 'right'}}>
-            <IconButton onClick={() => {localStorage.setItem('ProfileUser-info', -1); navigate('/Profile')}} sx={{marginLeft:"0.5%"}}>
+            </List>
+          <div style={{ display:'flex',   position: 'fixed',top:'30px', right: '1vw'}}>
+          <Button  sx={{backgroundColor: boje[0]}} 
+          onClick={()=>handleClickOpenSimple()}>   
+            <Typography sx={{fontWeight:'bold', color: 'white'}}>
+                See Team Members
+            </Typography>
+          </Button>
+            <IconButton onClick={() => {localStorage.setItem('ProfileUser-info', JSON.parse(window.localStorage.getItem('user-info')).id); navigate('/Profile')}} sx={{marginLeft:"0.5%"}}>
               <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
             </IconButton>
             </div>
@@ -403,6 +463,7 @@ export default function ProjectMenu(props) {
                 open={openSimple}
                 onClose={handleCloseSimple}
                 timID = {props.timID}
+                vodjaStatus={props.vodjaStatus}
               />
     </div>
   );

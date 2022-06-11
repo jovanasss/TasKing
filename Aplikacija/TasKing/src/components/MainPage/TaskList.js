@@ -72,8 +72,11 @@ function SimpleDialog(props) {
             if(s.ok)
             {
                //alert("uspesno je dodeljen task");
+               handleClose();
             }
         });
+
+        //zatvori se
   };
 
   React.useEffect(() => {
@@ -125,7 +128,7 @@ function SimpleDialog(props) {
               </Button>
               <Button
               sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
-              onClick={()=>handleHire(member.clanTimaID)}>
+              onClick={()=>{handleHire(member.clanTimaID);}}>
                  Hire
               </Button>
             </ThemeProvider>
@@ -239,6 +242,7 @@ const handleAll = (taskID, currentStatus, prijaveLenght) => {
     if(currentStatus==2)
     {
       handleChangeStatus(taskID, 3);
+      window.location.reload(false);
       return;
     }
 
@@ -441,9 +445,14 @@ if(tasks.length == 0)
 //primary={member.korisnik.korisnickoIme} 
 //onClick={()=>handleHire()}
 
+if(tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).length==0)
+{
+  return;
+}
+
 return(
       <div className="divTasks">
-              {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status<3))&&task.status!=-1)).map((task, index) => (
+              {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).map((task, index) => (
               <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%" }}>
                 <Card variant="outlined" 
                   sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status], marginBottom:'10px' }}>
@@ -465,7 +474,7 @@ return(
                       </ListItemAvatar>
                       <ListItemText primary={task.korisnickoIme}/>
                         <Button
-                          sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
+                          sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px', color: 'black'}}
                           onClick ={()=>{ if(task.korisnikID!=-1)
                           {visitProfile(task.korisnikID)}}}>
                           View Profile
@@ -482,6 +491,16 @@ return(
                           sx={{ border:"2px solid black", borderRadius:"10px"}}
                           color="primary">
                           See more
+                        </Button>
+                        <Button 
+                          //aria-describedby={id} 
+                          variant="contained" 
+                          //onClick={()=>handleAll(task.taskID, task.status, task.prijave.length)}
+                          //onClick={()=>handleImIntrested(task.taskID)}
+                          onClick={()=>handleChangeStatus(task.taskID, 4)}
+                          sx={{ border:"2px solid black", borderRadius:"10px", display: (props.vodjaStatus && task.status==2)? 'inline' : 'none'}}
+                          color="primary">
+                            Return
                         </Button>
                         <Button 
                           //aria-describedby={id} 
@@ -518,7 +537,7 @@ return(
                     backgroundColor : darkMode ? "rgb(26,25,25)" : "white" ,
                     color : darkMode ? "white "  : "black",
                      }} >
-                      {tasks[dialogTask].naziv}</DialogTitle>
+                      {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1))[dialogTask].naziv}</DialogTitle>
                   <DialogContent dividers={scroll === 'paper'} style={{backgroundColor : darkMode ? "rgb(26,25,25)" : "white",}} >
                     <DialogContentText
                       id="scroll-dialog-description"
@@ -527,7 +546,7 @@ return(
                       style={{
                         color : darkMode ? "white" : "black",
                       }}>
-                      {tasks[dialogTask].opisTaska}
+                      {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1))[dialogTask].opisTaska}
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions style={{
@@ -573,6 +592,11 @@ function TaskList(props){
     }
     async function addTask() {
 
+      if (bodovi == 0)
+      {
+        alert("niste uneli broj bodova");
+        return;
+      }
       setOpenD(false)
       const idProjekta = (JSON.parse(window.localStorage.getItem('projID')));
       console.log(idProjekta);

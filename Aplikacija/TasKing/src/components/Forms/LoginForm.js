@@ -30,6 +30,14 @@ function LoginForm()  {
       }
     },[])
 
+    useEffect(() => {
+      localStorage.removeItem('clanOrgID');
+      localStorage.removeItem('TimID');
+      localStorage.removeItem('clanTimaID');
+      localStorage.removeItem('projID');
+      localStorage.removeItem('selectedStatus');
+    }, []);
+
     async function login(){
 
       const user = {

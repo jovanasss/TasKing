@@ -57,16 +57,23 @@ function CreateTeamTasks(){
 
     // error check => napraviNoviTask(Naslov , bodovi) && dodavnje u taskList parent Projekta
     const handleSubmit = () => {
-        setOpenD(false)
-        let task = {
-            naziv: taskName ,
-            tip : taskType ,
-            opis : taskDesc ,
-            bodovi : bodovi
+        if (bodovi > 0){
+            setOpenD(false)
+            let task = {
+                naziv: taskName ,
+                tip : taskType ,
+                opis : taskDesc ,
+                bodovi : bodovi
         };
         let arr = tasks.concat(task);
         setTasks(arr);
         console.log(arr);
+        
+        }
+        else {
+            alert("niste uneli bodove")
+        }
+    
 
        // const t = new Task(bodovi,taskName);
 
@@ -268,9 +275,6 @@ function CreateTeamTasks(){
                             <ListItem>             
                             <ListItemButton component="a" href="#simple-list">
                                 <ListItemText primary={task.naziv} secondary={task.bodovi} />
-                                <IconButton edge="end" aria-label="delete" onClick={() => tasks.filter((a) => a === task) }>
-                                <DeleteIcon />
-                                    </IconButton>
                             </ListItemButton>
                             </ListItem>   )}                   
                             </List>

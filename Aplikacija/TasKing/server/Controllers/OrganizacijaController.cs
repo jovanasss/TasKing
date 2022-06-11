@@ -102,6 +102,11 @@ namespace TasKing.Controllers
                 }
                 else
                 {
+                    if(clan.izbacen=true)
+                    {
+                        clan.izbacen=false;
+                        await Context.SaveChangesAsync();
+                    }
                     return Ok(clan.ID);
                 }
         }
@@ -416,6 +421,66 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
+        }
+
+        [Route("PozoviUOrganizaciju/{korisnickoIme}/{orgID}")]
+        [HttpPost]
+        public async Task<ActionResult> PozoviUOrganizaciju(string korisnickoIme, int orgID)
+        {     
+                Korisnik korisnik = await Context.Korisnici.Where(p => p.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();
+                if(korisnik==null)
+                    return BadRequest(1);
+
+                Organizacija organizacija = await Context.Organizacije.Where(p => p.ID == orgID).FirstOrDefaultAsync();
+                if(organizacija==null)
+                    return BadRequest(2);
+
+                ClanOrganizacije clan = await Context.ClanoviOrganizacije.Where(p => p.organizacija == organizacija && p.korisnik == korisnik && p.izbacen==false).FirstOrDefaultAsync();
+                if(clan==null)
+                {
+                    PozivUOrganizaciju poziv = await Context.PoziviUOrganizaciju.Where(p => p.pozvaniKorisnik == korisnik && p.organizacija == organizacija).FirstOrDefaultAsync();
+                    if(poziv==null)
+                    {
+                        try
+                        {
+                            {
+                                PozivUOrganizaciju poziv1 = new PozivUOrganizaciju()
+                                {
+                                    pozvaniKorisnik= korisnik,
+                                    vremePoziva = DateTime.Now,
+                                    prihvacen = false,
+                                    organizacija = organizacija
+                                };
+
+                                Context.PoziviUOrganizaciju.Add(poziv1);
+                                await Context.SaveChangesAsync(); 
+
+                                return Ok();
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                            return BadRequest(e.Message);
+                        }
+                    }
+                    else
+                    {
+                        if(poziv.prihvacen==true)
+                        {
+                            poziv.prihvacen=false;
+                            await Context.SaveChangesAsync();
+                            return Ok();
+                        }
+                        else
+                        {
+                            return BadRequest(3);
+                        }
+                    }
+                }
+                else
+                {
+                    return BadRequest(4);
+                }
         }
     }
 }

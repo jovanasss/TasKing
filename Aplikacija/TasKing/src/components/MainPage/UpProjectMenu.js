@@ -31,6 +31,7 @@ export default function UpProjectMenu(props) {
   };
 
   const handleMenuItemClick = (event, index) => {
+    localStorage.setItem('selectedStatus', index)
     setSelectedIndex(index);
     setAnchorEl(null);
   };
@@ -49,7 +50,7 @@ export default function UpProjectMenu(props) {
       setProject({})
       return;
     }
-    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID + "/" + window.localStorage.getItem('clanTimaID'),
+    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID + "/" + props.clanTimaID,
     {
         method:"GET",
         headers: {
@@ -73,6 +74,15 @@ export default function UpProjectMenu(props) {
 
   React.useEffect(() => {
     showProjectData();
+    if(window.localStorage.getItem('selectedStatus')===null)
+    {
+      localStorage.setItem('selectedStatus', 0)
+      setSelectedIndex(0);
+    }
+    else
+    {
+      setSelectedIndex(window.localStorage.getItem('selectedStatus'));
+    }
   }, [props.projectID]);
 
 
@@ -148,7 +158,7 @@ export default function UpProjectMenu(props) {
               </div>
           </Toolbar>
         </AppBar>
-        <TaskList selected={selectedIndex} vodjaStatus={props.vodjaStatus} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} projectID={props.projectID}/>
+        <TaskList selected={selectedIndex!=4? selectedIndex : 5} vodjaStatus={props.vodjaStatus} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} projectID={props.projectID}/>
         <ProgressBar vodjaStatus={props.vodjaStatus}/>
         <TaskList selected={4} vodjaStatus={0} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} />
         <ProjectDescription ProjectName={project.imeProj} ProjectDescription={project.opisProj}/>

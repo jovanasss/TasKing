@@ -42,6 +42,48 @@ function SimpleDialog(props) {
 
   const { onClose, selectedValue, open } = props;
   const [members, setMembers] = useState([])
+  const [userName , setUserName] = useState('')
+  const [userError , setUserError] = useState(false)
+
+  async function handleInvite(){
+
+    // error ako je neki input prazan
+    if ( userName === ''){
+      setUserError(true)
+    }
+
+     // oba imaju vrednost => logovanje 
+    if (userName){
+
+      const idOrg = (JSON.parse(window.localStorage.getItem('OrgID')));
+      console.log(idOrg);
+
+      fetch("https://localhost:5001/Organizacija/PozoviUOrganizaciju/" + userName + "/" + idOrg, {
+        method: "POST"
+        }).then(res =>{
+          if(res.ok)
+            {
+              alert("zahtev je uspesno poslat");
+            }
+            else
+            {
+              res.json().then(data => {
+                  if(data==1)
+                  alert("korisnik ne postoji");
+
+                  if(data==2)
+                  alert("organizacija ne postoji");
+
+                  if(data==3)
+                  alert("zahtev je vec poslat");
+
+                  if(data==4)
+                  alert("korisnik je vec clan organizacije");
+              });
+            }
+        })
+    }
+  }
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -122,6 +164,16 @@ function SimpleDialog(props) {
         backgroundColor : darkMode ? "rgb(26,25,25)" : "white",
         color : darkMode ? "white": "black",
       }}>Members</DialogTitle>
+      <div style={{marginBottom: '30px', display: props.vodjaStatus? 'inile' : 'none'}}>
+      <TextField onChange={ (e) => setUserName(e.target.value) }
+                  sx= {{marginLeft: '50px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
+      <ThemeProvider theme={theme}>
+      <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
+       onClick={() => handleInvite()}>
+        Invite
+      </Button>
+      </ThemeProvider>
+      </div>
       <List sx={{ 
         pt: 0 ,
         backgroundColor : darkMode ? "rgb(26,25,25)" : "white",
@@ -142,7 +194,7 @@ function SimpleDialog(props) {
                 View Profile
               </Button>
               <Button
-              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
+              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: props.vodjaStatus? 'inile' : 'none'}}
               onClick={()=>handleRemove(member.clanOrgID)}>
                  Remove
               </Button>
@@ -342,6 +394,9 @@ export default function TeamsMenu(props){
           },
           body : JSON.stringify(ClanTima)
         });
+        //localStorage.setItem('TimID', idNovogTima)
+        //localStorage.setItem('clanTimaID',data[0].idClan)
+
         window.location.reload(false);
     }
     else{
@@ -424,7 +479,7 @@ export default function TeamsMenu(props){
                     <Button sx={{backgroundColor: 'white', alignSelf:'center'}}
                     onClick={() =>{handleClickOpenSimple();}}>
                       <Typography variant="h7" sx={{fontWeight:'bold'}}>
-                          See Members
+                          See Organisation Members
                       </Typography>
                     </Button>
                   </ThemeProvider>
@@ -464,7 +519,7 @@ export default function TeamsMenu(props){
                 T
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
-                <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>
+                <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
                             {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
                         </Typography>
                     </ThemeProvider>
@@ -508,6 +563,7 @@ export default function TeamsMenu(props){
                 open={openSimple}
                 onClose={handleCloseSimple}
                 clanID = {props.clanID}
+                vodjaStatus = {vodja}
               />
     </div>
   )

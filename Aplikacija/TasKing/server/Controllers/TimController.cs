@@ -106,7 +106,16 @@ namespace TasKing.Controllers
                 }
                 else
                 {
-                    return BadRequest("Korisnik je vec uclanjen u tim");
+                    if(clan.izbacen=true)
+                    {
+                        clan.izbacen=false;
+                        await Context.SaveChangesAsync();
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest("Korisnik je vec uclanjen u tim");
+                    }
                 }
         }
 
@@ -429,6 +438,68 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
+        }
+
+        [Route("PozoviUTim/{korisnickoIme}/{TimID}")]
+        [HttpPost]
+        public async Task<ActionResult> PozoviUTim(string korisnickoIme, int TimID)
+        {     
+                Korisnik korisnik = await Context.Korisnici.Where(p => p.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();
+                if(korisnik==null)
+                    return BadRequest(1);
+
+                Tim tim = await Context.Timovi.Where(p => p.ID == TimID).FirstOrDefaultAsync();
+                if(tim==null)
+                    return BadRequest(2);
+
+                ClanTima clan = await Context.ClanoviTima
+                .Include(c => c.clanOgranizacije)
+                .Where(p => p.tim == tim && p.clanOgranizacije.korisnik == korisnik && p.izbacen==false).FirstOrDefaultAsync();
+                if(clan==null)
+                {
+                    PozivUTim poziv = await Context.PoziviUTim.Where(p => p.pozvaniKorisnik == korisnik && p.tim == tim).FirstOrDefaultAsync();
+                    if(poziv==null)
+                    {
+                        try
+                        {
+                            {
+                                PozivUTim poziv1 = new PozivUTim()
+                                {
+                                    pozvaniKorisnik= korisnik,
+                                    vremePoziva = DateTime.Now,
+                                    prihvacen = false,
+                                    tim = tim
+                                };
+
+                                Context.PoziviUTim.Add(poziv1);
+                                await Context.SaveChangesAsync(); 
+
+                                return Ok();
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                            return BadRequest(e.Message);
+                        }
+                    }
+                    else
+                    {
+                        if(poziv.prihvacen==true)
+                            {
+                                poziv.prihvacen=false;
+                                await Context.SaveChangesAsync();
+                                return Ok();
+                            }
+                            else
+                            {
+                                return BadRequest(3);
+                            }
+                    }
+                }
+                else
+                {
+                    return BadRequest(4);
+                }
         }
     }
 }
