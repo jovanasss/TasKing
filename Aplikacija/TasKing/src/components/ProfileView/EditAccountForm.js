@@ -21,6 +21,8 @@ import Grid from '@mui/material/Grid';
 import ClearIcon from '@mui/icons-material/Clear';
 import { ListItemButton } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
+import { Switch } from "@mui/material";
+import { pink } from "@mui/material/colors";
 
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
@@ -84,6 +86,9 @@ function EditAccountForm(){
     const [organisationsfirst, setOrganisationsfirst] = useState(null);
     const teams1 = [];
     const idclanova = [];
+
+    const [darkMode ,setDarkMode] = useState((JSON.parse(window.localStorage.getItem('darkMode'))));
+    document.body.style.backgroundColor = darkMode ? "rgb(46, 45, 45)" :"azure";
 
   useEffect(() =>{
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
@@ -520,6 +525,9 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                             </Tooltip>
                             </ThemeProvider>
                             <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
+                            <ThemeProvider theme={theme}>
+                            <Switch sx={{marginLeft:"23%"}} checked = {darkMode} onChange={() => {localStorage.setItem('darkMode',!darkMode); window.location.reload(false);}} />
+                            </ThemeProvider>
                    </div>
 
                         {active === "TeamList" && <PaperListTeams teams={teams} />}

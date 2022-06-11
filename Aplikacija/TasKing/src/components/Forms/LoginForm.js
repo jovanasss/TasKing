@@ -21,8 +21,6 @@ function LoginForm()  {
     const [rememberMe , setRememberMe] = useState(false);
     const [darkMode ,setDarkMode] = useState((JSON.parse(window.localStorage.getItem('darkMode'))));
     
-
-
     document.body.style.backgroundColor = darkMode ? "rgb(26, 25, 25)" :"azure";
 
     const history = useNavigate();
@@ -233,7 +231,6 @@ return (
 
             <label className={darkMode ?"OrSignUpDM" : "OrSignUp"}>Need an account ? <a className={darkMode ? "linkDM" : "link"} href ="http://localhost:3000/SignUp" >SignUp</a></label>   
         </form>
-        <Switch checked = {darkMode} onChange={() => {localStorage.setItem('darkMode',!darkMode); window.location.reload(false);}} />
         </div>
         </Grid>
         <Grid item md={4.5} xs={0} sm={2}>
