@@ -71,15 +71,6 @@ function SimpleDialog(props) {
                       res.json().then(data => {
                         console.log(data)
                         setMembers(data)
-                        /*setOrganisations(data)
-                        if(data==undefined || data==null)
-                        return;
-                      
-                        if(data.length==0)
-                          return;  
-                        console.log(data[0].idClan);
-                        setOrg(data[0].idClan)
-                        localStorage.setItem('clanOrgID',data[0].idClan)*/
                       });
                     }
                     else
@@ -116,15 +107,6 @@ function SimpleDialog(props) {
       res.json().then(data => {
         console.log(data)
         setMembers(data)
-        /*setOrganisations(data)
-        if(data==undefined || data==null)
-        return;
-      
-        if(data.length==0)
-          return;  
-        console.log(data[0].idClan);
-        setOrg(data[0].idClan)
-        localStorage.setItem('clanOrgID',data[0].idClan)*/
       });
     }
     else
@@ -199,15 +181,16 @@ export default function TeamsMenu(props){
   };
 
   const showTeams = ()=>{
-    const org = window.localStorage.getItem('clanOrgID');
-    console.log(org);
+
+    setPrevOrg(props.clanID);
 
     if(props.clanID==-1)
     {
       setTeams([])
       setTim(-1)
-      localStorage.setItem('TimID',-1)
-      localStorage.setItem('clanTimaID',-1)
+      setClanTima(-1)
+      //localStorage.setItem('TimID',-1)
+      //localStorage.setItem('clanTimaID',-1)
       setVodja(false)
       return;
     }
@@ -227,6 +210,7 @@ export default function TeamsMenu(props){
           if(data==undefined || data==null)
           {
             setTim(-1)
+            setClanTima(-1)
             localStorage.setItem('TimID',-1)
             localStorage.setItem('clanTimaID',-1)
             setVodja(false)
@@ -235,17 +219,44 @@ export default function TeamsMenu(props){
          
           if(data.length==0)
           {
-            setTim(-1)
-            localStorage.setItem('TimID',-1)
-            localStorage.setItem('clanTimaID',-1)
+            setTim(-2)
+            setClanTima(-2)
+            localStorage.setItem('TimID',-2)
+            localStorage.setItem('clanTimaID',-2)
             setVodja(false)
             return;
           }
-          console.log(data[0].idTima);
-          setTim(data[0].idTima)
-          localStorage.setItem('TimID',data[0].idTima)
-          localStorage.setItem('clanTimaID',data[0].idClan)
-          setVodja(data[0].vodja)
+          if(prevOrg==-1)
+          {
+            if(window.localStorage.getItem("TimID") === null)
+            {
+              setTim(data[0].idTima)
+              setClanTima(data[0].idClan) 
+              localStorage.setItem('TimID',data[0].idTima)
+              localStorage.setItem('clanTimaID',data[0].idClan)
+            }
+            else
+            {
+              setTim(window.localStorage.getItem('TimID')) 
+              setClanTima(window.localStorage.getItem('clanTimaID')) 
+            }
+          }
+          else
+          {
+            setTim(data[0].idTima)
+            setClanTima(data[0].idClan) 
+            localStorage.setItem('TimID',data[0].idTima)
+            localStorage.setItem('clanTimaID',data[0].idClan)
+          }
+          for(let i=0; i< data.length; i++)
+          {
+            if(data[i].idTima==window.localStorage.getItem('TimID'))
+              {
+                setVodja(data[i].vodja)
+                break;
+              }
+          }
+          //setVodja(data[0].vodja)
         });
       }
       else
@@ -373,6 +384,8 @@ export default function TeamsMenu(props){
 
   
   const [curTim, setTim] = useState(-1)
+  const [prevOrg, setPrevOrg] = React.useState(-1)
+  const [curClanTima, setClanTima] = useState(-1)
   const [vodja, setVodja] = useState(false)
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
@@ -447,7 +460,7 @@ export default function TeamsMenu(props){
                             {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
                         </Typography>
               </Button>*/}
-               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}} onDoubleClick={handleClickFile}>
+               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}} onDoubleClick={handleClickFile}>
                 T
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
@@ -459,38 +472,38 @@ export default function TeamsMenu(props){
               ))}
               </List>
           </Paper>
-                              <ThemeProvider theme={theme}>
-                                <Dialog open={openD} onClose={handleClose}>
-                                    <DialogTitle style={{
-                                      backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
-                                      color : darkMode ? "white" : "black",
-                                    }}>
-                                            Chose a name for your team 
-                                    </DialogTitle>
-                                    <DialogContent style={{
-                                      backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
-                                    }}>
-                                        <ThemeProvider theme={theme}>
-                                            <TextField id="outlined-basic" label="Team Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
-                                            onChange={(e) => setTeamName(e.target.value)}
-                                            error={teamError}
-                                            sx={{
-                                                width :"100%",
-                                                marginTop : "5%",
-                                                marginBottom : "5%",
-                                                }}/>                      
-                                        </ThemeProvider>
-                                    </DialogContent>
-                                    <DialogActions style={{
-                                      backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
-                                    }}>
-                                        <Button onClick={handleClose}>Cancel</Button>
-                                        <Button onClick={() => {addTeam() ; }}>Sumbit</Button>
-                                    </DialogActions>
-                                </Dialog>
-                            </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Dialog open={openD} onClose={handleClose}>
+                <DialogTitle style={{
+                  backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                  color : darkMode ? "white" : "black",
+                }}>
+                        Chose a name for your team 
+                </DialogTitle>
+                <DialogContent style={{
+                  backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                }}>
+                    <ThemeProvider theme={theme}>
+                        <TextField id="outlined-basic" label="Team Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                        onChange={(e) => setTeamName(e.target.value)}
+                        error={teamError}
+                        sx={{
+                            width :"100%",
+                            marginTop : "5%",
+                            marginBottom : "5%",
+                            }}/>                      
+                    </ThemeProvider>
+                </DialogContent>
+                <DialogActions style={{
+                  backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                }}>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={() => {addTeam() ; }}>Sumbit</Button>
+                </DialogActions>
+            </Dialog>
+        </ThemeProvider>
       </div>
-      <ProjectMenu vodjaStatus={vodja} timID = {curTim}/>
+      <ProjectMenu vodjaStatus={vodja} timID = {curTim} clanTimaID = {curClanTima}/>
       <SimpleDialog
                 open={openSimple}
                 onClose={handleCloseSimple}

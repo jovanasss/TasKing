@@ -21,6 +21,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import { blue } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const drawerWidth = 240
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
@@ -89,15 +90,6 @@ function SimpleDialog(props) {
       res.json().then(data => {
         console.log(data)
         setMembers(data)
-        /*setOrganisations(data)
-        if(data==undefined || data==null)
-        return;
-      
-        if(data.length==0)
-          return;  
-        console.log(data[0].idClan);
-        setOrg(data[0].idClan)
-        localStorage.setItem('clanOrgID',data[0].idClan)*/
       });
     }
     else
@@ -451,7 +443,7 @@ if(tasks.length == 0)
 
 return(
       <div className="divTasks">
-              {tasks.filter(task => (task.status==props.selected-1 || (props.selected==0 && task.status<3))).map((task, index) => (
+              {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status<3))&&task.status!=-1)).map((task, index) => (
               <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%" }}>
                 <Card variant="outlined" 
                   sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status], marginBottom:'10px' }}>
@@ -465,7 +457,7 @@ return(
                       <Typography sx={{ mb: 1.5, fontSize:15 , fontWeight: 'bold' }} color="text.primary">
                         poeni: {task.vrednost} 
                       </Typography>
-                      <div style={{display: (task.clanTimaID!=-1 && props.realVodjaStatus)? 'flex' : 'none'}}>
+                      <div style={{display: (task.korisnikID!=-1 && props.realVodjaStatus)? 'flex' : 'none'}}>
                       <ListItemAvatar>
                         <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
                           <PersonIcon />
@@ -501,6 +493,14 @@ return(
                           color="primary">
                             {buttonTexts(task.taskID, task.status, task.prijave.length)}
                         </Button>
+                        <IconButton
+                          onClick={()=>handleChangeStatus(task.taskID, -1)}
+                          //aria-describedby={id} 
+                          variant="contained" 
+                          sx={{ border:"2px solid black", borderRadius:"10px", display:(task.status==0 && props.vodjaStatus)? 'inline' : 'none'}}
+                          color="primary">
+                            <DeleteForeverIcon/>
+                        </IconButton>
                       </ThemeProvider> 
                     </CardActions>
                 </Card>

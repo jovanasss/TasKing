@@ -40,9 +40,16 @@ export default function LeftMenu(props){
          
           if(data.length==0)
             return;  
-          console.log(data[0].idClan);
-          setOrg(data[0].idClan)
-          localStorage.setItem('clanOrgID',data[0].idClan)
+  
+          if(window.localStorage.getItem("clanOrgID") === null)
+          {
+            setOrg(data[0].idClan)
+            localStorage.setItem('clanOrgID',data[0].idClan)
+          }
+          else
+          {
+            setOrg(window.localStorage.getItem('clanOrgID'))
+          }
         });
       }
       else
