@@ -78,12 +78,15 @@ const theme1 = createTheme({
 function ProfileForm(){
 
   const [user, setUser] = useState(null);
-  const [user1, setUser1] = useState(null);
   const korisnikID = window.localStorage.getItem('ProfileUser-info');
 
+  const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
+  const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
+
   useEffect(() =>{
-    const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+user.id,
+    
+    if(profileUserInfo == userInfo.id){
+      fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
     {
         method:"GET",
         headers: {
@@ -95,10 +98,22 @@ function ProfileForm(){
             setUser(data);
         });
     })
+  }
+  else{
+    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+profileUserInfo,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+        res.json()
+        .then(data => {
+            setUser(data);
+        });
+    })
+  }
 }, [])
-
-const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
-const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
 
 if(profileUserInfo == userInfo.id){
   return(
@@ -109,25 +124,12 @@ if(profileUserInfo == userInfo.id){
 }
 
 else{
-  fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+profileUserInfo,
-    {
-        method:"GET",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }).then(res => {
-        res.json()
-        .then(data => {
-            setUser1(data);
-        });
-    })
-
   return(
     <div className="divProfileForm">
-         {user1 && <ProfileForm2 user1={user1} />}
+         {user && <ProfileForm2 user={user} />}
     </div>
    )
-}
+  }
 }
 
 function ProfileForm1({user}){
@@ -316,7 +318,7 @@ function ProfileForm1({user}){
       );
 }
 
-function ProfileForm2({user1}){
+function ProfileForm2({user}){
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -353,11 +355,11 @@ function ProfileForm2({user1}){
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
             >
-             <Avatar sx={{width:"50px", height:"50px"}} src={"../../profile/"+user1[0].profilnaSlika}>{user1[0].ime.charAt(0)}{user1[0].prezime.charAt(0)}</Avatar>
+             <Avatar sx={{width:"50px", height:"50px"}} src={"../../profile/"+user[0].profilnaSlika}>{user[0].ime.charAt(0)}{user[0].prezime.charAt(0)}</Avatar>
            </StyledBadge>
            <div>
-             <h3 className="h3FirstName">{user1[0].ime}</h3>
-             <h5 className="h5UserName">{user1[0].korisnickoIme}</h5>
+             <h3 className="h3FirstName">{user[0].ime}</h3>
+             <h5 className="h5UserName">{user[0].korisnickoIme}</h5>
            </div>
         </div>
           <List>

@@ -27,24 +27,10 @@ function MyAccountForm(){
     const OrgID = (JSON.parse(window.localStorage.getItem('OrgID')));
     const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
     
+    useEffect(() =>{
 
-    let projects1 = null;
-
-    if(profileUserInfo == userInfo){
-      fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
-      {
-          method:"GET",
-          headers: {
-              'Content-Type': 'application/json',
-          },
-      }).then(res => {
-          res.json()
-          .then(data => {
-              setUser(data);
-          });
-      })
-
-      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+userInfo.id,
+      if(profileUserInfo == userInfo){
+        fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
         {
             method:"GET",
             headers: {
@@ -53,19 +39,26 @@ function MyAccountForm(){
         }).then(res => {
             res.json()
             .then(data => {
-                setProjects(data.filter(d => d.organizacijaID == OrgID));
+                setUser(data);
             });
         })
+  
+        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+userInfo.id,
+          {
+              method:"GET",
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          }).then(res => {
+              res.json()
+              .then(data => {
+                  setProjects(data.filter(d => d.organizacijaID == OrgID));
+              });
+          })
+      }
 
-        return(
-          <div className="divMyAccount">
-               {projects && user && <MyAccount1 projects={projects} user={user} />}
-          </div>
-        )
-    }
-
-    else{
-      fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+profileUserInfo,
+      else{
+        fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+profileUserInfo,
       {
           method:"GET",
           headers: {
@@ -90,13 +83,14 @@ function MyAccountForm(){
               setProjects(data.filter(d => d.organizacijaID == OrgID));
             });
         })
+      }
+    },[])
 
-        return(
-          <div className="divMyAccount">
-               {projects && user && <MyAccount1 projects={projects} user={user} />}
-          </div>
-        )
-    }
+    return(
+      <div className="divMyAccount">
+          {projects && user && <MyAccount1 projects={projects} user={user} />}
+      </div>
+    )
 }
 
 function MyAccount1({projects, user}){
@@ -262,7 +256,8 @@ function MyAccount1({projects, user}){
                     key={task.id}
                     id="scroll-dialog-description"
                     ref={descriptionElementRef}
-                    tabIndex={-1}>
+                    tabIndex={-1}
+                    sx={{color : darkMode ? "white" : "black"}}>
                     {task.naziv + ": " + task.opis + ". (" + "type: " + task.tip + ", " + "valuation: " + task.vrednost + ")"}
                     </DialogContentText>)) : null}
                 </DialogContent>
