@@ -166,7 +166,8 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Members</DialogTitle>
+      <DialogTitle style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white" , color : darkMode ? "white" : "black"}}>Members</DialogTitle>
+      <DialogContent style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white" , color : darkMode ? "white": "black"}}>
       <List sx={{ pt: 0 }}>
       <div style={{marginBottom: '30px', display: props.vodjaStatus? 'inile' : 'none'}}>
       <TextField onChange={ (e) => setUserName(e.target.value) }
@@ -201,6 +202,7 @@ function SimpleDialog(props) {
           </ListItem>
         ))} 
       </List>
+      </DialogContent>
     </Dialog>
   );
 }

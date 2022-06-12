@@ -50,7 +50,14 @@ function CreateOrganisationForm (){
       // promena stranice
       let navigate = useNavigate(); 
 
-
+      const generateCode = () => {
+          let num ='1ABCD2EFG3HIJK4LMN5OPQ6RS7TUV8WXYZ9';
+          let OTP ='';
+          for ( let i =0 ; i<6;i++){
+            OTP +=num[Math.floor(Math.random()*10)];
+          }
+          return OTP;
+      }
       // kreiranje organizacije i tima 
       async function createOrganisation() { 
         let path = `/Main`; 
@@ -59,7 +66,8 @@ function CreateOrganisationForm (){
         console.log(type, teamName , orgName);
         const organizacija = {
           //type : type,
-          ime : orgName
+          ime : orgName,
+          kod : generateCode()
         }
 
         let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName , {
@@ -109,12 +117,12 @@ function CreateOrganisationForm (){
             let idClanaORG = temp ;
             console.log("IDclanaOrganizacije :" ,idClanaORG);
             console.log(statusU);
-  
+            
   
             const tim = {
               ime : teamName ,
               idOrganizacije : idNoveOrg,
-              
+              kod : generateCode(),
             }
             console.log(tim);
   
@@ -155,6 +163,7 @@ function CreateOrganisationForm (){
               
               console.log(tmp.status);
               if(tmp.status === 200){
+                alert("Uspesno kreirana organizacija !")
                 navigate(path)
               }
   
@@ -206,10 +215,11 @@ function CreateOrganisationForm (){
                         <TextField error={typeError} label = 'Select Type' inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  select value={type} onChange = {handleChange}>           
                                 <MenuItem value={1}>Faculty</MenuItem>
                                 <MenuItem value={2}>School</MenuItem>
-                                <MenuItem value={3}>Kita</MenuItem>
+                                <MenuItem value={3}>Clinic</MenuItem>
                                 <MenuItem value={4}>Department</MenuItem>
                                 <MenuItem value={5}>Non-Profit</MenuItem>
-                                <MenuItem value={6}>Other</MenuItem>
+                                <MenuItem value={6}>E-commerce</MenuItem>
+                                <MenuItem value={7}>Other</MenuItem>
                         </TextField> 
                   </FormControl>
                 </ThemeProvider>

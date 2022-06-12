@@ -159,14 +159,17 @@ function SimpleDialog(props) {
  }, [props.clanID]);
 
   return (
-    <Dialog onClose={handleClose} open={open}>
+    <Dialog onClose={handleClose} open={open} style={{ color : darkMode ? "rgb(26,25,25)" : "white" }}>
       <DialogTitle style={{
         backgroundColor : darkMode ? "rgb(26,25,25)" : "white",
         color : darkMode ? "white": "black",
       }}>Members</DialogTitle>
-      <div style={{marginBottom: '30px', display: props.vodjaStatus? 'inile' : 'none'}}>
+      <DialogContent style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white"}}>
+      <div style={{marginBottom: '30px', display: props.vodjaStatus? 'inile' : 'none' ,backgroundColor : darkMode ? "rgb(26,25,25)" :"white"}}>
+      <ThemeProvider theme={theme}>
       <TextField onChange={ (e) => setUserName(e.target.value) }
                   sx= {{marginLeft: '50px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
+      </ThemeProvider>
       <ThemeProvider theme={theme}>
       <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
        onClick={() => handleInvite()}>
@@ -202,6 +205,7 @@ function SimpleDialog(props) {
           </ListItem>
         ))} 
       </List>
+      </DialogContent>
     </Dialog>
   );
 }
@@ -321,7 +325,15 @@ export default function TeamsMenu(props){
   useEffect(() => {
     showTeams();
   }, [props.clanID]);
-
+  
+  const generateCode = () => {
+    let num ='1ABCD2EFG3HIJK4LMN5OPQ6RS7TUV8WXYZ9';
+    let OTP ='';
+    for ( let i =0 ; i<6;i++){
+      OTP +=num[Math.floor(Math.random()*10)];
+    }
+    return OTP;
+}
 
   async function addTeam() {
 
@@ -344,6 +356,7 @@ export default function TeamsMenu(props){
     const tim = {
       ime : teamName ,
       idOrganizacije : idNoveOrg,
+      kod : generateCode(),
       
     }
     console.log(tim);

@@ -147,6 +147,7 @@ function CreateTeamTasks(){
                       });
                       let statusT = result.status;
                       if ( statusT === 200){
+                          alert("Projekat uspesno kreiran !")
                           routeChange();
                       }
                 })
