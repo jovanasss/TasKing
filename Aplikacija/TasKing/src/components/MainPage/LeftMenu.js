@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 //import '../styles/MainPage/LeftMenu.css';
 import { useNavigate } from "react-router-dom";
-import { createTheme, IconButton, List, ListItem, Paper, Tooltip } from '@mui/material';
+import { Button, createTheme, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, List, ListItem, Paper, TextField, Tooltip } from '@mui/material';
 import { Typography } from '@mui/material';
 import { SubjectOutlined } from '@mui/icons-material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -9,6 +9,9 @@ import { ThemeProvider } from '@emotion/react';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import TeamsMenu from './TeamsMenu';
 import Avatar from '@mui/material/Avatar';
+import QrCode2Icon from '@mui/icons-material/QrCode2';
+import GroupsIcon from '@mui/icons-material/Groups';
+import CodeIcon from '@mui/icons-material/Code';
 const drawerWidth = 240     
 
 
@@ -16,6 +19,14 @@ export default function LeftMenu(props){
 
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
   const [organisations, setOrganisations] = useState([])
+  const [orgCode , setOrgCode] = useState('')
+  const [orgCodeError , setOrgCodeError] = useState(false)
+  const [teamCode , setTeamCode] = useState('')
+  const [teamCodeError , setTeamCodeError] = useState(false)
+  const [openOrgD, setOpenOrgD] = useState(false)
+  const [openD, setOpenD] = useState(false)
+  const [admin, setAdmin] = useState(false)
+
   const showOrganisations = ()=>{
     
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
@@ -46,10 +57,20 @@ export default function LeftMenu(props){
             setOrg(data[0].idClan)
             localStorage.setItem('clanOrgID',data[0].idClan)
             localStorage.setItem('OrgID',data[0].orgID)
+            localStorage.setItem('OrgKod',data[0].kod)
+            setAdmin(data[0].administrator)
           }
           else
           {
             setOrg(window.localStorage.getItem('clanOrgID'))
+            for(let i=0; i< data.length; i++)
+            {
+              if(data[i].idClan==window.localStorage.getItem('clanOrgID'))
+                {
+                  setAdmin(data[i].administrator)
+                  break;
+                }
+            }
           }
         });
       }
@@ -59,6 +80,180 @@ export default function LeftMenu(props){
       }
     })
   }
+
+  async function  handleJoinTeam()  {
+    
+    if (teamCode === ''){
+      setTeamCodeError(true)
+      setOrgCodeError(false)
+    }
+    else {
+      setOrgCode("")
+      // joinTeam(userID ,orgID)
+      console.log(teamCode)
+
+      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
+        method : 'GET',
+        headers : {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json; charset=utf-8'
+        },
+      });
+      let statusTima = temp.status;
+      temp = await temp.json();
+      console.log(temp);
+      let idNovogTima = temp;
+      console.log(statusTima);
+
+      if (temp != 0){
+
+
+        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima , {
+          method : 'GET',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+        });
+        nzm = await nzm.json();
+        let idORG = nzm ;
+
+
+        const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+        console.log(userN.id);
+
+        const ClanOrganizacije = {
+          idKorisnika : userN.id,
+          idOrganizacije : idORG,
+          admin : false
+        }
+
+        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+          method : 'POST',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+          body : JSON.stringify(ClanOrganizacije)
+        });
+        let statusU = rezultat.status ;
+        rezultat = await rezultat.json();
+        let idClanaORG = rezultat ;
+        console.log("IDclanaOrganizacije :" ,idClanaORG);
+        console.log(statusU);
+
+
+        if (statusU === 200){
+
+
+          const ClanTima = {
+            idClanaOrganizacije : idClanaORG,
+            idtima : idNovogTima,
+            vodja : false
+          }
+          console.log(ClanTima);
+  
+  
+          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(ClanTima)
+          });
+  
+          let statusTmp = tmp.status;
+          if ( statusTmp === 200){
+
+            routeChange();
+
+          }
+        }
+      }
+      else {
+        alert("Netacan kod !")
+        setOrgCodeError(false)
+        setTeamCodeError(true)
+        setTeamCode("");
+      }
+
+       // routeChange()
+    }
+
+  }
+
+  async function handleJoinOrg()  {
+
+    if (orgCode === ''){
+      setOrgCodeError(true)
+    }
+    else {
+      // joinOrg(userID ,orgID)
+      console.log(orgCode)
+
+      let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
+        method : 'GET',
+        headers : {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json; charset=utf-8'
+        },
+      });
+      temp = await temp.json();
+      console.log(temp);
+      let idNoveOrg = temp;
+      if (temp != 0){
+        const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+        console.log(userN.id);
+  
+        const ClanOrganizacije = {
+          idKorisnika : userN.id,
+          idOrganizacije : idNoveOrg,
+          admin : false,
+        }
+  
+          let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(ClanOrganizacije)
+          });
+          let noviStatus = tmp.status;
+          if ( noviStatus === 200){
+              alert("Uspesno ste se uclanili u organizaciju")
+              window.location.reload(false);
+          }
+  
+  
+        // routeChange()
+      }
+      else {
+        alert("Netacan kod !")
+        setOrgCodeError(true);
+      }
+      }
+
+
+  }
+
+  const handleClick = () => {
+    setOpenD(true);
+    teamCodeError(false);
+}
+const handleClose = () => {
+    setOpenD(false)
+    teamCodeError(false)
+}
+
+  const handleOrgClose = () => {
+    setOpenOrgD(false)
+}
+
+const handleOrgClick = () => {
+  setOpenOrgD(true);
+}
 
 
   let navigate = useNavigate();
@@ -136,8 +331,26 @@ export default function LeftMenu(props){
                 </Tooltip>
               </ThemeProvider>
             </ListItem>
+            <ListItem key={1}>
+              <ThemeProvider theme={theme}>
+              <Tooltip title="Join an organisation with code">
+                <IconButton sx={{backgroundColor: 'white'}} onClick={() => handleOrgClick()}>
+                  <CodeIcon/>
+                </IconButton>
+                </Tooltip>
+              </ThemeProvider>
+            </ListItem>
+            <ListItem key={2}>
+              <ThemeProvider theme={theme}>
+              <Tooltip title="Join a team with code">
+                <IconButton sx={{backgroundColor: 'white'}} onClick={() => handleClick()}>
+                  <CodeIcon/>
+                </IconButton>
+                </Tooltip>
+              </ThemeProvider>
+            </ListItem>
            {organisations.map(item => (
-             <ListItem key={item.idClan} className={curOrg==item.idClan? 'activeEnt' : null}>
+             <ListItem key={item.idClan+3} className={curOrg==item.idClan? 'activeEnt' : null}>
               <ThemeProvider theme={theme}>
                 <Tooltip title={item.imeOrganizacije}>
                  {/*} <IconButton src={"../../TandO/"+item.slika}  onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan); localStorage.setItem('OrgID',item.orgID) }} onDoubleClick={handleClickFile} sx={{backgroundColor: 'white'}}>
@@ -145,7 +358,7 @@ export default function LeftMenu(props){
                  </IconButton>
                 </Tooltip>
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />*/}
-               <Avatar src={"../../TandO/"+item.slika} onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan); localStorage.setItem('OrgID',item.orgID) }} onDoubleClick={handleClickFile}>
+               <Avatar src={"../../TandO/"+item.slika} onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan); localStorage.setItem('OrgID',item.orgID); localStorage.setItem('OrgKod',item.kod); setAdmin(item.administrator) }} onDoubleClick={item.administrator? handleClickFile : null}>
                 Org
                </Avatar>
                </Tooltip>   
@@ -155,8 +368,48 @@ export default function LeftMenu(props){
            ))}
         </List>
       </Paper>
+      <ThemeProvider theme={theme}>
+            <Dialog open={openOrgD} onClose={handleOrgClose}>
+                <DialogContent style={{
+                  backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                }}>
+                    <label className={darkMode ? "labelDM":"label"}>Join a organization with a code</label>
+                    <div  className="divIcons"><div className="divIcon"><GroupsIcon /></div></div>
+                        <ThemeProvider theme={theme}>
+                            <TextField onChange={ (e) => setOrgCode(e.target.value) } error={orgCodeError}
+                            value = {orgCode}
+                            sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
+                            id="outlined-basic" label="Enter Code" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
+                        </ThemeProvider>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                          <button className={darkMode ? "buttonJoin1DM":"buttonJoin1"} style={{marginTop:'10px', marginBottom:'0', marginLeft:'0', marginRight:'0', height:'35px', width:'100px'}} onClick={(event) => { event.preventDefault() ; handleJoinOrg(); } }>Join</button>
+                        </div>
+                        
+                </DialogContent>
+            </Dialog>
+        </ThemeProvider>
+        <ThemeProvider theme={theme}>
+            <Dialog open={openD} onClose={handleClose}>
+                <DialogContent style={{
+                  backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                }}>
+                    <label className={darkMode ? "labelDM":"label"}>Join a team with a code</label>
+                    <div  className="divIcons"><div className="divIcon"><GroupsIcon /></div></div>
+                        <ThemeProvider theme={theme}>
+                            <TextField onChange={ (e) => setTeamCode(e.target.value) } error={teamCodeError}
+                            value = {orgCode}
+                            sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
+                            id="outlined-basic" label="Enter Code" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
+                        </ThemeProvider>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                          <button className={darkMode ? "buttonJoin1DM":"buttonJoin1"} style={{marginTop:'10px', marginBottom:'0', marginLeft:'0', marginRight:'0', height:'35px', width:'100px'}} onClick={(event) => { event.preventDefault() ; handleJoinTeam(); } }>Join</button>
+                        </div>
+                        
+                </DialogContent>
+            </Dialog>
+        </ThemeProvider>
     </div>
-    <TeamsMenu clanID={curOrg}/>
+    <TeamsMenu clanID={curOrg} adminStatus = {admin}/>
     </div>
   )
 }

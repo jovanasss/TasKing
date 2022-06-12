@@ -1,6 +1,6 @@
 //import '../styles/MainPage/TaskList.css';
 import React, { Component, useEffect, useState } from 'react';
-import { Button, Card, CardActions, CardContent, createTheme, IconButton} from '@mui/material';
+import { Button, Card, CardActions, CardContent, createTheme, IconButton, Tooltip} from '@mui/material';
 import { Typography } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import { Box } from '@mui/system';
@@ -468,8 +468,8 @@ return(
                       </Typography>
                       <div style={{display: (task.korisnikID!=-1 && props.realVodjaStatus)? 'flex' : 'none'}}>
                       <ListItemAvatar>
-                        <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                          <PersonIcon />
+                        <Avatar src={"../../profile/"+task.slika} sx={{ bgcolor: blue[100], color: blue[600] }}>
+                          {task.korisnickoIme.slice(0,150)}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText primary={task.korisnickoIme}/>
@@ -680,9 +680,11 @@ function TaskList(props){
                       </CardContent>
                       <CardActions>
                         <ThemeProvider theme={theme}>
+                          <Tooltip title="Add Task">
                           <IconButton className='addBtn' onClick={handleClick}>
                             <AddIcon sx={{minWidth: 150, maxWidth: 300, minHeight: 150, maxHeight: 300}}/>
                           </IconButton>
+                          </Tooltip>
                         </ThemeProvider> 
                       </CardActions>
                   </Card>

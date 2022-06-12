@@ -13,6 +13,8 @@ import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import { blue } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
+import QrCode2Icon from '@mui/icons-material/QrCode2';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const drawerWidth = 240
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
@@ -165,7 +167,7 @@ function SimpleDialog(props) {
         color : darkMode ? "white": "black",
       }}>Members</DialogTitle>
       <DialogContent style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white"}}>
-      <div style={{marginBottom: '30px', display: props.vodjaStatus? 'inile' : 'none' ,backgroundColor : darkMode ? "rgb(26,25,25)" :"white"}}>
+      <div style={{marginBottom: '30px', display: props.adminStatus? 'inile' : 'none' ,backgroundColor : darkMode ? "rgb(26,25,25)" :"white"}}>
       <ThemeProvider theme={theme}>
       <TextField onChange={ (e) => setUserName(e.target.value) }
                   sx= {{marginLeft: '50px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
@@ -174,6 +176,10 @@ function SimpleDialog(props) {
       <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
        onClick={() => handleInvite()}>
         Invite
+      </Button>
+      <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
+       onClick={() => {navigator.clipboard.writeText(window.localStorage.getItem('OrgKod'))}}>
+        Copy code
       </Button>
       </ThemeProvider>
       </div>
@@ -185,8 +191,8 @@ function SimpleDialog(props) {
         {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info')).id).map((member) => (
           <ListItem key={member.clanOrgID}>
             <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
+              <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
+                { member.korisnik.korisnickoIme.slice(0,2)}
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={member.korisnik.korisnickoIme} />
@@ -197,7 +203,7 @@ function SimpleDialog(props) {
                 View Profile
               </Button>
               <Button
-              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: props.vodjaStatus? 'inile' : 'none'}}
+              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: props.adminStatus? 'inile' : 'none'}}
               onClick={()=>handleRemove(member.clanOrgID)}>
                  Remove
               </Button>
@@ -450,14 +456,17 @@ export default function TeamsMenu(props){
     },
   });           
 
-  
+  const [openJoinD, setOpenJoinD] = useState(false)
   const [curTim, setTim] = useState(-1)
   const [prevOrg, setPrevOrg] = React.useState(-1)
   const [curClanTima, setClanTima] = useState(-1)
   const [vodja, setVodja] = useState(false)
+  const [teamCode , setTeamCode] = useState('')
+  const [teamCodeError , setTeamCodeError] = useState(false)
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
   const hiddenFileInput = React.useRef(null);
+  
 
   const handleClickFile = event => {
     hiddenFileInput.current.click();
@@ -465,7 +474,6 @@ export default function TeamsMenu(props){
 
    const handleChangeFile = event => {
     const fileUploaded = event.target.files[0];
-
     const timID = (JSON.parse(window.localStorage.getItem('TimID')));
     fetch("https://localhost:5001/Tim/PromeniSlikuTima/"+timID+"/"+fileUploaded.name,
     {
@@ -476,6 +484,114 @@ export default function TeamsMenu(props){
     })
     alert("Photo is successfully changed 😀");
     window.location.reload(false);
+  }
+
+  async function  handleJoinTeam()  {
+    
+    if (teamCode === ''){
+      setTeamCodeError(true)
+    }
+    else {
+      // joinTeam(userID ,orgID)
+      console.log(teamCode)
+
+      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
+        method : 'GET',
+        headers : {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json; charset=utf-8'
+        },
+      });
+      let statusTima = temp.status;
+      temp = await temp.json();
+      console.log(temp);
+      let idNovogTima = temp;
+      console.log(statusTima);
+
+      if (temp != 0){
+
+
+        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima , {
+          method : 'GET',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+        });
+        nzm = await nzm.json();
+        let idORG = nzm ;
+
+
+        const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+        console.log(userN.id);
+
+        const ClanOrganizacije = {
+          idKorisnika : userN.id,
+          idOrganizacije : idORG,
+          admin : false
+        }
+
+        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+          method : 'POST',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+          body : JSON.stringify(ClanOrganizacije)
+        });
+        let statusU = rezultat.status ;
+        rezultat = await rezultat.json();
+        let idClanaORG = rezultat ;
+        console.log("IDclanaOrganizacije :" ,idClanaORG);
+        console.log(statusU);
+
+
+        if (statusU === 200){
+
+
+          const ClanTima = {
+            idClanaOrganizacije : idClanaORG,
+            idtima : idNovogTima,
+            vodja : false
+          }
+          console.log(ClanTima);
+  
+  
+          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+            method : 'POST',
+            headers : {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Accept': 'application/json; charset=utf-8'
+            },
+            body : JSON.stringify(ClanTima)
+          });
+  
+          let statusTmp = tmp.status;
+          if ( statusTmp === 200){
+            alert("uspesno ste uclanjeni u tim")
+            window.location.reload(false);
+          }
+        }
+      }
+      else {
+        alert("Netacan kod !")
+        setTeamCodeError(true)
+        setTeamCode("");
+      }
+
+       // routeChange()
+    }
+
+  }
+
+  const handleJoinClose = () => {
+    setOpenJoinD(false)
+}
+
+
+  const handleJoinClick = () => {
+    console.log("Otvoren dijalog")
+    setOpenJoinD(true);
   }
     
   return(
@@ -518,7 +634,7 @@ export default function TeamsMenu(props){
                   </ThemeProvider>
               </ListItem>
               {teams.map(team => (
-                  <ListItem key={team.idTima+2} className={curTim==team.idTima? 'activeEnt' : null}>
+                  <ListItem key={team.idTima+3} className={curTim==team.idTima? 'activeEnt' : null}>
                     <ThemeProvider theme={theme}>
                       {/*<Button onClick={() =>{setTim(team.idTima); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}}>
                         <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
@@ -528,7 +644,7 @@ export default function TeamsMenu(props){
                             {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
                         </Typography>
               </Button>*/}
-               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}} onDoubleClick={handleClickFile}>
+               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
                 T
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
@@ -570,6 +686,26 @@ export default function TeamsMenu(props){
                 </DialogActions>
             </Dialog>
         </ThemeProvider>
+        <ThemeProvider theme={theme}>
+            <Dialog open={openJoinD} onClose={handleJoinClose}>
+                <DialogContent style={{
+                  backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                }}>
+                    <label className={darkMode ? "labelDM":"label"}>Join a team with a code</label>
+                    <div  className="divIcons"><div className="divIcon"><GroupsIcon /></div></div>
+                        <ThemeProvider theme={theme}>
+                            <TextField onChange={ (e) => setTeamCode(e.target.value) } error={teamCodeError}
+                            value = {teamCode}
+                            sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
+                            id="outlined-basic" label="Enter Code" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
+                        </ThemeProvider>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                          <button className={darkMode ? "buttonJoin1DM":"buttonJoin1"} style={{marginTop:'10px', marginBottom:'0', marginLeft:'0', marginRight:'0', height:'35px', width:'100px'}} onClick={(event) => { event.preventDefault() ; handleJoinTeam(); } }>Join</button>
+                        </div>
+                        
+                </DialogContent>
+            </Dialog>
+        </ThemeProvider>
       </div>
       <ProjectMenu vodjaStatus={vodja} timID = {curTim} clanTimaID = {curClanTima}/>
       <SimpleDialog
@@ -577,6 +713,7 @@ export default function TeamsMenu(props){
                 onClose={handleCloseSimple}
                 clanID = {props.clanID}
                 vodjaStatus = {vodja}
+                adminStatus = {props.adminStatus}
               />
     </div>
   )

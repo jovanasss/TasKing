@@ -18,7 +18,7 @@ const options = [
 
 
 const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
-const boje = ['rgb(255, 255, 255)', 'rgb(77, 154, 255)', 'rgb(255, 207, 49)', 'rgb(255, 87, 69)']
+const boje = ['rgb(255, 255, 255)', 'rgb(219, 219, 219)', 'rgb(77, 154, 255)', 'rgb(255, 207, 49)', 'rgb(255, 87, 69)']
 
 export default function UpProjectMenu(props) {
   let navigate = useNavigate();
@@ -146,14 +146,14 @@ export default function UpProjectMenu(props) {
                   }}
                 >
                   {options.map((option, index) => (
-                    <MenuItem
-                      key={option}
-                      selected={index === selectedIndex}
-                      onClick={(event) => handleMenuItemClick(event, index)}
-                      sx={{backgroundColor:boje[index-1] }}>
-                      {option}
-                    </MenuItem>
-                  ))}
+                      <MenuItem
+                        key={option}
+                        selected={index === selectedIndex}
+                        onClick={(event) => handleMenuItemClick(event, index)}
+                        sx={{backgroundColor:boje[index]}}>
+                        {option}
+                      </MenuItem>
+                    ))}
                 </Menu>
               </div>
           </Toolbar>

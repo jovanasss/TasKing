@@ -182,8 +182,8 @@ function SimpleDialog(props) {
         {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info')).id).map((member) => (
           <ListItem key={member.clanTimaID}>
             <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
+              <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
+               {member.korisnik.korisnickoIme.slice(0,2)}
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={member.korisnik.korisnickoIme} />
@@ -367,7 +367,27 @@ export default function ProjectMenu(props) {
         MuiButton: {styleOverrides:{
          root: {
           "&:hover": {
-            backgroundColor: "rgb(0, 117, 83)",
+            backgroundColor:  'rgb(19, 173, 168)',
+          },
+         }
+        }},
+       },
+    palette: {
+      primary: {
+        main: "rgb(0, 100, 100)",
+      },
+      secondary:{
+        main : "rgb(0, 200, 0)",
+      }
+    },
+  }); 
+
+  const theme2 = createTheme({
+    components: {
+        MuiIconButton: {styleOverrides:{
+         root: {
+          "&:hover": {
+            backgroundColor:  boje[0],
           },
          }
         }},
@@ -385,12 +405,15 @@ export default function ProjectMenu(props) {
   return (
     <div>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', background: "rgb(147, 219, 217)", display:'flex', minHeight:'125px' }}>
+      <ThemeProvider theme={theme2}>
           <Tooltip title="Add Project">
             <IconButton onClick={() => {handleClick(); routeChange();}} sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}}>
               <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
             </IconButton>
           </Tooltip>
+          </ThemeProvider>
           <List sx={{display:'flex', width: '65vw', overflow: 'auto'}}>
+            <ThemeProvider theme={theme}>
           {projects.map(proj =>
           <ListItem key={proj.idProj} sx={{alignSelf: 'stretch', paddingBottom: '0', paddingTop: '0'}}>
           <Button  onClick={() =>{setProj(proj.idProj); localStorage.setItem('projID',proj.idProj);}} sx={{paddingBottom: '0', paddingTop: '0', alignSelf: 'stretch' ,backgroundColor: curProj==proj.idProj? boje[1] : boje[0]}}>   
@@ -400,14 +423,17 @@ export default function ProjectMenu(props) {
         </Button>
         </ListItem>
             )}
+          </ThemeProvider>
             </List>
-          <div style={{ display:'flex',   position: 'fixed',top:'30px', right: '1vw'}}>
-          <Button  sx={{backgroundColor: boje[0]}} 
+          <div style={{ display:'flex',   position: 'fixed',top:'30px', right: '0vw'}}>
+          <ThemeProvider theme={theme}>
+          <Button  sx={{backgroundColor: boje[1], width:'50%', marginRight:'1%'}} 
           onClick={()=>handleClickOpenSimple()}>   
             <Typography sx={{fontWeight:'bold', color: 'white'}}>
                 See Team Members
             </Typography>
           </Button>
+          </ThemeProvider>
             <IconButton onClick={() => {localStorage.setItem('ProfileUser-info', JSON.parse(window.localStorage.getItem('user-info')).id); navigate('/Profile')}} sx={{marginLeft:"0.5%"}}>
               <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
             </IconButton>

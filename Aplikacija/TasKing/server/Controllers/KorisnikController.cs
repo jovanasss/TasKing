@@ -162,7 +162,8 @@ namespace TasKing.Controllers
                                 administrator = p.administrator,
                                 vremePosecivanja = p.vremePosecivanja,
                                 orgID = p.organizacija.ID,
-                                slika = p.organizacija.slika
+                                slika = p.organizacija.slika,
+                                kod = p.organizacija.kod
                             }).ToArrayAsync();               
                             return Ok(clanInfo);
 
