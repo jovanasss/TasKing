@@ -26,6 +26,27 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 const drawerWidth = 240
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
+const theme1 = createTheme({
+  components:{
+    MuiButton: {styleOverrides:{
+      root: {
+       "&:hover": {
+         backgroundColor: "rgb(31, 206, 206);",
+       },
+      }
+     }}  
+  },
+  palette: {
+    primary: {
+      //main: "rgb(161, 17, 161)",
+      main: "rgb(0, 100, 100)",
+    },
+    secondary:{
+      main : "rgb(0, 100, 0)",
+    }
+  },
+});
+
 function SimpleDialog(props) {
   const theme = createTheme({
     components: {
@@ -120,15 +141,17 @@ function SimpleDialog(props) {
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={member.korisnik.korisnickoIme} style={{ color : darkMode ? "white" : "black"}}/>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme1}>
               <Button
                 sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
-                onClick ={()=>visitProfile(member.korisnik.id)} >
+                onClick ={()=>visitProfile(member.korisnik.id)}
+                color="primary">
                 View Profile
               </Button>
               <Button
               sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
-              onClick={()=>{handleHire(member.clanTimaID);}}>
+              onClick={()=>{handleHire(member.clanTimaID);}}
+              color="primary">
                  Hire
               </Button>
             </ThemeProvider>
@@ -482,7 +505,7 @@ return(
                       </div>
                     </CardContent>
                     <CardActions>
-                      <ThemeProvider theme={theme}>
+                      <ThemeProvider theme={theme1}>
                       <Button
                           onClick={handleClickOpen('paper', index)} 
                           //aria-describedby={id} 
@@ -552,7 +575,7 @@ return(
                   <DialogActions style={{
                     backgroundColor : darkMode ? "rgb(26,25,25)" : "white",
                   }}>
-                  <Button onClick={handleClose}>ok</Button>
+                  <ThemeProvider theme={theme1}><Button onClick={handleClose} variant="contained" color="primary" >ok</Button></ThemeProvider>
                   </DialogActions>
               </Dialog>
               <SimpleDialog
@@ -738,8 +761,8 @@ function TaskList(props){
               <DialogActions style={{
                  backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
               }}>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={addTask}>Sumbit</Button>
+               <ThemeProvider theme={theme1} ><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+              <ThemeProvider theme={theme1}><Button onClick={addTask} variant="contained" color="primary" sx={{fontWeight:"bold"}}>Sumbit</Button></ThemeProvider>
              </DialogActions>
           </Dialog>
         </ThemeProvider>

@@ -526,7 +526,9 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                             </ThemeProvider>
                             <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
                             <ThemeProvider theme={theme}>
+                            <Tooltip title={darkMode == true ? <h4 style={{color:"rgb(31, 206, 206)"}}>Light mode</h4> :  <h4 style={{color:"rgb(31, 206, 206)"}}>Dark mode</h4>} placement="left">
                             <Switch sx={{marginLeft:"23%"}} checked = {darkMode} onChange={() => {localStorage.setItem('darkMode',!darkMode); window.location.reload(false);}} />
+                            </Tooltip>
                             </ThemeProvider>
                    </div>
 

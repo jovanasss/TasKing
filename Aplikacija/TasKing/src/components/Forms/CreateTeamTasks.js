@@ -53,8 +53,6 @@ function CreateTeamTasks(){
         setOpenD(false)
     }
 
-    
-
     // error check => napraviNoviTask(Naslov , bodovi) && dodavnje u taskList parent Projekta
     const handleSubmit = () => {
         if (bodovi > 0){
@@ -233,7 +231,7 @@ function CreateTeamTasks(){
             main: "rgb(0, 100, 100)",
           },
           secondary:{
-            main : pink[100],
+            main : "rgb(0, 100, 0)",
           }
         },
       });
@@ -328,8 +326,8 @@ function CreateTeamTasks(){
                                         </ThemeProvider>
                                     </DialogContent>
                                     <DialogActions style={{ backgroundColor : darkMode? "rgb(46, 45, 45)" : "white" }}>
-                                        <Button onClick={handleClose}>Cancel</Button>
-                                        <Button onClick={handleSubmit}>Sumbit</Button>
+                                        <ThemeProvider theme={theme} ><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+                                        <ThemeProvider theme={theme}><Button onClick={handleSubmit} variant="contained" color="primary" sx={{fontWeight:"bold"}}>Sumbit</Button></ThemeProvider>
                                     </DialogActions>
                                 </Dialog>
                             </ThemeProvider>

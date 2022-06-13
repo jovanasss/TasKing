@@ -23,6 +23,27 @@ import { ThemeProvider,createTheme } from '@mui/material/styles';
 
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
+const theme1 = createTheme({
+  components:{
+    MuiButton: {styleOverrides:{
+      root: {
+       "&:hover": {
+         backgroundColor: "rgb(31, 206, 206);",
+       },
+      }
+     }}  
+  },
+  palette: {
+    primary: {
+      //main: "rgb(161, 17, 161)",
+      main: "rgb(0, 100, 100)",
+    },
+    secondary:{
+      main : "rgb(0, 100, 0)",
+    }
+  },
+});
+
 function SimpleDialog(props) {
   const theme = createTheme({
     components: {
@@ -170,11 +191,15 @@ function SimpleDialog(props) {
       <DialogContent style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white" , color : darkMode ? "white": "black"}}>
       <List sx={{ pt: 0 }}>
       <div style={{marginBottom: '30px', display: props.vodjaStatus? 'inile' : 'none'}}>
-      <TextField onChange={ (e) => setUserName(e.target.value) }
-                  sx= {{marginLeft: '50px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
       <ThemeProvider theme={theme}>
+      <TextField onChange={ (e) => setUserName(e.target.value) }
+                  sx= {{marginLeft: '50px', marginTop: '5px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
+      </ThemeProvider>
+      <ThemeProvider theme={theme1}>
       <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
-       onClick={() => handleInvite()}>
+       onClick={() => handleInvite()}
+       variant="contained"
+       color="primary">
         Invite
       </Button>
       </ThemeProvider>
@@ -183,19 +208,23 @@ function SimpleDialog(props) {
           <ListItem key={member.clanTimaID}>
             <ListItemAvatar>
               <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
-               {member.korisnik.korisnickoIme.slice(0,2)}
+               {member.korisnik.ime.slice(0,1)}{member.korisnik.prezime.slice(0,1)}
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={member.korisnik.korisnickoIme} />
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme1}>
               <Button 
                 sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
-                onClick={() => visitProfile(member.korisnik.id)}>
+                onClick={() => visitProfile(member.korisnik.id)}
+                color="primary"
+                variant="contained">
                 View Profile
               </Button>
               <Button
               sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: props.vodjaStatus? 'inile' : 'none'}}
-              onClick={()=>handleRemove(member.clanTimaID)}>
+              onClick={()=>handleRemove(member.clanTimaID)}
+              color="primary"
+              variant="contained">
                  Remove
               </Button>
             </ThemeProvider>
@@ -481,8 +510,8 @@ export default function ProjectMenu(props) {
                   </ThemeProvider>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={addTask}>Sumbit</Button>
+              <ThemeProvider theme={theme1} ><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+              <ThemeProvider theme={theme1}><Button onClick={addTask} variant="contained" color="primary" sx={{fontWeight:"bold"}}>Sumbit</Button></ThemeProvider>
              </DialogActions>
           </Dialog>
         </ThemeProvider>

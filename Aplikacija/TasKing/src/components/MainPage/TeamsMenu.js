@@ -19,6 +19,27 @@ import GroupsIcon from '@mui/icons-material/Groups';
 const drawerWidth = 240
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
+const theme1 = createTheme({
+  components:{
+    MuiButton: {styleOverrides:{
+      root: {
+       "&:hover": {
+         backgroundColor: "rgb(31, 206, 206);",
+       },
+      }
+     }}  
+  },
+  palette: {
+    primary: {
+      //main: "rgb(161, 17, 161)",
+      main: "rgb(0, 100, 100)",
+    },
+    secondary:{
+      main : "rgb(0, 100, 0)",
+    }
+  },
+});
+
 function SimpleDialog(props) {
   const theme = createTheme({
     components: {
@@ -170,15 +191,19 @@ function SimpleDialog(props) {
       <div style={{marginBottom: '30px', display: props.adminStatus? 'inile' : 'none' ,backgroundColor : darkMode ? "rgb(26,25,25)" :"white"}}>
       <ThemeProvider theme={theme}>
       <TextField onChange={ (e) => setUserName(e.target.value) }
-                  sx= {{marginLeft: '50px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
+                  sx= {{marginLeft: '50px', marginTop: '5px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
       </ThemeProvider>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme1}>
       <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
-       onClick={() => handleInvite()}>
+       onClick={() => handleInvite()}
+       color="primary"
+       variant="contained">
         Invite
       </Button>
       <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
-       onClick={() => {navigator.clipboard.writeText(window.localStorage.getItem('OrgKod'))}}>
+       onClick={() => {navigator.clipboard.writeText(window.localStorage.getItem('OrgKod'))}}
+       color="primary"
+       variant="contained">
         Copy code
       </Button>
       </ThemeProvider>
@@ -192,19 +217,23 @@ function SimpleDialog(props) {
           <ListItem key={member.clanOrgID}>
             <ListItemAvatar>
               <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
-                { member.korisnik.korisnickoIme.slice(0,2)}
+              {member.korisnik.ime.slice(0,1)}{member.korisnik.prezime.slice(0,1)}
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={member.korisnik.korisnickoIme} />
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme1}>
               <Button
                 sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
-                onClick={() => visitProfile(member.korisnik.id)}>
+                onClick={() => visitProfile(member.korisnik.id)}
+                color="primary"
+                variant="contained">
                 View Profile
               </Button>
               <Button
               sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: props.adminStatus? 'inile' : 'none'}}
-              onClick={()=>handleRemove(member.clanOrgID)}>
+              onClick={()=>handleRemove(member.clanOrgID)}
+              color="primary"
+              variant="contained">
                  Remove
               </Button>
             </ThemeProvider>
@@ -681,8 +710,8 @@ export default function TeamsMenu(props){
                 <DialogActions style={{
                   backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
                 }}>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={() => {addTeam() ; }}>Sumbit</Button>
+                    <ThemeProvider theme={theme1} ><Button onClick={handleClose} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+                    <ThemeProvider theme={theme1}><Button onClick={() => {addTeam() ; }} variant="contained" color="primary" sx={{fontWeight:"bold"}}>Sumbit</Button></ThemeProvider>
                 </DialogActions>
             </Dialog>
         </ThemeProvider>

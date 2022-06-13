@@ -52,7 +52,7 @@ function MyAccountForm(){
           }).then(res => {
               res.json()
               .then(data => {
-                  setProjects(data.filter(d => d.organizacijaID == OrgID));
+                  setProjects(data.filter(d => d.organizacijaID == OrgID && d.taskoviUradjeni.length != 0));
               });
           })
       }
@@ -80,7 +80,7 @@ function MyAccountForm(){
         }).then(res => {
             res.json()
             .then(data => {
-              setProjects(data.filter(d => d.organizacijaID == OrgID));
+              setProjects(data.filter(d => d.organizacijaID == OrgID && d.taskoviUradjeni.length != 0));
             });
         })
       }
