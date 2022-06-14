@@ -110,9 +110,7 @@ function SimpleDialog(props) {
   }).then(res => {
     if(res.ok)
     {
-      console.log(res);
       res.json().then(data => {
-        console.log(data)
         setMembers(data)
       });
     }
@@ -234,9 +232,7 @@ const refreshTasks = () => {
     }).then(res => {
       if(res.ok)
       {
-        console.log(res);
         res.json().then(data => {
-          console.log(data);
           setTasks(data.taskovi)
         });
       }
@@ -283,7 +279,6 @@ const handleAll = (taskID, currentStatus, prijaveLenght) => {
   {
     if(currentStatus==0)
     {
-      console.log(prijaveLenght);
 
       if(prijaveLenght==0)
         handleImIntrested(taskID);
@@ -392,8 +387,6 @@ let navigate = useNavigate();
 
   const handleImIntrested = (taskID) => {
   const clanID = window.localStorage.getItem('clanTimaID');
-  console.log(taskID + "taskID");
-  console.log(clanID +  " clanID");
    fetch("https://localhost:5001/Task/PrijaviZaTask/" + clanID + "/" + taskID, {
    method: "POST"
   }).then(s =>{
@@ -403,8 +396,6 @@ let navigate = useNavigate();
 
 const handleImNotIntrested = (taskID) => {
   const clanID = window.localStorage.getItem('clanTimaID');
-  console.log(taskID + "taskID");
-  console.log(clanID +  " clanID");
   fetch("https://localhost:5001/Task/PonistiPrijavuZaTask/"+clanID+"/"+taskID,
     {
         method:"DELETE",
@@ -417,13 +408,11 @@ const handleImNotIntrested = (taskID) => {
 };
 
 const handleSeeCandidats = (taskID) => {
-  console.log(taskID + "taskID");
   setTask(taskID);
   handleClickOpenSimple();
 };
 
 const handleChangeStatus = (taskID, status) => {
-  console.log(taskID + "taskID");
   fetch("https://localhost:5001/Task/PromeniStatus/" + taskID + "/" + status,
         {
             method: "PUT"
@@ -607,7 +596,6 @@ function TaskList(props){
 
     // otvaranje i zatvaranje Dijaloga 
     const handleClick = () => {
-      console.log("Otvoren dijalog")
       setOpenD(true);
     }
     const handleClose = () => {
@@ -622,7 +610,6 @@ function TaskList(props){
       }
       setOpenD(false)
       const idProjekta = (JSON.parse(window.localStorage.getItem('projID')));
-      console.log(idProjekta);
 
       let task = {
         naziv: taskName ,
@@ -631,7 +618,6 @@ function TaskList(props){
         bodovi : bodovi,
         projekatID  : idProjekta
     };
-    console.log(task);
 
     let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
       method : 'POST',
@@ -643,7 +629,6 @@ function TaskList(props){
     });
     let statusT = result.status;
     result = await result.json();
-    console.log(statusT);
     if (result === 0){
       alert("Task sa unetim imenom vec postoji !");
     }
@@ -657,9 +642,7 @@ function TaskList(props){
     }).then(res => {
       if(res.ok)
       {
-        console.log(res);
         res.json().then(data => {
-          console.log(data);
           setTasks(data.taskovi)
         });
       }

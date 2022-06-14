@@ -43,7 +43,7 @@ function SignUp(){
             email: email,
             brTelefona: phoneNo
        }
-       console.log(JSON.stringify(user))
+       //console.log(JSON.stringify(user))
        try{
         let result = await fetch("https://localhost:5001/Korisnik/UnesiKorisnika/", {
             method : 'POST',
@@ -54,22 +54,22 @@ function SignUp(){
             body : JSON.stringify(user)
           });
           let a = await result.json();
-          console.log(a);
-          console.log(JSON.stringify(a));
+          //console.log(a);
+          //console.log(JSON.stringify(a));
 
           localStorage.setItem('user-info',JSON.stringify(a))
           //result  = await result.json();
-          console.log(result.status);
+          //console.log(result.status);
           if (result.status === 200){
             routeChange()
         
           }
           else{
-              console.log(result.status)
+              //console.log(result.status)
           }
        }
        catch (error){
-           console.log(error)
+          //console.log(error)
 
        }
 }
@@ -99,7 +99,7 @@ function SignUp(){
         if (firstName && lastName && userName && passWord  && emailCheck()){
             
             // pravljenjeNaloga( podaci[] )
-            console.log(firstName , lastName , userName ,passWord , email, phoneNo)
+            //console.log(firstName , lastName , userName ,passWord , email, phoneNo)
 
             signUP()
 

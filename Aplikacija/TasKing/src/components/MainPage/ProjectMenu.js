@@ -104,9 +104,7 @@ function SimpleDialog(props) {
                   }).then(res => {
                     if(res.ok)
                     {
-                      console.log(res);
                       res.json().then(data => {
-                        console.log(data)
                         setMembers(data)
                       });
                     }
@@ -130,7 +128,6 @@ function SimpleDialog(props) {
     if (userName){
 
       const idTim = (JSON.parse(window.localStorage.getItem('TimID')));
-      console.log(idTim);
 
       fetch("https://localhost:5001/Tim/PozoviUTim/" + userName + "/" + idTim, {
         method: "POST"
@@ -172,9 +169,7 @@ function SimpleDialog(props) {
   }).then(res => {
     if(res.ok)
     {
-      console.log(res);
       res.json().then(data => {
-        console.log(data)
         setMembers(data)
       });
     }
@@ -291,10 +286,8 @@ export default function ProjectMenu(props) {
   
   const showProjects = ()=>{
     const tim = window.localStorage.getItem('clanTimaID');
-    console.log(tim);
 
     setPrevTim(props.timID);
-    console.log(props.timID)
     if(props.timID<=-1)
     {
       setProjects([])
@@ -312,7 +305,6 @@ export default function ProjectMenu(props) {
       if(res.ok)
       {
         res.json().then(data => {
-          console.log(data);
           setProjects(data)
           if(data==undefined || data==null)
           {
@@ -371,7 +363,6 @@ export default function ProjectMenu(props) {
 
   // otvaranje i zatvaranje Dijaloga 
   const handleClick = () => {
-    console.log("Otvoren dijalog")
     setOpenD(true);
   }
   const handleClose = () => {

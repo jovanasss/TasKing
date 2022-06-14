@@ -63,7 +63,7 @@ function CreateOrganisationForm (){
         let path = `/Main`; 
 
         // alert(JSON.stringify(type), JSON.stringify(teamName));
-        console.log(type, teamName , orgName);
+        //console.log(type, teamName , orgName);
         const organizacija = {
           //type : type,
           ime : orgName,
@@ -78,7 +78,7 @@ function CreateOrganisationForm (){
           },
         });
         proveraTima = await proveraTima.json();
-        console.log("Vrati tim :" ,proveraTima);
+        //console.log("Vrati tim :" ,proveraTima);
         if (proveraTima === 0){
           let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/", {
             method : 'POST',
@@ -96,9 +96,9 @@ function CreateOrganisationForm (){
             let idNoveOrg = result ;
             const admin = true ;
             const user = (JSON.parse(window.localStorage.getItem('user-info')));
-            console.log(user.id);
-            console.log("ID Nove Organizacije :" ,idNoveOrg);
-            console.log(status)
+            //console.log(user.id);
+            //("ID Nove Organizacije :" ,idNoveOrg);
+            //console.log(status)
             const ClanOrganizacije = {
               idKorisnika : user.id,
               idOrganizacije : idNoveOrg,
@@ -115,8 +115,8 @@ function CreateOrganisationForm (){
             let statusU = temp.status ;
             temp = await temp.json();
             let idClanaORG = temp ;
-            console.log("IDclanaOrganizacije :" ,idClanaORG);
-            console.log(statusU);
+            //console.log("IDclanaOrganizacije :" ,idClanaORG);
+            //console.log(statusU);
             
   
             const tim = {
@@ -124,7 +124,7 @@ function CreateOrganisationForm (){
               idOrganizacije : idNoveOrg,
               kod : generateCode(),
             }
-            console.log(tim);
+            //console.log(tim);
   
   
             let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
@@ -140,17 +140,17 @@ function CreateOrganisationForm (){
   
   
               let idNovogTima = rezultat ;
-              console.log("ID novog tima :" ,idNovogTima);
+              //console.log("ID novog tima :" ,idNovogTima);
               const vodja = true ;
               //result  = await result.json();
-              console.log(statusT);
+              //console.log(statusT);
   
               const ClanTima = {
                 idClanaOrganizacije : idClanaORG,
                 idtima : idNovogTima,
                 vodja : vodja
               }
-              console.log(ClanTima);
+              //console.log(ClanTima);
   
               let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
                 method : 'POST',
@@ -161,7 +161,7 @@ function CreateOrganisationForm (){
                 body : JSON.stringify(ClanTima)
               });
               
-              console.log(tmp.status);
+              //console.log(tmp.status);
               if(tmp.status === 200){
                 alert("Uspesno kreirana organizacija !")
                 navigate(path)

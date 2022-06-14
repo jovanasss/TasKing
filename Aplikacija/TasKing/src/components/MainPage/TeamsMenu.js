@@ -79,7 +79,6 @@ function SimpleDialog(props) {
     if (userName){
 
       const idOrg = (JSON.parse(window.localStorage.getItem('OrgID')));
-      console.log(idOrg);
 
       fetch("https://localhost:5001/Organizacija/PozoviUOrganizaciju/" + userName + "/" + idOrg, {
         method: "POST"
@@ -132,9 +131,7 @@ function SimpleDialog(props) {
                   }).then(res => {
                     if(res.ok)
                     {
-                      console.log(res);
                       res.json().then(data => {
-                        console.log(data)
                         setMembers(data)
                       });
                     }
@@ -168,9 +165,7 @@ function SimpleDialog(props) {
   }).then(res => {
     if(res.ok)
     {
-      console.log(res);
       res.json().then(data => {
-        console.log(data)
         setMembers(data)
       });
     }
@@ -294,9 +289,7 @@ export default function TeamsMenu(props){
     }).then(res => {
       if(res.ok)
       {
-        console.log(res);
         res.json().then(data => {
-          console.log(data);
           setTeams(data)
           if(data==undefined || data==null)
           {
@@ -374,7 +367,6 @@ export default function TeamsMenu(props){
 
     
     const idClanaOrg = (JSON.parse(window.localStorage.getItem('clanOrgID')));
-    console.log(idClanaOrg);
 
     let result = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuClana/" +idClanaOrg, {
       method : 'GET',
@@ -394,8 +386,6 @@ export default function TeamsMenu(props){
       kod : generateCode(),
       
     }
-    console.log(tim);
-
 
     let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName , {
       method : 'GET',
@@ -405,7 +395,6 @@ export default function TeamsMenu(props){
       },
     });
     proveraTima = await proveraTima.json();
-    console.log("Vrati tim :" ,proveraTima);
     if (proveraTima === 0){
       setOpenD(false)
       let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
@@ -421,10 +410,8 @@ export default function TeamsMenu(props){
       let statusT = rezultat.status;
       rezultat = await rezultat.json();
       let idNovogTima = rezultat ;
-      console.log("ID novog tima :" ,idNovogTima);
       const vodja = true ;
       //result  = await result.json();
-      console.log(statusT);
       
   
         const ClanTima = {
@@ -432,7 +419,6 @@ export default function TeamsMenu(props){
           idtima : idNovogTima,
           vodja : vodja
         }
-        console.log(ClanTima);
   
         let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
           method : 'POST',
@@ -456,7 +442,6 @@ export default function TeamsMenu(props){
   }
   // otvaranje i zatvaranje Dijaloga 
   const handleClick = () => {
-      console.log("Otvoren dijalog")
       setOpenD(true);
       setTeamError(false);
   }
@@ -522,7 +507,7 @@ export default function TeamsMenu(props){
     }
     else {
       // joinTeam(userID ,orgID)
-      console.log(teamCode)
+
 
       let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
         method : 'GET',
@@ -533,9 +518,7 @@ export default function TeamsMenu(props){
       });
       let statusTima = temp.status;
       temp = await temp.json();
-      console.log(temp);
       let idNovogTima = temp;
-      console.log(statusTima);
 
       if (temp != 0){
 
@@ -552,7 +535,6 @@ export default function TeamsMenu(props){
 
 
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
-        console.log(userN.id);
 
         const ClanOrganizacije = {
           idKorisnika : userN.id,
@@ -571,10 +553,7 @@ export default function TeamsMenu(props){
         let statusU = rezultat.status ;
         rezultat = await rezultat.json();
         let idClanaORG = rezultat ;
-        console.log("IDclanaOrganizacije :" ,idClanaORG);
-        console.log(statusU);
-
-
+  
         if (statusU === 200){
 
 
@@ -583,7 +562,6 @@ export default function TeamsMenu(props){
             idtima : idNovogTima,
             vodja : false
           }
-          console.log(ClanTima);
   
   
           let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
@@ -619,7 +597,6 @@ export default function TeamsMenu(props){
 
 
   const handleJoinClick = () => {
-    console.log("Otvoren dijalog")
     setOpenJoinD(true);
   }
     
@@ -651,16 +628,16 @@ export default function TeamsMenu(props){
                       </Typography>
               </ListItem>
               <ListItem key={2} style={{display: props.clanID!=-1? 'inline' : 'none'}}>
-                  <ThemeProvider theme={theme}>
-                    <Button >
-                      <IconButton onClick={() => {handleClick()}} sx={{backgroundColor: 'white', marginRight:'10px'}} >
+                    <div style={{marginLeft:"12px"}}>
+                      <IconButton onClick={() => {handleClick()}} sx={{backgroundColor: 'white', marginRight:'4px'}} >
                         <AddCircleIcon/>
                       </IconButton>
-                      <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left'}}>
-                          Add Team
+                      <ThemeProvider theme={theme}>
+                      <Typography variant="h7" sx={{fontWeight:'bold', textAlign: 'left', fontSize:"14px"}} color="primary">
+                          ADD TEAM
                       </Typography>
-                    </Button>
-                  </ThemeProvider>
+                      </ThemeProvider>
+                    </div>  
               </ListItem>
               {teams.map(team => (
                   <ListItem key={team.idTima+3} className={curTim==team.idTima? 'activeEnt' : null}>

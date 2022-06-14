@@ -52,19 +52,19 @@ function LoginForm()  {
         },
         body : JSON.stringify(user)
       });
-      console.log(JSON.stringify(user))
+      //console.log(JSON.stringify(user))
       let a = await result.json();
-      console.log(a);
+      //console.log(a);
       let status = result.status;
-      console.log(JSON.stringify(a));
-      console.log(result);
+      //console.log(JSON.stringify(a));
+      //console.log(result);
      // localStorage.setItem('user-info',JSON.stringify(a))
       // history.push("/main")
       if (a != 0){
         localStorage.setItem('user-info',JSON.stringify(a))
         localStorage.setItem('rememberMe',rememberMe);
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
-        console.log(userN.id);
+        //console.log(userN.id);
   
         let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+userN.id , {
           method : 'GET',
@@ -75,7 +75,7 @@ function LoginForm()  {
         });
         temp = await temp.json();
         let niz = [];
-        console.log(temp);
+        //console.log(temp);
         niz = temp ;
         let statusOrg = temp.status
         if (niz.length === 0){
@@ -106,7 +106,7 @@ function LoginForm()  {
       if (userName && password){
 
         // logovanje(user , pass)
-        console.log(userName ,password)
+        //console.log(userName ,password)
         login();
       }
     }

@@ -185,17 +185,19 @@ function MyAccount1({projects, user}){
           <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
             {projects.map((project, index) => (
            <Grid item md={4} sm={6} xs={12}>     
-            <Box sx={{margin:"0.5%" }}>
+            <Box sx={{margin:"0.5%" }}
+            key={project.id.toString()}>
             <Card variant="outlined" 
-            sx={{backgroundColor:"#d6e9de", boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)"}}>
-                <CardContent key={project.id}>
-                <Typography variant="h5" component="div">
+            sx={{backgroundColor:"#d6e9de", boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)"}}
+            key={project.id.toString()}>
+                <CardContent key={project.id.toString()}>
+                <Typography variant="h5" component="div" key={project.id.toString()}>
                     {"Name: " + project.naziv}
                 </Typography>
-                <Typography sx={{ fontSize: 14, height: "8vh", overflow: "auto" }} color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 14, height: "8vh", overflow: "auto" }} color="text.secondary" gutterBottom key={(project.id+1).toString()}>
                      {"Descripiton: " + project.opis}
                 </Typography>
-                  <Typography sx={{ mb: 1.5, fontSize:14 }} color="text.secondary">
+                  <Typography sx={{ mb: 1.5, fontSize:14 }} color="text.secondary" key={(project.id+2).toString()}>
                   Effect {procenat = showEffect(project.taskoviUkupni, project.taskoviUradjeni)}%
                   </Typography>
                   <div
@@ -223,7 +225,7 @@ function MyAccount1({projects, user}){
               </CardContent>
               <CardActions>
           <ThemeProvider theme={theme}>
-              <Button 
+              <Button
               variant="contained" 
               onClick={handleClickOpen("paper", index)}
               sx={{height:"30px", border:"2px solid black", borderRadius:"10px"}}

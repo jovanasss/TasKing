@@ -30,7 +30,6 @@ export default function LeftMenu(props){
   const showOrganisations = ()=>{
     
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    console.log(user.id);
 
 
     fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.id,
@@ -42,9 +41,7 @@ export default function LeftMenu(props){
     }).then(res => {
       if(res.ok)
       {
-        console.log(res);
         res.json().then(data => {
-          console.log(data);
           setOrganisations(data)
           if(data==undefined || data==null)
           return;
@@ -90,7 +87,6 @@ export default function LeftMenu(props){
     else {
       setOrgCode("")
       // joinTeam(userID ,orgID)
-      console.log(teamCode)
 
       let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
         method : 'GET',
@@ -101,9 +97,7 @@ export default function LeftMenu(props){
       });
       let statusTima = temp.status;
       temp = await temp.json();
-      console.log(temp);
       let idNovogTima = temp;
-      console.log(statusTima);
 
       if (temp != 0){
 
@@ -120,7 +114,6 @@ export default function LeftMenu(props){
 
 
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
-        console.log(userN.id);
 
         const ClanOrganizacije = {
           idKorisnika : userN.id,
@@ -139,9 +132,6 @@ export default function LeftMenu(props){
         let statusU = rezultat.status ;
         rezultat = await rezultat.json();
         let idClanaORG = rezultat ;
-        console.log("IDclanaOrganizacije :" ,idClanaORG);
-        console.log(statusU);
-
 
         if (statusU === 200){
 
@@ -151,7 +141,6 @@ export default function LeftMenu(props){
             idtima : idNovogTima,
             vodja : false
           }
-          console.log(ClanTima);
   
   
           let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
@@ -190,7 +179,6 @@ export default function LeftMenu(props){
     }
     else {
       // joinOrg(userID ,orgID)
-      console.log(orgCode)
 
       let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
         method : 'GET',
@@ -200,11 +188,9 @@ export default function LeftMenu(props){
         },
       });
       temp = await temp.json();
-      console.log(temp);
       let idNoveOrg = temp;
       if (temp != 0){
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
-        console.log(userN.id);
   
         const ClanOrganizacije = {
           idKorisnika : userN.id,

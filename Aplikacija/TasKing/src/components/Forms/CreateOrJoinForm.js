@@ -61,7 +61,7 @@ function CreateOrJoinForm(){
     else {
       setOrgCode("")
       // joinTeam(userID ,orgID)
-      console.log(teamCode)
+      //console.log(teamCode)
 
       let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
         method : 'GET',
@@ -72,9 +72,9 @@ function CreateOrJoinForm(){
       });
       let statusTima = temp.status;
       temp = await temp.json();
-      console.log(temp);
+      //console.log(temp);
       let idNovogTima = temp;
-      console.log(statusTima);
+      //console.log(statusTima);
 
       if (temp != 0){
 
@@ -91,7 +91,7 @@ function CreateOrJoinForm(){
 
 
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
-        console.log(userN.id);
+        //console.log(userN.id);
 
         const ClanOrganizacije = {
           idKorisnika : userN.id,
@@ -110,8 +110,8 @@ function CreateOrJoinForm(){
         let statusU = rezultat.status ;
         rezultat = await rezultat.json();
         let idClanaORG = rezultat ;
-        console.log("IDclanaOrganizacije :" ,idClanaORG);
-        console.log(statusU);
+        //console.log("IDclanaOrganizacije :" ,idClanaORG);
+        //console.log(statusU);
 
 
         if (statusU === 200){
@@ -122,7 +122,7 @@ function CreateOrJoinForm(){
             idtima : idNovogTima,
             vodja : false
           }
-          console.log(ClanTima);
+          //console.log(ClanTima);
   
   
           let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
@@ -164,7 +164,7 @@ function CreateOrJoinForm(){
     }
     else {
       // joinOrg(userID ,orgID)
-      console.log(orgCode)
+      //console.log(orgCode)
 
       let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
         method : 'GET',
@@ -174,11 +174,11 @@ function CreateOrJoinForm(){
         },
       });
       temp = await temp.json();
-      console.log(temp);
+      //console.log(temp);
       let idNoveOrg = temp;
       if (temp != 0){
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
-        console.log(userN.id);
+        //console.log(userN.id);
   
         const ClanOrganizacije = {
           idKorisnika : userN.id,

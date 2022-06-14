@@ -43,7 +43,6 @@ export default function UpProjectMenu(props) {
   const [project, setProject] = React.useState({})
   const showProjectData = ()=>{
     const proje = window.localStorage.getItem('projID');
-    console.log(proje);
 
     if(props.projectID==-1)
     {
@@ -59,9 +58,7 @@ export default function UpProjectMenu(props) {
     }).then(res => {
       if(res.ok)
       {
-        console.log(res);
         res.json().then(data => {
-          console.log(data);
           setProject(data)
         });
       }

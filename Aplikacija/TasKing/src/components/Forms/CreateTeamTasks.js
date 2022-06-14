@@ -65,7 +65,7 @@ function CreateTeamTasks(){
         };
         let arr = tasks.concat(task);
         setTasks(arr);
-        console.log(arr);
+        //console.log(arr);
         
         }
         else {
@@ -88,7 +88,7 @@ function CreateTeamTasks(){
 
 
         const idTima = (JSON.parse(window.localStorage.getItem('TimID')));
-        console.log(idTima);
+        //console.log(idTima);
 
 
 
@@ -98,7 +98,7 @@ function CreateTeamTasks(){
             //taskovi : tasks
             timID : idTima,
         }
-        console.log(projekat);
+        //console.log(projekat);
 
         if ( tasks.length !== 0){
 
@@ -120,16 +120,16 @@ function CreateTeamTasks(){
                 niz[task] = Object.assign(tasks[task] , idProjekta);
              })*/
     
-             console.log(tasks);
+             //console.log(tasks);
              // dodajemo prop idProjekta 
              tasks.forEach((element) => {
                 element.projekatID = idProjekta
               });
     
-              console.log(tasks)
+              //console.log(tasks)
               
     
-              console.log(status);
+              //console.log(status);
     
               // ako je ok dodajemo taskove 
               if (status === 200){
@@ -153,7 +153,7 @@ function CreateTeamTasks(){
               else {
     
                     // prikaz greske 
-                  console.log(status);
+                  //console.log(status);
               }
 
             }
