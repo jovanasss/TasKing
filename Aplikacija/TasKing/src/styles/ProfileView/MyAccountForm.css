@@ -29,6 +29,7 @@
     background-color: rgb(26, 167, 167);
     border-style:dotted;
     min-width: 250px;
+    margin-top: 20px;
 }
 
 .h3UserName, .h3Phone, .h3Email, .h2FirstLastName{

@@ -35,6 +35,9 @@ import './styles/ProfileView/ProfileForm.css';
 
 import { BrowserRouter ,Route ,Routes} from "react-router-dom";
 
+import { ReactNotifications, Store } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+
 
 function App() {
 
@@ -58,7 +61,7 @@ function App() {
 
   return (
     <div className="App">
-
+      <ReactNotifications />
 
       <Routes>
 

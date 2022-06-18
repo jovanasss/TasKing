@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { Store } from 'react-notifications-component';
 
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
@@ -120,7 +121,18 @@ function RequestsForm1({teamRequests, organisationRequests}){
             },
             body : JSON.stringify(ClanOrganizacije)
     });
-    alert("The invitation is successfully accepted 😀");
+    Store.addNotification({
+      title: "Success",
+      message: "The invitation is successfully accepted 😀",
+      type: "success",
+      insert: "top",
+      container: "top-center",
+      dismiss: {
+        duration: 2000,
+        onScreen: true
+      }
+    });
+    //alert("The invitation is successfully accepted 😀");
     let o = organisations.filter(org => org.id != orgID);
     setOrganisations(o);
   }
@@ -166,7 +178,18 @@ function RequestsForm1({teamRequests, organisationRequests}){
        });
       })
   })
-    alert("The invitation is successfully accepted 😀");
+  Store.addNotification({
+    title: "Success",
+    message: "The invitation is successfully accepted 😀",
+    type: "success",
+    insert: "top",
+    container: "top-center",
+    dismiss: {
+      duration: 2000,
+      onScreen: true
+    }
+  });
+    //alert("The invitation is successfully accepted 😀");
     let t = teams.filter(team => team.id != timID);
     setTeams(t);
   }
@@ -179,8 +202,19 @@ function RequestsForm1({teamRequests, organisationRequests}){
         headers:{
             "Content-Type":"application/json"
         },
-    })
-     alert("The invitation is rejected");
+    });
+    Store.addNotification({
+      title: "Information",
+      message: "The invitation is rejected",
+      type: "info",
+      insert: "top",
+      container: "top-center",
+      dismiss: {
+        duration: 2000,
+        onScreen: true
+      }
+    });
+     //alert("The invitation is rejected");
      let o = organisations.filter(org => org.id != orgID);
      setOrganisations(o);
   }
@@ -193,8 +227,19 @@ function RequestsForm1({teamRequests, organisationRequests}){
         headers:{
             "Content-Type":"application/json"
         },
-    })
-     alert("The invitation is rejected");
+    });
+    Store.addNotification({
+      title: "Information",
+      message: "The invitation is rejected",
+      type: "info",
+      insert: "top",
+      container: "top-center",
+      dismiss: {
+        duration: 2000,
+        onScreen: true
+      }
+    });
+     //alert("The invitation is rejected");
      let t = teams.filter(team => team.id != timID);
      setTeams(t);
   }

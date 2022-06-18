@@ -31,6 +31,7 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AppBar from '@mui/material/AppBar';
 
 const drawerwidth = 240;
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
@@ -269,17 +270,37 @@ function ProfileForm1({user}){
 
       return (
       <div>
-        <Toolbar>
+        <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor:"transparent",
+          boxShadow:"0px 0px 0px 0px",
+          color:"black"
+        }}
+      >
+         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'block' } }}
+            sx={{ mr: 2, display: { sm: 'block', md: 'block', xs: 'block' } }}
           >
             <MenuIcon />
           </IconButton>
         </Toolbar>
+      </AppBar>
+        {/*<Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'block', md: 'block', xs: 'block' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+      </Toolbar>*/}
       <ThemeProvider theme={theme}>
       <Drawer
           variant="temporary"
@@ -377,7 +398,27 @@ function ProfileForm2({user}){
 
   return (
     <div>
-      <Toolbar>
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor:"transparent",
+          boxShadow:"0px 0px 0px 0px",
+          color:"black"
+        }}
+      >
+         <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'block', md: 'block', xs: 'block' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      {/*<Toolbar>
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -387,7 +428,7 @@ function ProfileForm2({user}){
         >
           <MenuIcon />
         </IconButton>
-      </Toolbar>
+      </Toolbar>*/}
     <ThemeProvider theme={theme}>
     <Drawer
         variant="temporary"

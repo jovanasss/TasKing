@@ -23,6 +23,9 @@ import { ListItemButton } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import { Switch } from "@mui/material";
 import { pink } from "@mui/material/colors";
+import { Alert } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import { Store } from 'react-notifications-component';
 
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
@@ -211,17 +214,50 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
         function changeUsername(){
           const user = (JSON.parse(window.localStorage.getItem('user-info')));
           if(username == null){
-            alert("The field username must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field username must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field username must be filled in!");
             return
           }
 
           if(username.length == 0){
-            alert("The field username must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field username must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field username must be filled in!");
             return
           }
 
           if(username === user.korisnickoIme){
-            alert("This is already a username!");
+            Store.addNotification({
+              title: "Information",
+              message: "This is already a username",
+              type: "info",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("This is already a username!");
             return
           }
 
@@ -232,18 +268,51 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                   "Content-Type":"application/json"
               },
           })
-           alert("Username is successfully changed 😀");
+          Store.addNotification({
+            title: "Success",
+            message: "Username is successfully changed 😀",
+            type: "success",
+            insert: "top",
+            container: "top-center",
+            dismiss: {
+              duration: 2000,
+              onScreen: true
+            }
+          });
+           //alert("Username is successfully changed 😀");
            return
         }
 
         function changePhone(){
           if(phone == null){
-            alert("The field phone number must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field phone number must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field phone number must be filled in!");
             return
           }
 
           if(phone.length == 0){
-            alert("The field phone number must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field phone number must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field phone number must be filled in!");
             return
           }
 
@@ -255,7 +324,18 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                   "Content-Type":"application/json"
               },
           })
-          alert("Phone number is successfully changed 😀");
+          Store.addNotification({
+            title: "Success!",
+            message: "Phone number is successfully changed 😀",
+            type: "success",
+            insert: "top",
+            container: "top-center",
+            dismiss: {
+              duration: 2000,
+              onScreen: true
+            }
+          });
+          //alert("Phone number is successfully changed 😀");
           return
         }
 
@@ -263,43 +343,142 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
           const user = (JSON.parse(window.localStorage.getItem('user-info')));
 
           if(currentpass == null){
-            alert("The field current password must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field current password must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field current password must be filled in!");
             return
           }
           if(newpass == null){
-            alert("The field new password must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field new password must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field new password must be filled in!");
             return
           }
           if(confirmnewpass == null){
-            alert("The field confirm new password must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field confirm new password must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field confirm new password must be filled in!");
             return
           }
 
           if(currentpass.length == 0){
-            alert("The field current password must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field current password must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field current password must be filled in!");
             return
           }
           if(newpass.length == 0){
-            alert("The field new password must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field new password must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field new password must be filled in!");
             return
           }
           if(confirmnewpass.length == 0){
-            alert("The field confirm new password must be filled in!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "The field confirm new password must be filled in!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("The field confirm new password must be filled in!");
             return
           }
 
           if(currentpass !== user.lozinka){
-            alert("Wrong current password!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "Wrong current password!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("Wrong current password!");
             return
           }
 
           if(newpass !== confirmnewpass){
-            alert("New password and confirm new password are not the same!");
+            Store.addNotification({
+              title: "Warning!",
+              message: "New password and confirm new password are not the same!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("New password and confirm new password are not the same!");
             return;
           }
 
           if(newpass == confirmnewpass == currentpass){
-            alert("This is already a password!");
+            Store.addNotification({
+              title: "Information",
+              message: "This is already a password!",
+              type: "info",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("This is already a password!");
             return;
           }
 
@@ -310,7 +489,18 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                   "Content-Type":"application/json"
               },
           })
-          alert("Password is successfully changed 😀");
+          Store.addNotification({
+            title: "Success",
+            message: "Password is successfully changed 😀",
+            type: "success",
+            insert: "top",
+            container: "top-center",
+            dismiss: {
+              duration: 2000,
+              onScreen: true
+            }
+          });
+          //alert("Password is successfully changed 😀");
           return
         }
 
@@ -384,7 +574,18 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                   "Content-Type":"application/json"
               },
           })
-          alert("Photo is successfully changed 😀")
+          Store.addNotification({
+            title: "Success",
+            message: "Photo is successfully changed 😀",
+            type: "success",
+            insert: "top",
+            container: "top-center",
+            dismiss: {
+              duration: 2000,
+              onScreen: true
+            }
+          });
+          //alert("Photo is successfully changed 😀")
           window.location.reload(false);
         }
 
@@ -596,7 +797,18 @@ function PaperListTeams({ teams }){
                   "Content-Type":"application/json"
               },
           })
-          alert("You left the team");
+          Store.addNotification({
+            title: "Information",
+            message: "You left the team",
+            type: "info",
+            insert: "top",
+            container: "top-center",
+            dismiss: {
+              duration: 2000,
+              onScreen: true
+            }
+          });
+          //alert("You left the team");
           let t = teams1.filter(team => team.id != timID);
           setTeams1(t);
           handleClose();
@@ -678,7 +890,18 @@ function PaperListOrganisations({ organisations }){
             "Content-Type":"application/json"
         },
     })
-    alert("You left the organisation");
+    Store.addNotification({
+      title: "Information",
+      message: "You left the organisation",
+      type: "info",
+      insert: "top",
+      container: "top-center",
+      dismiss: {
+        duration: 2000,
+        onScreen: true
+      }
+    });
+    //alert("You left the organisation");
     let o = organisations1.filter(org => org.id != orgID);
     setOrganisations1(o);
     handleClose();
