@@ -133,7 +133,8 @@ namespace TasKing.Controllers
                                 imeTima = p.tim.ime,
                                 vodja = p.vodjaTima,
                                 vremePosecivanja = p.vremePosecivanja,
-                                slika = p.tim.slika
+                                slika = p.tim.slika,
+                                kod = p.tim.kod
                             }).ToArrayAsync();
                         
                             return Ok(clanInfo);

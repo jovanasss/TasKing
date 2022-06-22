@@ -20,6 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import { blue } from '@mui/material/colors';
 import { ThemeProvider,createTheme } from '@mui/material/styles';
+import { Store } from 'react-notifications-component';
 
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
 
@@ -110,7 +111,7 @@ function SimpleDialog(props) {
                     }
                     else
                     {
-                      alert("uneli ste pogresno korisnicko ime ili lozinku");
+                      alert("desila se greska pri ucitavanju timova korisnika");
                     }
                   })
               }
@@ -134,22 +135,68 @@ function SimpleDialog(props) {
         }).then(res =>{
           if(res.ok)
             {
-              alert("zahtev je uspesno poslat");
+              Store.addNotification({
+                title: "Success",
+                message: "you have successfully invited a member",
+                type: "success",
+                insert: "top",
+                container: "top-center",
+                dismiss: {
+                  duration: 2000,
+                  onScreen: true
+                }
+              });
             }
             else
             {
               res.json().then(data => {
                   if(data==1)
-                  alert("korisnik ne postoji");
+                  {
+                    Store.addNotification({
+                      title: "User doesn't exist",
+                      message: "We haven't found a user with such username",
+                      type: "danger",
+                      insert: "top",
+                      container: "top-center",
+                      dismiss: {
+                        duration: 2000,
+                        onScreen: true
+                      }
+                    });
+                  }
 
                   if(data==2)
-                  alert("organizacija ne postoji");
+                  alert("tim ne postoji");
 
                   if(data==3)
-                  alert("zahtev je vec poslat");
+                  {
+                    Store.addNotification({
+                      title: "The ivite is already sent",
+                      message: "You've already sent a invite to this member",
+                      type: "danger",
+                      insert: "top",
+                      container: "top-center",
+                      dismiss: {
+                        duration: 2000,
+                        onScreen: true
+                      }
+                    });
+                  }
 
                   if(data==4)
-                  alert("korisnik je vec clan organizacije");
+                  {
+                    Store.addNotification({
+                      title: "The user is already an organisation member",
+                      message: "",
+                      type: "danger",
+                      insert: "top",
+                      container: "top-center",
+                      dismiss: {
+                        duration: 2000,
+                        onScreen: true
+                      }
+                    });
+                  }
               });
             }
         })
@@ -175,7 +222,7 @@ function SimpleDialog(props) {
     }
     else
     {
-      alert("uneli ste pogresno korisnicko ime ili lozinku");
+      alert("Greska pri vracanju timova korisnika");
     }
   })
  }, [props.timID]);
@@ -196,6 +243,12 @@ function SimpleDialog(props) {
        variant="contained"
        color="primary">
         Invite
+      </Button>
+      <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
+       onClick={() => {navigator.clipboard.writeText(window.localStorage.getItem('TimKod'))}}
+       color="primary"
+       variant="contained">
+        Copy code
       </Button>
       </ThemeProvider>
       </div>
@@ -270,6 +323,7 @@ export default function ProjectMenu(props) {
   const [prevTim, setPrevTim] = React.useState(-1)
   const boje = ['rgb(147, 219, 217)', 'rgb(17, 156, 151)']
   const displej = ['none', 'inline']
+  const [userProfilna, setUserProfilna] = React.useState(null);
 
   const [openSimple, setOpenSimple] = React.useState(false);
 
@@ -340,7 +394,7 @@ export default function ProjectMenu(props) {
       }
       else
       {
-        alert("uneli ste pogresno korisnicko ime ili lozinku");
+        alert("Greska pri vracanju projekata tima");
       }
     })
   }
@@ -355,6 +409,24 @@ export default function ProjectMenu(props) {
   React.useEffect(() => {
      showProjects();
   }, [props.timID]);
+
+  React.useEffect(()=>{
+    const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
+        {
+            method:"GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => {
+            res.json()
+            .then(data => {
+              if(data!=null)
+              setUserProfilna(data[0].profilnaSlika);
+              console.log(data[0].profilnaSlika + "profilna");
+            });
+        })
+  },[])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -454,9 +526,9 @@ export default function ProjectMenu(props) {
             </Typography>
           </Button>
           </ThemeProvider>
-            <IconButton onClick={() => {localStorage.setItem('ProfileUser-info', JSON.parse(window.localStorage.getItem('user-info')).id); navigate('/Profile')}} sx={{marginLeft:"0.5%"}}>
+            <Avatar src={"../../profile/" + userProfilna} onClick={() => {localStorage.setItem('ProfileUser-info', JSON.parse(window.localStorage.getItem('user-info')).id); navigate('/Profile')}} sx={{marginLeft:"5%", width:'70px', height:'70px'}}>
               <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
-            </IconButton>
+            </Avatar>
             </div>
       </Box>
       <ThemeProvider theme={theme}>

@@ -12,6 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import GroupsIcon from '@mui/icons-material/Groups';
 import CodeIcon from '@mui/icons-material/Code';
+import { Store } from 'react-notifications-component';
 const drawerWidth = 240     
 
 
@@ -73,7 +74,7 @@ export default function LeftMenu(props){
       }
       else
       {
-        alert("uneli ste pogresno korisnicko ime ili lozinku");
+        alert("desila se greska pri ucitavanju organizacija korisnika");
       }
     })
   }
@@ -161,7 +162,17 @@ export default function LeftMenu(props){
         }
       }
       else {
-        alert("Netacan kod !")
+        Store.addNotification({
+          title: "Invalid code",
+          message: "The code you enter isn't valid please try again",
+          type: "danger",
+          insert: "top",
+          container: "top-center",
+          dismiss: {
+            duration: 2000,
+            onScreen: true
+          }
+        });
         setOrgCodeError(false)
         setTeamCodeError(true)
         setTeamCode("");
@@ -179,6 +190,7 @@ export default function LeftMenu(props){
     }
     else {
       // joinOrg(userID ,orgID)
+      setTeamCode("")
 
       let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
         method : 'GET',
@@ -208,7 +220,17 @@ export default function LeftMenu(props){
           });
           let noviStatus = tmp.status;
           if ( noviStatus === 200){
-              alert("Uspesno ste se uclanili u organizaciju")
+            Store.addNotification({
+              title: "Joined!",
+              message: "you have successfully joined the organization",
+              type: "success",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
               window.location.reload(false);
           }
   
@@ -216,8 +238,20 @@ export default function LeftMenu(props){
         // routeChange()
       }
       else {
-        alert("Netacan kod !")
-        setOrgCodeError(true);
+        Store.addNotification({
+          title: "Invalid code",
+          message: "The code you enter isn't valid please try again",
+          type: "danger",
+          insert: "top",
+          container: "top-center",
+          dismiss: {
+            duration: 2000,
+            onScreen: true
+          }
+        });
+        setOrgCodeError(true)
+        setTeamCodeError(false)
+        setOrgCode("");
       }
       }
 
@@ -292,7 +326,17 @@ const handleOrgClick = () => {
             "Content-Type":"application/json"
         },
     })
-    alert("Photo is successfully changed 😀");
+    Store.addNotification({
+      title: "Success",
+      message: "you have successfully changed your photo",
+      type: "success",
+      insert: "top",
+      container: "top-center",
+      dismiss: {
+        duration: 2000,
+        onScreen: true
+      }
+    });
     //const ClanOrgID = (JSON.parse(window.localStorage.getItem('clanOrgID')));
     //localStorage.setItem('clanOrgIDBackup',ClanOrgID);
     window.location.reload(false);
@@ -383,7 +427,7 @@ const handleOrgClick = () => {
                     <div  className="divIcons"><div className="divIcon"><GroupsIcon /></div></div>
                         <ThemeProvider theme={theme}>
                             <TextField onChange={ (e) => setTeamCode(e.target.value) } error={teamCodeError}
-                            value = {orgCode}
+                            value = {teamCode}
                             sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
                             id="outlined-basic" label="Enter Code" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
                         </ThemeProvider>

@@ -22,6 +22,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { blue } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Store } from 'react-notifications-component';
 
 const drawerWidth = 240
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
@@ -116,7 +117,7 @@ function SimpleDialog(props) {
     }
     else
     {
-      alert("uneli ste pogresno korisnicko ime ili lozinku");
+      alert("greska pri vracanju prijava");
     }
   })
  }, [props.taskID]);
@@ -238,7 +239,7 @@ const refreshTasks = () => {
       }
       else
       {
-        alert("");
+        alert("greska pri refreshovanju taskova");
       }
     })
 }  
@@ -605,7 +606,17 @@ function TaskList(props){
 
       if (bodovi == 0)
       {
-        alert("niste uneli broj bodova");
+        Store.addNotification({
+          title: "Enter the number of points",
+          message: "You did not enter a number of points",
+          type: "danger",
+          insert: "top",
+          container: "top-center",
+          dismiss: {
+            duration: 2000,
+            onScreen: true
+          }
+        });
         return;
       }
       setOpenD(false)
@@ -630,7 +641,17 @@ function TaskList(props){
     let statusT = result.status;
     result = await result.json();
     if (result === 0){
-      alert("Task sa unetim imenom vec postoji !");
+      Store.addNotification({
+        title: "Task with such name already exists in your project",
+        message: "Make a task with a different name",
+        type: "danger",
+        insert: "top",
+        container: "top-center",
+        dismiss: {
+          duration: 2000,
+          onScreen: true
+        }
+      });
     }
 
     fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID  + "/" + window.localStorage.getItem('clanTimaID'),
@@ -648,7 +669,7 @@ function TaskList(props){
       }
       else
       {
-        alert("");
+        alert("Greska pri vracanju informacija o projektu");
       }
     })
     

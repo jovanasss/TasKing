@@ -15,6 +15,7 @@ import { blue } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import GroupsIcon from '@mui/icons-material/Groups';
+import { Store } from 'react-notifications-component';
 
 const drawerWidth = 240
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
@@ -85,22 +86,68 @@ function SimpleDialog(props) {
         }).then(res =>{
           if(res.ok)
             {
-              alert("zahtev je uspesno poslat");
+              Store.addNotification({
+                title: "Success",
+                message: "you have successfully invited a member",
+                type: "success",
+                insert: "top",
+                container: "top-center",
+                dismiss: {
+                  duration: 2000,
+                  onScreen: true
+                }
+              });
             }
             else
             {
               res.json().then(data => {
-                  if(data==1)
-                  alert("korisnik ne postoji");
+                if(data==1)
+                {
+                  Store.addNotification({
+                    title: "User doesn't exist",
+                    message: "We haven't found a user with such username",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    dismiss: {
+                      duration: 2000,
+                      onScreen: true
+                    }
+                  });
+                }
 
-                  if(data==2)
-                  alert("organizacija ne postoji");
+                if(data==2)
+                alert("organizacija ne postoji");
 
-                  if(data==3)
-                  alert("zahtev je vec poslat");
+                if(data==3)
+                {
+                  Store.addNotification({
+                    title: "The ivite is already sent",
+                    message: "You've already sent a invite to this member",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    dismiss: {
+                      duration: 2000,
+                      onScreen: true
+                    }
+                  });
+                }
 
-                  if(data==4)
-                  alert("korisnik je vec clan organizacije");
+                if(data==4)
+                {
+                  Store.addNotification({
+                    title: "The user is already an organisation member",
+                    message: "",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    dismiss: {
+                      duration: 2000,
+                      onScreen: true
+                    }
+                  });
+                }
               });
             }
         })
@@ -137,7 +184,7 @@ function SimpleDialog(props) {
                     }
                     else
                     {
-                      alert("uneli ste pogresno korisnicko ime ili lozinku");
+                      alert("Greska pri vracanju organizacija korisnika");
                     }
                   })
               }
@@ -171,7 +218,7 @@ function SimpleDialog(props) {
     }
     else
     {
-      alert("uneli ste pogresno korisnicko ime ili lozinku");
+      alert("Greska pri vracanju organizacija korisnika");
     }
   })
  }, [props.clanID]);
@@ -297,6 +344,7 @@ export default function TeamsMenu(props){
             setClanTima(-1)
             localStorage.setItem('TimID',-1)
             localStorage.setItem('clanTimaID',-1)
+            localStorage.setItem('TimKod', null)
             setVodja(false)
             return;
           }
@@ -307,6 +355,7 @@ export default function TeamsMenu(props){
             setClanTima(-2)
             localStorage.setItem('TimID',-2)
             localStorage.setItem('clanTimaID',-2)
+            localStorage.setItem('TimKod', null)
             setVodja(false)
             return;
           }
@@ -318,6 +367,7 @@ export default function TeamsMenu(props){
               setClanTima(data[0].idClan) 
               localStorage.setItem('TimID',data[0].idTima)
               localStorage.setItem('clanTimaID',data[0].idClan)
+              localStorage.setItem('TimKod', data[0].kod)
             }
             else
             {
@@ -331,6 +381,7 @@ export default function TeamsMenu(props){
             setClanTima(data[0].idClan) 
             localStorage.setItem('TimID',data[0].idTima)
             localStorage.setItem('clanTimaID',data[0].idClan)
+            localStorage.setItem('TimKod', data[0].kod)
           }
           for(let i=0; i< data.length; i++)
           {
@@ -345,7 +396,7 @@ export default function TeamsMenu(props){
       }
       else
       {
-        alert("");
+        alert("Greska pri vracanju timova korisnika");
       }
     })
   }
@@ -434,7 +485,17 @@ export default function TeamsMenu(props){
         window.location.reload(false);
     }
     else{
-      alert("Tim sa unetim imenom vec postoji !");
+      Store.addNotification({
+        title: "Warning",
+        message: "Team with such name already exists in this organisation",
+        type: "danger",
+        insert: "top",
+        container: "top-center",
+        dismiss: {
+          duration: 2000,
+          onScreen: true
+        }
+      });
       setTeamError(true);  
     }
 
@@ -496,7 +557,17 @@ export default function TeamsMenu(props){
             "Content-Type":"application/json"
         },
     })
-    alert("Photo is successfully changed 😀");
+    Store.addNotification({
+      title: "Success",
+      message: "you have successfully changed your photo",
+      type: "success",
+      insert: "top",
+      container: "top-center",
+      dismiss: {
+        duration: 2000,
+        onScreen: true
+      }
+    });
     window.location.reload(false);
   }
 
@@ -575,13 +646,33 @@ export default function TeamsMenu(props){
   
           let statusTmp = tmp.status;
           if ( statusTmp === 200){
-            alert("uspesno ste uclanjeni u tim")
+            Store.addNotification({
+              title: "Joined!",
+              message: "you have successfully joined the organization",
+              type: "success",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
             window.location.reload(false);
           }
         }
       }
       else {
-        alert("Netacan kod !")
+        Store.addNotification({
+          title: "Invalid code",
+          message: "The code you enter isn't valid please try again",
+          type: "danger",
+          insert: "top",
+          container: "top-center",
+          dismiss: {
+            duration: 2000,
+            onScreen: true
+          }
+        });
         setTeamCodeError(true)
         setTeamCode("");
       }
@@ -650,7 +741,7 @@ export default function TeamsMenu(props){
                             {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
                         </Typography>
               </Button>*/}
-               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
+               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan); localStorage.setItem('TimKod', team.kod);  setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
                 T
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
