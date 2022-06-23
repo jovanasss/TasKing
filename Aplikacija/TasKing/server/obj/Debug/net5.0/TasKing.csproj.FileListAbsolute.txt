@@ -212,3 +212,4 @@ F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0
 F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.pdb
 F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.genruntimeconfig.cache
 C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.StaticWebAssets.xml
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Abstractions.dll

@@ -54,10 +54,25 @@ const theme = createTheme({
 
     const [teamRequests, setTeamRequests] = useState(null);
     const [organisationRequests, setOrganisationRequests] = useState(null);
+    const [userID ,setUserID] = useState(null);
 
     useEffect(() =>{
+      
       const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Tim/VratiPoziveIzTima/"+user.id,
+      fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+user.value,
+      {
+          method:"GET",
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      }).then(res => {
+          res.json()
+          .then(data => {
+              setUserID(data[0].id);
+              console.log(data[0].id);
+          });
+      })
+        fetch("https://localhost:5001/Tim/VratiPoziveIzTima/"+ user.value,
         {
             method:"GET",
             headers: {
@@ -73,7 +88,7 @@ const theme = createTheme({
 
     useEffect(() =>{
       const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Organizacija/VratiPoziveIzOrganizacije/"+user.id,
+        fetch("https://localhost:5001/Organizacija/VratiPoziveIzOrganizacije/"+user.value,
         {
             method:"GET",
             headers: {
@@ -89,24 +104,25 @@ const theme = createTheme({
 
     return(
    <div className= "MaindivRequestsForm">
-     {teamRequests && organisationRequests && <RequestsForm1 teamRequests={teamRequests} organisationRequests={organisationRequests} />}
+     {teamRequests && organisationRequests && userID && <RequestsForm1 teamRequests={teamRequests} organisationRequests={organisationRequests} userID={userID} />}
    </div>
        )
    }
 
-function RequestsForm1({teamRequests, organisationRequests}){
+function RequestsForm1({teamRequests, organisationRequests,userID}){
 
   const [teams, setTeams] = useState(teamRequests);
   const [organisations, setOrganisations] = useState(organisationRequests);
 
   function acceptInvitationforOrganisation(orgID){
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
+
     const ClanOrganizacije = {
-      idKorisnika : user.id,
+      idKorisnika : userID,
       idOrganizacije : orgID,
       admin : false
     }
-    fetch("https://localhost:5001/Organizacija/PrihvatiPozivUOrganizaciju/"+user.id+"/"+orgID,
+    fetch("https://localhost:5001/Organizacija/PrihvatiPozivUOrganizaciju/"+user.value+"/"+orgID,
     {
         method:"PUT",
         headers:{
@@ -139,13 +155,16 @@ function RequestsForm1({teamRequests, organisationRequests}){
 
   function acceptInvitationforTeam(timID, orgID){
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
+
+
+
     const ClanOrganizacije = {
-      idKorisnika : user.id,
+      idKorisnika : userID,
       idOrganizacije : orgID,
       admin : false
     }
   
-    fetch("https://localhost:5001/Tim/PrihvatiPozivUTim/"+user.id+"/"+timID,
+    fetch("https://localhost:5001/Tim/PrihvatiPozivUTim/"+user.value+"/"+timID,
     {
         method:"PUT",
         headers:{
@@ -196,7 +215,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
 
   function rejectInvitationforOrganisation(orgID){
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Organizacija/OdbijPozivUOrganizaciju/"+user.id+"/"+orgID,
+    fetch("https://localhost:5001/Organizacija/OdbijPozivUOrganizaciju/"+user.value+"/"+orgID,
     {
         method:"DELETE",
         headers:{
@@ -221,7 +240,7 @@ function RequestsForm1({teamRequests, organisationRequests}){
 
   function rejectInvitationforTeam(timID){
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Tim/OdbijPozivUTim/"+user.id+"/"+timID,
+    fetch("https://localhost:5001/Tim/OdbijPozivUTim/"+user.value+"/"+timID,
     {
         method:"DELETE",
         headers:{

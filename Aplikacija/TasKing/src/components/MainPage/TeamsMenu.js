@@ -255,7 +255,7 @@ function SimpleDialog(props) {
         backgroundColor : darkMode ? "rgb(26,25,25)" : "white",
         color : darkMode ? "white" : "black",
         }}>
-        {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info')).id).map((member) => (
+        {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info'))).map((member) => (
           <ListItem key={member.clanOrgID}>
             <ListItemAvatar>
               <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
@@ -608,7 +608,7 @@ export default function TeamsMenu(props){
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
 
         const ClanOrganizacije = {
-          idKorisnika : userN.id,
+          idKorisnika : userN,
           idOrganizacije : idORG,
           admin : false
         }

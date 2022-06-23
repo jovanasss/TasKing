@@ -16,9 +16,12 @@ namespace TasKing.Controllers
     {
         public TasKingContext Context { get; set; }
 
-        public OrganizacijaController(TasKingContext context)
+        private readonly JwtService jwtService ;
+
+        public OrganizacijaController(TasKingContext context , JwtService JwtService)
         {
             Context = context;
+            jwtService = JwtService;
         }
 
         [Route("KreirajOrganizaciju")]
@@ -102,7 +105,7 @@ namespace TasKing.Controllers
                 }
                 else
                 {
-                    if(clan.izbacen=true)
+                    if(clan.izbacen == true)
                     {
                         clan.izbacen=false;
                         await Context.SaveChangesAsync();
@@ -146,12 +149,16 @@ namespace TasKing.Controllers
         }
         
         
-        [Route("VratiOrganizacijeKorisnika/{userID}")]
+        [Route("VratiOrganizacijeKorisnika/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiOrganizacijeKorisnika(int userID)
+        public async Task<ActionResult> VratiOrganizacijeKorisnika(string jwt)
         {
             try
             {
+
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
+
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                 .Include(k => k.clanoviOrganizacije.Where(c => c.izbacen == false))
                 .ThenInclude(c => c.organizacija)
@@ -227,12 +234,14 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiPoziveIzOrganizacije/{userID}")]
+        [Route("VratiPoziveIzOrganizacije/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiPoziveIzOrganizacije(int userID)
+        public async Task<ActionResult> VratiPoziveIzOrganizacije(string jwt)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                 .Include(k => k.primljeniPoziviIzOrganizacije.Where(p => p.prihvacen == false))
                 .ThenInclude(p => p.organizacija)
@@ -254,12 +263,14 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("IzbaciKorisnikaIzOrganizacije/{userID}/{orgID}")]
+        [Route("IzbaciKorisnikaIzOrganizacije/{jwt}/{orgID}")]
         [HttpPut]
-        public async Task<ActionResult> IzbaciKorisnikaIzOrganizacije(int userID, int orgID)
+        public async Task<ActionResult> IzbaciKorisnikaIzOrganizacije(string jwt, int orgID)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
                 var clanorg = await Context.ClanoviOrganizacije.Where(c => c.korisnik.ID == userID && c.organizacija.ID == orgID)
                     .FirstOrDefaultAsync();
 
@@ -278,12 +289,14 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PrihvatiPozivUOrganizaciju/{userID}/{orgID}")]
+        [Route("PrihvatiPozivUOrganizaciju/{jwt}/{orgID}")]
         [HttpPut]
-        public async Task<ActionResult> PrihvatiPozivUOrganizaciju(int userID, int orgID)
+        public async Task<ActionResult> PrihvatiPozivUOrganizaciju(string jwt, int orgID)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
                 var poziv = await Context.PoziviUOrganizaciju.Where(p => p.pozvaniKorisnik.ID == userID && p.organizacija.ID == orgID)
                     .FirstOrDefaultAsync();
 
@@ -302,12 +315,14 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("OdbijPozivUOrganizaciju/{userID}/{orgID}")]
+        [Route("OdbijPozivUOrganizaciju/{jwt}/{orgID}")]
         [HttpDelete]
-        public async Task<ActionResult> OdbijPozivUOrganizacije(int userID, int orgID)
+        public async Task<ActionResult> OdbijPozivUOrganizacije(string jwt, int orgID)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
                 var poziv = await Context.PoziviUOrganizaciju.Where(p => p.pozvaniKorisnik.ID == userID && p.organizacija.ID == orgID)
                     .FirstOrDefaultAsync();
 
@@ -326,12 +341,15 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiIDClanaOrganizacije/{userID}/{orgID}")]
+        [Route("VratiIDClanaOrganizacije/{jwt}/{orgID}")]
         [HttpGet]
-        public async Task<ActionResult> VratiIDClanaOrganizacije(int userID, int orgID)
+        public async Task<ActionResult> VratiIDClanaOrganizacije(string jwt, int orgID)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
+                
                 var clanorg = await Context.ClanoviOrganizacije.Where(c => c.korisnik.ID == userID && c.organizacija.ID == orgID)
                     .FirstOrDefaultAsync();
 

@@ -29,7 +29,7 @@ import './styles/MainPage/UpProjectMenu.css';
 
 
 import { Paper } from '@mui/material';
-import ProfileForm from './components/ProfileView/ProfileForm';
+import Profile from './components/ProfileView/ProfileForm';
 import './styles/ProfileView/MyAccountForm.css';
 import './styles/ProfileView/ProfileForm.css';
 
@@ -68,7 +68,7 @@ function App() {
       <Route  path= "/" element={<LoginForm/>}/>
       <Route  path= "/CoJ" element={<CreateOrJoinForm/>}/>
       <Route  path= "/Main" element={<MainScreen/>}/>
-      <Route  path= "/Profile/*" element={<ProfileForm />}/>
+      <Route  path= "/Profile/*" element={<Profile />}/>
       <Route  path= "/SignUp" element={<SignUpForm />}/>
       <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
       <Route  path= "/acc" element={<AccountCreatedForm />}/>

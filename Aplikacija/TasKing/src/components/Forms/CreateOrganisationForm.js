@@ -95,12 +95,21 @@ function CreateOrganisationForm (){
   
             let idNoveOrg = result ;
             const admin = true ;
-            const user = (JSON.parse(window.localStorage.getItem('user-info')));
+            const token = (JSON.parse(window.localStorage.getItem('user-info')));
+            let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
+              method : 'GET',
+              headers : {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json; charset=utf-8'
+              },
+            })
+            userID = await userID.json();
+            console.log(userID[0].id);
             //console.log(user.id);
             //("ID Nove Organizacije :" ,idNoveOrg);
             //console.log(status)
             const ClanOrganizacije = {
-              idKorisnika : user.id,
+              idKorisnika : userID[0].id,
               idOrganizacije : idNoveOrg,
               admin : admin
             }        

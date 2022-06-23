@@ -16,9 +16,12 @@ namespace TasKing.Controllers
     {
         public TasKingContext Context { get; set; }
 
-        public TimController(TasKingContext context)
+        private readonly JwtService jwtService ;
+
+        public TimController(TasKingContext context , JwtService JwtService)
         {
             Context = context;
+            jwtService = JwtService;
         }
 
         [Route("KreirajTim")]
@@ -106,7 +109,7 @@ namespace TasKing.Controllers
                 }
                 else
                 {
-                    if(clan.izbacen=true)
+                    if(clan.izbacen ==true)
                     {
                         clan.izbacen=false;
                         await Context.SaveChangesAsync();
@@ -272,12 +275,14 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiPoziveIzTima/{userID}")]
+        [Route("VratiPoziveIzTima/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiPoziveIzTima(int userID)
+        public async Task<ActionResult> VratiPoziveIzTima(string jwt)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                 .Include(k => k.primljeniPoziviIzTima.Where(p => p.prihvacen == false))
                 .ThenInclude(p => p.tim)
@@ -301,12 +306,14 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PrihvatiPozivUTim/{userID}/{timID}")]
+        [Route("PrihvatiPozivUTim/{jwt}/{timID}")]
         [HttpPut]
-        public async Task<ActionResult> PrihvatiPozivUTim(int userID, int timID)
+        public async Task<ActionResult> PrihvatiPozivUTim(string jwt, int timID)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
                 var poziv = await Context.PoziviUTim.Where(p => p.pozvaniKorisnik.ID == userID && p.tim.ID == timID)
                     .FirstOrDefaultAsync();
 
@@ -325,12 +332,14 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("OdbijPozivUTim/{userID}/{timID}")]
+        [Route("OdbijPozivUTim/{jwt}/{timID}")]
         [HttpDelete]
-        public async Task<ActionResult> OdbijPozivUTim(int userID, int timID)
+        public async Task<ActionResult> OdbijPozivUTim(string jwt, int timID)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
                 var poziv = await Context.PoziviUTim.Where(p => p.pozvaniKorisnik.ID == userID && p.tim.ID == timID)
                     .FirstOrDefaultAsync();
 

@@ -17,20 +17,48 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-function MyAccountForm(){
+function MyAccount() {
+
+
+  const   token  = (JSON.parse(window.localStorage.getItem('user-info'))); 
+  const [userID ,setUserID] = useState(null);
+
+  useEffect(() => {
+
+    fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+        res.json()
+        .then(data => {
+            setUserID(data[0].id);
+            console.log(data[0].id);
+        });
+    })
+  },[])
+
+  return(
+    <div className="divProfileForm">
+         {userID && <MyAccountForm userID={userID} />}
+    </div>
+   )
+}
+function MyAccountForm({userID}){
 
     const [user, setUser] = useState(null);
     const [projects, setProjects] = useState(null);
-
-    const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
+    const   token  = (JSON.parse(window.localStorage.getItem('user-info'))); 
     const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
     const OrgID = (JSON.parse(window.localStorage.getItem('OrgID')));
     const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
     
     useEffect(() =>{
 
-      if(profileUserInfo == userInfo){
-        fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
+      if(profileUserInfo == userID){
+        fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+token.value,
         {
             method:"GET",
             headers: {
@@ -43,7 +71,7 @@ function MyAccountForm(){
             });
         })
   
-        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+userInfo.id,
+        fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+token.value,
           {
               method:"GET",
               headers: {
@@ -58,7 +86,7 @@ function MyAccountForm(){
       }
 
       else{
-        fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+profileUserInfo,
+        fetch("https://localhost:5001/Korisnik/VratiGledanogKorisnika/"+profileUserInfo,
       {
           method:"GET",
           headers: {
@@ -71,7 +99,7 @@ function MyAccountForm(){
           });
       })
 
-      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima/"+profileUserInfo,
+      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima2/"+profileUserInfo,
         {
             method:"GET",
             headers: {
@@ -96,7 +124,7 @@ function MyAccountForm(){
 function MyAccount1({projects, user}){
   
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
-    
+  console.log(projects);
     const theme = createTheme({
         components: {
             MuiButton: {styleOverrides:{
@@ -279,6 +307,6 @@ function MyAccount1({projects, user}){
     )
 }
 
-export default MyAccountForm;
+export default MyAccount;
 
 

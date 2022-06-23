@@ -57,7 +57,7 @@ function SignUp(){
           //console.log(a);
           //console.log(JSON.stringify(a));
 
-          localStorage.setItem('user-info',JSON.stringify(a))
+          //localStorage.setItem('user-info',JSON.stringify(a))
           //result  = await result.json();
           //console.log(result.status);
           if (result.status === 200){
@@ -110,7 +110,7 @@ function SignUp(){
     let navigate = useNavigate();
     // promena strane
     const routeChange = () =>{ 
-      let path = `/acc`; 
+      let path = `/`; 
       navigate(path);
     }
 

@@ -33,7 +33,8 @@ namespace TasKing
                 options.UseSqlServer(Configuration.GetConnectionString("StumpCS"));
 
             });
-
+            services.AddScoped<JwtService>();
+            
             services.AddCors(options => 
            {
                options.AddPolicy("CORS", builder => 

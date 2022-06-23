@@ -94,8 +94,8 @@ function EditAccountForm(){
     document.body.style.backgroundColor = darkMode ? "rgb(46, 45, 45)" :"azure";
 
   useEffect(() =>{
-    const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+user.id,
+    const token = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+token.value,
     {
         method:"GET",
         headers: {
@@ -110,8 +110,8 @@ function EditAccountForm(){
 }, [])
 
     useEffect(() => {
-      const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/" + user.id,
+      const token = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/" + token.value,
             {
                 method: "GET",
                 headers: {
@@ -126,8 +126,8 @@ function EditAccountForm(){
     }, [])
 
     useEffect(() => {
-      const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Korisnik/VratiIDClanovaOrganizacije/" + user.id,
+      const token = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Korisnik/VratiIDClanovaOrganizacije/" + token.value,
             {
                 method: "GET",
                 headers: {
@@ -212,7 +212,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
         }
 
         function changeUsername(){
-          const user = (JSON.parse(window.localStorage.getItem('user-info')));
+          const token = (JSON.parse(window.localStorage.getItem('user-info')));
           if(username == null){
             Store.addNotification({
               title: "Warning!",
@@ -261,7 +261,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             return
           }
 
-          fetch("https://localhost:5001/Korisnik/PromeniUsernameKorisniku/"+user.id+"/"+username,
+          fetch("https://localhost:5001/Korisnik/PromeniUsernameKorisniku/"+token+"/"+username,
           {
               method:"PUT",
               headers:{
@@ -316,8 +316,8 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             return
           }
 
-          const user = (JSON.parse(window.localStorage.getItem('user-info')));
-          fetch("https://localhost:5001/Korisnik/PromeniBrTelefonaKorisniku/"+user.id+"/"+phone,
+          const token = (JSON.parse(window.localStorage.getItem('user-info')));
+          fetch("https://localhost:5001/Korisnik/PromeniBrTelefonaKorisniku/"+token+"/"+phone,
           {
               method:"PUT",
               headers:{
@@ -340,7 +340,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
         }
 
         function changePassword(){
-          const user = (JSON.parse(window.localStorage.getItem('user-info')));
+          const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
           if(currentpass == null){
             Store.addNotification({
@@ -482,7 +482,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             return;
           }
 
-          fetch("https://localhost:5001/Korisnik/PromeniPasswordKorisniku/"+user.id+"/"+currentpass+"/"+newpass+"/"+confirmnewpass,
+          fetch("https://localhost:5001/Korisnik/PromeniPasswordKorisniku/"+token+"/"+currentpass+"/"+newpass+"/"+confirmnewpass,
           {
               method:"PUT",
               headers:{
@@ -505,8 +505,8 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
         }
 
         function changeSeeOrganisations(){
-          const user = (JSON.parse(window.localStorage.getItem('user-info')));
-          fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/" + user.id,
+          const token = (JSON.parse(window.localStorage.getItem('user-info')));
+          fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/" + token.value,
               {
                   method: "GET",
                   headers: {
@@ -522,8 +522,8 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
         }
 
         function changeSeeTeams(){
-        const user = (JSON.parse(window.localStorage.getItem('user-info')));
-        fetch("https://localhost:5001/Korisnik/VratiIDClanovaOrganizacije/" + user.id,
+        const token = (JSON.parse(window.localStorage.getItem('user-info')));
+        fetch("https://localhost:5001/Korisnik/VratiIDClanovaOrganizacije/" + token.value,
             {
                 method: "GET",
                 headers: {
@@ -566,8 +566,8 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
        const handleChangeFile = event => {
           const fileUploaded = event.target.files[0];
 
-          const user = (JSON.parse(window.localStorage.getItem('user-info')));
-          fetch("https://localhost:5001/Korisnik/PromeniSlikuKorisniku/"+user.id+"/"+fileUploaded.name,
+          const token = (JSON.parse(window.localStorage.getItem('user-info')));
+          fetch("https://localhost:5001/Korisnik/PromeniSlikuKorisniku/"+token.value+"/"+fileUploaded.name,
           {
               method:"PUT",
               headers:{
@@ -780,8 +780,8 @@ function PaperListTeams({ teams }){
   };
 
   function leaveTeam(){
-    const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Organizacija/VratiIDClanaOrganizacije/"+user.id+"/"+orgID,
+    const token = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Organizacija/VratiIDClanaOrganizacije/"+token.value+"/"+orgID,
     {
         method:"GET",
         headers: {
@@ -882,8 +882,8 @@ function PaperListOrganisations({ organisations }){
   };
 
   function leaveOrganisation(){
-    const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Organizacija/IzbaciKorisnikaIzOrganizacije/"+user.id+"/"+orgID,
+    const token = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Organizacija/IzbaciKorisnikaIzOrganizacije/"+ token.value+"/"+orgID,
     {
         method:"PUT",
         headers:{

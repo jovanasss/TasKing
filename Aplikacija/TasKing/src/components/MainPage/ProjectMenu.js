@@ -406,13 +406,27 @@ export default function ProjectMenu(props) {
     navigate(path);
   }
 
+  async function setujProfil()  {
+
+    const token = (JSON.parse(window.localStorage.getItem('user-info')));
+    let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
+      method : 'GET',
+      headers : {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json; charset=utf-8'
+      },
+    })
+    userID = await userID.json();
+    localStorage.setItem('ProfileUser-info', userID[0].id);
+  }
+
   React.useEffect(() => {
      showProjects();
   }, [props.timID]);
 
   React.useEffect(()=>{
     const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
+    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.value,
         {
             method:"GET",
             headers: {
@@ -526,7 +540,7 @@ export default function ProjectMenu(props) {
             </Typography>
           </Button>
           </ThemeProvider>
-            <Avatar src={"../../profile/" + userProfilna} onClick={() => {localStorage.setItem('ProfileUser-info', JSON.parse(window.localStorage.getItem('user-info')).id); navigate('/Profile')}} sx={{marginLeft:"5%", width:'70px', height:'70px'}}>
+            <Avatar src={"../../profile/" + userProfilna} onClick={() => {setujProfil(); navigate('/Profile')}} sx={{marginLeft:"5%", width:'70px', height:'70px'}}>
               <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
             </Avatar>
             </div>

@@ -53,20 +53,22 @@ function LoginForm()  {
         body : JSON.stringify(user)
       });
       //console.log(JSON.stringify(user))
-      let a = await result.json();
+      let a = await result.json();         
       //console.log(a);
       let status = result.status;
       //console.log(JSON.stringify(a));
       //console.log(result);
      // localStorage.setItem('user-info',JSON.stringify(a))
       // history.push("/main")
-      if (a != 0){
+      if (a){
         localStorage.setItem('user-info',JSON.stringify(a))
         localStorage.setItem('rememberMe',rememberMe);
-        const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+        //const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+        const token = (JSON.parse(window.localStorage.getItem('user-info')));
+        console.log(token);
         //console.log(userN.id);
   
-        let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+userN.id , {
+        let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+token.value , {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',

@@ -15,10 +15,12 @@ namespace TasKing.Controllers
     public class KorisnikController : ControllerBase
     {
         public TasKingContext Context { get; set; }
+        private readonly JwtService jwtService ;
 
-        public KorisnikController(TasKingContext context)
+        public KorisnikController(TasKingContext context , JwtService JwtService)
         {
             Context = context;
+            jwtService = JwtService;
         }
 
         [Route("UnesiKorisnika")]
@@ -115,13 +117,11 @@ namespace TasKing.Controllers
                     return Ok(0); // nepostojeci korisnik
                 }
                 else{
-                    var podaci = new
-                    {
-                        korisnickoIme = k1.korisnickoIme,
-                        lozinka = k1.lozinka,
-                        id = k1.ID
-                    };
-                    return Ok(podaci);
+                    var jwt = new
+                     {
+                        value = jwtService.Generate(k1.ID)
+                     };
+                    return Ok(jwt);
                 }
             }
             catch(Exception e)
@@ -131,17 +131,16 @@ namespace TasKing.Controllers
         }
 
 
-
-
-        [Route("VratiClanoveOrganizacije/{korisnikID}")]
-
+        [Route("VratiClanoveOrganizacije/{jwt}")]
         [HttpGet]
-
-        public async Task<ActionResult> VratiClanoveOrganizacije(int korisnikID)
+        public async Task<ActionResult> VratiClanoveOrganizacije(string jwt)
 
         {    
                  try
                 {
+                    var token = jwtService.Verify(jwt);
+                    int korisnikID = int.Parse(token.Issuer);
+
                     Korisnik korisnik = await Context.Korisnici.Where(k => k.ID == korisnikID).FirstOrDefaultAsync();
 
                     if(korisnik==null)
@@ -174,12 +173,15 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("VratiKorisnika/{userID}")]
+        [Route("VratiKorisnika/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiKorisnika(int userID)
+        public async Task<ActionResult> VratiKorisnika(string jwt)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
+
                 var korisnici = await Context.Korisnici
                 .Where(k => k.ID == userID)
                 .Select(k => new
@@ -197,14 +199,68 @@ namespace TasKing.Controllers
 
             catch(Exception e)
             {
-                return BadRequest("Doslo je do greske" + e.Message);
+                return Unauthorized();
+            }
+        }
+        [Route("VratiGledanogKorisnika/{userID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiGledanogKorisnika(int userID)
+        {
+            try
+            {
+
+                var korisnici = await Context.Korisnici
+                .Where(k => k.ID == userID)
+                .Select(k => new
+                {
+                    ime = k.ime,
+                    prezime = k.prezime,
+                    korisnickoIme = k.korisnickoIme,
+                    email = k.email,
+                    brtelefona = k.brTelefona,
+                    profilnaSlika = k.profilnaSlika
+                }).ToListAsync();
+
+                return Ok(korisnici);
+            }
+
+            catch(Exception e)
+            {
+                return Unauthorized();
+            }
+        }
+        [Route("VratiIDKorisnika/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiIDKorisnika(string jwt)
+        {
+            try
+            {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
+
+                var korisnici = await Context.Korisnici
+                .Where(k => k.ID == userID)
+                .Select(k => new
+                {
+                    id = k.ID,      
+ 
+                }).ToListAsync();
+
+                return Ok(korisnici);
+            }
+            catch(Exception e)
+            {
+                return Unauthorized();
             }
         }
 
-        [Route("PromeniUsernameKorisniku/{userID}/{newusername}")]
+        [Route("PromeniUsernameKorisniku/{jwt}/{newusername}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniUsernameKorisniku(int userID, string newusername)
+        public async Task<ActionResult> PromeniUsernameKorisniku(string jwt, string newusername)
+
         {
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Issuer);
             var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
             if(korisnik == null)
@@ -224,10 +280,12 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PromeniBrTelefonaKorisniku/{userID}/{novibrtelefona}")]
+        [Route("PromeniBrTelefonaKorisniku/{jwt}/{novibrtelefona}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniBrTelefonaKorisniku(int userID, string novibrtelefona)
+        public async Task<ActionResult> PromeniBrTelefonaKorisniku(string jwt, string novibrtelefona)
         {
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Issuer);
             var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
             if(korisnik == null)
@@ -247,10 +305,12 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PromeniSlikuKorisniku/{userID}/{novaslika}")]
+        [Route("PromeniSlikuKorisniku/{jwt}/{novaslika}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniSlikuKorisniku(int userID, string novaslika)
+        public async Task<ActionResult> PromeniSlikuKorisniku(string jwt, string novaslika)
         {
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Issuer);
             var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
             if(korisnik == null)
@@ -270,10 +330,13 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PromeniPasswordKorisniku/{userID}/{currentpass}/{newpass}/{confirmnewpass}")]
+        [Route("PromeniPasswordKorisniku/{jwt}/{currentpass}/{newpass}/{confirmnewpass}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniPasswordKorisniku(int userID, string currentpass, string newpass, string confirmnewpass)
+        public async Task<ActionResult> PromeniPasswordKorisniku(string jwt, string currentpass, string newpass, string confirmnewpass)
         {
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Issuer);
+
             var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
             if(korisnik == null)
@@ -303,12 +366,14 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiIDClanovaOrganizacije/{userID}")]
+        [Route("VratiIDClanovaOrganizacije/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiIDClanovaOrganizacije(int userID)
+        public async Task<ActionResult> VratiIDClanovaOrganizacije(string jwt)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                     .Include(k => k.clanoviOrganizacije).ToListAsync();
 

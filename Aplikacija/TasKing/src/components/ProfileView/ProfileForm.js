@@ -14,7 +14,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
-import MyAccountForm from "./MyAccountForm";
+import MyAccount from "./MyAccountForm";
 import EditAccountForm from "./EditAccountForm";
 import RequestsForm from "./RequestsForm";
 import LoginForm from "../Forms/LoginForm.js";
@@ -35,6 +35,7 @@ import AppBar from '@mui/material/AppBar';
 
 const drawerwidth = 240;
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+
 document.body.style.backgroundColor = darkMode ? "rgb(46, 45, 45)" :"azure";
 
 const theme = createTheme({
@@ -76,18 +77,61 @@ const theme1 = createTheme({
   },
 })
 
-function ProfileForm(){
+function Profile(){
 
+  const   token  = (JSON.parse(window.localStorage.getItem('user-info'))); 
+  const [userID ,setUserID] = useState(null);
+
+  useEffect(() => {
+
+    fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value,
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+        res.json()
+        .then(data => {
+            setUserID(data[0].id);
+            console.log(data[0].id);
+        });
+    })
+  },[])
+
+  return(
+    <div className="divProfileForm">
+         {userID && <ProfileForm userID={userID} />}
+    </div>
+   )
+
+}
+function ProfileForm({userID}){
+
+
+  console.log(userID);
   const [user, setUser] = useState(null);
-  const korisnikID = window.localStorage.getItem('ProfileUser-info');
-
-  const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
+  // const korisnikID = window.localStorage.getItem('ProfileUser-info');
+  //const [userID , setUserID] = useState(null);
   const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
 
+
+  const   token  = (JSON.parse(window.localStorage.getItem('user-info'))); 
+  
+  /*let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
+  method : 'GET',
+  headers : {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Accept': 'application/json; charset=utf-8'
+  },
+  })
+  userID = await userID.json();*/
+
+
   useEffect(() =>{
-    
-    if(profileUserInfo == userInfo.id){
-      fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.id,
+
+    if(profileUserInfo == userID){
+      fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+token.value,
     {
         method:"GET",
         headers: {
@@ -101,7 +145,7 @@ function ProfileForm(){
     })
   }
   else{
-    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+profileUserInfo,
+    fetch("https://localhost:5001/Korisnik/VratiGledanogKorisnika/"+profileUserInfo,
     {
         method:"GET",
         headers: {
@@ -116,7 +160,7 @@ function ProfileForm(){
   }
 }, [])
 
-if(profileUserInfo == userInfo.id){
+if(profileUserInfo == userID){
   return(
     <div className="divProfileForm">
          {user && <ProfileForm1 user={user} />}
@@ -329,7 +373,7 @@ function ProfileForm1({user}){
           </ThemeProvider>
           <div className="divRoutes">
             <Routes>
-                <Route path="" element={<MyAccountForm />} />
+                <Route path="" element={<MyAccount />} />
                 <Route path="editaccount" element={<EditAccountForm />} />
                 <Route path="/" element={<LoginForm />} />
                 <Route path="requests" element={<RequestsForm />} />
@@ -457,7 +501,7 @@ function ProfileForm2({user}){
         </ThemeProvider>
         <div className="divRoutes">
           <Routes>
-              <Route path="" element={<MyAccountForm />} />
+              <Route path="" element={<MyAccount />} />
           </Routes>
         </div>
    </div>
@@ -493,4 +537,4 @@ export const StyledBadge = styled(Badge)(({ theme }) => ({
     },
   }));
 
-export default ProfileForm;
+export default Profile;

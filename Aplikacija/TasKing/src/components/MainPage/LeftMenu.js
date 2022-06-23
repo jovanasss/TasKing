@@ -33,7 +33,7 @@ export default function LeftMenu(props){
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
 
 
-    fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.id,
+    fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.value,
     {
         method:"GET",
         headers: {
@@ -117,7 +117,7 @@ export default function LeftMenu(props){
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
 
         const ClanOrganizacije = {
-          idKorisnika : userN.id,
+          idKorisnika : userN,
           idOrganizacije : idORG,
           admin : false
         }
@@ -205,7 +205,7 @@ export default function LeftMenu(props){
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
   
         const ClanOrganizacije = {
-          idKorisnika : userN.id,
+          idKorisnika : userN,
           idOrganizacije : idNoveOrg,
           admin : false,
         }

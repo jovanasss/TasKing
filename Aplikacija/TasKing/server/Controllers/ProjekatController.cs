@@ -16,15 +16,22 @@ namespace TasKing.Controllers
     {
         public TasKingContext Context { get; set; }
 
-        public ProjekatController(TasKingContext context)
+
+        private readonly JwtService jwtService ;
+
+        public ProjekatController(TasKingContext context , JwtService JwtService)
         {
             Context = context;
+            jwtService = JwtService;
         }
         
         [Route("KreirajProjekat")]
         [HttpPost]
         public async Task<ActionResult> KreirajProjekat([FromBody] ProjekatDTO projekat)
         {
+            // ovde da proverimo dal je taj koj je kliknuo vodja tima posto samo on sme da kreira ??
+
+            
             var proj = Context.Projekti.Where(p => p.naziv == projekat.naziv).FirstOrDefault();
             if(proj == null)
             {
@@ -144,7 +151,67 @@ namespace TasKing.Controllers
             }
         }*/
 
-        [Route("VratiProjekteSaTaskovima/{userID}")]
+        [Route("VratiProjekteSaTaskovima/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiProjekteSaTaskovima(string jwt)
+        {
+            try
+            {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Issuer);
+                List<ProjectInfo> allProjectsInfo = new List<ProjectInfo>();
+                var clanoviOrg = await Context.ClanoviOrganizacije.Where(clan => clan.korisnik.ID == userID)
+                    .Include(o => o.clanoviTima)
+                    .ThenInclude(t => t.tim)
+                    .ThenInclude(ti => ti.projekti)
+                    .ThenInclude(p => p.taskovi)
+                    .ThenInclude(tas => tas.clanTima)
+                    .Select(clan => new{
+                        clanoviT = clan.clanoviTima.Select(clanT => new{
+                            ID = clanT.ID,
+                            projekti = clanT.tim.projekti.Select(proj => new{
+                                ID = proj.ID,
+                                naziv = proj.naziv,
+                                opis = proj.opis,
+                                aktivan = proj.aktivan,
+                                taskovi = proj.taskovi,
+                                organizacijaID = proj.tim.organizacija.ID
+                            })
+                        })
+                    })
+                    .ToListAsync();
+
+                foreach (var clanO in clanoviOrg)
+                {
+                    foreach (var clanT in clanO.clanoviT)
+                    {
+                        foreach (var proj in clanT.projekti)
+                        {
+                            List<Models.Task> taskoviUkupni = new List<Models.Task>();
+                            List<Models.Task> taskoviUradjeni = new List<Models.Task>();
+                            foreach (var task in proj.taskovi)
+                            {
+                                taskoviUkupni.Add(task);
+                                if(task.clanTima!=null)
+                                {
+                                    if(clanT.ID == task.clanTima.ID)
+                                        taskoviUradjeni.Add(task);
+                                }
+                            }
+                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, proj.organizacijaID, taskoviUkupni, taskoviUradjeni);
+                            allProjectsInfo.Add(projInfo);
+                        }
+                    }
+                }
+                return Ok(allProjectsInfo);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Doslo je do greske" + e.Message);
+            }
+        }  
+        
+        [Route("VratiProjekteSaTaskovima2/{userID}")]
         [HttpGet]
         public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
         {
@@ -200,9 +267,9 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Doslo je do greske" + e.Message);
             }
-        }        
+        }  
     }
-
+    
     public class ProjectInfo
         { 
         public int id { get; set; }
