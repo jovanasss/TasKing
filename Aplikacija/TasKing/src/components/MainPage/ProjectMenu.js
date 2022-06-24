@@ -339,7 +339,8 @@ export default function ProjectMenu(props) {
   const [projects, setProjects] = React.useState([])
   
   const showProjects = ()=>{
-    const tim = window.localStorage.getItem('clanTimaID');
+
+    //const tim = window.localStorage.getItem('clanTimaID');
 
     setPrevTim(props.timID);
     if(props.timID<=-1)
@@ -592,7 +593,7 @@ export default function ProjectMenu(props) {
              </DialogActions>
           </Dialog>
         </ThemeProvider>
-      <UpProjectMenu vodjaStatus={props.vodjaStatus} projectID={curProj} timID = {props.timID} clanTimaID = {props.clanTimaID}/>
+      <UpProjectMenu vodjaStatus={props.vodjaStatus} projectID={curProj} timID = {props.timID} clanTimaID = {localStorage.getItem('clanTimaID')}/>
       <SimpleDialog
                 open={openSimple}
                 onClose={handleCloseSimple}

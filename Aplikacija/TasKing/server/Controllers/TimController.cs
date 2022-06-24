@@ -150,12 +150,15 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("vratiProjekat/{projID}/{clanTimaID}")]
+        [Route("vratiProjekat/{projID}/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> vratiProjekat(int projID, int clanTimaID)
+        public async Task<ActionResult> vratiProjekat(int projID, string jwt)
         {     
                  try
                 {
+                    var token = jwtService.Verify(jwt);
+                    int clanTimaID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
                     var clan = await Context.ClanoviTima.Where(clan => clan.ID == clanTimaID).Select(clan => new{
                         vodjaTima = clan.vodjaTima
                     }).FirstOrDefaultAsync();
@@ -282,7 +285,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                 .Include(k => k.primljeniPoziviIzTima.Where(p => p.prihvacen == false))
                 .ThenInclude(p => p.tim)
@@ -313,7 +316,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 var poziv = await Context.PoziviUTim.Where(p => p.pozvaniKorisnik.ID == userID && p.tim.ID == timID)
                     .FirstOrDefaultAsync();
 
@@ -339,7 +342,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 var poziv = await Context.PoziviUTim.Where(p => p.pozvaniKorisnik.ID == userID && p.tim.ID == timID)
                     .FirstOrDefaultAsync();
 
@@ -509,6 +512,55 @@ namespace TasKing.Controllers
                 {
                     return BadRequest(4);
                 }
+        }
+
+        [Route("UlogujClanaTima/{idClana}")]
+        [HttpPost]
+        public async Task<ActionResult> UlogujClanaTima(int idClana){
+            try{
+
+                ClanTima c1 = await Context.ClanoviTima.Where(k => k.ID == idClana).FirstOrDefaultAsync();
+                if(c1 == null){
+                    return Ok(0); // nepostojeci korisnik
+                }
+                else{
+                    var jwt = new
+                     {
+                        value = jwtService.Generate(c1.ID)
+                     };
+
+                    return Ok(jwt);
+                }
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Route("VratiIDClanaTima/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiIDClanaTima(string jwt)
+        {
+            try
+            {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                var korisnici = await Context.ClanoviTima
+                .Where(k => k.ID == userID)
+                .Select(k => new
+                {
+                    id = k.ID,      
+ 
+                }).FirstOrDefaultAsync();
+
+                return Ok(korisnici);
+            }
+            catch(Exception e)
+            {
+                return Unauthorized();
+            }
         }
     }
 }

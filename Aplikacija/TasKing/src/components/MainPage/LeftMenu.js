@@ -50,20 +50,56 @@ export default function LeftMenu(props){
           if(data.length==0)
             return;  
   
-          if(window.localStorage.getItem("clanOrgID") === null)
+          if(window.localStorage.getItem("clanOrgID") === null) // provera da li token postoji ako ne onda ga napravimo 
           {
             setOrg(data[0].idClan)
-            localStorage.setItem('clanOrgID',data[0].idClan)
+            
+            fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + data[0].idClan,
+            {
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(res =>{
+              if(res.ok){
+                res.json().then(data => {
+                  console.log(data.value);
+                  localStorage.setItem('clanOrgID',data.value);
+                })
+              }
+            })
+
+            //localStorage.setItem('clanOrgID',data[0].idClan)
+
+            // ovde generisemo token sa ovim idClana i stavljamo ga u local storage
             localStorage.setItem('OrgID',data[0].orgID)
             localStorage.setItem('OrgKod',data[0].kod)
             setAdmin(data[0].administrator)
           }
+          // ako token postoji desifruj ga i koristimo to na dalje
           else
           {
-            setOrg(window.localStorage.getItem('clanOrgID'))
+            //setOrg(window.localStorage.getItem('clanOrgID')) // desifrovanje tokena 
+            var clanID ;
+            fetch("https://localhost:5001/Organizacija/VratiIDClanaOrganizacije/" + localStorage.getItem('clanOrgID'),
+            {
+                method:"GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(res =>{
+              if(res.ok){
+                res.json().then(data => {
+                  console.log(data.id);
+                  setOrg(data.id);
+                  clanID = data.id;
+                })
+              }
+            }) ;
+
             for(let i=0; i< data.length; i++)
             {
-              if(data[i].idClan==window.localStorage.getItem('clanOrgID'))
+              if(data[i].idClan == clanID)
                 {
                   setAdmin(data[i].administrator)
                   break;
@@ -116,8 +152,17 @@ export default function LeftMenu(props){
 
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
 
+        let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+userN.value , {
+          method : 'GET',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+        })
+        userID = await userID.json();
+
         const ClanOrganizacije = {
-          idKorisnika : userN,
+          idKorisnika : userID[0].id,
           idOrganizacije : idORG,
           admin : false
         }
@@ -203,9 +248,18 @@ export default function LeftMenu(props){
       let idNoveOrg = temp;
       if (temp != 0){
         const userN = (JSON.parse(window.localStorage.getItem('user-info')));
+
+        let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+userN.value , {
+          method : 'GET',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+        })
+        userID = await userID.json();
   
         const ClanOrganizacije = {
-          idKorisnika : userN,
+          idKorisnika : userID[0].id,
           idOrganizacije : idNoveOrg,
           admin : false,
         }
@@ -388,7 +442,24 @@ const handleOrgClick = () => {
                  </IconButton>
                 </Tooltip>
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />*/}
-               <Avatar src={"../../TandO/"+item.slika} onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan); localStorage.setItem('OrgID',item.orgID); localStorage.setItem('OrgKod',item.kod); setAdmin(item.administrator) }} onDoubleClick={item.administrator? handleClickFile : null}>
+               <Avatar src={"../../TandO/"+item.slika} onClick={() =>{setOrg(item.idClan); 
+               /*desifruj id**/ 
+               fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + item.idClan,
+               {
+                   method:"POST",
+                   headers: {
+                       'Content-Type': 'application/json',
+                   },
+               }).then(res =>{
+                 if(res.ok){
+                   res.json().then(data => {
+                     console.log(data);
+                     localStorage.setItem('clanOrgID',data.value);
+                   })
+                 }
+               }) ;
+
+                localStorage.setItem('OrgID',item.orgID); localStorage.setItem('OrgKod',item.kod); setAdmin(item.administrator) }} onDoubleClick={item.administrator? handleClickFile : null}>
                 Org
                </Avatar>
                </Tooltip>   

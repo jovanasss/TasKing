@@ -224,7 +224,9 @@ const [openSimple, setOpenSimple] = React.useState(false);
   };
 
 const refreshTasks = () => {
-  fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID + "/" + window.localStorage.getItem('clanTimaID'),
+
+
+  fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID + "/" + localStorage.getItem('clanTimaID'),
     {
         method:"GET",
         headers: {
@@ -387,8 +389,8 @@ let navigate = useNavigate();
 
 
   const handleImIntrested = (taskID) => {
-  const clanID = window.localStorage.getItem('clanTimaID');
-   fetch("https://localhost:5001/Task/PrijaviZaTask/" + clanID + "/" + taskID, {
+
+   fetch("https://localhost:5001/Task/PrijaviZaTask/" + localStorage.getItem('clanTimaID') + "/" + taskID, {
    method: "POST"
   }).then(s =>{
     refreshTasks();
@@ -396,8 +398,9 @@ let navigate = useNavigate();
 };
 
 const handleImNotIntrested = (taskID) => {
-  const clanID = window.localStorage.getItem('clanTimaID');
-  fetch("https://localhost:5001/Task/PonistiPrijavuZaTask/"+clanID+"/"+taskID,
+
+
+  fetch("https://localhost:5001/Task/PonistiPrijavuZaTask/" + localStorage.getItem('clanTimaID') +"/"+taskID,
     {
         method:"DELETE",
         headers:{
@@ -654,7 +657,8 @@ function TaskList(props){
       });
     }
 
-    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID  + "/" + window.localStorage.getItem('clanTimaID'),
+
+    fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID  + "/" + localStorage.getItem('clanTimaID'),
     {
         method:"GET",
         headers: {

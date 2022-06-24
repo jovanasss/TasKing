@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -121,6 +123,7 @@ namespace TasKing.Controllers
                      {
                         value = jwtService.Generate(k1.ID)
                      };
+
                     return Ok(jwt);
                 }
             }
@@ -139,9 +142,9 @@ namespace TasKing.Controllers
                  try
                 {
                     var token = jwtService.Verify(jwt);
-                    int korisnikID = int.Parse(token.Issuer);
+                    int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-                    Korisnik korisnik = await Context.Korisnici.Where(k => k.ID == korisnikID).FirstOrDefaultAsync();
+                    Korisnik korisnik = await Context.Korisnici.Where(k => k.ID == userID).FirstOrDefaultAsync();
 
                     if(korisnik==null)
 
@@ -180,7 +183,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
                 var korisnici = await Context.Korisnici
                 .Where(k => k.ID == userID)
@@ -236,7 +239,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
                 var korisnici = await Context.Korisnici
                 .Where(k => k.ID == userID)
@@ -260,7 +263,7 @@ namespace TasKing.Controllers
 
         {
             var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Issuer);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
             var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
             if(korisnik == null)
@@ -285,7 +288,7 @@ namespace TasKing.Controllers
         public async Task<ActionResult> PromeniBrTelefonaKorisniku(string jwt, string novibrtelefona)
         {
             var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Issuer);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
             var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
             if(korisnik == null)
@@ -310,7 +313,7 @@ namespace TasKing.Controllers
         public async Task<ActionResult> PromeniSlikuKorisniku(string jwt, string novaslika)
         {
             var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Issuer);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
             var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
             if(korisnik == null)
@@ -335,7 +338,7 @@ namespace TasKing.Controllers
         public async Task<ActionResult> PromeniPasswordKorisniku(string jwt, string currentpass, string newpass, string confirmnewpass)
         {
             var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Issuer);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
             var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
@@ -373,7 +376,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                     .Include(k => k.clanoviOrganizacije).ToListAsync();
 

@@ -157,7 +157,7 @@ namespace TasKing.Controllers
             {
 
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                 .Include(k => k.clanoviOrganizacije.Where(c => c.izbacen == false))
@@ -241,7 +241,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                 .Include(k => k.primljeniPoziviIzOrganizacije.Where(p => p.prihvacen == false))
                 .ThenInclude(p => p.organizacija)
@@ -270,7 +270,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 var clanorg = await Context.ClanoviOrganizacije.Where(c => c.korisnik.ID == userID && c.organizacija.ID == orgID)
                     .FirstOrDefaultAsync();
 
@@ -296,7 +296,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 var poziv = await Context.PoziviUOrganizaciju.Where(p => p.pozvaniKorisnik.ID == userID && p.organizacija.ID == orgID)
                     .FirstOrDefaultAsync();
 
@@ -322,7 +322,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 var poziv = await Context.PoziviUOrganizaciju.Where(p => p.pozvaniKorisnik.ID == userID && p.organizacija.ID == orgID)
                     .FirstOrDefaultAsync();
 
@@ -348,17 +348,19 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
-                
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
                 var clanorg = await Context.ClanoviOrganizacije.Where(c => c.korisnik.ID == userID && c.organizacija.ID == orgID)
                     .FirstOrDefaultAsync();
+                //var noviToken = jwtService.Generate2(clanorg.ID);
 
                 if(clanorg == null)
                 {
                     return BadRequest("Clan organizacije ne postoji!");
                 }
-
+  
                 return Ok(clanorg.ID);
+                
             }
             catch(Exception e)
             {
@@ -500,6 +502,55 @@ namespace TasKing.Controllers
                 {
                     return BadRequest(4);
                 }
+        }
+
+        [Route("UlogujClanaOrganizacije/{idClana}")]
+        [HttpPost]
+        public async Task<ActionResult> UlogujClanaOrganizacije(int idClana){
+            try{
+
+                ClanOrganizacije c1 = await Context.ClanoviOrganizacije.Where(k => k.ID == idClana).FirstOrDefaultAsync();
+                if(c1 == null){
+                    return Ok(0); // nepostojeci korisnik
+                }
+                else{
+                    var jwt = new
+                     {
+                        value = jwtService.Generate(c1.ID)
+                     };
+
+                    return Ok(jwt);
+                }
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
+        [Route("VratiIDClanaOrganizacije/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiIDClanaOrganizacije(string jwt)
+        {
+            try
+            {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                var korisnici = await Context.ClanoviOrganizacije
+                .Where(k => k.ID == userID)
+                .Select(k => new
+                {
+                    id = k.ID,      
+ 
+                }).FirstOrDefaultAsync();
+
+                return Ok(korisnici);
+            }
+            catch(Exception e)
+            {
+                return Unauthorized();
+            }
         }
     }
 }

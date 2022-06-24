@@ -91,7 +91,7 @@ function CreateOrJoinForm(){
 
 
         const token = (JSON.parse(window.localStorage.getItem('user-info')));
-        let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token , {
+        let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -102,7 +102,7 @@ function CreateOrJoinForm(){
         //console.log(userN.id);
 
         const ClanOrganizacije = {
-          idKorisnika : userID,
+          idKorisnika : userID[0].id,
           idOrganizacije : idORG,
           admin : false
         }
@@ -186,7 +186,7 @@ function CreateOrJoinForm(){
       let idNoveOrg = temp;
       if (temp != 0){
         const token = (JSON.parse(window.localStorage.getItem('user-info')));
-        let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token , {
+        let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -197,7 +197,7 @@ function CreateOrJoinForm(){
         //console.log(userN.id);
   
         const ClanOrganizacije = {
-          idKorisnika : userID,
+          idKorisnika : userID[0].id,
           idOrganizacije : idNoveOrg,
           admin : false,
         }

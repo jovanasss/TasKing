@@ -68,7 +68,7 @@ function LoginForm()  {
         console.log(token);
         //console.log(userN.id);
   
-        let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+token.value , {
+        let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+ token.value , {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',

@@ -158,7 +158,7 @@ namespace TasKing.Controllers
             try
             {
                 var token = jwtService.Verify(jwt);
-                int userID = int.Parse(token.Issuer);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
                 List<ProjectInfo> allProjectsInfo = new List<ProjectInfo>();
                 var clanoviOrg = await Context.ClanoviOrganizacije.Where(clan => clan.korisnik.ID == userID)
                     .Include(o => o.clanoviTima)

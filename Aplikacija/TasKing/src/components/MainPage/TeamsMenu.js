@@ -366,21 +366,74 @@ export default function TeamsMenu(props){
               setTim(data[0].idTima)
               setClanTima(data[0].idClan) 
               localStorage.setItem('TimID',data[0].idTima)
-              localStorage.setItem('clanTimaID',data[0].idClan)
+
+
+              fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan,
+              {
+                  method:"POST",
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+              }).then(res =>{
+                if(res.ok){
+                  res.json().then(data => {
+                    console.log(data.value);
+                    localStorage.setItem('clanTimaID',data.value);
+                  })
+                }
+              })
+
+              //localStorage.setItem('clanTimaID',data[0].idClan)
               localStorage.setItem('TimKod', data[0].kod)
             }
-            else
-            {
-              setTim(window.localStorage.getItem('TimID')) 
-              setClanTima(window.localStorage.getItem('clanTimaID')) 
-            }
+              else
+              {
+                setTim(window.localStorage.getItem('TimID'))
+                
+                // desifrovanje
+
+                fetch("https://localhost:5001/Tim/VratiIDClanaTima/" + localStorage.getItem('clanTimaID'),
+                {
+                    method:"GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res =>{
+                  if(res.ok){
+                    res.json().then(data => {
+                      console.log(data.id);
+                      setClanTima(data.id);
+                      //clanID = data.id;
+                    })
+                  }
+                }) ;
+
+              // setClanTima(window.localStorage.getItem('clanTimaID')) 
+              }
           }
           else
           {
             setTim(data[0].idTima)
             setClanTima(data[0].idClan) 
             localStorage.setItem('TimID',data[0].idTima)
-            localStorage.setItem('clanTimaID',data[0].idClan)
+
+
+            fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan,
+            {
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(res =>{
+              if(res.ok){
+                res.json().then(data => {
+                  console.log(data.value);
+                  localStorage.setItem('clanTimaID',data.value);
+                })
+              }
+            })
+
+           // localStorage.setItem('clanTimaID',data[0].idClan)
             localStorage.setItem('TimKod', data[0].kod)
           }
           for(let i=0; i< data.length; i++)
@@ -416,10 +469,22 @@ export default function TeamsMenu(props){
 
   async function addTeam() {
 
-    
-    const idClanaOrg = (JSON.parse(window.localStorage.getItem('clanOrgID')));
+    console.log("a");
 
-    let result = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuClana/" +idClanaOrg, {
+    let idClanaOrg = await fetch("https://localhost:5001/Organizacija/VratiIDClanaOrganizacije/" + localStorage.getItem('clanOrgID'), // desifrovanje tokena 
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    idClanaOrg = await idClanaOrg.json();
+    let idClana  = idClanaOrg.id;
+
+    console.log(idClana);
+
+    let result = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuClana/" + idClana, 
+    {
       method : 'GET',
       headers : {
         'Content-Type': 'application/json; charset=utf-8',
@@ -446,6 +511,8 @@ export default function TeamsMenu(props){
       },
     });
     proveraTima = await proveraTima.json();
+
+
     if (proveraTima === 0){
       setOpenD(false)
       let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
@@ -466,7 +533,7 @@ export default function TeamsMenu(props){
       
   
         const ClanTima = {
-          idClanaOrganizacije : idClanaOrg,
+          idClanaOrganizacije : idClana,
           idtima : idNovogTima,
           vodja : vodja
         }
@@ -741,7 +808,26 @@ export default function TeamsMenu(props){
                             {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
                         </Typography>
               </Button>*/}
-               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan); localStorage.setItem('TimKod', team.kod);  setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
+               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); 
+
+               //localStorage.setItem('clanTimaID',team.idClan);
+
+               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + team.idClan,
+               {
+                   method:"POST",
+                   headers: {
+                       'Content-Type': 'application/json',
+                   },
+               }).then(res =>{
+                 if(res.ok){
+                   res.json().then(data => {
+                     console.log(data.value);
+                     localStorage.setItem('clanTimaID',data.value);
+                   })
+                 }
+               })
+
+                localStorage.setItem('TimKod', team.kod);  setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
                 T
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />

@@ -16,9 +16,12 @@ namespace TasKing.Controllers
     {
         public TasKingContext Context { get; set; }
 
-        public TaskController(TasKingContext context)
+        private readonly JwtService jwtService ;
+
+        public TaskController(TasKingContext context , JwtService JwtService)
         {
             Context = context;
+            jwtService = JwtService;
         }
 
         [Route("KreirajTask")]
@@ -64,10 +67,15 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PrijaviZaTask/{clanTimaID}/{taskID}")]
+        [Route("PrijaviZaTask/{jwt}/{taskID}")]
         [HttpPost]
-        public async Task<ActionResult> PrijaviSeZaTask(int clanTimaID, int taskID)
+        public async Task<ActionResult> PrijaviSeZaTask(string jwt, int taskID)
         {     
+                
+                var token = jwtService.Verify(jwt);
+                int clanTimaID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+
                 ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID).FirstOrDefaultAsync();
                 Models.Task task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
                 if(clan==null)
@@ -108,12 +116,15 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("PonistiPrijavuZaTask/{clanTimaID}/{taskID}")]
+        [Route("PonistiPrijavuZaTask/{jwt}/{taskID}")]
         [HttpDelete]
-        public async Task<ActionResult> PonistiPrijavuZaTask(int clanTimaID, int taskID)
+        public async Task<ActionResult> PonistiPrijavuZaTask(string jwt, int taskID)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+                int clanTimaID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
                 PrijavaZaTask prijava =  await Context.PrijaveZaTask.Where(p => p.clanTima.ID == clanTimaID && p.task.ID == taskID).FirstOrDefaultAsync();
 
                 if(prijava == null)
