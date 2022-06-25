@@ -41,14 +41,18 @@ export default function UpProjectMenu(props) {
   };
 
   const [project, setProject] = React.useState({})
+  const [procenat, setProcenat] = React.useState(0)
   const showProjectData = ()=>{
     const proje = window.localStorage.getItem('projID');
+    //console.log(proje);
 
     if(props.projectID==-1)
     {
       setProject({})
+      setProcenat(0)
       return;
     }
+
     fetch("https://localhost:5001/Tim/VratiProjekat/" + props.projectID + "/" + props.clanTimaID,
     {
         method:"GET",
@@ -58,8 +62,12 @@ export default function UpProjectMenu(props) {
     }).then(res => {
       if(res.ok)
       {
+        //console.log(res);
         res.json().then(data => {
-          setProject(data)
+          console.log(data);
+          //setProject(data)
+          setProject(data.projekatInfo)
+          setProcenat(data.procenat)
         });
       }
       else
@@ -156,7 +164,7 @@ export default function UpProjectMenu(props) {
           </Toolbar>
         </AppBar>
         <TaskList selected={selectedIndex!=4? selectedIndex : 5} vodjaStatus={props.vodjaStatus} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} projectID={props.projectID}/>
-        <ProgressBar vodjaStatus={props.vodjaStatus}/>
+        <ProgressBar vodjaStatus={props.vodjaStatus} procenat = {procenat}/>
         <TaskList selected={4} vodjaStatus={0} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} />
         <ProjectDescription ProjectName={project.imeProj} ProjectDescription={project.opisProj}/>
     </div>

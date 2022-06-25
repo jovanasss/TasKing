@@ -4,7 +4,6 @@ import { AppBar, Toolbar, Typography, createTheme} from '@mui/material';
 
 export default function ProgressBar(props) {
 
-    const [effect, setEffect] = React.useState(86);
     const displej = ['inline','none']
 
   const theme = createTheme({
@@ -33,39 +32,39 @@ export default function ProgressBar(props) {
     <div>
         <AppBar position="static" className='upMenu' style={{ background: "rgb(17, 156, 151)" }}>
           <Toolbar className='upToolbar'>
-            <div className='progressDiv'>
-                <Typography className='effectText' variant="h6" color="inherit" component="div" style={{ marginLeft:'10px'}}>
+            <div className='progressDiv' style={{ display:'flex', marginTop:'10px', marginBottom:'10px'}}>
+                <Typography variant="h6" color="inherit" style={{ marginLeft:'10px'}}>
                 Tasks done
                 </Typography>
-                <Typography className='effectText' variant="h6" color="inherit" component="div"style={{ marginLeft:'50px', display: displej[props.vodjaStatus? 1 : 0]}}>
-                Your effect:
+                <Typography  variant="h6" color="inherit" style={{ marginLeft:'5vw', display: props.vodjaStatus? 'none' : 'inline'}}>
+                Your effect: 
                 </Typography>
                 <div
                   style={{
-                      display: displej[props.vodjaStatus? 1 : 0],
-                      width: effect*5, 
+                      width: props.procenat*0.3+"vw", 
                       border: "1px solid black", 
                       borderRadius:"10px",
-                      height:"15px",
-                      marginLeft:'10px',
+                      height:"16px",
+                      alignSelf:'center',
+                      display: props.vodjaStatus? 'none' : 'inline',
                       backgroundColor: 
-                      parseInt(effect) > 0 && parseInt(effect) <= 25 
+                      props.procenat >= 0 && props.procenat <= 25 
                       ? 
                       "red" 
                       : 
-                      parseInt(effect) > 25 && parseInt(effect) <= 50
+                      props.procenat> 25 && props.procenat <= 50
                       ?
                       "orange"
                       :
-                      parseInt(effect) > 50 && parseInt(effect) <= 75
+                      props.procenat > 50 && props.procenat <= 75
                       ?
                       "yellow"
                       :
                       "green"
                       }}>
-                 </div>    
-                 <Typography variant="h6" color="inherit" component="div" style={{ marginLeft:'20px', display: displej[props.vodjaStatus? 1 : 0] }}>
-                      {parseInt(effect)}%
+                 </div>     
+                 <Typography variant="h6" color="inherit" component="div" style={{ marginLeft:'20px', display: props.vodjaStatus? 'none' : 'inline', alignSelf:'center' }}>
+                      {parseInt(props.procenat)}%
                 </Typography>
             </div>
               

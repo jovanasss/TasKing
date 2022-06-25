@@ -606,6 +606,13 @@ export default function TeamsMenu(props){
   const [teamCode , setTeamCode] = useState('')
   const [teamCodeError , setTeamCodeError] = useState(false)
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+
+  const onWindowChange =() =>{
+    setScreenWidth(window.innerWidth)
+  };
+
+  window.addEventListener('resize', onWindowChange);
 
   const hiddenFileInput = React.useRef(null);
   
@@ -765,6 +772,7 @@ export default function TeamsMenu(props){
           style={{
             backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
             boxShadow : darkMode ? "0 8px 16px 0 rgb(0, 100, 100), 0 6px 20px 0 rgb(0, 100, 100)" : "",
+            display: screenWidth> 900? 'flex' : 'none'
           }}>
               <List>
               <ListItem key={0}>
@@ -890,7 +898,14 @@ export default function TeamsMenu(props){
             </Dialog>
         </ThemeProvider>
       </div>
-      <ProjectMenu vodjaStatus={vodja} timID = {curTim} clanTimaID = {curClanTima}/>
+      <div
+      style={{
+        height: '100vh',
+        width: '100vw',
+        overflowY: 'scroll',
+        overflowX: 'hidden'}}>
+        <ProjectMenu vodjaStatus={vodja} timID = {curTim} clanTimaID = {curClanTima}/>
+      </div>
       <SimpleDialog
                 open={openSimple}
                 onClose={handleCloseSimple}

@@ -189,8 +189,39 @@ namespace TasKing.Controllers
                                 slika = t.clanTima.clanOgranizacije.korisnik!=null? t.clanTima.clanOgranizacije.korisnik.profilnaSlika : ""
                             }),
                             }).FirstOrDefaultAsync();
+
+                            var projekat = await Context.Projekti
+                            .Include(p=>p.taskovi)
+                            .ThenInclude(t=>t.clanTima)
+                            .Where(p=>p.ID==projID && p.aktivan==true)
+                            .Select(p=>
+                            new{
+                                SviTaskovi = p.taskovi.Select(ta => new{
+                                    vrednost = ta.vrednost,
+                                }),
+                                TvojiTaskovi = p.taskovi.Where(t => t.clanTima!=null && t.clanTima.ID==clanTimaID).Select(ta => new{
+                                    vrednost = ta.vrednost,
+                                })
+                            }).FirstOrDefaultAsync();
                         
-                            return Ok(projekatInfo);
+                            int totalPoints = 0;
+                            int yourPoints = 0;
+                            foreach (var task in projekat.SviTaskovi)
+                            {
+                                totalPoints+=Int32.Parse(task.vrednost);
+                            }
+
+                            foreach (var task in projekat.TvojiTaskovi)
+                            {
+                                yourPoints+=Int32.Parse(task.vrednost);
+                            }
+
+                            int procenat = totalPoints==0? 0 : (int)((yourPoints*100)/totalPoints);
+                        
+                            return Ok(new{
+                                projekatInfo = projekatInfo,
+                                procenat = procenat
+                });
                 }
                 catch(Exception e)
                 {

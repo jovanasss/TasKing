@@ -27,6 +27,13 @@ export default function LeftMenu(props){
   const [openOrgD, setOpenOrgD] = useState(false)
   const [openD, setOpenD] = useState(false)
   const [admin, setAdmin] = useState(false)
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+
+  const onWindowChange =() =>{
+    setScreenWidth(window.innerWidth)
+  };
+
+  window.addEventListener('resize', onWindowChange);
 
   const showOrganisations = ()=>{
     
@@ -399,7 +406,7 @@ const handleOrgClick = () => {
 
   return(
     <div style={{display: 'flex', position: 'fixed', zIndex: '1', top: '0', left: '0', overflowX: 'hidden'}}>
-    <div className={darkMode ? 'leftMenuDM' :'leftMenu'}>
+    <div className={darkMode ? 'leftMenuDM' :'leftMenu'} style={{display: screenWidth> 900? 'flex' : 'none'}}>
     <Paper className='leftList' 
     style={{
       backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
