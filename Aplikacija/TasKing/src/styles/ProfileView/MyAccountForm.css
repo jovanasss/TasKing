@@ -1,7 +1,7 @@
 .divMyAccount{
     height: 100%;
-    width: 100%;
-    margin-left: 24%;
+    width:94%;
+    margin-left:7%;
 }
 
 .divAvatarMyAccount{
@@ -9,6 +9,13 @@
     align-items: center;
     justify-content: center;
     height: 15%;
+}
+
+@media screen and (min-width: 890px) {
+    .divMyAccount{
+        width:75%;
+        margin-left:24%;
+    }
 }
 
 /*divCards{

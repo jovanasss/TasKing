@@ -24,7 +24,7 @@ namespace TasKing.Controllers
             Context = context;
             jwtService = JwtService;
         }
-
+        
         [Route("UnesiKorisnika")]
         [HttpPost]
         public async Task<ActionResult> OtvoriNalog([FromBody] NoviKorisnikDTO korisnik)

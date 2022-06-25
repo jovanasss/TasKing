@@ -229,14 +229,42 @@ namespace TasKing.Controllers
                 }
         }
         
-        [Route("VratiTimoveKorisnika/{clanorgID}")]
+        [Route("VratiTimoveKorisnika/{clanoviorgID}")]
         [HttpGet]
-        public async Task<ActionResult> VratiTimoveKorisnika(int clanorgID)
+        public async Task<ActionResult> VratiTimoveKorisnika(string clanoviorgID)
         {
             try
             {
-                var clan = await Context.ClanoviOrganizacije.Where(clan => clan.ID == clanorgID)
-                    .Include(clan => clan.clanoviTima.Where(c => c.izbacen == false))
+                String[] clanovistringID = clanoviorgID.Split(" "); 
+                int[] clanoviID = Array.ConvertAll(clanovistringID, int.Parse);
+                List<ClanOrganizacije> clanoviOrg = new List<ClanOrganizacije>();
+                List<TimInfo> timovi = new List<TimInfo>();
+
+                foreach(var clanid in clanoviID)
+                {
+                    var clanOrg = await Context.ClanoviOrganizacije.Where(clan => clan.ID == clanid)
+                    .Include(clan => clan.clanoviTima.Where(c => c.izbacen == false && c.clanOgranizacije.izbacen == false))
+                    .ThenInclude(clantima => clantima.tim)
+                    .ThenInclude(tim => tim.organizacija)
+                    .FirstOrDefaultAsync();
+                    clanoviOrg.Add(clanOrg);
+                }
+
+                var c = clanoviOrg.Select(clan => new {
+                    ID = clan.ID,
+                    }).ToList();
+
+                foreach(var clanorg in clanoviOrg)
+                {
+                    foreach(var clantima in clanorg.clanoviTima)
+                    {
+                        TimInfo timinfo = new TimInfo(clantima.tim.ID, clantima.tim.ime, clantima.tim.slika, clantima.tim.organizacija.ID);
+                        timovi.Add(timinfo);
+                    }
+                }
+
+                /*var clanOrg = await Context.ClanoviOrganizacije.Where(clan => clan.ID == clanorgID)
+                    .Include(clan => clan.clanoviTima.Where(c => c.izbacen == false && c.clanOgranizacije.izbacen == false))
                     .ThenInclude(clantima => clantima.tim)
                     .ThenInclude(tim => tim.organizacija)
                     .ToListAsync();
@@ -247,7 +275,7 @@ namespace TasKing.Controllers
                     ime = clantima.tim.ime,
                     slika = clantima.tim.slika,
                     organizacijaID = clantima.tim.organizacija.ID
-                }).ToList();
+                }).ToList();*/
                     
                 return Ok(timovi);
             }
@@ -592,6 +620,22 @@ namespace TasKing.Controllers
             {
                 return Unauthorized();
             }
+        }
+    }
+
+    public class TimInfo
+    {
+        public int id { get; set; }
+        public string ime { get; set; }
+        public string slika { get; set; }
+        public int organizacijaID {  get; set; }
+
+        public TimInfo(int id_, string ime_, string slika_, int organizacijaID_)
+        {
+            id = id_;
+            ime = ime_;
+            slika = slika_;
+            organizacijaID = organizacijaID_;
         }
     }
 }

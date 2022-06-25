@@ -321,11 +321,11 @@ export default function LeftMenu(props){
 
   const handleClick = () => {
     setOpenD(true);
-    teamCodeError(false);
+    setTeamCodeError(false);
 }
 const handleClose = () => {
     setOpenD(false)
-    teamCodeError(false)
+    setTeamCodeError(false)
 }
 
   const handleOrgClose = () => {

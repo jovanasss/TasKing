@@ -88,7 +88,7 @@ function EditAccountForm(){
     const [teamsfirst, setTeamsfirst] = useState(null);
     const [organisationsfirst, setOrganisationsfirst] = useState(null);
     const teams1 = [];
-    const idclanova = [];
+    let idclanova = "";
 
     const [darkMode ,setDarkMode] = useState((JSON.parse(window.localStorage.getItem('darkMode'))));
     document.body.style.backgroundColor = darkMode ? "rgb(46, 45, 45)" :"azure";
@@ -137,10 +137,9 @@ function EditAccountForm(){
                 res.json()
                     .then(data => {
                         data.forEach(d =>{
-                          idclanova.push(d);
+                          idclanova += d.id + " ";
                         })
-                        {idclanova.map(clanid => {
-                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + clanid.id,
+                        fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova,
                         {
                             method: "GET",
                             headers: {
@@ -152,10 +151,9 @@ function EditAccountForm(){
                                     data.forEach(d =>{
                                       teams1.push(d);
                                     })
+                                    setTeamsfirst(teams1);
                                 });
-                             })
-                        })}
-                        setTeamsfirst(teams1);
+                            })
                       })
                   });
     }, [])
@@ -173,7 +171,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
     const [teams, setTeams] = useState(teamsfirst);
     const [organisations, setOrganisations] = useState(organisationsfirst);
     const teamsFirst = [];
-    const idclanova1 = [];
+    let idclanova1 = "";
 
         const handleClickOpen = () => {
             setOpen(true);
@@ -261,7 +259,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             return
           }
 
-          fetch("https://localhost:5001/Korisnik/PromeniUsernameKorisniku/"+token+"/"+username,
+          fetch("https://localhost:5001/Korisnik/PromeniUsernameKorisniku/"+token.value+"/"+username,
           {
               method:"PUT",
               headers:{
@@ -317,7 +315,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
           }
 
           const token = (JSON.parse(window.localStorage.getItem('user-info')));
-          fetch("https://localhost:5001/Korisnik/PromeniBrTelefonaKorisniku/"+token+"/"+phone,
+          fetch("https://localhost:5001/Korisnik/PromeniBrTelefonaKorisniku/"+token.value+"/"+phone,
           {
               method:"PUT",
               headers:{
@@ -482,7 +480,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             return;
           }
 
-          fetch("https://localhost:5001/Korisnik/PromeniPasswordKorisniku/"+token+"/"+currentpass+"/"+newpass+"/"+confirmnewpass,
+          fetch("https://localhost:5001/Korisnik/PromeniPasswordKorisniku/"+token.value+"/"+currentpass+"/"+newpass+"/"+confirmnewpass,
           {
               method:"PUT",
               headers:{
@@ -533,10 +531,9 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                 res.json()
                     .then(data => {
                         data.forEach(d =>{
-                          idclanova1.push(d);
+                          idclanova1 += d.id + " ";
                         })
-                        {idclanova1.map(clanid => {
-                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + clanid.id,
+                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova1,
                         {
                             method: "GET",
                             headers: {
@@ -548,12 +545,11 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                                     data.forEach(d =>{
                                       teamsFirst.push(d);
                                     })
+                                    setTeams(teamsFirst);
+                                    setActive("TeamList");
                                 });
                             })
-                        })}
-                        setTeams(teamsFirst);
                       })
-                      setActive("TeamList");
                   });
         }
 
@@ -574,7 +570,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                   "Content-Type":"application/json"
               },
           })
-          Store.addNotification({
+          /*Store.addNotification({
             title: "Success",
             message: "Photo is successfully changed 😀",
             type: "success",
@@ -584,7 +580,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
               duration: 2000,
               onScreen: true
             }
-          });
+          });*/
           //alert("Photo is successfully changed 😀")
           window.location.reload(false);
         }

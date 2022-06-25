@@ -215,7 +215,7 @@ function CreateOrganisationForm (){
           if (page === 0 ){
               return (                       
                  <ThemeProvider theme={theme}>
-                    <TextField error={orgError} onChange={ (e) => setORGname(e.target.value) } id="outlined-basic" label="Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
+                    <TextField error={orgError} onChange={ (e) => setORGname(e.target.value) } id="outlined-basic1" label="Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
                  </ThemeProvider>)
           }else if (page === 1){
               return (
@@ -236,7 +236,7 @@ function CreateOrganisationForm (){
           }else if (page === 2){
               return (
                 <ThemeProvider theme={theme}>
-                    <TextField error={teamError} onChange={ (e) => setTEAMname(e.target.value) } id="outlined-basic" label="Team Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
+                    <TextField error={teamError} onChange={ (e) => setTEAMname(e.target.value) } id="outlined-basic2" label="Team Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined" size="small" type="text" color="primary" required/>
                 </ThemeProvider>)
           }
       }

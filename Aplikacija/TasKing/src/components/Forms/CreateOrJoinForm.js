@@ -258,7 +258,7 @@ function CreateOrJoinForm(){
                 <TextField onChange={ (e) => setOrgCode(e.target.value) } error={orgCodeError}
                 value = {orgCode}
                 sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
-                id="outlined-basic" label="Enter Code" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
+                id="outlined-basic1" label="Enter Code" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
             </ThemeProvider>
             <button className={darkMode ? "buttonJoin1DM":"buttonJoin1"} onClick={(event) => { event.preventDefault() ; handleJoinOrg(); } }>Join</button>
           </div>
@@ -269,7 +269,7 @@ function CreateOrJoinForm(){
                 <TextField onChange={ (e) => setTeamCode(e.target.value) } error={teamCodeError}
                 value = {teamCode}
                 sx={{ width : "50%" , marginLeft : "25%" , marginRight : "25%" , marginTop : "5%"}}
-                id="outlined-basic" label="Enter Code" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
+                id="outlined-basic2" label="Enter Code" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" size="small" type="text" color="primary" required/>
             </ThemeProvider>
             <button className={darkMode ? "buttonJoin2DM":"buttonJoin2"} onClick={(event) => { event.preventDefault() ; handleJoinTeam(); } }>Join</button>
           </div>

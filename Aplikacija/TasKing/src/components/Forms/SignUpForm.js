@@ -178,38 +178,38 @@ function SignUp(){
                         <div className="inputFirstName">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setFirstName(e.target.value) } error={fnameError}
-                                id="outlined-basic" label="First Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" required sx= {{ width : "100%"}}/>
+                                id="outlined-basic1" label="First Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" required sx= {{ width : "100%"}}/>
                             </ThemeProvider>
                         </div>
                         <div className="inputLastName">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setLastName(e.target.value) } error={lnameError}
-                                id="outlined-basic" label="Last Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" required sx ={{ width : "100%"}}/>
+                                id="outlined-basic2" label="Last Name" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" required sx ={{ width : "100%"}}/>
                             </ThemeProvider>
                         </div>
                     </div>
                     <div className="inputUserSignUp">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setUserName(e.target.value) } error={userError}
-                                id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }}/> 
+                                id="outlined-basic3" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputPassSignUp">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setPassWord(e.target.value) } error={passError}
-                                id="outlined-basic" label="Password" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="password" color="primary" required sx ={{ width: "85%"  }}/> 
+                                id="outlined-basic4" label="Password" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="password" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputEmailSignUp">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setEmail(e.target.value) } error={emailError}
-                                id="outlined-basic" label="Email" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }}/> 
+                                id="outlined-basic5" label="Email" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="email" color="primary" required sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <div className="inputPhoneSignUp">
                             <ThemeProvider theme={theme}>
                                 <TextField onChange={ (e) => setPhoneNo(e.target.value) } 
-                                id="outlined-basic" label="Phone Number" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
+                                id="outlined-basic6" label="Phone Number" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="number" color="primary" sx ={{ width: "85%"  }}/> 
                             </ThemeProvider>
                     </div>
                     <button onClick={(event) => { event.preventDefault() ; handleSignUp(); } } className="BtnSignUp">CREATE ACCOUNT</button>

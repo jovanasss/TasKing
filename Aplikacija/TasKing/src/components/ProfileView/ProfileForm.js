@@ -94,7 +94,6 @@ function Profile(){
         res.json()
         .then(data => {
             setUserID(data[0].id);
-            console.log(data[0].id);
         });
     })
   },[])
@@ -108,8 +107,6 @@ function Profile(){
 }
 function ProfileForm({userID}){
 
-
-  console.log(userID);
   const [user, setUser] = useState(null);
   // const korisnikID = window.localStorage.getItem('ProfileUser-info');
   //const [userID , setUserID] = useState(null);

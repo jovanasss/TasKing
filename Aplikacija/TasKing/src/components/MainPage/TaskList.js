@@ -469,6 +469,7 @@ if(tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 &&
 return(
       <div className="divTasks">
               {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).map((task, index) => (
+            <React.Fragment key={task.taskID}>
               <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%", alignSelf:'centar', marginLeft:'5px' }}>
                 <Card variant="outlined" 
                   sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status], marginBottom:'10px' }}>
@@ -540,7 +541,7 @@ return(
                     </CardActions>
                 </Card>
               </Box>
-              
+            </React.Fragment>
                ))}
               <Dialog
                 open={open}

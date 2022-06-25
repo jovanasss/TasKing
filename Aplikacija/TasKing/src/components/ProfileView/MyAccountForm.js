@@ -35,7 +35,6 @@ function MyAccount() {
         res.json()
         .then(data => {
             setUserID(data[0].id);
-            console.log(data[0].id);
         });
     })
   },[])
@@ -124,7 +123,7 @@ function MyAccountForm({userID}){
 function MyAccount1({projects, user}){
   
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
-  console.log(projects);
+
     const theme = createTheme({
         components: {
             MuiButton: {styleOverrides:{
@@ -212,13 +211,14 @@ function MyAccount1({projects, user}){
         </Grid>
           <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
             {projects.map((project, index) => (
+        <React.Fragment key={project.id}>
            <Grid item md={4} sm={6} xs={12}>     
             <Box sx={{margin:"0.5%" }}
-            key={project.id.toString()}>
+            >
             <Card variant="outlined" 
             sx={{backgroundColor:"#d6e9de", boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)"}}
-            key={project.id.toString()}>
-                <CardContent key={project.id.toString()}>
+            >
+                <CardContent>
                 <Typography variant="h5" component="div" key={project.id.toString()}>
                     {"Name: " + project.naziv}
                 </Typography>
@@ -265,6 +265,7 @@ function MyAccount1({projects, user}){
             </Card>
             </Box> 
         </Grid>
+    </React.Fragment>
         ))}
         <Dialog
               open={open}

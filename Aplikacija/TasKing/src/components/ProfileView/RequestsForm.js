@@ -69,7 +69,6 @@ const theme = createTheme({
           res.json()
           .then(data => {
               setUserID(data[0].id);
-              console.log(data[0].id);
           });
       })
         fetch("https://localhost:5001/Tim/VratiPoziveIzTima/"+ user.value,
@@ -264,7 +263,7 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
   }
 
  return(
-<Grid container  spacing={20}>
+<Grid container spacing={5}>
   <Grid item md={6} xs={12} sm={12}>
     <div className="levidivRequests">
     <div className="divPaperTeamRequests">
