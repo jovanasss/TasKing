@@ -132,6 +132,18 @@ namespace TasKing.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [Route("ProveriToken/{token}")]
+        [HttpPost]
+        public async Task<ActionResult> ProveriToken(string token)
+        {
+                var validanToken = jwtService.Verify(token);
+
+                if (validanToken == null){
+                    return Ok(0);
+                }
+                else 
+                return Ok(1);
+        }
 
 
         [Route("VratiClanoveOrganizacije/{jwt}")]

@@ -165,67 +165,95 @@ function CreateOrJoinForm(){
   // Join Org
   async function handleJoinOrg()  {
 
-    if (orgCode === ''){
-      setOrgCodeError(true)
-      setTeamCodeError(false)
-      setTeamCode("");
-    }
-    else {
-      // joinOrg(userID ,orgID)
-      //console.log(orgCode)
+    const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
-      let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
-        method : 'GET',
-        headers : {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Accept': 'application/json; charset=utf-8'
-        },
-      });
-      temp = await temp.json();
-      //console.log(temp);
-      let idNoveOrg = temp;
-      if (temp != 0){
-        const token = (JSON.parse(window.localStorage.getItem('user-info')));
-        let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
-          method : 'GET',
-          headers : {
-            'Content-Type': 'application/json; charset=utf-8',
-            'Accept': 'application/json; charset=utf-8'
-          },
-        })
-        userID = await userID.json();
-        //console.log(userN.id);
-  
-        const ClanOrganizacije = {
-          idKorisnika : userID[0].id,
-          idOrganizacije : idNoveOrg,
-          admin : false,
+    let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/" + token.value, {
+      method : 'POST',
+      headers : {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json; charset=utf-8'
+      },
+    });
+    let b = await valid.json()
+    if (b===1){
+
+        if (orgCode === ''){
+          setOrgCodeError(true)
+          setTeamCodeError(false)
+          setTeamCode("");
         }
-  
-          let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
-            method : 'POST',
+        else {
+          // joinOrg(userID ,orgID)
+          //console.log(orgCode)
+
+          let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
+            method : 'GET',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
               'Accept': 'application/json; charset=utf-8'
             },
-            body : JSON.stringify(ClanOrganizacije)
           });
-          let noviStatus = tmp.status;
-          if ( noviStatus === 200){
-            routeChange();
-          }
-  
-  
-        // routeChange()
-      }
-      else {
-        alert("Netacan kod !")
-        setOrgCodeError(true);
-        setTeamCodeError(false);
-        setTeamCode("");
-      }
-      }
+          temp = await temp.json();
+          //console.log(temp);
+          let idNoveOrg = temp;
+          if (temp != 0){
+            const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
+            let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/" + token.value, {
+              method : 'POST',
+              headers : {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json; charset=utf-8'
+              },
+            });
+            let b = await valid.json()
+
+
+            let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
+              method : 'GET',
+              headers : {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json; charset=utf-8'
+              },
+            })
+            userID = await userID.json();
+            //console.log(userN.id);
+      
+            const ClanOrganizacije = {
+              idKorisnika : userID[0].id,
+              idOrganizacije : idNoveOrg,
+              admin : false,
+            }
+      
+              let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+                method : 'POST',
+                headers : {
+                  'Content-Type': 'application/json; charset=utf-8',
+                  'Accept': 'application/json; charset=utf-8'
+                },
+                body : JSON.stringify(ClanOrganizacije)
+              });
+              let noviStatus = tmp.status;
+              if ( noviStatus === 200){
+                routeChange();
+              }
+      
+      
+            // routeChange()
+          }
+          else {
+            alert("Netacan kod !")
+            setOrgCodeError(true);
+            setTeamCodeError(false);
+            setTeamCode("");
+          }
+          }
+    }
+    else{
+      alert("NEVALIDAN TOKEN !!!");
+    }
+
+  
 
   }
 

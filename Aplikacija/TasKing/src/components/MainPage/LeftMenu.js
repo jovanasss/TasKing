@@ -18,6 +18,7 @@ const drawerWidth = 240
 
 export default function LeftMenu(props){
 
+
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
   const [organisations, setOrganisations] = useState([])
   const [orgCode , setOrgCode] = useState('')
@@ -38,6 +39,7 @@ export default function LeftMenu(props){
   const showOrganisations = ()=>{
     
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
+    
 
 
     fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.value,
@@ -520,4 +522,5 @@ const handleOrgClick = () => {
     <TeamsMenu clanID={curOrg} adminStatus = {admin}/>
     </div>
   )
+
 }

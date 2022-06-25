@@ -16,11 +16,14 @@ function MainScreen()  {
 
     const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
     document.body.style.backgroundColor = darkMode ? "rgb(46, 45, 45)" :"azure";
+  
       return (
         <div className="App">
         <LeftMenu/>
         </div>
       );
+    
+
 }
 
 export default MainScreen ;

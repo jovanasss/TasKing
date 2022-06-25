@@ -50,16 +50,86 @@ function CreateOrganisationForm (){
       // promena stranice
       let navigate = useNavigate(); 
 
-      const generateCode = () => {
-          let num ='1ABCD2EFG3HIJK4LMN5OPQ6RS7TUV8WXYZ9';
-          let OTP ='';
+      const generate = () => {
+
+        let num ='1ABCD2EFG3HIJK4LMN5OPQ6RS7TUV8WXYZ9';
+        let OTP ='';
+    
           for ( let i =0 ; i<6;i++){
             OTP +=num[Math.floor(Math.random()*10)];
           }
-          return OTP;
+    
+          return OTP
       }
+    
+      async function generateCodeTeam()  {
+    
+        let codeValid = false ; 
+
+        while(!codeValid){
+
+          let OTP = generate();
+          let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP ,
+          {
+              method:"GET",
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          });
+          result = await result.json();
+          console.log(result);
+          if ( result == 'false'){
+            console.log(result , OTP);
+            codeValid = true ;
+            return OTP;
+          }
+          else break;
+        }
+    }
+
+      async function generateCodeORG()  {
+
+      let codeValid = false ;
+
+      while(!codeValid){
+        
+        let OTP = generate();
+        let result = await fetch("https://localhost:5001/Organizacija/ORGCodeCheck/" + OTP ,
+        {
+            method:"GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        result = await result.json();
+        if ( result === "false"){
+          codeValid = true ;
+          return OTP;
+        }
+        else break ;
+      }
+
+    }
+
       // kreiranje organizacije i tima 
-      async function createOrganisation() { 
+      async function createOrganisation() 
+      { 
+
+        const token = (JSON.parse(window.localStorage.getItem('user-info')));
+
+        let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/" + token.value, {
+          method : 'POST',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+        });
+        let b = await valid.json()
+        if ( b === 1)
+        {
+
+
+
         let path = `/Main`; 
 
         // alert(JSON.stringify(type), JSON.stringify(teamName));
@@ -67,7 +137,7 @@ function CreateOrganisationForm (){
         const organizacija = {
           //type : type,
           ime : orgName,
-          kod : generateCode()
+          kod : await generateCodeORG()
         }
 
         let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName , {
@@ -79,118 +149,120 @@ function CreateOrganisationForm (){
         });
         proveraTima = await proveraTima.json();
         //console.log("Vrati tim :" ,proveraTima);
-        if (proveraTima === 0){
-          let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/", {
-            method : 'POST',
-            headers : {
-              'Content-Type': 'application/json; charset=utf-8',
-              'Accept': 'application/json; charset=utf-8'
-            },
-            body : JSON.stringify(organizacija)
-          });
-          let status = result.status ;
-          result  = await result.json();
-          if (result != 0)     
-          {
-  
-            let idNoveOrg = result ;
-            const admin = true ;
-            const token = (JSON.parse(window.localStorage.getItem('user-info')));
-            let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
-              method : 'GET',
-              headers : {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Accept': 'application/json; charset=utf-8'
-              },
-            })
-            userID = await userID.json();
-            console.log(userID[0].id);
-            //console.log(user.id);
-            //("ID Nove Organizacije :" ,idNoveOrg);
-            //console.log(status)
-            const ClanOrganizacije = {
-              idKorisnika : userID[0].id,
-              idOrganizacije : idNoveOrg,
-              admin : admin
-            }        
-            let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
-              method : 'POST',
-              headers : {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Accept': 'application/json; charset=utf-8'
-              },
-              body : JSON.stringify(ClanOrganizacije)
-            });
-            let statusU = temp.status ;
-            temp = await temp.json();
-            let idClanaORG = temp ;
-            //console.log("IDclanaOrganizacije :" ,idClanaORG);
-            //console.log(statusU);
+
+        if (proveraTima === 0)
+        {
+                let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/", {
+                  method : 'POST',
+                  headers : {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Accept': 'application/json; charset=utf-8'
+                  },
+                  body : JSON.stringify(organizacija)
+                });
+                let status = result.status ;
+                result  = await result.json();
+                if (result != 0)     
+                {
             
-  
-            const tim = {
-              ime : teamName ,
-              idOrganizacije : idNoveOrg,
-              kod : generateCode(),
-            }
-            //console.log(tim);
-  
-  
-            let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
-              method : 'POST',
-              headers : {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Accept': 'application/json; charset=utf-8'
-              },
-              body : JSON.stringify(tim)
-            });
-            let statusT = rezultat.status;
-            rezultat = await rezultat.json();
-  
-  
-              let idNovogTima = rezultat ;
-              //console.log("ID novog tima :" ,idNovogTima);
-              const vodja = true ;
-              //result  = await result.json();
-              //console.log(statusT);
-  
-              const ClanTima = {
-                idClanaOrganizacije : idClanaORG,
-                idtima : idNovogTima,
-                vodja : vodja
-              }
-              //console.log(ClanTima);
-  
-              let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
-                method : 'POST',
-                headers : {
-                  'Content-Type': 'application/json; charset=utf-8',
-                  'Accept': 'application/json; charset=utf-8'
-                },
-                body : JSON.stringify(ClanTima)
-              });
-              
-              //console.log(tmp.status);
-              if(tmp.status === 200){
-                alert("Uspesno kreirana organizacija !")
-                navigate(path)
-              }
-  
-          }
-          else{
-              alert("Organizacija sa unetim imenom vec postoji !")
-              setPage(0);
-          }
-          
+                      let idNoveOrg = result ;
+                      const admin = true ;
+
+                      let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
+                        method : 'GET',
+                        headers : {
+                          'Content-Type': 'application/json; charset=utf-8',
+                          'Accept': 'application/json; charset=utf-8'
+                        },
+                      })
+                      userID = await userID.json();
+                      console.log(userID[0].id);
+                      //console.log(user.id);
+                      //("ID Nove Organizacije :" ,idNoveOrg);
+                      //console.log(status)
+                      const ClanOrganizacije = {
+                        idKorisnika : userID[0].id,
+                        idOrganizacije : idNoveOrg,
+                        admin : admin
+                      }        
+                      let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+                        method : 'POST',
+                        headers : {
+                          'Content-Type': 'application/json; charset=utf-8',
+                          'Accept': 'application/json; charset=utf-8'
+                        },
+                        body : JSON.stringify(ClanOrganizacije)
+                      });
+                      let statusU = temp.status ;
+                      temp = await temp.json();
+                      let idClanaORG = temp ;
+                      //console.log("IDclanaOrganizacije :" ,idClanaORG);
+                      //console.log(statusU);
+                      
+            
+                      const tim = {
+                        ime : teamName ,
+                        idOrganizacije : idNoveOrg,
+                        kod : await generateCodeTeam(),
+                      }
+                      //console.log(tim);
+            
+            
+                      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
+                        method : 'POST',
+                        headers : {
+                          'Content-Type': 'application/json; charset=utf-8',
+                          'Accept': 'application/json; charset=utf-8'
+                        },
+                        body : JSON.stringify(tim)
+                      });
+                      let statusT = rezultat.status;
+                      rezultat = await rezultat.json();
+            
+            
+                        let idNovogTima = rezultat ;
+                        //console.log("ID novog tima :" ,idNovogTima);
+                        const vodja = true ;
+                        //result  = await result.json();
+                        //console.log(statusT);
+            
+                        const ClanTima = {
+                          idClanaOrganizacije : idClanaORG,
+                          idtima : idNovogTima,
+                          vodja : vodja
+                        }
+                        //console.log(ClanTima);
+            
+                        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+                          method : 'POST',
+                          headers : {
+                            'Content-Type': 'application/json; charset=utf-8',
+                            'Accept': 'application/json; charset=utf-8'
+                          },
+                          body : JSON.stringify(ClanTima)
+                        });
+                        
+                        //console.log(tmp.status);
+                        if(tmp.status === 200){
+                          alert("Uspesno kreirana organizacija !")
+                          navigate(path)
+                        }
+            
+                }
+                else{
+                    alert("Organizacija sa unetim imenom vec postoji !")
+                    setPage(0);
+                }
+                    
         }
         else {
           alert("Tim sa unetim imenom vec postoji")
           setTEAMerror(true);
-        }
-
-
-      
+        }    
+      }else{
+        alert("NEVALIDAN KOD !!!"); 
       }
+    }
       
       // konstante za cuvanje inputa + listaNaslova
       const FormTitles = ["CHOSE A NAME FOR YOUR ORGANISATION","CHOSE WHAT TYPE OF AN ORGANISATION IT IS","CREATE A TEAM"];

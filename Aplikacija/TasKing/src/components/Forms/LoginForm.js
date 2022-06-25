@@ -58,9 +58,17 @@ function LoginForm()  {
       let status = result.status;
       //console.log(JSON.stringify(a));
       //console.log(result);
-     // localStorage.setItem('user-info',JSON.stringify(a))
+      // localStorage.setItem('user-info',JSON.stringify(a))
       // history.push("/main")
-      if (a){
+      let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/" + a.value, {
+        method : 'POST',
+        headers : {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json; charset=utf-8'
+        },
+      });
+      let b = await valid.json()
+      if ( b === 1){
         localStorage.setItem('user-info',JSON.stringify(a))
         localStorage.setItem('rememberMe',rememberMe);
         //const userN = (JSON.parse(window.localStorage.getItem('user-info')));
@@ -86,12 +94,10 @@ function LoginForm()  {
         else{
           routeChange()
         }
+      }else{
+        alert("Wrong username or password !");
       }
-      else {
-        alert("Wrong username or password!")
-      }
-    
-
+      
     }
 
 

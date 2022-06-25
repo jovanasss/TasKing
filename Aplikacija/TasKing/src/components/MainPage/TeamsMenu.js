@@ -458,13 +458,36 @@ export default function TeamsMenu(props){
     showTeams();
   }, [props.clanID]);
   
-  const generateCode = () => {
+  const generate = () => {
     let num ='1ABCD2EFG3HIJK4LMN5OPQ6RS7TUV8WXYZ9';
     let OTP ='';
-    for ( let i =0 ; i<6;i++){
-      OTP +=num[Math.floor(Math.random()*10)];
+      for ( let i =0 ; i<6;i++){
+        OTP +=num[Math.floor(Math.random()*10)];
+      }
+      return OTP
+  }
+  async function generateCode()  {
+
+    let codeValid = false ; 
+    while(!codeValid){
+      let OTP = generate();
+      console.log(OTP);
+      let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP ,
+      {
+          method:"GET",
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+      result = await result.json();
+      console.log(result);
+      if ( result == 'false'){
+        console.log(result , OTP);
+        codeValid = true ;
+        return OTP;
+      }
+      else break;
     }
-    return OTP;
 }
 
   async function addTeam() {
@@ -499,7 +522,7 @@ export default function TeamsMenu(props){
     const tim = {
       ime : teamName ,
       idOrganizacije : idNoveOrg,
-      kod : generateCode(),
+      kod : await generateCode(),
       
     }
 

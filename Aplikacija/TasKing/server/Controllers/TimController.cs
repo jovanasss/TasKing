@@ -621,6 +621,19 @@ namespace TasKing.Controllers
                 return Unauthorized();
             }
         }
+        [Route("TeamCodeCheck/{code}")]
+        [HttpGet]
+        public async Task<ActionResult> TeamCodeCheck (string code)
+        {
+                var tim = await Context.Timovi.Where(t => t.kod == code).FirstOrDefaultAsync(); 
+
+                if (tim != null){
+                    return Ok("true");
+                }
+                else{
+                    return Ok("false");
+                }
+        }
     }
 
     public class TimInfo

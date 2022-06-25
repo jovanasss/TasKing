@@ -552,5 +552,18 @@ namespace TasKing.Controllers
                 return Unauthorized();
             }
         }
+        [Route("ORGCodeCheck/{code}")]
+        [HttpGet]
+        public async Task<ActionResult> TeamCodeCheck (string code)
+        {
+                var org = await Context.Organizacije.Where(o => o.kod == code).FirstOrDefaultAsync(); 
+
+                if (org != null){
+                    return Ok("true");
+                }
+                else{
+                    return Ok("false");
+                }
+        }
     }
 }
