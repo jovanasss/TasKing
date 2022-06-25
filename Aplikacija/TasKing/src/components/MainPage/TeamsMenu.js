@@ -526,7 +526,8 @@ export default function TeamsMenu(props){
       
     }
 
-    let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName , {
+    const organizacijaID = (JSON.parse(window.localStorage.getItem('OrgID')));
+    let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+organizacijaID , {
       method : 'GET',
       headers : {
         'Content-Type': 'application/json; charset=utf-8',
@@ -534,7 +535,7 @@ export default function TeamsMenu(props){
       },
     });
     proveraTima = await proveraTima.json();
-
+    
 
     if (proveraTima === 0){
       setOpenD(false)

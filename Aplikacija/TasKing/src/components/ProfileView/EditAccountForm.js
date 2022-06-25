@@ -715,7 +715,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                 <div className="DesniDivEditAccount">
                   <div className="divAvatarEditAccount">
                             <ThemeProvider theme={theme}>
-                            <Tooltip title={<h1 style={{color:"rgb(31, 206, 206)"}}>Click to change photo</h1>} placement="top" sx={{fontSize:"20px"}}>
+                            <Tooltip title={<h1>Click to change photo</h1>} placement="top" sx={{fontSize:"20px"}}>
                             <Avatar onClick={handleClickFile} sx={{width: "150px", height:"150px", fontSize:"60px"}} src={"../../profile/"+user[0].profilnaSlika}>
                             {user[0].ime.charAt(0)}{user[0].prezime.charAt(0)}
                             </Avatar>
@@ -723,7 +723,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                             </ThemeProvider>
                             <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
                             <ThemeProvider theme={theme}>
-                            <Tooltip title={darkMode == true ? <h4 style={{color:"rgb(31, 206, 206)"}}>Light mode</h4> :  <h4 style={{color:"rgb(31, 206, 206)"}}>Dark mode</h4>} placement="left">
+                            <Tooltip title={darkMode == true ? <h4>Light mode</h4> : <h4>Dark mode</h4>} placement="left">
                             <Switch sx={{marginLeft:"23%"}} checked = {darkMode} onChange={() => {localStorage.setItem('darkMode',!darkMode); window.location.reload(false);}} />
                             </Tooltip>
                             </ThemeProvider>

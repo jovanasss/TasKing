@@ -6,6 +6,7 @@ import {ThemeProvider} from "@mui/system";
 import { createTheme , experimental_sx as sx} from "@mui/material/styles"
 import { useNavigate } from "react-router-dom";
 import Grid from '@mui/material/Grid';
+import { Store } from 'react-notifications-component';
 
 
 function CreateOrganisationForm (){
@@ -140,7 +141,7 @@ function CreateOrganisationForm (){
           kod : await generateCodeORG()
         }
 
-        let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName , {
+        let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+0 , {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -244,23 +245,67 @@ function CreateOrganisationForm (){
                         
                         //console.log(tmp.status);
                         if(tmp.status === 200){
-                          alert("Uspesno kreirana organizacija !")
+                          Store.addNotification({
+                            title: "Success",
+                            message: "The organization is successfully created 😀",
+                            type: "success",
+                            insert: "top",
+                            container: "top-center",
+                            dismiss: {
+                              duration: 2000,
+                              onScreen: true
+                            }
+                          });
+                          //alert("Uspesno kreirana organizacija !")
                           navigate(path)
                         }
             
                 }
                 else{
-                    alert("Organizacija sa unetim imenom vec postoji !")
+                  Store.addNotification({
+                    title: "Warning!",
+                    message: "An organization with this name already exists",
+                    type: "warning",
+                    insert: "top",
+                    container: "top-center",
+                    dismiss: {
+                      duration: 2000,
+                      onScreen: true
+                    }
+                  });
+                    //alert("Organizacija sa unetim imenom vec postoji !")
                     setPage(0);
                 }
                     
         }
         else {
-          alert("Tim sa unetim imenom vec postoji")
+          Store.addNotification({
+            title: "Warning!",
+            message: "A team with this name already exists",
+            type: "warning",
+            insert: "top",
+            container: "top-center",
+            dismiss: {
+              duration: 2000,
+              onScreen: true
+            }
+          });
+          //alert("Tim sa unetim imenom vec postoji")
           setTEAMerror(true);
         }    
       }else{
-        alert("NEVALIDAN KOD !!!"); 
+        Store.addNotification({
+          title: "Error!",
+          message: "invalid code",
+          type: "danger",
+          insert: "top",
+          container: "top-center",
+          dismiss: {
+            duration: 2000,
+            onScreen: true
+          }
+        });
+        //alert("NEVALIDAN KOD !!!"); 
       }
     }
       

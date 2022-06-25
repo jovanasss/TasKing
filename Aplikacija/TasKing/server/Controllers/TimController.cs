@@ -30,7 +30,7 @@ namespace TasKing.Controllers
         {
             var org = Context.Organizacije.Where(p=> p.ID == tim.idOrganizacije).FirstOrDefault();
 
-            var t = Context.Timovi.Where(p => p.ime == tim.ime).FirstOrDefault();
+            var t = Context.Timovi.Where(p => p.ime == tim.ime && p.organizacija.ID == tim.idOrganizacije).FirstOrDefault();
             if(t == null)
             {
                  if(string.IsNullOrWhiteSpace(tim.ime) || tim.ime.Length > 50)
@@ -303,13 +303,13 @@ namespace TasKing.Controllers
         }
 
 
-        [Route("VratiTimIME/{ime}")]
+        [Route("VratiTimIME/{ime}/{orgID}")]
         [HttpGet]
-        public async Task<ActionResult> VratiTimIME(string ime)
+        public async Task<ActionResult> VratiTimIME(string ime, int orgID)
         {
             try
             {
-                var tim = await Context.Timovi.Where(k => k.ime == ime).FirstOrDefaultAsync();
+                var tim = await Context.Timovi.Where(k => k.ime == ime && k.organizacija.ID == orgID).FirstOrDefaultAsync();
 
                 return Ok(tim.ID);
             }

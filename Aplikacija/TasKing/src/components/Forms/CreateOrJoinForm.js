@@ -9,6 +9,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
 import GroupIcon from '@mui/icons-material/Group';
 import Grid from '@mui/material/Grid';
+import { Store } from 'react-notifications-component';
 
 function CreateOrJoinForm(){
 
@@ -151,7 +152,18 @@ function CreateOrJoinForm(){
         }
       }
       else {
-        alert("Netacan kod !")
+        Store.addNotification({
+          title: "Error!",
+          message: "Incorrect code",
+          type: "danger",
+          insert: "top",
+          container: "top-center",
+          dismiss: {
+            duration: 2000,
+            onScreen: true
+          }
+        });
+        //alert("Netacan kod !")
         setOrgCodeError(false)
         setTeamCodeError(true)
         setTeamCode("");
@@ -242,7 +254,18 @@ function CreateOrJoinForm(){
             // routeChange()
           }
           else {
-            alert("Netacan kod !")
+            Store.addNotification({
+              title: "Error!",
+              message: "Incorrect code",
+              type: "danger",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            //alert("Netacan kod !")
             setOrgCodeError(true);
             setTeamCodeError(false);
             setTeamCode("");
@@ -250,7 +273,18 @@ function CreateOrJoinForm(){
           }
     }
     else{
-      alert("NEVALIDAN TOKEN !!!");
+      Store.addNotification({
+        title: "Error!",
+        message: "Invalid token",
+        type: "danger",
+        insert: "top",
+        container: "top-center",
+        dismiss: {
+          duration: 2000,
+          onScreen: true
+        }
+      });
+      //alert("NEVALIDAN TOKEN !!!");
     }
 
   
