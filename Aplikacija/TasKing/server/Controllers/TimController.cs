@@ -258,7 +258,7 @@ namespace TasKing.Controllers
                 {
                     foreach(var clantima in clanorg.clanoviTima)
                     {
-                        TimInfo timinfo = new TimInfo(clantima.tim.ID, clantima.tim.ime, clantima.tim.slika, clantima.tim.organizacija.ID);
+                        TimInfo timinfo = new TimInfo(clantima.tim.ID, clantima.tim.ime, clantima.tim.slika, clantima.tim.organizacija.ID, clantima.tim.organizacija.ime);
                         timovi.Add(timinfo);
                     }
                 }
@@ -358,6 +358,7 @@ namespace TasKing.Controllers
                         ime = p.tim.ime,
                         slika = p.tim.slika,
                         organizacijaID = p.tim.organizacija.ID,
+                        organizacijaIme = p.tim.organizacija.ime,
                         vremepoziva = p.vremePoziva
                     }).ToList();
                 return Ok(timovi);
@@ -642,13 +643,15 @@ namespace TasKing.Controllers
         public string ime { get; set; }
         public string slika { get; set; }
         public int organizacijaID {  get; set; }
+        public string organizacijaIme { get; set; }
 
-        public TimInfo(int id_, string ime_, string slika_, int organizacijaID_)
+        public TimInfo(int id_, string ime_, string slika_, int organizacijaID_, string organizacijaIme_)
         {
             id = id_;
             ime = ime_;
             slika = slika_;
             organizacijaID = organizacijaID_;
+            organizacijaIme = organizacijaIme_;
         }
     }
 }

@@ -654,7 +654,7 @@ export default function TeamsMenu(props){
             "Content-Type":"application/json"
         },
     })
-    Store.addNotification({
+    /*Store.addNotification({
       title: "Success",
       message: "you have successfully changed your photo",
       type: "success",
@@ -664,7 +664,7 @@ export default function TeamsMenu(props){
         duration: 2000,
         onScreen: true
       }
-    });
+    });*/
     window.location.reload(false);
   }
 
@@ -862,9 +862,17 @@ export default function TeamsMenu(props){
                 T
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
-                <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
-                            {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
+                {team.imeTima.length > 9 
+                ? 
+                <Tooltip title= {team.imeTima} placement="top" sx={{fontSize:"20px"}}>
+                  <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
+                            {team.imeTima.slice(0,10) + (team.imeTima.length>10? "..." : "")}
                         </Typography>
+                </Tooltip> 
+                : 
+              <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
+                  {team.imeTima.slice(0,10) + (team.imeTima.length>10? "..." : "")}
+              </Typography>}
                     </ThemeProvider>
                   </ListItem>
               ))}

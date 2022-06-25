@@ -32,7 +32,7 @@ function CreateTeamTasks(){
     const [taskName , setTaskName] = useState('')
     const [taskType , setTaskType] = useState('')
     const [taskDesc ,setTaskDesc] = useState('')
-    const [bodovi , setBodovi] = useState('')
+    const [bodovi , setBodovi] = useState(0)
     const [projName , setProjName] = useState('')
     const [projNameError, setProjNameError] = useState(false)
     const [projDesc , setProjDesc] = useState('')

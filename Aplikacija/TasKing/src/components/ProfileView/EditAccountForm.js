@@ -831,7 +831,7 @@ function PaperListTeams({ teams }){
         <ListItemAvatar>
           <Avatar src={"../../TandO/"+item.slika}>Team</Avatar>
         </ListItemAvatar>
-        <ListItemText primary={item.ime} />
+        <ListItemText sx={{wordWrap:"break-word"}} primary={item.ime +" (" + item.organizacijaIme + ")"} />
        </ListItem>
          ))}
       </List>
@@ -922,7 +922,7 @@ function PaperListOrganisations({ organisations }){
        <ListItemAvatar>
          <Avatar  src={"../../TandO/"+item.slika}>Org</Avatar>
        </ListItemAvatar>
-       <ListItemText primary={item.ime} />
+       <ListItemText sx={{wordWrap:"break-word"}} primary={item.ime} />
       </ListItem>
         ))}
      </List>

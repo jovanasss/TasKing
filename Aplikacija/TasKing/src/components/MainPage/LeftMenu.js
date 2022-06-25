@@ -389,7 +389,7 @@ const handleOrgClick = () => {
             "Content-Type":"application/json"
         },
     })
-    Store.addNotification({
+    /*Store.addNotification({
       title: "Success",
       message: "you have successfully changed your photo",
       type: "success",
@@ -399,7 +399,7 @@ const handleOrgClick = () => {
         duration: 2000,
         onScreen: true
       }
-    });
+    });*/
     //const ClanOrgID = (JSON.parse(window.localStorage.getItem('clanOrgID')));
     //localStorage.setItem('clanOrgIDBackup',ClanOrgID);
     window.location.reload(false);
