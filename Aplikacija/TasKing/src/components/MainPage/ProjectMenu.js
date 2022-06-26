@@ -316,7 +316,7 @@ export default function ProjectMenu(props) {
   const [taskName , setTaskName] = React.useState('')
   const [taskType , setTaskType] = React.useState('')
   const [taskDesc ,setTaskDesc] = React.useState('')
-  const [bodovi , setBodovi] = React.useState('')
+  const [bodovi , setBodovi] = React.useState(0)
   const [openD, setOpenD] = React.useState(false)
   const [value, setValue] = React.useState(0);
   const [curProj, setProj] = React.useState(-1)

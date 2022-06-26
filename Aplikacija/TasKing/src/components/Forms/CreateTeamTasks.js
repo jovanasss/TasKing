@@ -21,6 +21,7 @@ import App from "../../App";
 import Task from "../../Classes/TaskDTO";
 import TaskList from "../MainPage/TaskList";
 import Grid from '@mui/material/Grid';
+import { Store } from 'react-notifications-component';
 
 
 
@@ -32,7 +33,7 @@ function CreateTeamTasks(){
     const [taskName , setTaskName] = useState('')
     const [taskType , setTaskType] = useState('')
     const [taskDesc ,setTaskDesc] = useState('')
-    const [bodovi , setBodovi] = useState('')
+    const [bodovi , setBodovi] = useState(0)
     const [projName , setProjName] = useState('')
     const [projNameError, setProjNameError] = useState(false)
     const [projDesc , setProjDesc] = useState('')
@@ -69,7 +70,18 @@ function CreateTeamTasks(){
         
         }
         else {
-            alert("niste uneli bodove")
+            Store.addNotification({
+                title: "Warning!",
+                message: "Enter points, please",
+                type: "warning",
+                insert: "top",
+                container: "top-center",
+                dismiss: {
+                  duration: 2000,
+                  onScreen: true
+                }
+              });
+            //alert("niste uneli bodove")
         }
     
 
@@ -145,7 +157,18 @@ function CreateTeamTasks(){
                       });
                       let statusT = result.status;
                       if ( statusT === 200){
-                          alert("Projekat uspesno kreiran !")
+                        Store.addNotification({
+                            title: "Success!",
+                            message: "the project is successfully created",
+                            type: "success",
+                            insert: "top",
+                            container: "top-center",
+                            dismiss: {
+                              duration: 2000,
+                              onScreen: true
+                            }
+                          });
+                         //alert("Projekat uspesno kreiran !")
                           routeChange();
                       }
                 })
@@ -158,12 +181,34 @@ function CreateTeamTasks(){
 
             }
             else {
-                alert("Projekat  sa unetim imenom vec postoji !");
+                Store.addNotification({
+                    title: "Warning!",
+                    message: "A project with this name already exists",
+                    type: "warning",
+                    insert: "top",
+                    container: "top-center",
+                    dismiss: {
+                      duration: 2000,
+                      onScreen: true
+                    }
+                  });
+                //alert("Projekat  sa unetim imenom vec postoji !");
                 setProjNameError(true);
             }
         }       
         else {
-            alert("Niste dodali taskove");
+            Store.addNotification({
+                title: "Warning!",
+                message: "Add tasks, please",
+                type: "warning",
+                insert: "top",
+                container: "top-center",
+                dismiss: {
+                  duration: 2000,
+                  onScreen: true
+                }
+              });
+            //alert("Niste dodali taskove");
         }
     
 

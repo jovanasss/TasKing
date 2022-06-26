@@ -289,7 +289,7 @@ function MyAccount1({projects, user}){
                     ref={descriptionElementRef}
                     tabIndex={-1}
                     sx={{color : darkMode ? "white" : "black"}}>
-                    {task.naziv + ": " + task.opis + ". (" + "type: " + task.tip + ", " + "valuation: " + task.vrednost + ")"}
+                    {task.naziv + ": " + task.opis + ". (" + "type: " + task.tip + ", " + "points: " + task.vrednost + ")"}
                     </DialogContentText>)) : null}
                 </DialogContent>
                 <DialogActions style={{

@@ -32,7 +32,7 @@ namespace TasKing.Controllers
             // ovde da proverimo dal je taj koj je kliknuo vodja tima posto samo on sme da kreira ??
 
             
-            var proj = Context.Projekti.Where(p => p.naziv == projekat.naziv).FirstOrDefault();
+            var proj = Context.Projekti.Where(p => p.naziv == projekat.naziv && p.tim.ID == projekat.timID).FirstOrDefault();
             if(proj == null)
             {
                  if(string.IsNullOrWhiteSpace(projekat.naziv) || projekat.naziv.Length > 50)

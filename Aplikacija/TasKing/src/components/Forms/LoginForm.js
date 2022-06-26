@@ -8,6 +8,7 @@ import { useNavigate} from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import { Switch } from "@mui/material";
 import { Paper } from "@mui/material";
+import { Store } from 'react-notifications-component';
 
 
 function LoginForm()  {
@@ -95,7 +96,18 @@ function LoginForm()  {
           routeChange()
         }
       }else{
-        alert("Wrong username or password !");
+        Store.addNotification({
+          title: "Error!",
+          message: "Wrong username or password!",
+          type: "danger",
+          insert: "top",
+          container: "top-center",
+          dismiss: {
+            duration: 2000,
+            onScreen: true
+          }
+        });
+        //alert("Wrong username or password !");
       }
       
     }

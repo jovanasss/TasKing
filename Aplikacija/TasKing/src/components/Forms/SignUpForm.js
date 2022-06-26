@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { ClassNames } from "@emotion/react";
 import { Password } from "@mui/icons-material";
 import Grid from '@mui/material/Grid';
+import { Store } from 'react-notifications-component';
 
 function SignUp(){
 
@@ -94,8 +95,19 @@ function SignUp(){
         if (email === ''){
             setEmailError(true)           
         }
-        if( passError || userError || lnameError || fnameError){
-            alert("Nisu popunjena sva potrebna polja")
+        if(passError || userError || lnameError || fnameError){
+            Store.addNotification({
+                title: "Warning!",
+                message: "Not all fields are filled",
+                type: "warning",
+                insert: "top",
+                container: "top-center",
+                dismiss: {
+                  duration: 2000,
+                  onScreen: true
+                }
+              });
+            //alert("Nisu popunjena sva potrebna polja")
         }
         // ako je sve ok pravi se nalog i prebacuje nas na main 
         if(!emailCheck()){

@@ -135,19 +135,21 @@ function SimpleDialog(props) {
         {members.map((member) => (
           <ListItem key={member.clanTimaID}>
             <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
+              <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
+               {member.korisnik.ime.charAt(0)}{member.korisnik.prezime.charAt(0)}
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={member.korisnik.korisnickoIme} style={{ color : darkMode ? "white" : "black"}}/>
             <ThemeProvider theme={theme1}>
               <Button
+                variant="contained"
                 sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
                 onClick ={()=>visitProfile(member.korisnik.id)}
                 color="primary">
                 View Profile
               </Button>
               <Button
+              variant="contained"
               sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
               onClick={()=>{handleHire(member.clanTimaID);}}
               color="primary">
@@ -481,7 +483,7 @@ return(
                         {"Descripiton: " + task.opisTaska.slice(0,150) + (task.opisTaska.length>150? "..." : "")}
                       </Typography>
                       <Typography sx={{ mb: 1.5, fontSize:15 , fontWeight: 'bold' }} color="text.primary">
-                        poeni: {task.vrednost} 
+                        points: {task.vrednost} 
                       </Typography>
                       <div style={{display: (task.korisnikID!=-1 && props.realVodjaStatus)? 'flex' : 'none'}}>
                       <ListItemAvatar>
@@ -588,7 +590,7 @@ function TaskList(props){
   const [taskName , setTaskName] = React.useState('')
   const [taskType , setTaskType] = React.useState('')
   const [taskDesc ,setTaskDesc] = React.useState('')
-  const [bodovi , setBodovi] = React.useState('')
+  const [bodovi , setBodovi] = React.useState(0)
   const [openD, setOpenD] = React.useState(false)
   const [change, setChange] = React.useState(false)
   const [tasks, setTasks] = React.useState([])
