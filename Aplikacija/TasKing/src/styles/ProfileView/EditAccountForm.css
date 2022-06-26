@@ -45,19 +45,20 @@ body{
   margin-left: 20%;
 }*/
 
-.divPaperEditAccount{
-  margin-top: 8%;
-}
+/*.divPaperEditAccount{
+  margin-top: 1%;
+}*/
 
 .PaperEditAccount{
   height: 40vh;
   overflow: auto;
-  min-width: 270px;
+  min-width: 310px;
+  max-width: 310px;
 }
 
-.divPaperTopLabelOrganisation{
-  margin-left: 10%;
-}
+/*.divPaperTopLabelOrganisation{
+  margin-left: 6%;
+}*/
 
 .divPaperTopLabelTeam{
   margin-left: 34%;
@@ -71,5 +72,11 @@ body{
 .divAvatarEditAccount{
   margin-left: 30%;
   margin-top: 10%;
+}
+
+.divLeaveAndSee{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
 }
 

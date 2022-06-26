@@ -268,7 +268,14 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
     <div className="levidivRequests">
     <div className="divPaperTeamRequests">
       <div className="divPaperTopLabelTeamRequests" style={{color : darkMode ? "white":"black"}}><h2>Teams</h2></div>
-          <Paper className="PaperRequests" sx={{backgroundColor:"#d6e9de"}}>
+          <Paper className="PaperRequests" 
+          sx={{
+            borderStyle:"dotted", 
+            borderWidth:"thick", 
+            borderColor:"rgb(26, 150, 167)", 
+            backgroundColor:"#d6e9de", 
+            borderRadius:"20px", 
+            boxShadow:" 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)"}}>
           <List>
           {teams.map(item => (
           <ListItem
@@ -316,7 +323,14 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
     <div className="desnidivRequests">
     <div className="divPaperOrgRequests">
       <div className="divPaperTopLabelOrganisation" style={{color : darkMode ? "white" :"black"}} ><h2>Organisations</h2></div>
-          <Paper className="PaperRequests"  sx={{backgroundColor:"#d6e9de"}}>
+          <Paper className="PaperRequests" 
+          sx={{
+            borderStyle:"dotted", 
+            borderWidth:"thick", 
+            borderColor:"rgb(26, 150, 167)", 
+            backgroundColor:"#d6e9de", 
+            borderRadius:"20px", 
+            boxShadow:" 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)" }}>
           <List>
           {organisations.map(item => (
           <ListItem

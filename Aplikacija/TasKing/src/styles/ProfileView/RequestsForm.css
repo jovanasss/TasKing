@@ -9,10 +9,12 @@
     margin-top: 6%;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 899px) {
   .MaindivRequestsForm{
-      width:75%;
-      margin-left:25%;
+      width:70%;
+      margin-left:20%;
+      position: relative;
+      left:16px;
   }
 }
 
@@ -50,7 +52,7 @@
   }
 
   .divPaperTopLabelTeamRequests{
-    margin-left: 38%;
+    margin-left: 42%;
   }
 
   .divPaperTopLabelOrganisation{

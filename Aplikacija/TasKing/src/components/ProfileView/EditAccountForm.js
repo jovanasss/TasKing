@@ -725,6 +725,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                             </ThemeProvider>
                    </div>
 
+                   <div className="divLeaveAndSee">
                         {active === "TeamList" && <PaperListTeams teams={teams} />}
                         {active === "OrganisationList" && <PaperListOrganisations organisations={organisations} />}
 
@@ -747,6 +748,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                    See teams
                  </Button>
                  </ThemeProvider></div>
+            </div>
             </div>
                 </div>
                 </Grid>
@@ -811,7 +813,14 @@ function PaperListTeams({ teams }){
   return(
   <div className="divPaperEditAccount">
     <div className="divPaperTopLabelTeam" style={{ color : darkMode ? "white" : "black"}} ><h2>Teams</h2></div>
-        <Paper className="PaperEditAccount"  sx={{backgroundColor:"#d6e9de"}}>
+        <Paper className="PaperEditAccount"  
+        sx={{
+          borderStyle:"dotted", 
+            borderWidth:"thick", 
+            borderColor:"rgb(26, 150, 167)", 
+            backgroundColor:"#d6e9de", 
+            borderRadius:"20px", 
+            boxShadow:" 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)"}}>
         <List>
         {teams1.map(item => (
         <ListItem
@@ -901,8 +910,15 @@ function PaperListOrganisations({ organisations }){
 
   return(
   <div className="divPaperEditAccount">
-    <div className="divPaperTopLabelOrganisation" style={{ color: darkMode ? "white" : "black" }}><h2>Organisations</h2></div>
-        <Paper className="PaperEditAccount"  sx={{backgroundColor:"#d6e9de"}}>
+    <div className="divPaperTopLabelOrganisation" style={{ color: darkMode ? "white" : "black", marginLeft:"24%" }}><h2>Organisations</h2></div>
+        <Paper className="PaperEditAccount"  
+        sx={{
+            borderStyle:"dotted", 
+            borderWidth:"thick", 
+            borderColor:"rgb(26, 150, 167)", 
+            backgroundColor:"#d6e9de", 
+            borderRadius:"20px", 
+            boxShadow:" 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)"}}>
         <List>
         {organisations1.map(item => (
         <ListItem
