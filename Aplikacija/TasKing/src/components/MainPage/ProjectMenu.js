@@ -109,6 +109,7 @@ function SimpleDialog(props) {
     onClose(selectedValue);
   };
 
+  const token = window.localStorage.getItem('clanTimaID');
   const handleRemove = (clanID) => {
     fetch("https://localhost:5001/Tim/IzbaciClana/" + clanID,
           {
@@ -120,7 +121,7 @@ function SimpleDialog(props) {
                  if(props.timID<=-1)
                   return;
 
-                  fetch("https://localhost:5001/Tim/VratiClanoveTima/" + props.timID,
+                  fetch("https://localhost:5001/Tim/VratiClanoveTima/" + props.timID+"/" + token,
                   {
                       method:"GET",
                       headers: {

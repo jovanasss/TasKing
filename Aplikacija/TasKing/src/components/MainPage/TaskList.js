@@ -505,7 +505,7 @@ return(
                         {"Descripiton: " + task.opisTaska.slice(0,150) + (task.opisTaska.length>150? "..." : "")}
                       </Typography>
                       <Typography sx={{ mb: 1.5, fontSize:15 , fontWeight: 'bold' }} color="text.primary">
-                        poeni: {task.vrednost} 
+                        points: {task.vrednost} 
                       </Typography>
                       <div style={{display: (task.korisnikID!=-1 && isVodja)? 'flex' : 'none'}}>
                       <ListItemAvatar>

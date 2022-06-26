@@ -1,4 +1,4 @@
-.descriptionDiv{
+/*.descriptionDiv{
     margin-left: 2%;
     margin-right: 2%;
     margin-bottom: 2.5%;
@@ -10,4 +10,49 @@
     margin-bottom: 2.5%;
     color : white;
     word-wrap: break-word;
+}*/
+
+.h2EditProjectNameVodja{
+    background-color: transparent;
+    border: 0;
+    padding: 2px;
+    display: inline;
+    margin-left: 1%;
 }
+
+.h2EditProjectNameVodja:hover{
+    /*background-color: #d3d3d3;*/
+    background-color: rgb(31, 206, 206);
+    cursor: pointer;
+}
+
+.h2EditProjectName{
+    background-color: transparent;
+    border: 0;
+    padding: 2px;
+    display: inline;
+    margin-left: 1%;
+}
+
+.EditProjectDescriptionVodja{
+    background-color: transparent;
+    border: 0;
+    padding: 2px;
+}
+
+.EditProjectDescriptionVodja:hover{
+    /*background-color: #d3d3d3;*/
+    background-color: rgb(31, 206, 206);
+    cursor: pointer;
+}
+
+.EditProjectDescription{
+    background-color: transparent;
+    border: 0;
+    padding: 2px;
+}
+
+.divProjectNameDescription{
+    margin-top: 5px;
+}
+

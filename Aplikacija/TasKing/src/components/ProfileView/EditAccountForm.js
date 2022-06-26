@@ -87,7 +87,6 @@ function EditAccountForm(){
     const [user, setUser] = useState(null);
     const [teamsfirst, setTeamsfirst] = useState(null);
     const [organisationsfirst, setOrganisationsfirst] = useState(null);
-    const teams1 = [];
     let idclanova = "";
 
     const [darkMode ,setDarkMode] = useState((JSON.parse(window.localStorage.getItem('darkMode'))));
@@ -148,10 +147,7 @@ function EditAccountForm(){
                         }).then(res => {
                             res.json()
                                 .then(data => {
-                                    data.forEach(d =>{
-                                      teams1.push(d);
-                                    })
-                                    setTeamsfirst(teams1);
+                                    setTeamsfirst(data);
                                 });
                             })
                       })

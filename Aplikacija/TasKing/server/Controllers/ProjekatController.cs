@@ -268,6 +268,68 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske" + e.Message);
             }
         }  
+
+        [Route("VratiProjekat/{projID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiProjekat(int projID)
+        {
+            var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
+
+            if(projekat == null)
+            {
+                return BadRequest("Projekat ne postoji!");
+            }
+            else
+            {
+                return Ok(projekat);
+            }
+        }
+
+        [Route("PromeniImeProjekta/{projID}/{novinaziv}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniImeProjekta(int projID, string novinaziv)
+        {
+            var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
+
+            if(projekat == null)
+            {
+                return BadRequest("Projekat ne postoji!");
+            }
+
+            try
+            {
+                projekat.naziv = novinaziv;
+                await Context.SaveChangesAsync();
+                return Ok("Naziv projekta je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("PromeniOpisProjekta/{projID}/{noviopis}")]
+        [HttpPut]
+        public async Task<ActionResult> PromeniOpisProjekta(int projID, string noviopis)
+        {
+            var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
+
+            if(projekat == null)
+            {
+                return BadRequest("Projekat ne postoji!");
+            }
+
+            try
+            {
+                projekat.opis = noviopis;
+                await Context.SaveChangesAsync();
+                return Ok("Opis projekta je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
     }
     
     public class ProjectInfo
