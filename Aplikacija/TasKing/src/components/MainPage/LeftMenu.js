@@ -13,6 +13,9 @@ import QrCode2Icon from '@mui/icons-material/QrCode2';
 import GroupsIcon from '@mui/icons-material/Groups';
 import CodeIcon from '@mui/icons-material/Code';
 import { Store } from 'react-notifications-component';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 const drawerWidth = 240     
 
 
@@ -29,6 +32,7 @@ export default function LeftMenu(props){
   const [openD, setOpenD] = useState(false)
   const [admin, setAdmin] = useState(false)
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+  const [openMenu, setOpenMenu] = useState(false)
 
   const onWindowChange =() =>{
     setScreenWidth(window.innerWidth)
@@ -39,9 +43,6 @@ export default function LeftMenu(props){
   const showOrganisations = ()=>{
     
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    
-
-
     fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.value,
     {
         method:"GET",
@@ -82,8 +83,6 @@ export default function LeftMenu(props){
 
             // ovde generisemo token sa ovim idClana i stavljamo ga u local storage
             localStorage.setItem('OrgID',data[0].orgID)
-            localStorage.setItem('OrgKod',data[0].kod)
-            setAdmin(data[0].administrator)
           }
           // ako token postoji desifruj ga i koristimo to na dalje
           else
@@ -110,7 +109,6 @@ export default function LeftMenu(props){
             {
               if(data[i].idClan == clanID)
                 {
-                  setAdmin(data[i].administrator)
                   break;
                 }
             }
@@ -209,10 +207,55 @@ export default function LeftMenu(props){
   
           let statusTmp = tmp.status;
           if ( statusTmp === 200){
-
-            routeChange();
-
+            Store.addNotification({
+              title: "Joined!",
+              message: "you have successfully joined the organization",
+              type: "success",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
           }
+
+          localStorage.setItem('OrgID',idORG); 
+
+          fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + rezultat,
+               {
+                   method:"POST",
+                   headers: {
+                       'Content-Type': 'application/json',
+                   },
+               }).then(res =>{
+                 if(res.ok){
+                   res.json().then(data => {
+                     console.log(data.value);
+                     localStorage.setItem('clanOrgID',data.value);
+                   })
+                 }
+               })
+
+               localStorage.setItem('TimID',idNovogTima); 
+
+               tmp = await tmp.json();
+                console.log(tmp);
+               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp,
+               {
+                   method:"POST",
+                   headers: {
+                       'Content-Type': 'application/json',
+                   },
+               }).then(res =>{
+                 if(res.ok){
+                   res.json().then(data => {
+                     console.log(data.value);
+                     localStorage.setItem('clanTimaID',data.value);
+                   })
+                 }
+               })
+          window.location.reload(false);
         }
       }
       else {
@@ -272,6 +315,9 @@ export default function LeftMenu(props){
           idOrganizacije : idNoveOrg,
           admin : false,
         }
+
+        console.log("Organizacija:" + idNoveOrg);
+        localStorage.setItem('OrgID',idNoveOrg); 
   
           let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
             method : 'POST',
@@ -294,6 +340,22 @@ export default function LeftMenu(props){
                 onScreen: true
               }
             });
+
+            tmp = await tmp.json();
+            fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + tmp,
+               {
+                   method:"POST",
+                   headers: {
+                       'Content-Type': 'application/json',
+                   },
+               }).then(res =>{
+                 if(res.ok){
+                   res.json().then(data => {
+                     console.log(data.value);
+                     localStorage.setItem('clanOrgID',data.value);
+                   })
+                 }
+               })
               window.location.reload(false);
           }
   
@@ -408,7 +470,13 @@ const handleOrgClick = () => {
 
   return(
     <div style={{display: 'flex', position: 'fixed', zIndex: '1', top: '0', left: '0', overflowX: 'hidden'}}>
-    <div className={darkMode ? 'leftMenuDM' :'leftMenu'} style={{display: screenWidth> 900? 'flex' : 'none'}}>
+      <IconButton onClick={() => {setOpenMenu(!openMenu)}} sx={{position: 'fixed', top:'50vh', left:'-10px', display: (openMenu || screenWidth>= 900)? 'none' : 'inline', zIndex:'100'}}>
+        <ChevronRightIcon sx={{backgroundColor:'white', width:'50px', height:'50px'}}/>
+      </IconButton>
+      <IconButton onClick={() => {setOpenMenu(!openMenu)}} sx={{position: 'fixed', top:'50vh', left:'265px', display: (openMenu && screenWidth< 900)? 'inline' : 'none', zIndex:'100'}}>
+        <ChevronLeftIcon sx={{backgroundColor:'white', width:'50px', height:'50px'}}/>
+      </IconButton>
+    <div className={darkMode ? 'leftMenuDM' :'leftMenu'} style={{display: (screenWidth> 900 || openMenu)? 'flex' : 'none'}}>
     <Paper className='leftList' 
     style={{
       backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
@@ -468,7 +536,7 @@ const handleOrgClick = () => {
                  }
                }) ;
 
-                localStorage.setItem('OrgID',item.orgID); localStorage.setItem('OrgKod',item.kod); setAdmin(item.administrator) }} onDoubleClick={item.administrator? handleClickFile : null}>
+                localStorage.setItem('OrgID',item.orgID); }} onDoubleClick={item.administrator? handleClickFile : null}>
                 Org
                </Avatar>
                </Tooltip>   
@@ -519,7 +587,7 @@ const handleOrgClick = () => {
             </Dialog>
         </ThemeProvider>
     </div>
-    <TeamsMenu clanID={curOrg} adminStatus = {admin}/>
+    <TeamsMenu clanID={curOrg} openMenu = {openMenu}/>
     </div>
   )
 

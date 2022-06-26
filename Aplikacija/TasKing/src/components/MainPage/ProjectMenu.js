@@ -80,6 +80,30 @@ function SimpleDialog(props) {
   const [members, setMembers] = React.useState([])
   const [userError , setUserError] = React.useState(false)
   const [userName , setUserName] = React.useState('')
+  const [isVodja , setVodja] = React.useState(false)
+
+  async function vodjaStatus () {
+    if(localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
+    {
+      setVodja(true);
+      return;
+    }
+
+    let rez = await fetch("https://localhost:5001/Tim/VratiVodjaStatus/" + localStorage.getItem('clanTimaID'),
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    rez = await rez.json();
+    let vodja  = rez.vodja;
+    setVodja(vodja);
+ }
+
+ React.useEffect(() => {
+  vodjaStatus();
+}, [props, localStorage.getItem('clanTimaID')]);
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -204,10 +228,10 @@ function SimpleDialog(props) {
   }
 
   React.useEffect(() => {
-    if(props.timID==-1)
+    if(props.timID==-1 || localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
     return;
 
-    fetch("https://localhost:5001/Tim/VratiClanoveTima/" + props.timID,
+    fetch("https://localhost:5001/Tim/VratiClanoveTima/" + props.timID + "/" + localStorage.getItem('clanTimaID'),
   {
       method:"GET",
       headers: {
@@ -225,14 +249,27 @@ function SimpleDialog(props) {
       alert("Greska pri vracanju timova korisnika");
     }
   })
- }, [props.timID]);
+ }, [props.timID, localStorage.getItem('clanTimaID')]);
+
+ async function copyTimKod () {
+  let rez = await fetch("https://localhost:5001/Tim/VratiKodTima/" + localStorage.getItem('clanTimaID'),
+  {
+      method:"GET",
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  });
+  rez = await rez.json();
+  let kod  = rez.kod;
+  navigator.clipboard.writeText(kod);
+ }
 
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white" , color : darkMode ? "white" : "black"}}>Members</DialogTitle>
       <DialogContent style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white" , color : darkMode ? "white": "black"}}>
       <List sx={{ pt: 0 }}>
-      <div style={{marginBottom: '30px', display: props.vodjaStatus? 'inile' : 'none'}}>
+      <div style={{marginBottom: '30px', display: isVodja? 'inile' : 'none'}}>
       <ThemeProvider theme={theme}>
       <TextField onChange={ (e) => setUserName(e.target.value) }
                   sx= {{marginLeft: '50px', marginTop: '5px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
@@ -245,7 +282,7 @@ function SimpleDialog(props) {
         Invite
       </Button>
       <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
-       onClick={() => {navigator.clipboard.writeText(window.localStorage.getItem('TimKod'))}}
+       onClick={() => {copyTimKod();}}
        color="primary"
        variant="contained">
         Copy code
@@ -253,7 +290,7 @@ function SimpleDialog(props) {
       </ThemeProvider>
       </div>
         {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info')).id).map((member) => (
-          <ListItem key={member.clanTimaID}>
+          <ListItem key={member.clanTimaID} sx={{ bgcolor:member.vodja? blue[100] : 'auto', color: member.vodja? blue[600] : 'auto'}} >
             <ListItemAvatar>
               <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
                {member.korisnik.ime.slice(0,1)}{member.korisnik.prezime.slice(0,1)}
@@ -269,7 +306,7 @@ function SimpleDialog(props) {
                 View Profile
               </Button>
               <Button
-              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: props.vodjaStatus? 'inile' : 'none'}}
+              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: isVodja? 'inile' : 'none'}}
               onClick={()=>handleRemove(member.clanTimaID)}
               color="primary"
               variant="contained">
@@ -324,6 +361,30 @@ export default function ProjectMenu(props) {
   const boje = ['rgb(147, 219, 217)', 'rgb(17, 156, 151)']
   const displej = ['none', 'inline']
   const [userProfilna, setUserProfilna] = React.useState(null);
+  const [isVodja , setVodja] = React.useState(false)
+
+  async function vodjaStatus () {
+    if(localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
+    {
+      setVodja(true);
+      return;
+    }
+
+    let rez = await fetch("https://localhost:5001/Tim/VratiVodjaStatus/" + localStorage.getItem('clanTimaID'),
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    rez = await rez.json();
+    let vodja  = rez.vodja;
+    setVodja(vodja);
+ }
+
+ React.useEffect(() => {
+  vodjaStatus();
+}, [props, localStorage.getItem('clanTimaID')]);
 
   const [openSimple, setOpenSimple] = React.useState(false);
 
@@ -350,6 +411,7 @@ export default function ProjectMenu(props) {
       //localStorage.setItem('projID',-1)
       return;
     }
+    
     fetch("https://localhost:5001/Tim/VratiProjekteTima/" + props.timID,
     {
         method:"GET",
@@ -425,50 +487,22 @@ export default function ProjectMenu(props) {
      showProjects();
   }, [props.timID]);
 
-  React.useEffect(()=>
-  {
+  React.useEffect(()=>{
     const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
-    
-
-    fetch("https://localhost:5001/Korisnik/ProveriToken/" + userInfo.value, {
-      method : 'POST',
-      headers : {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Accept': 'application/json; charset=utf-8'
-      },
-    }).then(res => {
-      res.json()
-      .then(data => {
-          if ( data === 1) {
-
-            fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.value,
-                {
-                    method:"GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }).then(res => {
-                    res.json()
-                    .then(data => {
-                      if(data!=null)
-                      setUserProfilna(data[0].profilnaSlika);
-                      console.log(data[0].profilnaSlika + "profilna");
-                    });
-                })
-        
-              }
-              else{
-                alert("NEVALIDAN TOKEN");
-                let path = `/`; 
-                navigate(path)
-              }
-      })
-    })
-
-
-
-
-
+    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.value,
+        {
+            method:"GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => {
+            res.json()
+            .then(data => {
+              if(data!=null)
+              setUserProfilna(data[0].profilnaSlika);
+              console.log(data[0].profilnaSlika + "profilna");
+            });
+        })
   },[])
 
   const handleChange = (event, newValue) => {
@@ -542,7 +576,7 @@ export default function ProjectMenu(props) {
       <Box sx={{ borderBottom: 1, borderColor: 'divider', background: "rgb(147, 219, 217)", display:'flex', minHeight:'125px' }}>
       <ThemeProvider theme={theme2}>
           <Tooltip title="Add Project">
-            <IconButton onClick={() => {handleClick(); routeChange();}} sx={{marginLeft:"0.5%", display: (props.timID!=-1 && props.vodjaStatus)? 'inline' : 'none'}}>
+            <IconButton onClick={() => {handleClick(); routeChange();}} sx={{marginLeft:"2%", display: (props.timID>-1 && isVodja)? 'inline' : 'none'}}>
               <AddIcon sx={{marginLeft:"0.5%", width: '25px', height: '25px' }}/>
             </IconButton>
           </Tooltip>
@@ -560,16 +594,16 @@ export default function ProjectMenu(props) {
             )}
           </ThemeProvider>
             </List>
-          <div style={{ display:'flex',   position: 'fixed',top:'30px', right: '0vw'}}>
+          <div style={{ display:'flex', marginLeft:'10px', height:'70px', alignSelf:'center', marginLeft:'5vw'}}>
           <ThemeProvider theme={theme}>
-          <Button  sx={{backgroundColor: boje[1], width:'50%', marginRight:'1%'}} 
+          <Button  sx={{backgroundColor: boje[1], width:'50%', marginRight:'1%', alignSelf:'center', display: props.timID<=-1? 'none' : 'inline'}} 
           onClick={()=>handleClickOpenSimple()}>   
             <Typography sx={{fontWeight:'bold', color: 'white'}}>
                 See Team Members
             </Typography>
           </Button>
           </ThemeProvider>
-            <Avatar src={"../../profile/" + userProfilna} onClick={() => {setujProfil(); navigate('/Profile')}} sx={{marginLeft:"5%", width:'70px', height:'70px'}}>
+            <Avatar src={"../../profile/" + userProfilna} onClick={() => {setujProfil(); navigate('/Profile')}} sx={{marginLeft:"1vw", width:'70px', height:'70px', alignSelf:'center'}}>
               <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
             </Avatar>
             </div>
@@ -621,12 +655,11 @@ export default function ProjectMenu(props) {
              </DialogActions>
           </Dialog>
         </ThemeProvider>
-      <UpProjectMenu vodjaStatus={props.vodjaStatus} projectID={curProj} timID = {props.timID} clanTimaID = {localStorage.getItem('clanTimaID')}/>
+      <UpProjectMenu  projectID={curProj} timID = {props.timID} clanTimaID = {localStorage.getItem('clanTimaID')}/>
       <SimpleDialog
                 open={openSimple}
                 onClose={handleCloseSimple}
                 timID = {props.timID}
-                vodjaStatus={props.vodjaStatus}
               />
     </div>
   );

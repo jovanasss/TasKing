@@ -385,10 +385,11 @@ namespace TasKing.Controllers
                         return BadRequest("nepostojeci clan");
                     }
                     
-                    var clanovi = await Context.ClanoviOrganizacije.Where(p => p.organizacija.ID == clan.orgID && p.izbacen==false)
+                    var clanovi = await Context.ClanoviOrganizacije.Where(p => p.organizacija.ID == clan.orgID && p.ID != clanID && p.izbacen==false)
                     .Include(c =>c.korisnik)
                     .Select(clan => new{
                         clanOrgID = clan.ID,
+                        admin = clan.administrator, 
                         Korisnik = clan.korisnik
                     })
                     .ToListAsync();
@@ -564,6 +565,57 @@ namespace TasKing.Controllers
                 else{
                     return Ok("false");
                 }
+        }
+
+        [Route("VratiKodOrganizacije/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiKodOrganizacije(string jwt)
+        {
+            try
+            {
+                var token = jwtService.Verify(jwt);
+                int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                var clan = await Context.ClanoviOrganizacije
+                .Where(k => k.ID == clanID)
+                .Include(c => c.organizacija)
+                .Select(k => new
+                {
+                    kod =   k.organizacija.kod
+ 
+                }).FirstOrDefaultAsync();
+
+                return Ok(clan);
+            }
+            catch(Exception e)
+            {
+                return Unauthorized();
+            }
+        }
+
+        [Route("VratiAdminStatus/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiAdminStatus(string jwt)
+        {
+            try
+            {
+                var token = jwtService.Verify(jwt);
+                int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                var clan = await Context.ClanoviOrganizacije
+                .Where(k => k.ID == clanID)
+                .Select(k => new
+                {
+                    admin =   k.administrator
+ 
+                }).FirstOrDefaultAsync();
+
+                return Ok(clan);
+            }
+            catch(Exception e)
+            {
+                return Unauthorized();
+            }
         }
     }
 }

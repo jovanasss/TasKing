@@ -68,6 +68,8 @@ function SimpleDialog(props) {
   const [members, setMembers] = useState([])
   const [userName , setUserName] = useState('')
   const [userError , setUserError] = useState(false)
+  const [isAdmin , setAdmin] = useState(false)
+  
 
   async function handleInvite(){
 
@@ -223,6 +225,41 @@ function SimpleDialog(props) {
   })
  }, [props.clanID]);
 
+ async function copyOrgKod () {
+  let rez = await fetch("https://localhost:5001/Organizacija/VratiKodOrganizacije/" + localStorage.getItem('clanOrgID'),
+  {
+      method:"GET",
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  });
+  rez = await rez.json();
+  let kod  = rez.kod;
+  navigator.clipboard.writeText(kod);
+ }
+
+ async function adminStatus () {
+  if(localStorage.getItem('clanOrgID')<=-1 || localStorage.getItem('clanOrgID')===null)
+  {
+    setAdmin(false);
+    return;
+  }
+    let rez = await fetch("https://localhost:5001/Organizacija/VratiAdminStatus/" + localStorage.getItem('clanOrgID'),
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    rez = await rez.json();
+    let admin  = rez.admin;
+    setAdmin(admin);
+ }
+
+ React.useEffect(() => {
+  adminStatus();
+}, [props, localStorage.getItem('clanOrgID')]);
+
   return (
     <Dialog onClose={handleClose} open={open} style={{ color : darkMode ? "rgb(26,25,25)" : "white" }}>
       <DialogTitle style={{
@@ -230,7 +267,7 @@ function SimpleDialog(props) {
         color : darkMode ? "white": "black",
       }}>Members</DialogTitle>
       <DialogContent style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white"}}>
-      <div style={{marginBottom: '30px', display: props.adminStatus? 'inile' : 'none' ,backgroundColor : darkMode ? "rgb(26,25,25)" :"white"}}>
+      <div style={{marginBottom: '30px', display: isAdmin? 'inline' : 'none' ,backgroundColor : darkMode ? "rgb(26,25,25)" :"white"}}>
       <ThemeProvider theme={theme}>
       <TextField onChange={ (e) => setUserName(e.target.value) }
                   sx= {{marginLeft: '50px', marginTop: '5px'}}  error={userError} id="outlined-basic" label="Username" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
@@ -243,7 +280,7 @@ function SimpleDialog(props) {
         Invite
       </Button>
       <Button sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', marginTop: '5px'}}
-       onClick={() => {navigator.clipboard.writeText(window.localStorage.getItem('OrgKod'))}}
+       onClick={() => {copyOrgKod();}}
        color="primary"
        variant="contained">
         Copy code
@@ -256,7 +293,7 @@ function SimpleDialog(props) {
         color : darkMode ? "white" : "black",
         }}>
         {members.filter(member => member.korisnik.id!=JSON.parse(window.localStorage.getItem('user-info'))).map((member) => (
-          <ListItem key={member.clanOrgID}>
+          <ListItem key={member.clanOrgID} sx={{ bgcolor:member.admin? blue[100] : 'auto', color: member.admin? blue[600] : 'auto'}} >
             <ListItemAvatar>
               <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
               {member.korisnik.ime.slice(0,1)}{member.korisnik.prezime.slice(0,1)}
@@ -272,7 +309,7 @@ function SimpleDialog(props) {
                 View Profile
               </Button>
               <Button
-              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: props.adminStatus? 'inile' : 'none'}}
+              sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px', display: isAdmin? 'inline' : 'none'}}
               onClick={()=>handleRemove(member.clanOrgID)}
               color="primary"
               variant="contained">
@@ -344,7 +381,6 @@ export default function TeamsMenu(props){
             setClanTima(-1)
             localStorage.setItem('TimID',-1)
             localStorage.setItem('clanTimaID',-1)
-            localStorage.setItem('TimKod', null)
             setVodja(false)
             return;
           }
@@ -355,7 +391,6 @@ export default function TeamsMenu(props){
             setClanTima(-2)
             localStorage.setItem('TimID',-2)
             localStorage.setItem('clanTimaID',-2)
-            localStorage.setItem('TimKod', null)
             setVodja(false)
             return;
           }
@@ -384,7 +419,6 @@ export default function TeamsMenu(props){
               })
 
               //localStorage.setItem('clanTimaID',data[0].idClan)
-              localStorage.setItem('TimKod', data[0].kod)
             }
               else
               {
@@ -434,7 +468,6 @@ export default function TeamsMenu(props){
             })
 
            // localStorage.setItem('clanTimaID',data[0].idClan)
-            localStorage.setItem('TimKod', data[0].kod)
           }
           for(let i=0; i< data.length; i++)
           {
@@ -572,6 +605,24 @@ export default function TeamsMenu(props){
         });
         //localStorage.setItem('TimID', idNovogTima)
         //localStorage.setItem('clanTimaID',data[0].idClan)
+
+        localStorage.setItem('TimID',idNovogTima); 
+
+        tmp = await tmp.json();
+               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp,
+               {
+                   method:"POST",
+                   headers: {
+                       'Content-Type': 'application/json',
+                   },
+               }).then(res =>{
+                 if(res.ok){
+                   res.json().then(data => {
+                     console.log(data.value);
+                     localStorage.setItem('clanTimaID',data.value);
+                   })
+                 }
+               })
 
         window.location.reload(false);
     }
@@ -796,7 +847,7 @@ export default function TeamsMenu(props){
           style={{
             backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
             boxShadow : darkMode ? "0 8px 16px 0 rgb(0, 100, 100), 0 6px 20px 0 rgb(0, 100, 100)" : "",
-            display: screenWidth> 900? 'flex' : 'none'
+            display: (screenWidth> 900 || props.openMenu)? 'flex' : 'none'
           }}>
               <List>
               <ListItem key={0}>
@@ -859,21 +910,13 @@ export default function TeamsMenu(props){
                  }
                })
 
-                localStorage.setItem('TimKod', team.kod);  setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
+               setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
                 T
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
-                {team.imeTima.length > 9 
-                ? 
-                <Tooltip title= {team.imeTima} placement="top" sx={{fontSize:"20px"}}>
-                  <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
-                            {team.imeTima.slice(0,10) + (team.imeTima.length>10? "..." : "")}
+                <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
+                            {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
                         </Typography>
-                </Tooltip> 
-                : 
-              <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
-                  {team.imeTima.slice(0,10) + (team.imeTima.length>10? "..." : "")}
-              </Typography>}
                     </ThemeProvider>
                   </ListItem>
               ))}
@@ -933,17 +976,16 @@ export default function TeamsMenu(props){
       <div
       style={{
         height: '100vh',
-        width: '100vw',
-        overflowY: 'scroll',
+        width:screenWidth> 900? 'calc(100vw - 275px)' : '100vw',
+        overflowY: 'auto',
         overflowX: 'hidden'}}>
-        <ProjectMenu vodjaStatus={vodja} timID = {curTim} clanTimaID = {curClanTima}/>
+        <ProjectMenu timID = {curTim} clanTimaID = {curClanTima}/>
       </div>
       <SimpleDialog
                 open={openSimple}
                 onClose={handleCloseSimple}
                 clanID = {props.clanID}
                 vodjaStatus = {vodja}
-                adminStatus = {props.adminStatus}
               />
     </div>
   )

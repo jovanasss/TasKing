@@ -18,7 +18,6 @@
 .divTasks{
     display: flex;
     flex-direction: row;
-    width: 84.38vw;
     overflow: auto;
 }
 

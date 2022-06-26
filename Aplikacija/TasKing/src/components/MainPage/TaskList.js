@@ -135,21 +135,19 @@ function SimpleDialog(props) {
         {members.map((member) => (
           <ListItem key={member.clanTimaID}>
             <ListItemAvatar>
-              <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
-               {member.korisnik.ime.charAt(0)}{member.korisnik.prezime.charAt(0)}
+              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
+                <PersonIcon />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={member.korisnik.korisnickoIme} style={{ color : darkMode ? "white" : "black"}}/>
             <ThemeProvider theme={theme1}>
               <Button
-                variant="contained"
                 sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
                 onClick ={()=>visitProfile(member.korisnik.id)}
                 color="primary">
                 View Profile
               </Button>
               <Button
-              variant="contained"
               sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
               onClick={()=>{handleHire(member.clanTimaID);}}
               color="primary">
@@ -199,6 +197,29 @@ const [open, setOpen] = React.useState(false);
 const [scroll, setScroll] = React.useState('paper');
 const [dialogTask, setDialog] = React.useState(0);
 const [tasks, setTasks] = React.useState([])
+const [isVodja , setVodja] = React.useState(false)
+
+  async function vodjaStatus () {
+    if(localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
+    {
+      setVodja(true);
+      return;
+    } 
+    let rez = await fetch("https://localhost:5001/Tim/VratiVodjaStatus/" + localStorage.getItem('clanTimaID'),
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    rez = await rez.json();
+    let vodja  = rez.vodja;
+    setVodja(vodja);
+ }
+
+ React.useEffect(() => {
+  vodjaStatus();
+}, [props, localStorage.getItem('clanTimaID')]);
 
 React.useEffect(() => {
   setTasks(props.taskovi);
@@ -211,6 +232,7 @@ const handleClickOpen = (scrollType, ind) => () => {
 };
 
 const handleClose = () => {
+  setDialog(0);
   setOpen(false);
 };
 
@@ -250,7 +272,7 @@ const refreshTasks = () => {
 
 const handleAll = (taskID, currentStatus, prijaveLenght) => {
 
-  if(props.vodjaStatus)
+  if(isVodja)
   {
     if(currentStatus==0)
     {
@@ -320,7 +342,7 @@ const handleAll = (taskID, currentStatus, prijaveLenght) => {
 
 const buttonTexts = (taskID, currentStatus, prijaveLenght) => {
 
-  if(props.vodjaStatus)
+  if(isVodja)
   {
     if(currentStatus==0)
     {
@@ -469,10 +491,10 @@ if(tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 &&
 }
 
 return(
-      <div className="divTasks">
-              {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).map((task, index) => (
-            <React.Fragment key={task.taskID}>
-              <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%", alignSelf:'centar', marginLeft:'5px' }}>
+      <div style={{display: 'flex', flexDirection:'row'}}>
+              {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).slice(0).reverse().map((task, index) => (
+                <React.Fragment key={task.taskID}>
+              <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%", alignSelf:'centar', marginLeft:'5px', marginTop:'25px' }}>
                 <Card variant="outlined" 
                   sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status], marginBottom:'10px' }}>
                     <CardContent>
@@ -483,12 +505,12 @@ return(
                         {"Descripiton: " + task.opisTaska.slice(0,150) + (task.opisTaska.length>150? "..." : "")}
                       </Typography>
                       <Typography sx={{ mb: 1.5, fontSize:15 , fontWeight: 'bold' }} color="text.primary">
-                        points: {task.vrednost} 
+                        poeni: {task.vrednost} 
                       </Typography>
-                      <div style={{display: (task.korisnikID!=-1 && props.realVodjaStatus)? 'flex' : 'none'}}>
+                      <div style={{display: (task.korisnikID!=-1 && isVodja)? 'flex' : 'none'}}>
                       <ListItemAvatar>
                         <Avatar src={"../../profile/"+task.slika} sx={{ bgcolor: blue[100], color: blue[600] }}>
-                          {task.korisnickoIme.slice(0,150)}
+                          {task.korisnickoIme.slice(0,2)}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText primary={task.korisnickoIme}/>
@@ -517,9 +539,9 @@ return(
                           //onClick={()=>handleAll(task.taskID, task.status, task.prijave.length)}
                           //onClick={()=>handleImIntrested(task.taskID)}
                           onClick={()=>handleChangeStatus(task.taskID, 4)}
-                          sx={{ border:"2px solid black", borderRadius:"10px", display: (props.vodjaStatus && task.status==2)? 'inline' : 'none'}}
+                          sx={{ border:"2px solid black", borderRadius:"10px", display: (isVodja && task.status==2)? 'inline' : 'none', padding:'10px 0 10px 0', fontSize:'13px', width:'40%'}}
                           color="primary">
-                            Return
+                              Return
                         </Button>
                         <Button 
                           //aria-describedby={id} 
@@ -527,7 +549,7 @@ return(
                           onClick={()=>handleAll(task.taskID, task.status, task.prijave.length)}
                           //onClick={()=>handleImIntrested(task.taskID)}
                           //onClick={()=>handleChangeStatus(task.taskID, 2)}
-                          sx={{ border:"2px solid black", borderRadius:"10px", display: displej[props.vodjaStatus? 1 : 0][task.status]}}
+                          sx={{ border:"2px solid black", borderRadius:"10px", display: displej[isVodja? 1 : 0][task.status], padding: task.status==2? '10px 0 10px 0' : '10px 10px 10px 10px', fontSize:'13px',  width: task.status==2? '40%' : 'auto'}}
                           color="primary">
                             {buttonTexts(task.taskID, task.status, task.prijave.length)}
                         </Button>
@@ -535,7 +557,7 @@ return(
                           onClick={()=>handleChangeStatus(task.taskID, -1)}
                           //aria-describedby={id} 
                           variant="contained" 
-                          sx={{ border:"2px solid black", borderRadius:"10px", display:(task.status==0 && props.vodjaStatus)? 'inline' : 'none'}}
+                          sx={{ border:"2px solid black", borderRadius:"10px", display:(task.status==0 && isVodja)? 'inline' : 'none'}}
                           color="primary">
                             <DeleteForeverIcon/>
                         </IconButton>
@@ -543,7 +565,7 @@ return(
                     </CardActions>
                 </Card>
               </Box>
-            </React.Fragment>
+              </React.Fragment>
                ))}
               <Dialog
                 open={open}
@@ -594,6 +616,29 @@ function TaskList(props){
   const [openD, setOpenD] = React.useState(false)
   const [change, setChange] = React.useState(false)
   const [tasks, setTasks] = React.useState([])
+  const [isVodja , setVodja] = React.useState(false)
+
+  async function vodjaStatus () {
+    if(localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
+    {
+      setVodja(true);
+      return;
+    }
+    let rez = await fetch("https://localhost:5001/Tim/VratiVodjaStatus/" + localStorage.getItem('clanTimaID'),
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    rez = await rez.json();
+    let vodja  = rez.vodja;
+    setVodja(vodja);
+ }
+
+ React.useEffect(() => {
+  vodjaStatus();
+}, [props, localStorage.getItem('clanTimaID')]);
 
   React.useEffect(() => {
     setTasks(props.taskovi);
@@ -706,7 +751,7 @@ function TaskList(props){
 
   return(
         <div className="divTasks">
-                <Box className='addBtnBox' sx={{margin:"0.5%", display: displejPlus[props.vodjaStatus? 1 : 0] }}>
+                <Box className='addBtnBox' sx={{margin:"0.5%", display: displejPlus[(props.vodjaStatus && isVodja && props.projectID!=-1)? 1 : 0], alignSelf:'center' }}>
                   <Card variant="outlined" 
                     className='addCard'
                     sx={{minWidth: 250, maxWidth: 340, minHeight: 250, maxHeight: 340, boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor: darkMode? "rgb(192,192,192)" : "white", }}>
@@ -777,7 +822,7 @@ function TaskList(props){
              </DialogActions>
           </Dialog>
         </ThemeProvider>
-                <Tasks selected={props.selected} vodjaStatus={props.vodjaStatus} realVodjaStatus={props.realVodjaStatus} taskovi = {tasks} change = {change} projectID = {props.projectID}/>
+                <Tasks selected={props.selected} vodjaStatus={props.vodjaStatus} taskovi = {tasks} change = {change} projectID = {props.projectID}/>
       </div>
 )
 }

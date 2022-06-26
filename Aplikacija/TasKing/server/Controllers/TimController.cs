@@ -113,7 +113,7 @@ namespace TasKing.Controllers
                     {
                         clan.izbacen=false;
                         await Context.SaveChangesAsync();
-                        return Ok();
+                        return Ok(clan.ID);
                     }
                     else
                     {
@@ -199,7 +199,7 @@ namespace TasKing.Controllers
                                 SviTaskovi = p.taskovi.Select(ta => new{
                                     vrednost = ta.vrednost,
                                 }),
-                                TvojiTaskovi = p.taskovi.Where(t => t.clanTima!=null && t.clanTima.ID==clanTimaID).Select(ta => new{
+                                TvojiTaskovi = p.taskovi.Where(t =>t.status==3  && t.clanTima!=null && t.clanTima.ID==clanTimaID).Select(ta => new{
                                     vrednost = ta.vrednost,
                                 })
                             }).FirstOrDefaultAsync();
@@ -445,17 +445,21 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiClanoveTima/{timID}")]
+        [Route("VratiClanoveTima/{timID}/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiClanoveTima(int timID)
+        public async Task<ActionResult> VratiClanoveTima(int timID,string jwt)
         {     
                  try
                 {
-                    var clanovi = await Context.ClanoviTima.Where(p => p.tim.ID == timID && p.izbacen==false && p.clanOgranizacije.izbacen==false)
+                    var token = jwtService.Verify(jwt);
+                    int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                    var clanovi = await Context.ClanoviTima.Where(p => p.tim.ID == timID && p.ID != clanID && p.izbacen==false && p.clanOgranizacije.izbacen==false)
                     .Include(c =>c.clanOgranizacije)
                     .ThenInclude(c =>c.korisnik)
                     .Select(clan => new{
                         clanTimaID = clan.ID,
+                        vodja = clan.vodjaTima,
                         clanOrgID = clan.clanOgranizacije.ID,
                         Korisnik = clan.clanOgranizacije.korisnik
                     })
@@ -634,6 +638,57 @@ namespace TasKing.Controllers
                 else{
                     return Ok("false");
                 }
+        }
+
+        [Route("VratiKodTima/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiKodTima(string jwt)
+        {
+            try
+            {
+                var token = jwtService.Verify(jwt);
+                int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                var clan = await Context.ClanoviTima
+                .Where(k => k.ID == clanID)
+                .Include(c => c.tim)
+                .Select(k => new
+                {
+                    kod =   k.tim.kod
+ 
+                }).FirstOrDefaultAsync();
+
+                return Ok(clan);
+            }
+            catch(Exception e)
+            {
+                return Unauthorized();
+            }
+        }
+
+        [Route("VratiVodjaStatus/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiVodjaStatus(string jwt)
+        {
+            try
+            {
+                var token = jwtService.Verify(jwt);
+                int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                var clan = await Context.ClanoviTima
+                .Where(k => k.ID == clanID)
+                .Select(k => new
+                {
+                    vodja =   k.vodjaTima
+ 
+                }).FirstOrDefaultAsync();
+
+                return Ok(clan);
+            }
+            catch(Exception e)
+            {
+                return Unauthorized();
+            }
         }
     }
 

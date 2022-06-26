@@ -257,6 +257,43 @@ function CreateOrganisationForm (){
                             }
                           });
                           //alert("Uspesno kreirana organizacija !")
+
+                          
+                localStorage.setItem('OrgID',idNoveOrg); 
+
+                fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + temp,
+                {
+                    method:"POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res =>{
+                  if(res.ok){
+                    res.json().then(data => {
+                      console.log(data.value);
+                      localStorage.setItem('clanOrgID',data.value);
+                    })
+                  }
+                })
+ 
+                 localStorage.setItem('TimID',idNovogTima); 
+ 
+                 tmp = await tmp.json();
+                fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp,
+                {
+                    method:"POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res =>{
+                  if(res.ok){
+                    res.json().then(data => {
+                      console.log(data.value);
+                      localStorage.setItem('clanTimaID',data.value);
+                    })
+                  }
+                })
+                
                           navigate(path)
                         }
             

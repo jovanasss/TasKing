@@ -5,6 +5,29 @@ import { AppBar, Toolbar, Typography, createTheme} from '@mui/material';
 export default function ProgressBar(props) {
 
     const displej = ['inline','none']
+    const [isVodja , setVodja] = React.useState(false)
+
+  async function vodjaStatus () {
+    if(localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
+    {
+      setVodja(true);
+      return;
+    }
+    let rez = await fetch("https://localhost:5001/Tim/VratiVodjaStatus/" + localStorage.getItem('clanTimaID'),
+    {
+        method:"GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    rez = await rez.json();
+    let vodja  = rez.vodja;
+    setVodja(vodja);
+ }
+
+ React.useEffect(() => {
+  vodjaStatus();
+}, [props, localStorage.getItem('clanTimaID')]);
 
   const theme = createTheme({
     components: {
@@ -36,7 +59,7 @@ export default function ProgressBar(props) {
                 <Typography variant="h6" color="inherit" style={{ marginLeft:'10px'}}>
                 Tasks done
                 </Typography>
-                <Typography  variant="h6" color="inherit" style={{ marginLeft:'5vw', display: props.vodjaStatus? 'none' : 'inline'}}>
+                <Typography  variant="h6" color="inherit" style={{ marginLeft:'5vw', display: isVodja? 'none' : 'inline'}}>
                 Your effect: 
                 </Typography>
                 <div
@@ -46,7 +69,7 @@ export default function ProgressBar(props) {
                       borderRadius:"10px",
                       height:"16px",
                       alignSelf:'center',
-                      display: props.vodjaStatus? 'none' : 'inline',
+                      display: isVodja? 'none' : 'inline',
                       backgroundColor: 
                       props.procenat >= 0 && props.procenat <= 25 
                       ? 
@@ -63,7 +86,7 @@ export default function ProgressBar(props) {
                       "green"
                       }}>
                  </div>     
-                 <Typography variant="h6" color="inherit" component="div" style={{ marginLeft:'20px', display: props.vodjaStatus? 'none' : 'inline', alignSelf:'center' }}>
+                 <Typography variant="h6" color="inherit" component="div" style={{ marginLeft:'20px', display: isVodja? 'none' : 'inline', alignSelf:'center' }}>
                       {parseInt(props.procenat)}%
                 </Typography>
             </div>

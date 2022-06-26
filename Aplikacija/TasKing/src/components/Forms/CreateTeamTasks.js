@@ -168,6 +168,8 @@ function CreateTeamTasks(){
                               onScreen: true
                             }
                           });
+
+                          localStorage.setItem('projID', idProjekta); 
                          //alert("Projekat uspesno kreiran !")
                           routeChange();
                       }
