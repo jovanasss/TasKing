@@ -27,6 +27,8 @@ import './styles/MainPage/TaskList.css';
 import './styles/MainPage/TeamsMenu.css';
 import './styles/MainPage/UpProjectMenu.css';
 
+import ProtectedRoutes from './ProtectedRoutes';
+import AdminRoutes from './AdminRoutes';
 
 import { Paper } from '@mui/material';
 import Profile from './components/ProfileView/ProfileForm';
@@ -66,14 +68,18 @@ function App() {
       <Routes>
 
       <Route  path= "/" element={<LoginForm/>}/>
-      <Route  path= "/CoJ" element={<CreateOrJoinForm/>}/>
-      <Route  path= "/Main" element={<MainScreen/>}/>
-      <Route  path= "/Profile/*" element={<Profile />}/>
-      <Route  path= "/SignUp" element={<SignUpForm />}/>
-      <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
-      <Route  path= "/acc" element={<AccountCreatedForm />}/>
-      <Route  path= "/cTT" element={<CreateTeamTasks />}/>
-
+      <Route element={<ProtectedRoutes/>}>  
+        <Route  path= "/CoJ" element={<CreateOrJoinForm/>}/>
+        <Route  path= "/Main" element={<MainScreen/>}/>
+        <Route  path= "/Profile/*" element={<Profile />}/>
+        <Route  path= "/SignUp" element={<SignUpForm />}/>
+        <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
+        <Route  path= "/acc" element={<AccountCreatedForm />}/>
+      </Route>
+      <Route element= {<AdminRoutes />}>
+          <Route  path= "/cTT" element={<CreateTeamTasks />}/>
+      </Route>
+     
       </Routes>
  
 

@@ -425,22 +425,50 @@ export default function ProjectMenu(props) {
      showProjects();
   }, [props.timID]);
 
-  React.useEffect(()=>{
+  React.useEffect(()=>
+  {
     const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.value,
-        {
-            method:"GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(res => {
-            res.json()
-            .then(data => {
-              if(data!=null)
-              setUserProfilna(data[0].profilnaSlika);
-              console.log(data[0].profilnaSlika + "profilna");
-            });
-        })
+    
+
+    fetch("https://localhost:5001/Korisnik/ProveriToken/" + userInfo.value, {
+      method : 'POST',
+      headers : {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json; charset=utf-8'
+      },
+    }).then(res => {
+      res.json()
+      .then(data => {
+          if ( data === 1) {
+
+            fetch("https://localhost:5001/Korisnik/VratiKorisnika/"+userInfo.value,
+                {
+                    method:"GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => {
+                    res.json()
+                    .then(data => {
+                      if(data!=null)
+                      setUserProfilna(data[0].profilnaSlika);
+                      console.log(data[0].profilnaSlika + "profilna");
+                    });
+                })
+        
+              }
+              else{
+                alert("NEVALIDAN TOKEN");
+                let path = `/`; 
+                navigate(path)
+              }
+      })
+    })
+
+
+
+
+
   },[])
 
   const handleChange = (event, newValue) => {

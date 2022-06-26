@@ -60,12 +60,12 @@ function SignUp(){
           //localStorage.setItem('user-info',JSON.stringify(a))
           //result  = await result.json();
           //console.log(result.status);
-          if (result.status === 200){
+          if (a === 1){
             routeChange()
         
           }
-          else{
-              //console.log(result.status)
+          else if (a === 2){
+             alert("Korisnik sa datim emailom vec postoji !")
           }
        }
        catch (error){
@@ -76,6 +76,8 @@ function SignUp(){
     
     // error check => pravljenjeNaloga( podaci [] )
     const handleSignUp = () =>{
+
+        setEmailError(false);setFnameError(false);setUserError(false);setLnameError(false);setPassError(false);
 
         if ( firstName === ''){
             setFnameError(true)
@@ -92,10 +94,13 @@ function SignUp(){
         if (email === ''){
             setEmailError(true)           
         }
-        if(emailError || passError || userError || lnameError || fnameError){
+        if( passError || userError || lnameError || fnameError){
             alert("Nisu popunjena sva potrebna polja")
         }
         // ako je sve ok pravi se nalog i prebacuje nas na main 
+        if(!emailCheck()){
+            alert("Nevalidan email")
+        }
         if (firstName && lastName && userName && passWord  && emailCheck()){
             
             // pravljenjeNaloga( podaci[] )
@@ -116,6 +121,7 @@ function SignUp(){
 
     // validacija emaila 
     const emailCheck = () => {
+        // fetch email 
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if ( re.test(email)){
             return true 

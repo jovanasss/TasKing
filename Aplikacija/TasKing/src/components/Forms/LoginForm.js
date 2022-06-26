@@ -241,7 +241,7 @@ return (
                             />
                         }
                     />
-            </div>
+                      </div> 
 
             <button className="BtnLogin" onClick={(event) => { event.preventDefault() ; handleLogin(); } }>LOGIN</button>
 

@@ -63,7 +63,7 @@ namespace TasKing.Controllers
                            return BadRequest("Lozinka je prazna ili je duza od 20!");
                         }
 
-                        if(string.IsNullOrWhiteSpace(korisnik.brTelefona) || korisnik.brTelefona.Length > 20 || korisnik.brTelefona.Any(Char.IsControl))
+                        if( korisnik.brTelefona.Length > 20 || korisnik.brTelefona.Any(Char.IsControl))
                         {
                            return BadRequest("Broj telefona je prazan ili je duzi od 20!");
                         }
@@ -90,7 +90,7 @@ namespace TasKing.Controllers
                                 lozinka = korisnik1.lozinka,
                                 id = korisnik1.ID
                             };
-                            return Ok(podaci);
+                            return Ok("1");
 
                         }
 
@@ -106,7 +106,7 @@ namespace TasKing.Controllers
             }
             else
             {
-                return BadRequest("Nalog sa unetim email-om vec postoji!");
+                return Ok("2");
             }
         }
 
@@ -135,7 +135,8 @@ namespace TasKing.Controllers
         [Route("ProveriToken/{token}")]
         [HttpPost]
         public async Task<ActionResult> ProveriToken(string token)
-        {
+        {       
+                Console.Write(token);
                 var validanToken = jwtService.Verify(token);
 
                 if (validanToken == null){
@@ -429,6 +430,19 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
+        }
+        [Route("ProveriVodju/{jwt}")]
+        [HttpPost]
+        public async Task<ActionResult> ProveriVodju(string jwt)
+        {
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(c => c.ID ==  userID).FirstOrDefaultAsync();
+
+            return Ok(vodja.vodjaTima);
+
+
         } 
     }
 }
