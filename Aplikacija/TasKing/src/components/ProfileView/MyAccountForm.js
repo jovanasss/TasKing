@@ -212,7 +212,10 @@ function MyAccount1({projects, user}){
           <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
             {projects.map((project, index) => (
         <React.Fragment key={project.id}>
-           <Grid item md={4} sm={6} xs={12}>     
+          <Grid item 
+           md={projects.length===1 ? 12 : projects.length===2 ? 6 : 4} 
+           sm={projects.length===1 ? 12 : 6} 
+           xs={12}>     
             <Box sx={{margin:"0.5%" }}
             >
             <Card variant="outlined" 
@@ -226,7 +229,7 @@ function MyAccount1({projects, user}){
             >
                 <CardContent>
                 <Typography variant="h5" component="div" key={project.id.toString()}>
-                    {"Name: " + project.naziv}
+                    {"Name: " + project.naziv + " (" + project.nazivTima + ")"}
                 </Typography>
                 <Typography sx={{ fontSize: 14, height: "8vh", overflow: "auto", wordWrap: 'break-word' }} color="text.secondary" gutterBottom key={(project.id+1).toString()}>
                      {"Descripiton: " + project.opis}

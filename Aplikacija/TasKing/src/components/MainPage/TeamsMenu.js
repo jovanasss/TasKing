@@ -918,11 +918,11 @@ export default function TeamsMenu(props){
                 
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
-                {team.imeTima.length > 10 
+                {team.imeTima.length > 15 
                 ?
                 <Tooltip title={team.imeTima}>
                    <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
-                            {team.imeTima.slice(0,10) + "..."}
+                            {team.imeTima.slice(0,15) + "..."}
                     </Typography>
                 </Tooltip>
                 :

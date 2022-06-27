@@ -175,7 +175,8 @@ namespace TasKing.Controllers
                                 opis = proj.opis,
                                 aktivan = proj.aktivan,
                                 taskovi = proj.taskovi,
-                                organizacijaID = proj.tim.organizacija.ID
+                                organizacijaID = proj.tim.organizacija.ID,
+                                timNaziv = proj.tim.ime
                             })
                         })
                     })
@@ -199,7 +200,7 @@ namespace TasKing.Controllers
                                         taskoviUradjeni.Add(task);
                                 }
                             }
-                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, proj.organizacijaID, taskoviUkupni, taskoviUradjeni);
+                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, proj.organizacijaID, proj.timNaziv, taskoviUkupni, taskoviUradjeni);
                             allProjectsInfo.Add(projInfo);
                         }
                     }
@@ -234,7 +235,8 @@ namespace TasKing.Controllers
                                 opis = proj.opis,
                                 aktivan = proj.aktivan,
                                 taskovi = proj.taskovi,
-                                organizacijaID = proj.tim.organizacija.ID
+                                organizacijaID = proj.tim.organizacija.ID,
+                                timNaziv = proj.tim.ime
                             })
                         })
                     })
@@ -258,7 +260,7 @@ namespace TasKing.Controllers
                                         taskoviUradjeni.Add(task);
                                 }
                             }
-                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, proj.organizacijaID, taskoviUkupni, taskoviUradjeni);
+                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, proj.organizacijaID, proj.timNaziv, taskoviUkupni, taskoviUradjeni);
                             allProjectsInfo.Add(projInfo);
                         }
                     }
@@ -370,17 +372,18 @@ namespace TasKing.Controllers
         public string opis { get; set; }
         public bool status { get; set; }
         public int organizacijaID { get; set; }
+        public string nazivTima { get; set; }
         public List<Models.Task> taskoviUkupni { get; set; }
         public List<Models.Task> taskoviUradjeni { get; set; }
         
-
-        public ProjectInfo(int id_, string naziv_, string opis_, bool status_, int organizacijaID_, List<Models.Task> taskoviUkupni_, List<Models.Task> taskoviUradjeni_)
+        public ProjectInfo(int id_, string naziv_, string opis_, bool status_, int organizacijaID_, string nazivTima_, List<Models.Task> taskoviUkupni_, List<Models.Task> taskoviUradjeni_)
         {
             id = id_;
             naziv = naziv_;
             opis = opis_;
             status = status_;
             organizacijaID = organizacijaID_;
+            nazivTima = nazivTima_;
             taskoviUkupni = taskoviUkupni_;
             taskoviUradjeni = taskoviUradjeni_;
         }
