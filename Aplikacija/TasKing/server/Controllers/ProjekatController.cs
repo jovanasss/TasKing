@@ -330,6 +330,35 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
         }
+
+        [Route("ObrisiProjekat/{projID}")]
+        [HttpDelete]
+        public async Task<ActionResult> ObrisiProjekat(int projID)
+        {
+            try 
+            { 
+
+            var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
+
+            if(projekat == null)
+            {
+                return BadRequest("Projekat ne postoji!");
+            }
+              
+             foreach(var task in Context.Taskovi.Where(t => t.projekat.ID == projID))
+                {
+                    Context.Taskovi.Remove(task);
+                }
+
+             Context.Projekti.Remove(projekat);
+             await Context.SaveChangesAsync();
+             return Ok("Projekat je uspesno obrisan");
+             }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
     }
     
     public class ProjectInfo

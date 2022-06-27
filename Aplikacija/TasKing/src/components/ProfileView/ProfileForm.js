@@ -233,6 +233,8 @@ function ProfileForm1({user}){
         navigate("/");
         localStorage.removeItem("user-info");
         localStorage.removeItem("rememberMe");
+        localStorage.removeItem("ProfileUser-info");
+        localStorage.removeItem("OrgID");
       }
       
       const drawer = (

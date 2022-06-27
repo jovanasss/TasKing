@@ -12,8 +12,26 @@ import { createTheme } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 import { Store } from 'react-notifications-component';
 import Tooltip from '@mui/material/Tooltip';
+import { IconButton } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 export default function ProjectDescription(props) {
+
+  const [project, setProject] = React.useState([]);
+
+  React.useEffect(() => {
+    setProject(props.Project);
+  }, [props]);
+
+  console.log(project);
+  let canDelete = 0;
+  {props.Project.taskovi==undefined ? void(0) : props.Project.taskovi.forEach(t =>{
+    if(t.status != 0){
+      canDelete++;
+    }
+  })}
+  console.log(canDelete);
+  console.log(props.ProjectID);
 
   const theme = createTheme({
     components:{
@@ -38,6 +56,7 @@ export default function ProjectDescription(props) {
   const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
+  const [open3, setOpen3] = React.useState(false);
   const [projectName, setProjectName] = React.useState(null);
   const [projectDescription, setProjectDescription] = React.useState(null);
 
@@ -151,6 +170,14 @@ export default function ProjectDescription(props) {
     setOpen2(false);
   };
 
+  const handleClickOpen3 = () => {
+    setOpen3(true);
+  };
+
+  const handleClose3 = () => {
+    setOpen3(false);
+  };
+
   const [isVodja , setVodja] = React.useState(true);
   async function vodjaStatus () {
 
@@ -176,24 +203,57 @@ export default function ProjectDescription(props) {
   vodjaStatus();
 }, [props]);
 
+function deleteProject(){
+  fetch("https://localhost:5001/Projekat/ObrisiProjekat/"+props.ProjectID,
+  {
+      method:"DELETE",
+      headers:{
+          "Content-Type":"application/json"
+      },
+  });
+  window.location.reload(false);
+}
+
   return (
     <div className={darkMode ? "descriptionDivDM" :'descriptionDiv'}>
-        {isVodja 
-        ? 
+        {isVodja && canDelete==0
+        ?
         <div className="divProjectNameDescription">
         <Tooltip title="change project title">
-          <h2 onClick={()=>handleClickOpen1()} style={{marginTop:"2%"}} className="h2EditProjectNameVodja">{props.ProjectName}</h2>
+          <h2 onClick={()=>handleClickOpen1()} style={{marginTop:"2%", color : darkMode ? "white" : "black"}} className="h2EditProjectNameVodja">{props.ProjectName}</h2>
+        </Tooltip>
+        <ThemeProvider theme={theme}>
+        <IconButton 
+        onClick={()=>handleClickOpen3()} 
+        variant="contained" 
+        sx={{ border:"2px solid black", borderRadius:"10px", marginLeft:"1%", height:"35px", color : darkMode ? "white" : "black"}}
+        color="primary">
+          <DeleteForeverIcon />
+        </IconButton>
+        </ThemeProvider>
+        <Tooltip title="change project description" placement="bottom-start">
+           <Typography onClick={()=>handleClickOpen2()} className="EditProjectDescriptionVodja" sx={{marginTop:"10px", marginLeft:"1%", width:"85%", color : darkMode ? "white" : "black"}}>
+          {props.ProjectDescription}
+        </Typography>
+        </Tooltip>
+        </div>
+        :
+        isVodja
+        ?
+        <div className="divProjectNameDescription">
+        <Tooltip title="change project title">
+          <h2 onClick={()=>handleClickOpen1()} style={{marginTop:"2%", color : darkMode ? "white" : "black"}} className="h2EditProjectNameVodja">{props.ProjectName}</h2>
         </Tooltip>
         <Tooltip title="change project description" placement="bottom-start">
-           <Typography onClick={()=>handleClickOpen2()} className="EditProjectDescriptionVodja" sx={{marginTop:"10px", marginLeft:"1%", width:"85%"}}>
+           <Typography onClick={()=>handleClickOpen2()} className="EditProjectDescriptionVodja" sx={{marginTop:"10px", marginLeft:"1%", width:"85%", color : darkMode ? "white" : "black"}}>
           {props.ProjectDescription}
         </Typography>
         </Tooltip>
         </div>
         :
         <div className="divProjectNameDescription">
-        <h2 style={{marginTop:"2%"}} className="h2EditProjectName">{props.ProjectName}</h2>
-        <Typography className="EditProjectDescription" sx={{marginTop:"10px", marginLeft:"1%", width:"85%"}}>
+        <h2 style={{marginTop:"2%", color : darkMode ? "white" : "black"}} className="h2EditProjectName">{props.ProjectName}</h2>
+        <Typography className="EditProjectDescription" sx={{marginTop:"10px", marginLeft:"1%", width:"85%", color : darkMode ? "white" : "black"}}>
           {props.ProjectDescription}
         </Typography>
         </div>
@@ -208,11 +268,11 @@ export default function ProjectDescription(props) {
           <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold" ,backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                 {"Change project title"}
               </DialogTitle>
-            <div style={{marginLeft:"10%"}}>
+              <DialogContent style={{backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
              <ThemeProvider theme={theme}>
-                      <TextField onChange={getProjectName} id="outlined-basic3"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white': "black"}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} label="New project title" variant="outlined" type="text" color="primary" sx ={{ maxWidth: "85%"  }}/>
+                      <TextField onChange={getProjectName} id="outlined-basic3"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white': "black"}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} label="New project title" variant="outlined" type="text" color="primary" sx ={{marginTop:"3%", marginLeft:"5%", maxWidth: "85%",backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"  }}/>
               </ThemeProvider>
-              </div>
+              </DialogContent>
               <DialogActions style={{ backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                  <ThemeProvider theme={theme}><Button onClick={handleClose1} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
                  <ThemeProvider theme={theme}>
@@ -231,16 +291,39 @@ export default function ProjectDescription(props) {
           <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold" ,backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                 {"Change project description"}
               </DialogTitle>
-            <div style={{marginLeft:"10%"}}>
+            <DialogContent style={{backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
              <ThemeProvider theme={theme}>
-                      <TextField rows={"6"} multiline onChange={getProjectDescription} id="outlined-basic3"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white': "black"}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} label="New project description" variant="outlined" type="text" color="primary" sx ={{ width: "90%" }}/>
+                      <TextField rows={"6"} multiline onChange={getProjectDescription} id="outlined-basic3"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white': "black"}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} label="New project description" variant="outlined" type="text" color="primary" sx ={{marginLeft:"5%", marginTop:"2%", width: "90%", backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black" }}/>
               </ThemeProvider>
-              </div>
+              </DialogContent>
               <DialogActions style={{ backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
                  <ThemeProvider theme={theme}><Button onClick={handleClose2} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
                  <ThemeProvider theme={theme}>
                    <Button onClick={()=>changeProjectDescription()} variant="contained" color="primary" sx={{fontWeight:"bold"}} autoFocus>
                      Submit
+                   </Button></ThemeProvider>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+          open={open3}
+          onClose={handleClose3}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          >
+          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold" ,backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+                {"Delete Project"}
+              </DialogTitle>
+              <DialogContent style={{backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+              <DialogContentText id="alert-dialog-description" style={{ color : darkMode ? "white"  : "black"}}>
+                Are you sure you want to delete this project?
+              </DialogContentText>
+            </DialogContent>
+              <DialogActions style={{ backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+                 <ThemeProvider theme={theme}><Button onClick={handleClose3} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+                 <ThemeProvider theme={theme}>
+                   <Button onClick={()=>deleteProject()} variant="contained" color="primary" sx={{fontWeight:"bold"}} autoFocus>
+                     Delete
                    </Button></ThemeProvider>
             </DialogActions>
           </Dialog>

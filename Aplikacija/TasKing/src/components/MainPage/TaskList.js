@@ -560,7 +560,13 @@ return(
                 <React.Fragment key={task.taskID}>
               <Box sx={{ minWidth: 280, maxWidth: 340 ,margin:"0.5%", alignSelf:'centar', marginLeft:'5px', marginTop:'25px' }}>
                 <Card variant="outlined" 
-                  sx={{boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", backgroundColor:boje[task.status], marginBottom:'10px' }}>
+                  sx={{
+                    boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)", 
+                    backgroundColor:boje[task.status], marginBottom:'10px', 
+                    borderStyle:"dotted", 
+                    borderWidth:"thick", 
+                    borderColor:"rgb(0, 100, 0)",
+                    borderRadius:"20px"}}>
                     <CardContent>
                       <Typography variant="h5" component="div">
                         {task.naziv.slice(0,70) + (task.naziv.length>70? "..." : "")}

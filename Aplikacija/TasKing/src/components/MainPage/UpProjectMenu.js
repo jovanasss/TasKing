@@ -171,7 +171,7 @@ export default function UpProjectMenu(props) {
         <TaskList selected={selectedIndex!=4? selectedIndex : 5} vodjaStatus={props.vodjaStatus} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} projectID={props.projectID}/>
         <ProgressBar vodjaStatus={props.vodjaStatus} procenat = {procenat}/>
         <TaskList selected={4} vodjaStatus={0} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} />
-        <ProjectDescription ProjectName={project.imeProj} ProjectDescription={project.opisProj} ProjectID={props.projectID}/>
+        <ProjectDescription ProjectName={project.imeProj} ProjectDescription={project.opisProj} ProjectID={props.projectID} Project={project}/>
     </div>
   );
 }
