@@ -208,5 +208,45 @@ namespace TasKing.Controllers
                     return BadRequest(e.Message);
                 }
         }
+
+        [Route("IzmeniTask/{taskID}/{naziv}/{opis}/{tip}/{vrednost}")]
+        [HttpPut]
+        public async Task<ActionResult> IzmeniTask(int taskID, string naziv, string opis, string tip, string vrednost)
+        {
+            var task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
+
+            if(task == null)
+            {
+                return BadRequest("Task ne postoji!");
+            }
+
+            try
+            {
+                task.naziv = naziv;
+                task.opis = opis;
+                task.tip = tip;
+                task.vrednost = vrednost;
+                await Context.SaveChangesAsync();
+                return Ok("Task je uspesno izmenjen");
+            }
+             catch(Exception e)
+            {
+                return BadRequest("Doslo je do greske:" + e.Message);
+            }
+        }
+
+        [Route("VratiTask/{taskID}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiTask(int taskID)
+        {
+            var task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
+
+            if(task == null)
+            {
+                return BadRequest("Task ne postoji!");
+            }
+
+            return Ok(task);
+        }
     }
 }

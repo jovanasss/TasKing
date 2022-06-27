@@ -912,14 +912,22 @@ export default function TeamsMenu(props){
                })
 
                setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
-                T
+                
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
+                {team.imeTima.length > 10 
+                ?
+                <Tooltip title={team.imeTima}>
+                   <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
+                            {team.imeTima.slice(0,10) + "..."}
+                    </Typography>
+                </Tooltip>
+                :
                 <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
-                            {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
-                        </Typography>
-                    </ThemeProvider>
-                  </ListItem>
+                            {team.imeTima}
+                  </Typography>}
+                  </ThemeProvider>
+              </ListItem>
               ))}
               </List>
           </Paper>

@@ -11,10 +11,12 @@
     height: 15%;
 }
 
-@media screen and (min-width: 890px) {
+@media screen and (min-width: 899px) {
     .divMyAccount{
         width:75%;
-        margin-left:24%;
+        margin-left:18%;
+        position: relative;
+        left: 72px;
     }
 }
 
@@ -35,6 +37,7 @@
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     background-color: rgb(26, 167, 167);
     border-style:dotted;
+    border-width:medium;
     min-width: 250px;
     margin-top: 20px;
 }

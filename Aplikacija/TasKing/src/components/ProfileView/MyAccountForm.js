@@ -216,7 +216,13 @@ function MyAccount1({projects, user}){
             <Box sx={{margin:"0.5%" }}
             >
             <Card variant="outlined" 
-            sx={{backgroundColor:"#d6e9de", boxShadow: "0 8px 16px 0 rgba(0,0,0,0), 0 6px 20px 0 rgba(0,0,0,0.19)"}}
+            sx={{
+              borderStyle:"dotted", 
+              borderWidth:"thick", 
+              borderColor:"rgb(26, 150, 167)", 
+              backgroundColor:"#d6e9de", 
+              borderRadius:"20px", 
+              boxShadow:" 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)"}}
             >
                 <CardContent>
                 <Typography variant="h5" component="div" key={project.id.toString()}>

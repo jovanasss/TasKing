@@ -23,6 +23,7 @@ import { blue } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Store } from 'react-notifications-component';
+import EditIcon from '@mui/icons-material/Edit';
 
 const drawerWidth = 240
 const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
@@ -135,8 +136,8 @@ function SimpleDialog(props) {
         {members.map((member) => (
           <ListItem key={member.clanTimaID}>
             <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
+              <Avatar src={"../../profile/"+member.korisnik.profilnaSlika} sx={{ bgcolor: blue[100], color: blue[600] }}>
+                {member.korisnik.ime.charAt(0)}{member.korisnik.prezime.charAt(0)}
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={member.korisnik.korisnickoIme} style={{ color : darkMode ? "white" : "black"}}/>
@@ -144,13 +145,15 @@ function SimpleDialog(props) {
               <Button
                 sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '50px'}}
                 onClick ={()=>visitProfile(member.korisnik.id)}
-                color="primary">
+                color="primary"
+                variant="contained">
                 View Profile
               </Button>
               <Button
               sx={{ border:"2px solid black", borderRadius:"10px", marginLeft: '20px'}}
               onClick={()=>{handleHire(member.clanTimaID);}}
-              color="primary">
+              color="primary"
+              variant="contained">
                  Hire
               </Button>
             </ThemeProvider>
@@ -476,6 +479,66 @@ const displej = [displejClan, displejVodja]
 const imeKlasa = ['normal', 'intrested', 'working', 'waitingReview']
 const boje = [boja1(),'rgb(77, 154, 255)', 'rgb(255, 207, 49)', 'rgb(78, 255, 93)', 'rgb(255, 87, 69)']
 
+const [openDChangeTask, setOpenDChangeTask] = React.useState(false);
+const [t, setT] = React.useState(null);
+const [taskID, setTaskID] = React.useState(null);
+const [taskName , setTaskName] = React.useState('');
+const [taskType , setTaskType] = React.useState('');
+const [taskDesc ,setTaskDesc] = React.useState('');
+const [bodovi , setBodovi] = React.useState(0);
+
+const handleClickChangeTask = (id) => {
+  fetch("https://localhost:5001/Task/VratiTask/"+id,
+  {
+      method:"GET",
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  }).then(res => {
+      res.json()
+      .then(data => {
+          setT(data);
+          setTaskID(data.id);
+          setTaskName(data.naziv);
+          setTaskType(data.tip);
+          setTaskDesc(data.opis);
+          setBodovi(data.vrednost);
+          setOpenDChangeTask(true);
+      });
+  })
+}
+
+function getnaziv(e){
+  setTaskName(e.target.value);
+}
+
+function getopis(e){
+  setTaskDesc(e.target.value);
+}
+
+function gettip(e){
+  setTaskType(e.target.value);
+}
+
+function getbodovi(e){
+  setBodovi(e.target.value);
+}
+
+const handleCloseChangeTask = () => {
+  setOpenDChangeTask(false)
+}
+
+function changeTask(){
+  fetch("https://localhost:5001/Task/IzmeniTask/"+taskID+"/"+taskName+"/"+taskDesc+"/"+taskType+"/"+bodovi,
+          {
+              method:"PUT",
+              headers:{
+                  "Content-Type":"application/json"
+              },
+        });
+      window.location.reload(false);
+}
+
 if(tasks==undefined || tasks==null)
   return;
 
@@ -489,6 +552,7 @@ if(tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 &&
 {
   return;
 }
+
 
 return(
       <div style={{display: 'flex', flexDirection:'row'}}>
@@ -554,6 +618,14 @@ return(
                             {buttonTexts(task.taskID, task.status, task.prijave.length)}
                         </Button>
                         <IconButton
+                          onClick={()=>handleClickChangeTask(task.taskID)}
+                          //aria-describedby={id} 
+                          variant="contained" 
+                          sx={{ border:"2px solid black", borderRadius:"10px", display:(task.status==0 && isVodja)? 'inline' : 'none'}}
+                          color="primary">
+                            <EditIcon/>
+                        </IconButton>
+                        <IconButton
                           onClick={()=>handleChangeStatus(task.taskID, -1)}
                           //aria-describedby={id} 
                           variant="contained" 
@@ -601,6 +673,61 @@ return(
                 onClose={handleCloseSimple}
                 taskID = {curTask}
               />
+
+        <ThemeProvider theme={theme}>
+          <Dialog open={openDChangeTask} onClose={handleClose}>
+             <DialogTitle style={{
+                backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+                color : darkMode ? "white" : "black",
+             }}>
+               Edit task 
+             </DialogTitle>
+              <DialogContent style={{
+                 backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+              }}>
+                <ThemeProvider theme={theme}>
+                  <TextField id="outlined-basic" defaultValue={t==undefined ? " " : t.naziv} label="Task Title" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                       onChange={getnaziv}
+                        sx={{
+                          width :"100%",
+                          marginTop : "5%",
+                          marginBottom : "5%",
+                          }}/>                      
+                </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <TextField id="outlined-basic" defaultValue={t==undefined ? " " : t.tip} label="Task Type"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
+                        onChange={gettip}
+                          sx={{
+                           width :"100%",
+                           marginTop : "5%",
+                           marginBottom : "5%",
+                           }}/>                      
+                </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <TextField  //error={projDescError}
+                     onChange={getopis}
+                      id="outlined-basic" defaultValue={t==undefined ? " " : t.opis} label="Description"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
+                          multiline 
+                          required
+                          rows={'5'}
+                          //maxRows={'5'}  
+                          sx={{ width : "100%", height: "40%"}}/>
+                </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <Slider 
+                      //value = {bodovi}
+                      onChange={getbodovi}
+                      defaultValue={t==undefined ? 0 : parseInt(t.vrednost)} aria-label="Default" valueLabelDisplay="auto" />
+                  </ThemeProvider>
+              </DialogContent>
+              <DialogActions style={{
+                 backgroundColor : darkMode ? "rgb(46, 45, 45)" : "white",
+              }}>
+               <ThemeProvider theme={theme1} ><Button onClick={handleCloseChangeTask} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+              <ThemeProvider theme={theme1}><Button onClick={changeTask} variant="contained" color="primary" sx={{fontWeight:"bold"}}>Sumbit</Button></ThemeProvider>
+             </DialogActions>
+          </Dialog>
+        </ThemeProvider>
     </div>
 )
 }
