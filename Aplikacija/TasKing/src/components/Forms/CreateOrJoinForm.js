@@ -311,7 +311,7 @@ function CreateOrJoinForm(){
        </Grid>
        <Grid item xs={12} sm={8} md={5}>
        <form className={darkMode ? "FormDM":"Form"}>
-       
+       <img src="../../Logo/TasKingLogo.png" width="120px" height="50px" style={{float : "left"}} ></img>
         <div className="JoinDiv">
           <div className={darkMode ? "JoinOrganizationDM" :"JoinOrganization"}>
           <div  className="divIcons"><div className="divIcon"><GroupsIcon /></div></div>

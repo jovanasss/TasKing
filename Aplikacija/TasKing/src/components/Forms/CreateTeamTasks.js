@@ -296,6 +296,7 @@ function CreateTeamTasks(){
             <form className={darkMode ? "formaCreateTeamTasksDM":"formaCreateTeamTasks"}>
                 <div className="GlavniDivTeamTasks">
                         <div className="divNaslovCreateTeamTasks"> 
+                            <img src="../../Logo/TasKingLogo.png" width="70px" height="50px" style={{float : "left"}} ></img>
                             <label className={darkMode ? "naslovCreateTeamTasksDM":"naslovCreateTeamTasks"}>CREATE A PROJECT</label>
                         </div>
                         <div className="inputProjectTitle">

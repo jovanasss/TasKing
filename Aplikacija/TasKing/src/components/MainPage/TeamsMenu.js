@@ -502,8 +502,10 @@ export default function TeamsMenu(props){
   async function generateCode()  {
 
     let codeValid = false ; 
+
     while(!codeValid){
-      let OTP = generate();
+
+      let OTP =  generate();
       console.log(OTP);
       let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP ,
       {
@@ -514,7 +516,7 @@ export default function TeamsMenu(props){
       });
       result = await result.json();
       console.log(result);
-      if ( result == 'false'){
+      if ( result === false){
         console.log(result , OTP);
         codeValid = true ;
         return OTP;
@@ -555,10 +557,9 @@ export default function TeamsMenu(props){
     const tim = {
       ime : teamName ,
       idOrganizacije : idNoveOrg,
-      kod : await generateCode(),
-      
-    }
-
+      kod :  await generateCode(),  
+      }
+      console.log(tim);
     const organizacijaID = (JSON.parse(window.localStorage.getItem('OrgID')));
     let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+organizacijaID , {
       method : 'GET',
@@ -624,7 +625,7 @@ export default function TeamsMenu(props){
                  }
                })
 
-        window.location.reload(false);
+       window.location.reload(false);
     }
     else{
       Store.addNotification({

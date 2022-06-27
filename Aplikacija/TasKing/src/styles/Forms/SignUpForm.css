@@ -76,9 +76,10 @@ body{
       border-radius: 10px;
   }
   .naslov{
+      margin-right: 25%;
       font-weight: bold;
       font-size: 25px;
-      width: 100%;
+      width: 80%;
   }
   .inputFirstLastName{
       display: flex;

@@ -238,7 +238,7 @@ return (
                    {/* </ThemeProvider>*/}
             </div>
 
-            <div className={darkMode ? "divCheckDM":"divCheck"}>
+           {/* <div className={darkMode ? "divCheckDM":"divCheck"}>
                     <FormControlLabel
                         label = "Remember me ?"
                         control = {
@@ -255,7 +255,7 @@ return (
                             />
                         }
                     />
-                      </div> 
+                      </div> */}
 
             <button className="BtnLogin" onClick={(event) => { event.preventDefault() ; handleLogin(); } }>LOGIN</button>
 

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {Navigate , Outlet} from "react-router-dom";
 
 
@@ -54,9 +55,9 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 
-async function useAuth()  {
+async function  useAuth() {
 
-    var vodja = false; 
+    let vodja = false; 
     const token = localStorage.getItem('clanTimaID');
 
     //console.log(token.value);
@@ -67,12 +68,15 @@ async function useAuth()  {
     else{
         vodja = proveri().then( a => console.log(a));
         await sleep(1000);
-        return vodja;     
+        return vodja ;   
     }
 }
 const AdminRoutes= () => {
 
-    const isAuth =  useAuth();
+    let isAuth ;
+
+    isAuth =  useAuth(); 
+
     return isAuth ? <Outlet/> : <Navigate to = "/" /> ;
     
 };

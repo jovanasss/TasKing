@@ -43,6 +43,7 @@
     border-radius: 10px;
 }
 .naslovCreateTeamTasks{
+    margin-right: 10%;
     font-weight: bold;
     font-size: 25px;
     width: 100%;
@@ -52,6 +53,7 @@
     font-size: 25px;
     width: 100%;
     color : white;
+    margin-right: 10%;
 }
 .inputProjectTitle , .inputProjectDescription ,.inputTasks {
     margin-top: 5%;

@@ -189,7 +189,8 @@ function SignUp(){
             <form className={darkMode ? "formaDM" :"forma"}>
                 <div className={darkMode ? "GlavniDivDM" :"GlavniDiv"}>
                     <div className="divNaslov"> 
-                        <label className="naslov">SIGN UP</label>
+                        <img src="../../Logo/TasKingLogo.png" width="100px" height="40px" style={{float : "left"}} ></img>
+                        <label className="naslov"> SIGN UP</label>
                     </div>
 
                     <div className="inputFirstLastName">

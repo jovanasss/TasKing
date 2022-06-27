@@ -43,83 +43,119 @@ export default function LeftMenu(props){
   const showOrganisations = ()=>{
     
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.value,
+
+    console.log(user);
+
+    if(user === undefined){
+        let path = "/";
+        navigate(path);
+    }
+    else
     {
-        method:"GET",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }).then(res => {
-      if(res.ok)
-      {
-        res.json().then(data => {
-          setOrganisations(data)
-          if(data==undefined || data==null)
-          return;
-         
-          if(data.length==0)
-            return;  
-  
-          if(window.localStorage.getItem("clanOrgID") === null) // provera da li token postoji ako ne onda ga napravimo 
-          {
-            setOrg(data[0].idClan)
-            
-            fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + data[0].idClan,
-            {
-                method:"POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }).then(res =>{
-              if(res.ok){
-                res.json().then(data => {
-                  console.log(data.value);
-                  localStorage.setItem('clanOrgID',data.value);
-                })
-              }
-            })
+    
 
-            //localStorage.setItem('clanOrgID',data[0].idClan)
+      fetch("https://localhost:5001/Korisnik/ProveriToken/" + user.value, {
+      method : 'POST',
+      headers : {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json; charset=utf-8'
+      },
+      }).then(res => {
+      res.json().then(data => {
+         if ( data === 1)
+         {
 
-            // ovde generisemo token sa ovim idClana i stavljamo ga u local storage
-            localStorage.setItem('OrgID',data[0].orgID)
-          }
-          // ako token postoji desifruj ga i koristimo to na dalje
-          else
-          {
-            //setOrg(window.localStorage.getItem('clanOrgID')) // desifrovanje tokena 
-            var clanID ;
-            fetch("https://localhost:5001/Organizacija/VratiIDClanaOrganizacije/" + localStorage.getItem('clanOrgID'),
+            fetch("https://localhost:5001/Korisnik/VratiClanoveOrganizacije/" + user.value,
             {
                 method:"GET",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            }).then(res =>{
-              if(res.ok){
+            }).then(res => {
+              if(res.ok)
+              {
                 res.json().then(data => {
-                  console.log(data.id);
-                  setOrg(data.id);
-                  clanID = data.id;
-                })
+                  setOrganisations(data)
+                  if(data==undefined || data==null)
+                  return;
+                
+                  if(data.length==0)
+                    return;  
+          
+                  if(window.localStorage.getItem("clanOrgID") === null) // provera da li token postoji ako ne onda ga napravimo 
+                  {
+                    setOrg(data[0].idClan)
+                    
+                    fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + data[0].idClan,
+                    {
+                        method:"POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }).then(res =>{
+                      if(res.ok){
+                        res.json().then(data => {
+                          console.log(data.value);
+                          localStorage.setItem('clanOrgID',data.value);
+                        })
+                      }
+                    })
+        
+                    //localStorage.setItem('clanOrgID',data[0].idClan)
+        
+                    // ovde generisemo token sa ovim idClana i stavljamo ga u local storage
+                    localStorage.setItem('OrgID',data[0].orgID)
+                  }
+                  // ako token postoji desifruj ga i koristimo to na dalje
+                  else
+                  {
+                    //setOrg(window.localStorage.getItem('clanOrgID')) // desifrovanje tokena 
+                    var clanID ;
+                    fetch("https://localhost:5001/Organizacija/VratiIDClanaOrganizacije/" + localStorage.getItem('clanOrgID'),
+                    {
+                        method:"GET",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }).then(res =>{
+                      if(res.ok){
+                        res.json().then(data => {
+                          console.log(data.id);
+                          setOrg(data.id);
+                          clanID = data.id;
+                        })
+                      }
+                    }) ;
+        
+                    for(let i=0; i< data.length; i++)
+                    {
+                      if(data[i].idClan == clanID)
+                        {
+                          break;
+                        }
+                    }
+                  }
+                });
               }
-            }) ;
+              else
+              {
+                alert("desila se greska pri ucitavanju organizacija korisnika");
+              }
+            })
+         }
+         else
+         {
+            alert("NEVALIDAN TOKEN !");
+            let path = '/';
+            navigate(path);
+         }
+      
 
-            for(let i=0; i< data.length; i++)
-            {
-              if(data[i].idClan == clanID)
-                {
-                  break;
-                }
-            }
-          }
-        });
-      }
-      else
-      {
-        alert("desila se greska pri ucitavanju organizacija korisnika");
-      }
-    })
+        
+        })
+      })
+    }
+
   }
 
   async function  handleJoinTeam()  {

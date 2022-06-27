@@ -66,13 +66,12 @@ function App() {
       <ReactNotifications />
 
       <Routes>
-
+      <Route  path= "/SignUp" element={<SignUpForm />}/>
       <Route  path= "/" element={<LoginForm/>}/>
       <Route element={<ProtectedRoutes/>}>  
         <Route  path= "/CoJ" element={<CreateOrJoinForm/>}/>
         <Route  path= "/Main" element={<MainScreen/>}/>
         <Route  path= "/Profile/*" element={<Profile />}/>
-        <Route  path= "/SignUp" element={<SignUpForm />}/>
         <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
         <Route  path= "/acc" element={<AccountCreatedForm />}/>
       </Route>

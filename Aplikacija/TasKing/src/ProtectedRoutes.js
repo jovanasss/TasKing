@@ -42,6 +42,7 @@ const useAuth = () => {
 
     const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
+
     //console.log(token.value);
     if (token === null){
         console.log(loggedIn);

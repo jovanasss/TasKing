@@ -455,7 +455,8 @@ function CreateOrganisationForm (){
             <form className={darkMode ? "formaCORGDM" :"formaCORG"}>
                 <div className="GlavniDivCORG">
 
-                    <div className="divNaslovCORG"> 
+                    <div className="divNaslovCORG">
+                        <img src="../../Logo/TasKingLogo.png" width="60px" height="40px" style={{float : "left"}} ></img>
                         <label className="naslovCORG">{FormTitles[page]}</label>
                     </div>
 
