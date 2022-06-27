@@ -26,7 +26,7 @@ export default function ProjectDescription(props) {
   console.log(project);
   let canDelete = 0;
   {props.Project.taskovi==undefined ? void(0) : props.Project.taskovi.forEach(t =>{
-    if(t.status != 0){
+    if(t.status > 0){
       canDelete++;
     }
   })}
@@ -211,12 +211,13 @@ function deleteProject(){
           "Content-Type":"application/json"
       },
   });
+  localStorage.removeItem('projID');
   window.location.reload(false);
 }
 
   return (
     <div className={darkMode ? "descriptionDivDM" :'descriptionDiv'}>
-        {isVodja && canDelete==0
+        {isVodja && canDelete==0 && props.ProjectID>=0
         ?
         <div className="divProjectNameDescription">
         <Tooltip title="change project title">
@@ -238,7 +239,7 @@ function deleteProject(){
         </Tooltip>
         </div>
         :
-        isVodja
+        isVodja && props.ProjectID>=0
         ?
         <div className="divProjectNameDescription">
         <Tooltip title="change project title">

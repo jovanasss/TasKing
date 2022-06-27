@@ -226,7 +226,16 @@ namespace TasKing.Controllers
                 task.opis = opis;
                 task.tip = tip;
                 task.vrednost = vrednost;
+
+                var prijave =  await Context.PrijaveZaTask.Where(p => p.task.ID == taskID).ToListAsync();
+
+                foreach(var prijava in prijave)
+                {
+                    Context.PrijaveZaTask.Remove(prijava);
+                }
+
                 await Context.SaveChangesAsync();
+                
                 return Ok("Task je uspesno izmenjen");
             }
              catch(Exception e)

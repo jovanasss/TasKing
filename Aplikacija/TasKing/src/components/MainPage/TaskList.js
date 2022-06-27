@@ -235,7 +235,7 @@ const handleClickOpen = (scrollType, ind) => () => {
 };
 
 const handleClose = () => {
-  setDialog(0);
+  setDialog(-1);
   setOpen(false);
 };
 
@@ -486,6 +486,8 @@ const [taskName , setTaskName] = React.useState('');
 const [taskType , setTaskType] = React.useState('');
 const [taskDesc ,setTaskDesc] = React.useState('');
 const [bodovi , setBodovi] = React.useState(0);
+const [open3, setOpen3] = React.useState(false);
+const [curTaskID, setCurTaskId] = React.useState(false);
 
 const handleClickChangeTask = (id) => {
   fetch("https://localhost:5001/Task/VratiTask/"+id,
@@ -527,6 +529,14 @@ function getbodovi(e){
 const handleCloseChangeTask = () => {
   setOpenDChangeTask(false)
 }
+
+const handleClickOpen3 = () => {
+  setOpen3(true);
+};
+
+const handleClose3 = () => {
+  setOpen3(false);
+};
 
 function changeTask(){
   fetch("https://localhost:5001/Task/IzmeniTask/"+taskID+"/"+taskName+"/"+taskDesc+"/"+taskType+"/"+bodovi,
@@ -632,7 +642,7 @@ return(
                             <EditIcon/>
                         </IconButton>
                         <IconButton
-                          onClick={()=>handleChangeStatus(task.taskID, -1)}
+                          onClick={()=>{setCurTaskId(task.taskID); handleClickOpen3();}}
                           //aria-describedby={id} 
                           variant="contained" 
                           sx={{ border:"2px solid black", borderRadius:"10px", display:(task.status==0 && isVodja)? 'inline' : 'none'}}
@@ -645,6 +655,8 @@ return(
               </Box>
               </React.Fragment>
                ))}
+              {dialogTask!=-1
+              ?
               <Dialog
                 open={open}
                 onClose={handleClose}
@@ -656,7 +668,7 @@ return(
                     backgroundColor : darkMode ? "rgb(26,25,25)" : "white" ,
                     color : darkMode ? "white "  : "black",
                      }} >
-                      {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1))[dialogTask].naziv}</DialogTitle>
+                      {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).slice(0).reverse()[dialogTask].naziv}</DialogTitle>
                   <DialogContent dividers={scroll === 'paper'} style={{backgroundColor : darkMode ? "rgb(26,25,25)" : "white",}} >
                     <DialogContentText
                       id="scroll-dialog-description"
@@ -665,7 +677,7 @@ return(
                       style={{
                         color : darkMode ? "white" : "black",
                       }}>
-                      {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1))[dialogTask].opisTaska}
+                      {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).slice(0).reverse()[dialogTask].opisTaska}
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions style={{
@@ -674,6 +686,9 @@ return(
                   <ThemeProvider theme={theme1}><Button onClick={handleClose} variant="contained" color="primary" >ok</Button></ThemeProvider>
                   </DialogActions>
               </Dialog>
+              :
+              null
+              }
               <SimpleDialog
                 open={openSimple}
                 onClose={handleCloseSimple}
@@ -732,6 +747,28 @@ return(
                <ThemeProvider theme={theme1} ><Button onClick={handleCloseChangeTask} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
               <ThemeProvider theme={theme1}><Button onClick={changeTask} variant="contained" color="primary" sx={{fontWeight:"bold"}}>Sumbit</Button></ThemeProvider>
              </DialogActions>
+          </Dialog>
+          <Dialog
+          open={open3}
+          onClose={handleClose3}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          >
+          <DialogTitle id="alert-dialog-title"  sx={{fontWeight:"bold" ,backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+                {"Delete Task"}
+              </DialogTitle>
+              <DialogContent style={{backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+              <DialogContentText id="alert-dialog-description" style={{ color : darkMode ? "white"  : "black"}}>
+                Are you sure you want to delete this task?
+              </DialogContentText>
+            </DialogContent>
+              <DialogActions style={{ backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
+                 <ThemeProvider theme={theme}><Button onClick={handleClose3} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+                 <ThemeProvider theme={theme}>
+                   <Button onClick={()=>{handleChangeStatus(curTaskID, -1); handleClose3();}} variant="contained" color="primary" sx={{fontWeight:"bold"}} autoFocus>
+                     Delete
+                   </Button></ThemeProvider>
+            </DialogActions>
           </Dialog>
         </ThemeProvider>
     </div>

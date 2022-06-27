@@ -79,7 +79,7 @@ function CreateOrganisationForm (){
           });
           result = await result.json();
           console.log(result);
-          if ( result == 'false'){
+          if ( result === false){
             console.log(result , OTP);
             codeValid = true ;
             return OTP;
@@ -103,7 +103,7 @@ function CreateOrganisationForm (){
             },
         });
         result = await result.json();
-        if ( result === "false"){
+        if ( result === false){
           codeValid = true ;
           return OTP;
         }

@@ -67,7 +67,7 @@ export default function UpProjectMenu(props) {
           console.log(data);
           //setProject(data)
           setProject(data.projekatInfo)
-          setProcenat(data.procenat)
+          setProcenat(data.procenat.toFixed(0))
         });
       }
       else
@@ -163,14 +163,9 @@ export default function UpProjectMenu(props) {
               </div>
           </Toolbar>
         </AppBar>
-        {/*<TaskList selected={selectedIndex!=4? selectedIndex : 5} vodjaStatus={1} taskovi = {project.taskovi} projectID={props.projectID}/>
+        <TaskList selected={selectedIndex!=4? selectedIndex : 5} vodjaStatus={1} taskovi = {project.taskovi} projectID={props.projectID}/>
         <ProgressBar procenat = {procenat}/>
         <TaskList selected={4} vodjaStatus={0} taskovi = {project.taskovi} />
-        <ProjectDescription ProjectName={project.imeProj} ProjectDescription={project.opisProj}/>*/}
-
-        <TaskList selected={selectedIndex!=4? selectedIndex : 5} vodjaStatus={props.vodjaStatus} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} projectID={props.projectID}/>
-        <ProgressBar vodjaStatus={props.vodjaStatus} procenat = {procenat}/>
-        <TaskList selected={4} vodjaStatus={0} realVodjaStatus={props.vodjaStatus} taskovi = {project.taskovi} />
         <ProjectDescription ProjectName={project.imeProj} ProjectDescription={project.opisProj} ProjectID={props.projectID} Project={project}/>
     </div>
   );

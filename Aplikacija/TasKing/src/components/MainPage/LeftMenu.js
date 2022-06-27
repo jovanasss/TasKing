@@ -16,6 +16,7 @@ import { Store } from 'react-notifications-component';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { blue, green } from '@mui/material/colors';
 const drawerWidth = 240     
 
 
@@ -547,7 +548,7 @@ const handleOrgClick = () => {
               </ThemeProvider>
             </ListItem>
            {organisations.map(item => (
-             <ListItem key={item.idClan+3} className={curOrg==item.idClan? 'activeEnt' : null}>
+             <ListItem key={item.idClan+3} className={curOrg==item.idClan? 'activeEnt' : null} sx={{ bgcolor: curOrg==item.idClan? 'rgb(26, 167, 167)' : (item.administrator? green[50] : 'auto')}} >
               <ThemeProvider theme={theme}>
                 <Tooltip title={item.imeOrganizacije}>
                  {/*} <IconButton src={"../../TandO/"+item.slika}  onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan); localStorage.setItem('OrgID',item.orgID) }} onDoubleClick={handleClickFile} sx={{backgroundColor: 'white'}}>

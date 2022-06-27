@@ -74,9 +74,9 @@ function App() {
         <Route  path= "/Profile/*" element={<Profile />}/>
         <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
         <Route  path= "/acc" element={<AccountCreatedForm />}/>
-      </Route>
-      <Route element= {<AdminRoutes />}>
-          <Route  path= "/cTT" element={<CreateTeamTasks />}/>
+          <Route element= {<AdminRoutes />}>
+              <Route  path= "/cTT" element={<CreateTeamTasks />}/>
+          </Route>
       </Route>
      
       </Routes>

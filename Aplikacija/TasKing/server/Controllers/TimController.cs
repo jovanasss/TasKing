@@ -196,7 +196,7 @@ namespace TasKing.Controllers
                             .Where(p=>p.ID==projID && p.aktivan==true)
                             .Select(p=>
                             new{
-                                SviTaskovi = p.taskovi.Select(ta => new{
+                                SviTaskovi = p.taskovi.Where(t =>t.status!=-1).Select(ta => new{
                                     vrednost = ta.vrednost,
                                 }),
                                 TvojiTaskovi = p.taskovi.Where(t =>t.status==3  && t.clanTima!=null && t.clanTima.ID==clanTimaID).Select(ta => new{
@@ -216,7 +216,7 @@ namespace TasKing.Controllers
                                 yourPoints+=Int32.Parse(task.vrednost);
                             }
 
-                            int procenat = totalPoints==0? 0 : (int)((yourPoints*100)/totalPoints);
+                            float procenat = totalPoints==0? 0 : (int)((yourPoints*100)/totalPoints);
                         
                             return Ok(new{
                                 projekatInfo = projekatInfo,

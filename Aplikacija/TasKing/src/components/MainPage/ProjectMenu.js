@@ -85,7 +85,7 @@ function SimpleDialog(props) {
   async function vodjaStatus () {
     if(localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
     {
-      setVodja(true);
+      setVodja(false);
       return;
     }
 
@@ -367,7 +367,7 @@ export default function ProjectMenu(props) {
   async function vodjaStatus () {
     if(localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
     {
-      setVodja(true);
+      setVodja(false);
       return;
     }
 

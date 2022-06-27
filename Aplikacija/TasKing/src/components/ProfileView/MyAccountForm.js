@@ -228,7 +228,7 @@ function MyAccount1({projects, user}){
                 <Typography variant="h5" component="div" key={project.id.toString()}>
                     {"Name: " + project.naziv}
                 </Typography>
-                <Typography sx={{ fontSize: 14, height: "8vh", overflow: "auto" }} color="text.secondary" gutterBottom key={(project.id+1).toString()}>
+                <Typography sx={{ fontSize: 14, height: "8vh", overflow: "auto", wordWrap: 'break-word' }} color="text.secondary" gutterBottom key={(project.id+1).toString()}>
                      {"Descripiton: " + project.opis}
                 </Typography>
                   <Typography sx={{ mb: 1.5, fontSize:14 }} color="text.secondary" key={(project.id+2).toString()}>

@@ -73,7 +73,7 @@ function LoginForm()  {
       let b = await valid.json()
       if ( b === 1){
         localStorage.setItem('user-info',JSON.stringify(a))
-        localStorage.setItem('rememberMe',rememberMe);
+        //localStorage.setItem('rememberMe',rememberMe);
         //const userN = (JSON.parse(window.localStorage.getItem('user-info')));
         const token = (JSON.parse(window.localStorage.getItem('user-info')));
         console.log(token);

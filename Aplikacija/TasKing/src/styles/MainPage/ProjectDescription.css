@@ -38,6 +38,7 @@
     background-color: transparent;
     border: 0;
     padding: 2px;
+    word-wrap: break-word;
 }
 
 .EditProjectDescriptionVodja:hover{
@@ -50,6 +51,7 @@
     background-color: transparent;
     border: 0;
     padding: 2px;
+    word-wrap: break-word;
 }
 
 .divProjectNameDescription{

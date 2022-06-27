@@ -191,8 +191,9 @@ namespace TasKing.Controllers
                             List<Models.Task> taskoviUradjeni = new List<Models.Task>();
                             foreach (var task in proj.taskovi)
                             {
-                                taskoviUkupni.Add(task);
-                                if(task.clanTima!=null)
+                                if(task.status!=-1)
+                                    taskoviUkupni.Add(task);
+                                if(task.clanTima!=null && task.status==3)
                                 {
                                     if(clanT.ID == task.clanTima.ID)
                                         taskoviUradjeni.Add(task);
@@ -249,8 +250,9 @@ namespace TasKing.Controllers
                             List<Models.Task> taskoviUradjeni = new List<Models.Task>();
                             foreach (var task in proj.taskovi)
                             {
-                                taskoviUkupni.Add(task);
-                                if(task.clanTima!=null)
+                                if(task.status!=-1)
+                                    taskoviUkupni.Add(task);
+                                if(task.clanTima!=null && task.status==3)
                                 {
                                     if(clanT.ID == task.clanTima.ID)
                                         taskoviUradjeni.Add(task);

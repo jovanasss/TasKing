@@ -12,6 +12,8 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import { blue } from '@mui/material/colors';
+import { yellow } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -403,6 +405,7 @@ export default function TeamsMenu(props){
               localStorage.setItem('TimID',data[0].idTima)
 
 
+
               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan,
               {
                   method:"POST",
@@ -447,9 +450,6 @@ export default function TeamsMenu(props){
           }
           else
           {
-            setTim(data[0].idTima)
-            setClanTima(data[0].idClan) 
-            localStorage.setItem('TimID',data[0].idTima)
 
 
             fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan,
@@ -460,9 +460,12 @@ export default function TeamsMenu(props){
                 },
             }).then(res =>{
               if(res.ok){
-                res.json().then(data => {
-                  console.log(data.value);
-                  localStorage.setItem('clanTimaID',data.value);
+                res.json().then(data2 => {
+                  console.log(data2.value + "adawdawdawdawdawda");
+                  setTim(data[0].idTima)
+                  setClanTima(data[0].idClan) 
+                  localStorage.setItem('TimID',data[0].idTima)
+                  localStorage.setItem('clanTimaID',data2.value);
                 })
               }
             })
@@ -882,7 +885,7 @@ export default function TeamsMenu(props){
                     </div>  
               </ListItem>
               {teams.map(team => (
-                  <ListItem key={team.idTima+3} className={curTim==team.idTima? 'activeEnt' : null}>
+                  <ListItem key={team.idTima+3} className={curTim==team.idTima? 'activeEnt' : null} sx={{ bgcolor: curTim==team.idTima? 'rgb(26, 167, 167)' : (team.vodja? green[50] : 'auto')}} >
                     <ThemeProvider theme={theme}>
                       {/*<Button onClick={() =>{setTim(team.idTima); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}}>
                         <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
