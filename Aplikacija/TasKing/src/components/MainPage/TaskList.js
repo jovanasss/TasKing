@@ -102,7 +102,8 @@ function SimpleDialog(props) {
         //zatvori se
   };
 
-  React.useEffect(() => {
+
+  const vratiPrijave = ()=>{
     fetch("https://localhost:5001/Task/VratiPrijaveZaTask/" + props.taskID,
   {
       method:"GET",
@@ -121,7 +122,11 @@ function SimpleDialog(props) {
       alert("greska pri vracanju prijava");
     }
   })
- }, [props.taskID]);
+  }
+
+  React.useEffect(() => {
+    vratiPrijave();
+ }, [props]);
 
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -763,8 +768,8 @@ return(
               </DialogContentText>
             </DialogContent>
               <DialogActions style={{ backgroundColor : darkMode ? "rgb(26,25,25)": "white" , color : darkMode ? "white" : "black"}}>
-                 <ThemeProvider theme={theme}><Button onClick={handleClose3} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
-                 <ThemeProvider theme={theme}>
+                 <ThemeProvider theme={theme1}><Button onClick={handleClose3} color="secondary" sx={{fontWeight:"bold"}}>Cancel</Button></ThemeProvider>
+                 <ThemeProvider theme={theme1}>
                    <Button onClick={()=>{handleChangeStatus(curTaskID, -1); handleClose3();}} variant="contained" color="primary" sx={{fontWeight:"bold"}} autoFocus>
                      Delete
                    </Button></ThemeProvider>

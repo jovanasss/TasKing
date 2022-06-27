@@ -363,6 +363,64 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
         }
+
+        [Route("VratiClanoveSaUcinkom/{timID}/{ProjekatID}/{jwt}")]
+        [HttpGet]
+        public async Task<ActionResult> VratiClanoveSaUcinkom(int timID,int ProjekatID, string jwt)
+        {     
+                 try
+                {
+                    var token = jwtService.Verify(jwt);
+                    int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                    var sviTaskovi = await Context.Taskovi.Where(t => t.projekat.ID == ProjekatID && t.status!=-1).ToListAsync();
+
+                    var clanovi = await Context.ClanoviTima.Where(p => p.tim.ID == timID && p.ID != clanID && p.izbacen==false && p.clanOgranizacije.izbacen==false)
+                    .Include(c =>c.tim)
+                    .ThenInclude(t =>t.projekti)
+                    .ThenInclude(p =>p.taskovi)
+                    .Include(c =>c.clanOgranizacije)
+                    .ThenInclude(c =>c.korisnik)
+                    .Select(clan => new{
+                        clanTimaID = clan.ID,
+                        vodja = clan.vodjaTima,
+                        clanOrgID = clan.clanOgranizacije.ID,
+                        Korisnik = clan.clanOgranizacije.korisnik,
+                        taskovi = clan.tim.projekti.FirstOrDefault(p => p.ID == ProjekatID).taskovi.Where(t => t.status==3 && t.clanTima!=null && t.clanTima.ID==clan.ID).Select(task => new{
+                            bodovi = Int32.Parse(task.vrednost)
+                        })
+                    })
+                    .ToListAsync();
+
+                List<MemberInfo> membersInfo = new List<MemberInfo>();
+
+                int ukupniBodovi=0;
+
+                foreach (var task in sviTaskovi)
+                {
+                    ukupniBodovi += Int32.Parse(task.vrednost);
+                }
+
+                foreach (var clan in clanovi)
+                {
+                    int bodovi = 0;
+                    foreach (var task in clan.taskovi)
+                    {
+                        bodovi+=task.bodovi;
+                    }
+                        MemberInfo memberInfo = new MemberInfo(clan.clanTimaID, clan.vodja, clan.clanOrgID, clan.Korisnik, bodovi);
+                        membersInfo.Add(memberInfo);
+                }
+                     return Ok(new {
+                        members = membersInfo,
+                        ukupniBodovi = ukupniBodovi
+                     });
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+        }
     }
     
     public class ProjectInfo
@@ -386,6 +444,26 @@ namespace TasKing.Controllers
             nazivTima = nazivTima_;
             taskoviUkupni = taskoviUkupni_;
             taskoviUradjeni = taskoviUradjeni_;
+        }
+
+      }
+
+      public class MemberInfo
+        { 
+        public int clanTimaID { get; set; }
+        public bool vodja { get; set; }
+        public int clanOrgID { get; set; }
+        public Models.Korisnik Korisnik { get; set; }
+        public int bodovi { get; set; }
+
+        
+        public MemberInfo(int clanTimaID_, bool vodja_, int clanOrgID_, Models.Korisnik Korisnik_, int bodovi_)
+        {
+            clanTimaID_ = clanTimaID_;
+            vodja = vodja_;
+            clanOrgID = clanOrgID_;
+            Korisnik = Korisnik_;
+            bodovi = bodovi_;
         }
 
       }

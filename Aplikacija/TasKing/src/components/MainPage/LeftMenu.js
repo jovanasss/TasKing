@@ -548,7 +548,7 @@ const handleOrgClick = () => {
               </ThemeProvider>
             </ListItem>
            {organisations.map(item => (
-             <ListItem key={item.idClan+3} className={curOrg==item.idClan? 'activeEnt' : null} sx={{ bgcolor: curOrg==item.idClan? 'rgb(26, 167, 167)' : (item.administrator? green[50] : 'auto')}} >
+             <ListItem key={item.idClan+3} className={curOrg==item.idClan? 'activeEnt' : null} sx={{ bgcolor: curOrg==item.idClan? (item.administrator? 'rgb(21, 140, 140)' : 'rgb(26, 167, 167)') : (item.administrator? green[50] : 'auto')}} >
               <ThemeProvider theme={theme}>
                 <Tooltip title={item.imeOrganizacije}>
                  {/*} <IconButton src={"../../TandO/"+item.slika}  onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan); localStorage.setItem('OrgID',item.orgID) }} onDoubleClick={handleClickFile} sx={{backgroundColor: 'white'}}>

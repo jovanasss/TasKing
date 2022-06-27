@@ -885,7 +885,7 @@ export default function TeamsMenu(props){
                     </div>  
               </ListItem>
               {teams.map(team => (
-                  <ListItem key={team.idTima+3} className={curTim==team.idTima? 'activeEnt' : null} sx={{ bgcolor: curTim==team.idTima? 'rgb(26, 167, 167)' : (team.vodja? green[50] : 'auto')}} >
+                  <ListItem key={team.idTima+3} className={curTim==team.idTima? 'activeEnt' : null} sx={{ bgcolor: curTim==team.idTima? (team.vodja? 'rgb(21, 140, 140)' : 'rgb(26, 167, 167)') : (team.vodja? green[50] : 'auto')}} >
                     <ThemeProvider theme={theme}>
                       {/*<Button onClick={() =>{setTim(team.idTima); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}}>
                         <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
