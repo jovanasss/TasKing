@@ -179,12 +179,13 @@ function CreateOrJoinForm(){
 
     const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
-    let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/" + token.value, {
+    let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/", {
       method : 'POST',
       headers : {
         'Content-Type': 'application/json; charset=utf-8',
         'Accept': 'application/json; charset=utf-8'
       },
+      body : JSON.stringify(token.value)
     });
     let b = await valid.json()
     if (b===1){
@@ -211,12 +212,13 @@ function CreateOrJoinForm(){
           if (temp != 0){
             const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
-            let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/" + token.value, {
+            let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/", {
               method : 'POST',
               headers : {
                 'Content-Type': 'application/json; charset=utf-8',
                 'Accept': 'application/json; charset=utf-8'
               },
+              body : JSON.stringify(token.value)
             });
             let b = await valid.json()
 

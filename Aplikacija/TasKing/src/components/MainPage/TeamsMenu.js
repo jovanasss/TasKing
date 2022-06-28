@@ -418,7 +418,7 @@ export default function TeamsMenu(props){
               }).then(res =>{
                 if(res.ok){
                   res.json().then(data => {
-                    console.log(data.value);
+                    //console.log(data.value);
                     localStorage.setItem('clanTimaID',data.value);
                   })
                 }
@@ -441,7 +441,7 @@ export default function TeamsMenu(props){
                 }).then(res =>{
                   if(res.ok){
                     res.json().then(data => {
-                      console.log(data.id);
+                      //console.log(data.id);
                       setClanTima(data.id);
                       //clanID = data.id;
                     })
@@ -464,7 +464,7 @@ export default function TeamsMenu(props){
             }).then(res =>{
               if(res.ok){
                 res.json().then(data2 => {
-                  console.log(data2.value + "adawdawdawdawdawda");
+                  //console.log(data2.value + "adawdawdawdawdawda");
                   setTim(data[0].idTima)
                   setClanTima(data[0].idClan) 
                   localStorage.setItem('TimID',data[0].idTima)
@@ -512,7 +512,7 @@ export default function TeamsMenu(props){
     while(!codeValid){
 
       let OTP =  generate();
-      console.log(OTP);
+      //console.log(OTP);
       let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP ,
       {
           method:"GET",
@@ -521,9 +521,9 @@ export default function TeamsMenu(props){
           },
       });
       result = await result.json();
-      console.log(result);
+      //console.log(result);
       if ( result === false){
-        console.log(result , OTP);
+        //console.log(result , OTP);
         codeValid = true ;
         return OTP;
       }
@@ -533,7 +533,7 @@ export default function TeamsMenu(props){
 
   async function addTeam() {
 
-    console.log("a");
+    //console.log("a");
 
     let idClanaOrg = await fetch("https://localhost:5001/Organizacija/VratiIDClanaOrganizacije/" + localStorage.getItem('clanOrgID'), // desifrovanje tokena 
     {
@@ -545,7 +545,7 @@ export default function TeamsMenu(props){
     idClanaOrg = await idClanaOrg.json();
     let idClana  = idClanaOrg.id;
 
-    console.log(idClana);
+    //console.log(idClana);
 
     let result = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuClana/" + idClana, 
     {
@@ -565,7 +565,7 @@ export default function TeamsMenu(props){
       idOrganizacije : idNoveOrg,
       kod :  await generateCode(),  
       }
-      console.log(tim);
+      //console.log(tim);
     const organizacijaID = (JSON.parse(window.localStorage.getItem('OrgID')));
     let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+organizacijaID , {
       method : 'GET',
@@ -625,7 +625,7 @@ export default function TeamsMenu(props){
                }).then(res =>{
                  if(res.ok){
                    res.json().then(data => {
-                     console.log(data.value);
+                     //console.log(data.value);
                      localStorage.setItem('clanTimaID',data.value);
                    })
                  }
@@ -889,7 +889,7 @@ export default function TeamsMenu(props){
                     </div>  
               </ListItem>
               {teams.map(team => (
-                  <ListItem key={team.idTima+3} className={curTim==team.idTima? 'activeEnt' : null} sx={{ bgcolor: curTim==team.idTima? (team.vodja? 'rgb(21, 140, 140)' : 'rgb(26, 167, 167)') : (team.vodja? green[50] : 'auto')}} >
+                  <ListItem key={team.idTima+3} className={curTim==team.idTima? 'activeEnt' : null} sx={{ bgcolor: curTim==team.idTima? (team.vodja? 'rgb(15, 105, 105)' : 'rgb(26, 167, 167)') : (team.vodja? (darkMode? 'rgb(22, 22, 22)' : green[50]) : 'auto')}} >
                     <ThemeProvider theme={theme}>
                       {/*<Button onClick={() =>{setTim(team.idTima); localStorage.setItem('TimID',team.idTima); localStorage.setItem('clanTimaID',team.idClan);  setVodja(team.vodja);}}>
                         <IconButton sx={{backgroundColor: 'white', marginRight:'10px'}}>
@@ -899,10 +899,10 @@ export default function TeamsMenu(props){
                             {team.imeTima.slice(0,30) + (team.imeTima.length>30? "..." : "")}
                         </Typography>
               </Button>*/}
-               <Avatar src={"../../TandO/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); 
+               <Avatar src={"../../profile/"+team.slika} onClick={() =>{setTim(team.idTima); setClanTima(team.idClan); localStorage.setItem('TimID',team.idTima); 
 
                //localStorage.setItem('clanTimaID',team.idClan);
-
+               localStorage.setItem('clanTimaID',-1);
                fetch("https://localhost:5001/Tim/UlogujClanaTima/" + team.idClan,
                {
                    method:"POST",
@@ -912,7 +912,7 @@ export default function TeamsMenu(props){
                }).then(res =>{
                  if(res.ok){
                    res.json().then(data => {
-                     console.log(data.value);
+                     //console.log(data.value);
                      localStorage.setItem('clanTimaID',data.value);
                    })
                  }
@@ -925,12 +925,12 @@ export default function TeamsMenu(props){
                 {team.imeTima.length > 15 
                 ?
                 <Tooltip title={team.imeTima}>
-                   <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
+                   <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left', color: darkMode? 'white' : 'auto'}}>
                             {team.imeTima.slice(0,15) + "..."}
                     </Typography>
                 </Tooltip>
                 :
-                <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left'}}>
+                <Typography variant="h7" sx={{ marginLeft:'10px',fontWeight:'bold', textAlign: 'left', color: darkMode? 'white' : 'auto'}}>
                             {team.imeTima}
                   </Typography>}
                   </ThemeProvider>

@@ -38,7 +38,7 @@ namespace TasKing.Controllers
             }
 
             var projekat = Context.Projekti.Where(p  => p.ID == Task.projekatID).FirstOrDefault();
-            var task = Context.Taskovi.Where( t => t.naziv == Task.naziv && t.projekat == projekat).FirstOrDefault();
+            var task = Context.Taskovi.Where( t => t.naziv == Task.naziv && t.projekat == projekat && t.status!=-1).FirstOrDefault();
             if(task == null)
             {
                  if(string.IsNullOrWhiteSpace(Task.naziv) || Task.naziv.Length > 50)
@@ -207,13 +207,25 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("PromeniStatus/{taskID}/{status}")]
+        [Route("PromeniStatus/{taskID}/{status}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniStatus(int taskID, int status)
+        public async Task<ActionResult> PromeniStatus(int taskID, int status, string jwt)
         {
+                var token = jwtService.Verify(jwt);
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+                var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+                if(status!=2 && vodja.vodjaTima == false)
+                {
+                    return BadRequest("Korisnik nije vodja");
+                }
                 try
                 {
-                    var task =  Context.Taskovi.Where(t=>t.ID==taskID).FirstOrDefault();  
+                    var task =  Context.Taskovi.Where(t=>t.ID==taskID)
+                    .Include(t=>t.projekat).FirstOrDefault(); 
+
+                    if(task.projekat.tim!=vodja.tim)
+                        return BadRequest("Korisnik nije clan tog tima");
+
                     if(task!=null)
                     {
                         task.status = status;
@@ -246,7 +258,7 @@ namespace TasKing.Controllers
                 return BadRequest(1);
             }
 
-            var taskstari = await Context.Taskovi.Where(t => t.naziv == naziv && t.projekat.ID == projID).FirstOrDefaultAsync();
+            var taskstari = await Context.Taskovi.Where(t => t.naziv == naziv && t.ID!=task.ID && t.projekat.ID == projID && t.status!=-1).FirstOrDefaultAsync();
 
             if(taskstari != null)
             {

@@ -132,9 +132,9 @@ namespace TasKing.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [Route("ProveriToken/{token}")]
+        [Route("ProveriToken")]
         [HttpPost]
-        public async Task<ActionResult> ProveriToken(string token)
+        public async Task<ActionResult> ProveriToken([FromBody] string token)
         {       
                 Console.Write(token);
                 var validanToken = jwtService.Verify(token);
@@ -207,7 +207,8 @@ namespace TasKing.Controllers
                     korisnickoIme = k.korisnickoIme,
                     email = k.email,
                     brtelefona = k.brTelefona,
-                    profilnaSlika = k.profilnaSlika
+                    profilnaSlika = k.profilnaSlika,
+                    lozinka = k.lozinka
                 }).ToListAsync();
 
                 return Ok(korisnici);

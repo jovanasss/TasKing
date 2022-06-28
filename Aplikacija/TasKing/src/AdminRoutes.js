@@ -17,14 +17,14 @@ async function proveri() {
         temp = await temp.json();
         if ( temp === false){
             vodjaCheck = false;
-            console.log(vodjaCheck);
+            //console.log(vodjaCheck);
         }else{
             vodjaCheck = true;
-            console.log(vodjaCheck);
+            //console.log(vodjaCheck);
         }
 
         await sleep(1000);
-        console.log(vodjaCheck);
+        //console.log(vodjaCheck);
         return vodjaCheck;
 
     /*fetch("https://localhost:5001/Korisnik/ProveriVodju/" + token, {
@@ -62,7 +62,7 @@ async function  useAuth() {
 
     //console.log(token.value);
     if (token === null){
-        console.log(vodja);
+        //console.log(vodja);
         return vodja;
     }
     else{

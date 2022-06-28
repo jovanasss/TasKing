@@ -78,9 +78,9 @@ function CreateOrganisationForm (){
               },
           });
           result = await result.json();
-          console.log(result);
+          //console.log(result);
           if ( result === false){
-            console.log(result , OTP);
+            //console.log(result , OTP);
             codeValid = true ;
             return OTP;
           }
@@ -118,12 +118,13 @@ function CreateOrganisationForm (){
 
         const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
-        let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/" + token.value, {
+        let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/", {
           method : 'POST',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
             'Accept': 'application/json; charset=utf-8'
           },
+          body : JSON.stringify(token.value)
         });
         let b = await valid.json()
         if ( b === 1)
@@ -177,7 +178,7 @@ function CreateOrganisationForm (){
                         },
                       })
                       userID = await userID.json();
-                      console.log(userID[0].id);
+                      //console.log(userID[0].id);
                       //console.log(user.id);
                       //("ID Nove Organizacije :" ,idNoveOrg);
                       //console.log(status)
@@ -270,7 +271,7 @@ function CreateOrganisationForm (){
                 }).then(res =>{
                   if(res.ok){
                     res.json().then(data => {
-                      console.log(data.value);
+                      //console.log(data.value);
                       localStorage.setItem('clanOrgID',data.value);
                     })
                   }
@@ -288,7 +289,7 @@ function CreateOrganisationForm (){
                 }).then(res =>{
                   if(res.ok){
                     res.json().then(data => {
-                      console.log(data.value);
+                      //console.log(data.value);
                       localStorage.setItem('clanTimaID',data.value);
                     })
                   }

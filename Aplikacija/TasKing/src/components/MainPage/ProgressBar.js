@@ -60,7 +60,7 @@ function SimpleDialog(props) {
   const { onClose, selectedValue, open } = props;
   const [members, setMembers] = React.useState([])
   const [numOfPoints , setNumOfPoints] = React.useState(0)
-  const [wholeValue , setWholeValue] = React.useState(false)
+  const [wholeValue , setWholeValue] = React.useState(0)
   const [suffix , setSuffix] = React.useState("points")
   const [userError , setUserError] = React.useState(false)
 
@@ -78,15 +78,15 @@ function SimpleDialog(props) {
     const clanTimaID = localStorage.getItem('clanTimaID');
     const projID = localStorage.getItem('projID');
     const timID = localStorage.getItem('TimID');
-    console.log(clanTimaID);
-    console.log(projID);
-    console.log(timID);
+    //console.log(clanTimaID);
+    //console.log(projID);
+    //console.log(timID);
     if(timID<0 || projID<0 || clanTimaID<0
     || timID===null || projID===null || clanTimaID===null)
     {
-      console.log(clanTimaID+"aaaa");
-      console.log(projID+"aaaa");
-      console.log(timID+"aaaa");
+      //console.log(clanTimaID+"aaaa");
+      //console.log(projID+"aaaa");
+      //console.log(timID+"aaaa");
       return;
     }
 
@@ -145,7 +145,6 @@ function SimpleDialog(props) {
                       "green"
                       }}>
                  </div> */
- 
 
   return (
     <Dialog onClose={handleClose} open={open} style={{ color : darkMode ? "rgb(26,25,25)" : "white" }}>
@@ -156,7 +155,7 @@ function SimpleDialog(props) {
       <DialogContent style={{ backgroundColor : darkMode ? "rgb(26,25,25)":"white"}}>
       <div style={{marginBottom: '30px',backgroundColor : darkMode ? "rgb(26,25,25)" :"white"}}>
       <ThemeProvider theme={theme}>
-      <TextField defaultValue={wholeValue} onChange={ (e) => setWholeValue(parseInt(e.target.value)) }
+      <TextField defaultValue={props.imaTaskova? wholeValue: 0} onChange={ (e) => setWholeValue(parseInt(isNaN(parseInt(e.target.value))? 0 : parseInt(e.target.value))) }
                   sx= {{marginLeft: '50px', marginTop: '5px'}}  error={userError} id="outlined-basic" label="value" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
       <TextField defaultValue={suffix} onChange={ (e) => setSuffix(e.target.value) }
                   sx= {{marginLeft: '50px', marginTop: '5px'}}  error={userError} id="outlined-basic" label="suffix" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined" type="text" color="primary"/>
@@ -224,7 +223,7 @@ export default function ProgressBar(props) {
 
  React.useEffect(() => {
   vodjaStatus();
-}, [props, localStorage.getItem('clanTimaID')]);
+}, [props]);
 
   const theme = createTheme({
     components: {
@@ -313,6 +312,7 @@ export default function ProgressBar(props) {
                 open={openSimple}
                 onClose={handleCloseSimple}
                 projID = {1}
+                imaTaskova = {props.imaTaskova}
               />
         }
     </div>

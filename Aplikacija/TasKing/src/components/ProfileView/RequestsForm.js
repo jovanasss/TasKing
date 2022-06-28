@@ -295,7 +295,7 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
            </div>
           }>
           <ListItemAvatar>
-                    <Avatar  src={"../../TandO/"+item.slika}>Team</Avatar> 
+                    <Avatar  src={"../../profile/"+item.slika}>Team</Avatar> 
                   </ListItemAvatar>
           <ListItemText sx={{wordWrap:"break-word"}} primary={item.ime +" (" + item.organizacijaIme + ")"}
           secondary={
@@ -350,7 +350,7 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
           </div>
           }>
             <ListItemAvatar>
-                    <Avatar  src={"../../TandO/"+item.slika}>Org</Avatar>
+                    <Avatar  src={"../../profile/"+item.slika}>Org</Avatar>
                   </ListItemAvatar>
           <ListItemText  sx={{wordWrap:"break-word"}} primary={item.ime} 
            secondary={

@@ -23,15 +23,15 @@ export default function ProjectDescription(props) {
     setProject(props.Project);
   }, [props]);
 
-  console.log(project);
+  //console.log(project);
   let canDelete = 0;
   {props.Project.taskovi==undefined ? void(0) : props.Project.taskovi.forEach(t =>{
     if(t.status > 0){
       canDelete++;
     }
   })}
-  console.log(canDelete);
-  console.log(props.ProjectID);
+  //console.log(canDelete);
+  //console.log(props.ProjectID);
 
   const theme = createTheme({
     components:{
@@ -101,7 +101,7 @@ export default function ProjectDescription(props) {
 
     const clanTimaID = window.localStorage.getItem('clanTimaID');
     const TimID = window.localStorage.getItem('TimID');
-    console.log(projectName);
+    //console.log(projectName);
 
     fetch("https://localhost:5001/Projekat/PromeniImeProjekta/"+props.ProjectID+"/"+ projectName + "/"+ clanTimaID + "/" + TimID,
     {
@@ -112,9 +112,9 @@ export default function ProjectDescription(props) {
     }).then(res => {
       res.json()
       .then(data => {
-        console.log(data);
+        //console.log(data);
          if(data === 0){
-            console.log(data);
+            //console.log(data);
             Store.addNotification({
               title: "Warning!",
               message: "The project with this name already exist!",
@@ -233,7 +233,7 @@ export default function ProjectDescription(props) {
         },
     });
     rez = await rez.json();
-    console.log(rez);
+    //console.log(rez);
     let vodja  = rez.vodja;
     setVodja(vodja);
  }

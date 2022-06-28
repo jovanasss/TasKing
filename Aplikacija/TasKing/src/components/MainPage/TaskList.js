@@ -228,7 +228,7 @@ const [isVodja , setVodja] = React.useState(false)
 
  React.useEffect(() => {
   vodjaStatus();
-}, [props, localStorage.getItem('clanTimaID')]);
+}, [localStorage.getItem('projID')]);//props, localStorage.getItem('clanTimaID')
 
 React.useEffect(() => {
   setTasks(props.taskovi);
@@ -426,7 +426,14 @@ let navigate = useNavigate();
    fetch("https://localhost:5001/Task/PrijaviZaTask/" + localStorage.getItem('clanTimaID') + "/" + taskID, {
    method: "POST"
   }).then(s =>{
+    if(s.ok)
+    {
     refreshTasks();
+    }
+    else
+    {
+      alert("your role doesn't allow you this function");
+    }
   })
 };
 
@@ -450,7 +457,8 @@ const handleSeeCandidats = (taskID) => {
 };
 
 const handleChangeStatus = (taskID, status) => {
-  fetch("https://localhost:5001/Task/PromeniStatus/" + taskID + "/" + status,
+  const clanTimaID = localStorage.getItem('clanTimaID');
+  fetch("https://localhost:5001/Task/PromeniStatus/" + taskID + "/" + status + "/" + clanTimaID,
         {
             method: "PUT"
         }).then(s =>{
@@ -491,6 +499,9 @@ const [taskID, setTaskID] = React.useState(null);
 const [taskName , setTaskName] = React.useState('');
 const [taskType , setTaskType] = React.useState('');
 const [taskDesc ,setTaskDesc] = React.useState('');
+const [nameError , setNameError] = useState(false)
+const [typeError , setTypeError] = useState(false)
+const [descError , setDescError] = useState(false)
 const [bodovi , setBodovi] = React.useState(0);
 const [open3, setOpen3] = React.useState(false);
 const [curTaskID, setCurTaskId] = React.useState(false);
@@ -545,6 +556,51 @@ const handleClose3 = () => {
 };
 
 function changeTask(){
+
+  if ( taskName === ''){
+    setNameError(true)
+  }
+  else
+  {
+    setNameError(false)
+  }
+
+  if ( taskType === ''){
+    setTypeError(true)
+  } 
+  else
+  {
+    setTypeError(false)
+  }
+
+  if ( taskDesc === ''){
+    setDescError(true)
+  } 
+  else
+  {
+    setDescError(false)
+  }
+
+  if (!taskName || !taskType || !taskDesc){
+    return;
+  }
+
+  if (bodovi == 0)
+      {
+        Store.addNotification({
+          title: "Enter the number of points",
+          message: "You did not enter a number of points",
+          type: "danger",
+          insert: "top",
+          container: "top-center",
+          dismiss: {
+            duration: 2000,
+            onScreen: true
+          }
+        });
+        return;
+      }
+
   const clanTimaID = window.localStorage.getItem('clanTimaID');
   const ProjID = window.localStorage.getItem('projID');
   fetch("https://localhost:5001/Task/IzmeniTask/"+taskID+"/"+taskName+"/"+taskDesc+"/"+taskType+"/"+bodovi+"/"+clanTimaID+"/"+ProjID,
@@ -556,9 +612,9 @@ function changeTask(){
         }).then(res => {
           res.json()
           .then(data => {
-            console.log(data);
+            //console.log(data);
              if(data === 0){
-                console.log(data);
+                //console.log(data);
                 Store.addNotification({
                   title: "Warning!",
                   message: "The task with this name already exist!",
@@ -752,7 +808,7 @@ return(
               }}>
                 <ThemeProvider theme={theme}>
                   <TextField id="outlined-basic" defaultValue={t==undefined ? " " : t.naziv} label="Task Title" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
-                       onChange={getnaziv}
+                      error={nameError} onChange={getnaziv}
                         sx={{
                           width :"100%",
                           marginTop : "5%",
@@ -761,7 +817,7 @@ return(
                 </ThemeProvider>
                 <ThemeProvider theme={theme}>
                   <TextField id="outlined-basic" defaultValue={t==undefined ? " " : t.tip} label="Task Type"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
-                        onChange={gettip}
+                      error={typeError}  onChange={gettip}
                           sx={{
                            width :"100%",
                            marginTop : "5%",
@@ -771,7 +827,7 @@ return(
                 <ThemeProvider theme={theme}>
                   <TextField  //error={projDescError}
                      onChange={getopis}
-                      id="outlined-basic" defaultValue={t==undefined ? " " : t.opis} label="Description"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
+                     error={descError} id="outlined-basic" defaultValue={t==undefined ? " " : t.opis} label="Description"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
                           multiline 
                           required
                           rows={'5'}
@@ -826,6 +882,9 @@ function TaskList(props){
   const [taskName , setTaskName] = React.useState('')
   const [taskType , setTaskType] = React.useState('')
   const [taskDesc ,setTaskDesc] = React.useState('')
+  const [nameError , setNameError] = useState(false)
+  const [typeError , setTypeError] = useState(false)
+  const [descError , setDescError] = useState(false)
   const [bodovi , setBodovi] = React.useState(0)
   const [openD, setOpenD] = React.useState(false)
   const [change, setChange] = React.useState(false)
@@ -869,6 +928,34 @@ function TaskList(props){
     }
     async function addTask() {
 
+      if ( taskName === ''){
+        setNameError(true)
+      }
+      else
+      {
+        setNameError(false)
+      }
+
+      if ( taskType === ''){
+        setTypeError(true)
+      } 
+      else
+      {
+        setTypeError(false)
+      }
+
+      if ( taskDesc === ''){
+        setDescError(true)
+      } 
+      else
+      {
+        setDescError(false)
+      }
+
+      if (!taskName || !taskType || !taskDesc){
+        return;
+      }
+
       if (bodovi == 0)
       {
         Store.addNotification({
@@ -884,7 +971,7 @@ function TaskList(props){
         });
         return;
       }
-      setOpenD(false)
+      //setOpenD(false)
       const idProjekta = (JSON.parse(window.localStorage.getItem('projID')));
 
       let task = {
@@ -918,6 +1005,7 @@ function TaskList(props){
           onScreen: true
         }
       });
+      return;
     }
 
 
@@ -940,6 +1028,7 @@ function TaskList(props){
       }
     })
     
+      setOpenD(false)
     }
   
     const theme = createTheme({
@@ -996,7 +1085,7 @@ function TaskList(props){
               }}>
                 <ThemeProvider theme={theme}>
                   <TextField id="outlined-basic" label="Task Title" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
-                      onChange={(e) => setTaskName(e.target.value)}
+                    error={nameError}  onChange={(e) => setTaskName(e.target.value)}
                         sx={{
                           width :"100%",
                           marginTop : "5%",
@@ -1005,7 +1094,7 @@ function TaskList(props){
                 </ThemeProvider>
                 <ThemeProvider theme={theme}>
                   <TextField id="outlined-basic" label="Task Type"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
-                        onChange={(e) => setTaskType(e.target.value)}
+                      error={typeError}  onChange={(e) => setTaskType(e.target.value)}
                           sx={{
                            width :"100%",
                            marginTop : "5%",
@@ -1014,7 +1103,7 @@ function TaskList(props){
                 </ThemeProvider>
                 <ThemeProvider theme={theme}>
                   <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
-                      id="outlined-basic" label="Description"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
+                      error={descError} id="outlined-basic" label="Description"  inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}} variant="outlined"  type="text" color="primary" 
                           multiline 
                           required
                           rows={'5'}

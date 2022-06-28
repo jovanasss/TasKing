@@ -503,7 +503,7 @@ export default function ProjectMenu(props) {
             .then(data => {
               if(data!=null)
               setUserProfilna(data[0].profilnaSlika);
-              console.log(data[0].profilnaSlika + "profilna");
+              //console.log(data[0].profilnaSlika + "profilna");
             });
         })
   },[])

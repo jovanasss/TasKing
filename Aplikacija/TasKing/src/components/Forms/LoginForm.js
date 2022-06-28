@@ -19,7 +19,6 @@ function LoginForm()  {
     const [userError , setUserError] = useState(false)
     const [password , setPassWord] = useState('')
     const [passError , setPassError] = useState(false)
-    const [rememberMe , setRememberMe] = useState(false);
     const [darkMode ,setDarkMode] = useState((JSON.parse(window.localStorage.getItem('darkMode'))));
     
     document.body.style.backgroundColor = darkMode ? "rgb(26, 25, 25)" :"azure";
@@ -34,6 +33,7 @@ function LoginForm()  {
     useEffect(() => {
       localStorage.removeItem('clanOrgID');
       localStorage.removeItem('TimID');
+      localStorage.removeItem('OrgID');
       localStorage.removeItem('clanTimaID');
       localStorage.removeItem('projID');
       localStorage.removeItem('selectedStatus');
@@ -63,20 +63,20 @@ function LoginForm()  {
       //console.log(result);
       // localStorage.setItem('user-info',JSON.stringify(a))
       // history.push("/main")
-      let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/" + a.value, {
+      let valid = await fetch("https://localhost:5001/Korisnik/ProveriToken/", {
         method : 'POST',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
           'Accept': 'application/json; charset=utf-8'
         },
+        body : JSON.stringify(a.value)
       });
       let b = await valid.json()
       if ( b === 1){
         localStorage.setItem('user-info',JSON.stringify(a))
-        //localStorage.setItem('rememberMe',rememberMe);
         //const userN = (JSON.parse(window.localStorage.getItem('user-info')));
         const token = (JSON.parse(window.localStorage.getItem('user-info')));
-        console.log(token);
+        //console.log(token);
         //console.log(userN.id);
   
         let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijeKorisnika/"+ token.value , {
@@ -201,9 +201,6 @@ function LoginForm()  {
       },
     });
 
-   /* const rememberMEChange = () =>{
-        setRememberMe(!rememberMe);
-      }*/
 
 
 
@@ -240,7 +237,6 @@ return (
 
            {/* <div className={darkMode ? "divCheckDM":"divCheck"}>
                     <FormControlLabel
-                        label = "Remember me ?"
                         control = {
                             <Checkbox    
                                 //onChange={() => {rememberMEChange()} }                

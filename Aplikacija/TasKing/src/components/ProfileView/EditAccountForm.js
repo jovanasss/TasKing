@@ -239,7 +239,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             return
           }
 
-          if(username === user.korisnickoIme){
+          if(username === user[0].korisnickoIme){
             Store.addNotification({
               title: "Information",
               message: "This is already a username",
@@ -274,6 +274,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             }
           });
            //alert("Username is successfully changed 😀");
+           window.location.reload(false);
            return
         }
 
@@ -428,7 +429,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             return
           }
 
-          if(currentpass !== user.lozinka){
+          if(currentpass !== user[0].lozinka){
             Store.addNotification({
               title: "Warning!",
               message: "Wrong current password!",
@@ -495,6 +496,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             }
           });
           //alert("Password is successfully changed 😀");
+          setOpen(false);
           return
         }
 
@@ -834,7 +836,7 @@ function PaperListTeams({ teams }){
         }
         >
         <ListItemAvatar>
-          <Avatar src={"../../TandO/"+item.slika}>Team</Avatar>
+          <Avatar src={"../../profile/"+item.slika}>Team</Avatar>
         </ListItemAvatar>
         <ListItemText sx={{wordWrap:"break-word"}} primary={item.ime +" (" + item.organizacijaIme + ")"} />
        </ListItem>
@@ -932,7 +934,7 @@ function PaperListOrganisations({ organisations }){
        }
        >
        <ListItemAvatar>
-         <Avatar  src={"../../TandO/"+item.slika}>Org</Avatar>
+         <Avatar  src={"../../profile/"+item.slika}>Org</Avatar>
        </ListItemAvatar>
        <ListItemText sx={{wordWrap:"break-word"}} primary={item.ime} />
       </ListItem>

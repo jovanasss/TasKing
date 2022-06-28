@@ -229,13 +229,13 @@ function MyAccount1({projects, user}){
             >
                 <CardContent>
                 <Typography variant="h5" component="div" key={project.id.toString()}>
-                    {"Name: " + project.naziv + " (" + project.nazivTima + ")"}
+                    {"Name: " + (project!=undefined? project.naziv : "") + " (" + (project!=undefined? project.nazivTima : "") + ")"}
                 </Typography>
                 <Typography sx={{ fontSize: 14, height: "8vh", overflow: "auto", wordWrap: 'break-word' }} color="text.secondary" gutterBottom key={(project.id+1).toString()}>
-                     {"Descripiton: " + project.opis}
+                     {"Descripiton: " + (project!=undefined? project.opis : "")}
                 </Typography>
                   <Typography sx={{ mb: 1.5, fontSize:14 }} color="text.secondary" key={(project.id+2).toString()}>
-                  Effect {procenat = showEffect(project.taskoviUkupni, project.taskoviUradjeni)}%
+                  Effect {procenat = project!=undefined? showEffect(project.taskoviUkupni, project.taskoviUradjeni) : 0 }%
                   </Typography>
                   <div
                   style={{
@@ -293,12 +293,12 @@ function MyAccount1({projects, user}){
               }} >
                     {projects[dialogTask] != null ? projects[dialogTask].taskoviUradjeni.map(task => 
                     (<DialogContentText
-                    key={task.id}
+                    key={task!=undefined? task.id : 0}
                     id="scroll-dialog-description"
                     ref={descriptionElementRef}
                     tabIndex={-1}
                     sx={{color : darkMode ? "white" : "black"}}>
-                    {task.naziv + ": " + task.opis + ". (" + "type: " + task.tip + ", " + "points: " + task.vrednost + ")"}
+                    {(task!=undefined?   task.naziv : "") + ": " + (task!=undefined? task.opis : "") + ". (" + "type: " + (task!=undefined? task.tip : "") + ", " + "points: " + (task!=undefined? task.vrednost : "") + ")"}
                     </DialogContentText>)) : null}
                 </DialogContent>
                 <DialogActions style={{

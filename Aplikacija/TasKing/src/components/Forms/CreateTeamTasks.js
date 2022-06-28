@@ -35,6 +35,9 @@ function CreateTeamTasks(){
     const [taskDesc ,setTaskDesc] = useState('')
     const [bodovi , setBodovi] = useState(0)
     const [projName , setProjName] = useState('')
+    const [nameError , setNameError] = useState(false)
+    const [typeError , setTypeError] = useState(false)
+    const [descError , setDescError] = useState(false)
     const [projNameError, setProjNameError] = useState(false)
     const [projDesc , setProjDesc] = useState('')
     const [projDescError, setProjDescError] = useState(false)
@@ -56,6 +59,38 @@ function CreateTeamTasks(){
 
     // error check => napraviNoviTask(Naslov , bodovi) && dodavnje u taskList parent Projekta
     const handleSubmit = () => {
+
+      if ( taskName === ''){
+        setNameError(true)
+      }
+      else
+      {
+        setNameError(false)
+      }
+
+      if ( taskType === ''){
+        setTypeError(true)
+      } 
+      else
+      {
+        setTypeError(false)
+      }
+
+      if ( taskDesc === ''){
+        setDescError(true)
+      } 
+      else
+      {
+        setDescError(false)
+      }
+
+      //console.log(taskName);
+      //console.log(taskType);
+      //console.log(taskDesc);
+      if (!taskName || !taskType || !taskDesc){
+        return;
+      }
+
         if (bodovi > 0){
             setOpenD(false)
             let task = {
@@ -90,6 +125,10 @@ function CreateTeamTasks(){
        // const element = 
 
        //root.render(element);
+       setTaskName('')
+       setTaskType('')
+       setTaskDesc('')
+       setBodovi(0)
     }
 
     async function createProject(){
@@ -128,7 +167,7 @@ function CreateTeamTasks(){
               let idProjekta = await rezultat.json();
               
               if(idProjekta === 1){
-                alert("Nisi vodja");
+                alert("You aren't team admin");
               }
               else if (idProjekta != 0){
                               // dodati idProjekta u niz taskova i proslediti kroz body fetcha 
@@ -152,7 +191,24 @@ function CreateTeamTasks(){
               // ako je ok dodajemo taskove 
               if (status === 200){
 
+                let imena = [];
                 tasks.map(async task => {
+                  if(imena.includes(task.naziv))
+                  {
+                    Store.addNotification({
+                      title: "The task wasn't created!",
+                      message: "This task name is already in use: " + task.naziv,
+                      type: "danger",
+                      insert: "top",
+                      container: "top-center",
+                      dismiss: {
+                        duration: 2000,
+                        onScreen: true
+                      }
+                    });
+                  }
+                  else{
+                  imena.push(task.naziv)
                     const clanTimaID = window.localStorage.getItem('clanTimaID');
                     let result = await fetch("https://localhost:5001/Task/KreirajTask/" + clanTimaID, {
                         method : 'POST',
@@ -162,25 +218,23 @@ function CreateTeamTasks(){
                         },
                         body : JSON.stringify(task)
                       });
-                      let statusT = result.status;
-                      if ( statusT === 200){
-                        Store.addNotification({
-                            title: "Success!",
-                            message: "the project is successfully created",
-                            type: "success",
-                            insert: "top",
-                            container: "top-center",
-                            dismiss: {
-                              duration: 2000,
-                              onScreen: true
-                            }
-                          });
-
-                          localStorage.setItem('projID', idProjekta); 
-                         //alert("Projekat uspesno kreiran !")
-                          routeChange();
-                      }
+                    }
                 })
+                  localStorage.setItem('projID', idProjekta); 
+                  //alert("Projekat uspesno kreiran !")
+                  routeChange();
+
+                Store.addNotification({
+                  title: "Success!",
+                  message: "the project is successfully created",
+                  type: "success",
+                  insert: "top",
+                  container: "top-center",
+                  dismiss: {
+                    duration: 2000,
+                    onScreen: true
+                  }
+                });
               }
               else {
     
@@ -325,10 +379,10 @@ function CreateTeamTasks(){
                         </div>
                         <div id="inputTasks" className={darkMode ? "inputTasksDM":"inputTasks"} rows={'5'} multiline = "true" >
                             <List style={{maxHeight: '85%', overflow: 'auto'}} >
-                                 {tasks.map(task => 
-                            <ListItem>             
-                            <ListItemButton component="a" href="#simple-list">
-                                <ListItemText primary={task.naziv} secondary={task.bodovi} />
+                                 {tasks.map((task, index) => 
+                            <ListItem key={index}>             
+                            <ListItemButton component="a" href="#simple-list" style={{color:'white'}}>
+                                <ListItemText primary={task.naziv} secondary={task.bodovi}/>
                             </ListItemButton>
                             </ListItem>   )}                   
                             </List>
@@ -347,7 +401,7 @@ function CreateTeamTasks(){
                                     <DialogContent style={{ backgroundColor : darkMode? "rgb(46, 45, 45)" : "white"}}>
                                         <ThemeProvider theme={theme}>
                                             <TextField id="outlined-basic3" label="Task Title" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
-                                            onChange={(e) => setTaskName(e.target.value)}
+                                          error={nameError}  onChange={(e) => setTaskName(e.target.value)}
                                             sx={{
                                                 width :"100%",
                                                 marginTop : "5%",
@@ -356,7 +410,7 @@ function CreateTeamTasks(){
                                         </ThemeProvider>
                                         <ThemeProvider theme={theme}>
                                             <TextField id="outlined-basic4" label="Task Type" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}  variant="outlined"  type="text" color="primary" maxRows ={'1'} required 
-                                            onChange={(e) => setTaskType(e.target.value)}
+                                          error={typeError}  onChange={(e) => setTaskType(e.target.value)}
                                             sx={{
                                                 width :"100%",
                                                 marginTop : "5%",
@@ -364,7 +418,7 @@ function CreateTeamTasks(){
                                                 }}/>                      
                                         </ThemeProvider>
                                         <ThemeProvider theme={theme}>
-                                            <TextField onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
+                                            <TextField error={descError} onChange={ (e) => setTaskDesc(e.target.value) } //error={projDescError}
                                             id="outlined-basic5" label="Description" inputProps={{ style: { fontFamily: 'Arial', color: darkMode ? 'white':'black'}}} InputLabelProps={{ style : { color : darkMode ? "white":"rgb(0, 100, 100)"}}}   variant="outlined"  type="text" color="primary" 
                                             multiline 
                                             required
@@ -376,7 +430,7 @@ function CreateTeamTasks(){
                                         <ThemeProvider theme={theme}>
                                             <Slider 
                                             value = {bodovi}
-                                            onChange={(e ,value ) => setBodovi(value)}
+                                            onChange={(e ,value ) => setBodovi(parseInt(value))}
                                             defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
                                         </ThemeProvider>
                                     </DialogContent>

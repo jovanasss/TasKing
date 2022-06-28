@@ -45,7 +45,7 @@ export default function LeftMenu(props){
     
     const user = (JSON.parse(window.localStorage.getItem('user-info')));
 
-    console.log(user);
+    //console.log(user);
 
     if(user === undefined){
         let path = "/";
@@ -55,12 +55,13 @@ export default function LeftMenu(props){
     {
     
 
-      fetch("https://localhost:5001/Korisnik/ProveriToken/" + user.value, {
+      fetch("https://localhost:5001/Korisnik/ProveriToken/", {
       method : 'POST',
       headers : {
         'Content-Type': 'application/json; charset=utf-8',
         'Accept': 'application/json; charset=utf-8'
       },
+      body : JSON.stringify(user.value)
       }).then(res => {
       res.json().then(data => {
          if ( data === 1)
@@ -96,7 +97,7 @@ export default function LeftMenu(props){
                     }).then(res =>{
                       if(res.ok){
                         res.json().then(data => {
-                          console.log(data.value);
+                          //console.log(data.value);
                           localStorage.setItem('clanOrgID',data.value);
                         })
                       }
@@ -121,7 +122,7 @@ export default function LeftMenu(props){
                     }).then(res =>{
                       if(res.ok){
                         res.json().then(data => {
-                          console.log(data.id);
+                          //console.log(data.id);
                           setOrg(data.id);
                           clanID = data.id;
                         })
@@ -146,7 +147,8 @@ export default function LeftMenu(props){
          }
          else
          {
-            alert("NEVALIDAN TOKEN !");
+            alert("Invalid token!");
+            localStorage.removeItem("user-info")
             let path = '/';
             navigate(path);
          }
@@ -268,7 +270,7 @@ export default function LeftMenu(props){
                }).then(res =>{
                  if(res.ok){
                    res.json().then(data => {
-                     console.log(data.value);
+                     //console.log(data.value);
                      localStorage.setItem('clanOrgID',data.value);
                    })
                  }
@@ -277,7 +279,7 @@ export default function LeftMenu(props){
                localStorage.setItem('TimID',idNovogTima); 
 
                tmp = await tmp.json();
-                console.log(tmp);
+                //console.log(tmp);
                fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp,
                {
                    method:"POST",
@@ -287,8 +289,9 @@ export default function LeftMenu(props){
                }).then(res =>{
                  if(res.ok){
                    res.json().then(data => {
-                     console.log(data.value);
+                     //console.log(data.value);
                      localStorage.setItem('clanTimaID',data.value);
+                     localStorage.setItem('projID',-1);
                    })
                  }
                })
@@ -353,7 +356,7 @@ export default function LeftMenu(props){
           admin : false,
         }
 
-        console.log("Organizacija:" + idNoveOrg);
+        //console.log("Organizacija:" + idNoveOrg);
         localStorage.setItem('OrgID',idNoveOrg); 
   
           let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
@@ -388,7 +391,7 @@ export default function LeftMenu(props){
                }).then(res =>{
                  if(res.ok){
                    res.json().then(data => {
-                     console.log(data.value);
+                     //console.log(data.value);
                      localStorage.setItem('clanOrgID',data.value);
                    })
                  }
@@ -549,16 +552,17 @@ const handleOrgClick = () => {
               </ThemeProvider>
             </ListItem>
            {organisations.map(item => (
-             <ListItem key={item.idClan+3} className={curOrg==item.idClan? 'activeEnt' : null} sx={{ bgcolor: curOrg==item.idClan? (item.administrator? 'rgb(21, 140, 140)' : 'rgb(26, 167, 167)') : (item.administrator? green[50] : 'auto')}} >
+             <ListItem key={item.idClan+3} className={curOrg==item.idClan? 'activeEnt' : null} sx={{ bgcolor: curOrg==item.idClan? (item.administrator? 'rgb(15, 105, 105)' : 'rgb(26, 167, 167)') : (item.administrator? (darkMode? 'rgb(22, 22, 22)' : green[50]) : 'auto')}} >
               <ThemeProvider theme={theme}>
                 <Tooltip title={item.imeOrganizacije}>
-                 {/*} <IconButton src={"../../TandO/"+item.slika}  onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan); localStorage.setItem('OrgID',item.orgID) }} onDoubleClick={handleClickFile} sx={{backgroundColor: 'white'}}>
+                 {/*} <IconButton src={"../../profile/"+item.slika}  onClick={() =>{setOrg(item.idClan); localStorage.setItem('clanOrgID',item.idClan); localStorage.setItem('OrgID',item.orgID) }} onDoubleClick={handleClickFile} sx={{backgroundColor: 'white'}}>
                   <SubjectOutlined />
                  </IconButton>
                 </Tooltip>
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />*/}
-               <Avatar src={"../../TandO/"+item.slika} onClick={() =>{setOrg(item.idClan); 
+               <Avatar src={"../../profile/"+item.slika} onClick={() =>{setOrg(item.idClan); 
                /*desifruj id**/ 
+               localStorage.setItem('clanOrgID',-1);
                fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + item.idClan,
                {
                    method:"POST",
@@ -568,7 +572,7 @@ const handleOrgClick = () => {
                }).then(res =>{
                  if(res.ok){
                    res.json().then(data => {
-                     console.log(data);
+                     //console.log(data);
                      localStorage.setItem('clanOrgID',data.value);
                    })
                  }
