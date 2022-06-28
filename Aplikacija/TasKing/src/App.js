@@ -31,11 +31,12 @@ import ProtectedRoutes from './ProtectedRoutes';
 import AdminRoutes from './AdminRoutes';
 
 import { Paper } from '@mui/material';
+import Switch from 'react-router-dom';
 import Profile from './components/ProfileView/ProfileForm';
 import './styles/ProfileView/MyAccountForm.css';
 import './styles/ProfileView/ProfileForm.css';
 
-import { BrowserRouter ,Route ,Routes} from "react-router-dom";
+import { BrowserRouter ,Route ,Routes, Navigate} from "react-router-dom";
 
 import { ReactNotifications, Store } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
@@ -69,16 +70,16 @@ function App() {
       <Route  path= "/SignUp" element={<SignUpForm />}/>
       <Route  path= "/" element={<LoginForm/>}/>
       <Route element={<ProtectedRoutes/>}>  
-        <Route  path= "/CoJ" element={<CreateOrJoinForm/>}/>
-        <Route  path= "/Main" element={<MainScreen/>}/>
-        <Route  path= "/Profile/*" element={<Profile />}/>
-        <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
-        <Route  path= "/acc" element={<AccountCreatedForm />}/>
-          <Route element= {<AdminRoutes />}>
-              <Route  path= "/cTT" element={<CreateTeamTasks />}/>
-          </Route>
+          <Route  path= "/CoJ" element={<CreateOrJoinForm/>}/>
+          <Route  path= "/Main" element={<MainScreen/>}/>
+          <Route  path= "/Profile/*" element={<Profile />}/>
+          <Route  path= "/cORG" element={<CreateOrganisationForm />}/>
+          <Route  path= "/acc" element={<AccountCreatedForm />}/>
+            <Route element= {<AdminRoutes />}>
+                <Route  path= "/cTT" element={<CreateTeamTasks />}/>
+            </Route>
       </Route>
-     
+      <Route path="*" element={<Navigate to = "/" />}></Route>
       </Routes>
  
 
