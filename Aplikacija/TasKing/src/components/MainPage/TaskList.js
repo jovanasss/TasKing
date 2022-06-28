@@ -546,14 +546,51 @@ const handleClose3 = () => {
 
 function changeTask(){
   const clanTimaID = window.localStorage.getItem('clanTimaID');
-  fetch("https://localhost:5001/Task/IzmeniTask/"+taskID+"/"+taskName+"/"+taskDesc+"/"+taskType+"/"+bodovi+"/"+clanTimaID,
+  const ProjID = window.localStorage.getItem('projID');
+  fetch("https://localhost:5001/Task/IzmeniTask/"+taskID+"/"+taskName+"/"+taskDesc+"/"+taskType+"/"+bodovi+"/"+clanTimaID+"/"+ProjID,
           {
               method:"PUT",
               headers:{
                   "Content-Type":"application/json"
               },
-        });
-      window.location.reload(false);
+        }).then(res => {
+          res.json()
+          .then(data => {
+            console.log(data);
+             if(data === 0){
+                console.log(data);
+                Store.addNotification({
+                  title: "Warning!",
+                  message: "The task with this name already exist!",
+                  type: "warning",
+                  insert: "top",
+                  container: "top-center",
+                  dismiss: {
+                    duration: 2000,
+                    onScreen: true
+                  }
+                });
+              }
+              else if(data === 1){
+                Store.addNotification({
+                  title: "Warning!",
+                  message: "The task doesn't exist!",
+                  type: "warning",
+                  insert: "top",
+                  container: "top-center",
+                  dismiss: {
+                    duration: 2000,
+                    onScreen: true
+                  }
+                });
+              }
+              else if(data === 2){
+              setOpenDChangeTask(false);
+              window.location.reload(false);
+              }
+          }
+          )
+      })
 }
 
 if(tasks==undefined || tasks==null)

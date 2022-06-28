@@ -212,9 +212,9 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PromeniImeProjekta/{projID}/{novinaziv}/{jwt}")]
+        [Route("PromeniImeProjekta/{projID}/{novinaziv}/{jwt}/{timID}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniImeProjekta(int projID, string novinaziv, string jwt)
+        public async Task<ActionResult> PromeniImeProjekta(int projID, string novinaziv, string jwt, int timID)
         {
             var token = jwtService.Verify(jwt);
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
@@ -223,34 +223,23 @@ namespace TasKing.Controllers
             if (vodja == null ){
                 return BadRequest("Invalid");
             }
+
             if(vodja.vodjaTima == false)
             {
                 return BadRequest("Nisi vodja");
             }
 
-                var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
-                //var tim1 = await Context.Timovi.Where(t => t == projekat.tim).FirstOrDefaultAsync();
+            var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
 
             if(projekat == null)
             {
                 return BadRequest(1);
             }
 
-            
+            var projekatstari = await Context.Projekti.Where(p => p.naziv == novinaziv && p.tim.ID == timID).FirstOrDefaultAsync();
 
-            // ovo je pisalo pre 
-
-            /*var stariProjekat = await Context.Projekti.Where(p => p.naziv.ToLower() == novinaziv.ToLower()  && p.tim.ID == projekat.tim.ID)
-            if ( stariProjekat != null){
-                return BadRequest(0);
-            }*/
-
-            var projekti = await Context.Projekti.Where(p => p.naziv.ToLower() == novinaziv.ToLower() )
-            .Include(t => t.ID == projekat.tim.ID)
-            .FirstOrDefaultAsync();
-
-
-            if ( projekti != null){
+            if(projekatstari != null)
+            {
                 return BadRequest(0);
             }
 

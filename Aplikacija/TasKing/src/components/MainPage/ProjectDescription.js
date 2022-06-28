@@ -100,9 +100,10 @@ export default function ProjectDescription(props) {
     }
 
     const clanTimaID = window.localStorage.getItem('clanTimaID');
+    const TimID = window.localStorage.getItem('TimID');
     console.log(projectName);
 
-    fetch("https://localhost:5001/Projekat/PromeniImeProjekta/"+props.ProjectID+"/"+ projectName + "/"+ clanTimaID,
+    fetch("https://localhost:5001/Projekat/PromeniImeProjekta/"+props.ProjectID+"/"+ projectName + "/"+ clanTimaID + "/" + TimID,
     {
         method:"PUT",
         headers:{
@@ -125,7 +126,6 @@ export default function ProjectDescription(props) {
                 onScreen: true
               }
             });
-            setOpen1(false);
           }
           else if(data === 1){
             Store.addNotification({
@@ -139,22 +139,10 @@ export default function ProjectDescription(props) {
                 onScreen: true
               }
             });
-            setOpen1(false);
           }
-          else if(data ===2){
-            Store.addNotification({
-              title: "Success!",
-              message: "The name has been changed",
-              type: "success",
-              insert: "top",
-              container: "top-center",
-              dismiss: {
-                duration: 2000,
-                onScreen: true
-              }
-            });
+          else if(data === 2){
             setOpen1(false);
-          //window.location.reload(false);
+          window.location.reload(false);
           }
       }
       )

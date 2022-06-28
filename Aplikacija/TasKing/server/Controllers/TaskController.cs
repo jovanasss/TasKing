@@ -227,9 +227,9 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("IzmeniTask/{taskID}/{naziv}/{opis}/{tip}/{vrednost}/{jwt}")]
+        [Route("IzmeniTask/{taskID}/{naziv}/{opis}/{tip}/{vrednost}/{jwt}/{projID}")]
         [HttpPut]
-        public async Task<ActionResult> IzmeniTask(int taskID, string naziv, string opis, string tip, string vrednost, string jwt)
+        public async Task<ActionResult> IzmeniTask(int taskID, string naziv, string opis, string tip, string vrednost, string jwt, int projID)
         {
              var token = jwtService.Verify(jwt);
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
@@ -243,7 +243,14 @@ namespace TasKing.Controllers
 
             if(task == null)
             {
-                return BadRequest("Task ne postoji!");
+                return BadRequest(1);
+            }
+
+            var taskstari = await Context.Taskovi.Where(t => t.naziv == naziv && t.projekat.ID == projID).FirstOrDefaultAsync();
+
+            if(taskstari != null)
+            {
+                return BadRequest(0);
             }
 
             try
@@ -261,8 +268,7 @@ namespace TasKing.Controllers
                 }
 
                 await Context.SaveChangesAsync();
-                
-                return Ok("Task je uspesno izmenjen");
+                return Ok(2);
             }
              catch(Exception e)
             {
