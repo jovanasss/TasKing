@@ -99,16 +99,50 @@ export default function ProjectDescription(props) {
       return
     }
 
-    fetch("https://localhost:5001/Projekat/PromeniImeProjekta/"+props.ProjectID+"/"+projectName,
+    const clanTimaID = window.localStorage.getItem('clanTimaID');
+    fetch("https://localhost:5001/Projekat/PromeniImeProjekta/"+props.ProjectID+"/"+projectName+"/"+clanTimaID,
     {
         method:"PUT",
         headers:{
             "Content-Type":"application/json"
         },
-    })
-    setOpen1(false);
-    window.location.reload(false);
-    return
+    }).then(res => {
+      res.json()
+      .then(data => {
+          if(data === 0){
+            console.log(data);
+            Store.addNotification({
+              title: "Warning!",
+              message: "The project with this name already exist!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            setOpen1(false);
+          }
+          else if(data === 1){
+            Store.addNotification({
+              title: "Warning!",
+              message: "The project doesn't exist!",
+              type: "warning",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            setOpen1(false);
+          }
+          else{
+          window.location.reload(false);
+          }
+      });
+  })
   }
 
   function changeProjectDescription(){
@@ -142,7 +176,8 @@ export default function ProjectDescription(props) {
       return
     }
 
-    fetch("https://localhost:5001/Projekat/PromeniOpisProjekta/"+props.ProjectID+"/"+projectDescription,
+    const clanTimaID = window.localStorage.getItem('clanTimaID');
+    fetch("https://localhost:5001/Projekat/PromeniOpisProjekta/"+props.ProjectID+"/"+projectDescription+"/"+clanTimaID,
     {
         method:"PUT",
         headers:{
@@ -204,7 +239,8 @@ export default function ProjectDescription(props) {
 }, [props]);
 
 function deleteProject(){
-  fetch("https://localhost:5001/Projekat/ObrisiProjekat/"+props.ProjectID,
+  const clanTimaID = window.localStorage.getItem('clanTimaID');
+  fetch("https://localhost:5001/Projekat/ObrisiProjekat/"+props.ProjectID+"/"+clanTimaID,
   {
       method:"DELETE",
       headers:{

@@ -473,10 +473,19 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("IzbaciClana/{ClanID}")]
+        [Route("IzbaciClana/{ClanID}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> IzbaciClana(int ClanID)
+        public async Task<ActionResult> IzbaciClana(int ClanID, string jwt)
         {
+
+             var token = jwtService.Verify(jwt);
+             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
                 try
                 {
                     var clan =  Context.ClanoviTima.Where(c=>c.ID==ClanID).FirstOrDefault();  
@@ -493,10 +502,20 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("PromeniSlikuTima/{timID}/{novaslika}")]
+        [Route("PromeniSlikuTima/{timID}/{novaslika}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniSlikuTima(int timID, string novaslika)
+        public async Task<ActionResult> PromeniSlikuTima(int timID, string novaslika, string jwt)
         {
+
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
+            
             var tim = await Context.Timovi.Where(t => t.ID == timID).FirstOrDefaultAsync();
 
             if(tim == null)
@@ -516,10 +535,19 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PozoviUTim/{korisnickoIme}/{TimID}")]
+        [Route("PozoviUTim/{korisnickoIme}/{TimID}/{jwt}")]
         [HttpPost]
-        public async Task<ActionResult> PozoviUTim(string korisnickoIme, int TimID)
+        public async Task<ActionResult> PozoviUTim(string korisnickoIme, int TimID, string jwt)
         {     
+             var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
+
                 Korisnik korisnik = await Context.Korisnici.Where(p => p.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();
                 if(korisnik==null)
                     return BadRequest(1);
@@ -650,7 +678,7 @@ namespace TasKing.Controllers
                 int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
                 var clan = await Context.ClanoviTima
-                .Where(k => k.ID == clanID)
+                .Where(k => k.ID == clanID && k.vodjaTima == true)
                 .Include(c => c.tim)
                 .Select(k => new
                 {

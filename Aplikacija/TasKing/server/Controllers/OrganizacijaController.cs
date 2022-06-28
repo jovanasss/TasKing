@@ -402,10 +402,19 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("IzbaciClana/{ClanID}")]
+        [Route("IzbaciClana/{ClanID}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> IzbaciClana(int ClanID)
+        public async Task<ActionResult> IzbaciClana(int ClanID, string jwt)
         {
+
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.administrator == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
                 try
                 {
                     var clan =  Context.ClanoviOrganizacije.Where(c=>c.ID==ClanID).FirstOrDefault();  
@@ -422,10 +431,19 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("PromeniSlikuOrganizacije/{orgID}/{novaslika}")]
+        [Route("PromeniSlikuOrganizacije/{orgID}/{novaslika}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniSlikuOrganizacije(int orgID, string novaslika)
+        public async Task<ActionResult> PromeniSlikuOrganizacije(int orgID, string novaslika, string jwt)
         {
+
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.administrator == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
             var org = await Context.Organizacije.Where(o => o.ID == orgID).FirstOrDefaultAsync();
 
             if(org == null)
@@ -445,10 +463,19 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PozoviUOrganizaciju/{korisnickoIme}/{orgID}")]
+        [Route("PozoviUOrganizaciju/{korisnickoIme}/{orgID}/{jwt}")]
         [HttpPost]
-        public async Task<ActionResult> PozoviUOrganizaciju(string korisnickoIme, int orgID)
+        public async Task<ActionResult> PozoviUOrganizaciju(string korisnickoIme, int orgID, string jwt)
         {     
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.administrator == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
+            
                 Korisnik korisnik = await Context.Korisnici.Where(p => p.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();
                 if(korisnik==null)
                     return BadRequest(1);
@@ -577,7 +604,7 @@ namespace TasKing.Controllers
                 int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
                 var clan = await Context.ClanoviOrganizacije
-                .Where(k => k.ID == clanID)
+                .Where(k => k.ID == clanID && k.administrator == true)
                 .Include(c => c.organizacija)
                 .Select(k => new
                 {

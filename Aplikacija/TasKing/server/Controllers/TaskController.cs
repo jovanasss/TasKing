@@ -24,10 +24,19 @@ namespace TasKing.Controllers
             jwtService = JwtService;
         }
 
-        [Route("KreirajTask")]
+        [Route("KreirajTask/{jwt}")]
         [HttpPost]
-        public async Task<ActionResult> KreirajTask([FromBody] TaskDTO Task)
+        public async Task<ActionResult> KreirajTask([FromBody] TaskDTO Task, string jwt)
         {   
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
+
             var projekat = Context.Projekti.Where(p  => p.ID == Task.projekatID).FirstOrDefault();
             var task = Context.Taskovi.Where( t => t.naziv == Task.naziv && t.projekat == projekat).FirstOrDefault();
             if(task == null)
@@ -76,7 +85,7 @@ namespace TasKing.Controllers
                 int clanTimaID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
 
-                ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID).FirstOrDefaultAsync();
+                ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID && c.vodjaTima == false).FirstOrDefaultAsync();
                 Models.Task task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
                 if(clan==null)
                     return BadRequest("Clan tima ne postoji u bazi");
@@ -125,7 +134,7 @@ namespace TasKing.Controllers
                 var token = jwtService.Verify(jwt);
                 int clanTimaID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-                PrijavaZaTask prijava =  await Context.PrijaveZaTask.Where(p => p.clanTima.ID == clanTimaID && p.task.ID == taskID).FirstOrDefaultAsync();
+                PrijavaZaTask prijava =  await Context.PrijaveZaTask.Where(p => p.clanTima.ID == clanTimaID && p.task.ID == taskID && p.clanTima.vodjaTima == false).FirstOrDefaultAsync();
 
                 if(prijava == null)
                 {
@@ -167,10 +176,19 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("DodeliTask/{clanTimaID}/{taskID}")]
+        [Route("DodeliTask/{clanTimaID}/{taskID}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> DodeliTask(int clanTimaID, int taskID)
+        public async Task<ActionResult> DodeliTask(int clanTimaID, int taskID, string jwt)
         {
+
+             var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
                 try
                 {
                     var task =  Context.Taskovi.Where(t=>t.ID==taskID).FirstOrDefault();  
@@ -209,10 +227,18 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("IzmeniTask/{taskID}/{naziv}/{opis}/{tip}/{vrednost}")]
+        [Route("IzmeniTask/{taskID}/{naziv}/{opis}/{tip}/{vrednost}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> IzmeniTask(int taskID, string naziv, string opis, string tip, string vrednost)
+        public async Task<ActionResult> IzmeniTask(int taskID, string naziv, string opis, string tip, string vrednost, string jwt)
         {
+             var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
             var task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
 
             if(task == null)

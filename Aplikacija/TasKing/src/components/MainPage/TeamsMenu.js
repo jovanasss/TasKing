@@ -85,7 +85,8 @@ function SimpleDialog(props) {
 
       const idOrg = (JSON.parse(window.localStorage.getItem('OrgID')));
 
-      fetch("https://localhost:5001/Organizacija/PozoviUOrganizaciju/" + userName + "/" + idOrg, {
+      const clanOrgID = window.localStorage.getItem('clanOrgID');
+      fetch("https://localhost:5001/Organizacija/PozoviUOrganizaciju/" + userName + "/" + idOrg + "/" + clanOrgID, {
         method: "POST"
         }).then(res =>{
           if(res.ok)
@@ -162,8 +163,10 @@ function SimpleDialog(props) {
     onClose(selectedValue);
   };
 
+
   const handleRemove = (clanID) => {
-    fetch("https://localhost:5001/Organizacija/IzbaciClana/" + clanID,
+    const clanOrgID = window.localStorage.getItem('clanOrgID');
+    fetch("https://localhost:5001/Organizacija/IzbaciClana/" + clanID + "/" + clanOrgID,
           {
               method: "PUT"
           }).then(s =>{
@@ -703,7 +706,8 @@ export default function TeamsMenu(props){
    const handleChangeFile = event => {
     const fileUploaded = event.target.files[0];
     const timID = (JSON.parse(window.localStorage.getItem('TimID')));
-    fetch("https://localhost:5001/Tim/PromeniSlikuTima/"+timID+"/"+fileUploaded.name,
+    const clanTimaID = window.localStorage.getItem('clanTimaID');
+    fetch("https://localhost:5001/Tim/PromeniSlikuTima/"+timID+"/"+fileUploaded.name+"/"+clanTimaID,
     {
         method:"PUT",
         headers:{

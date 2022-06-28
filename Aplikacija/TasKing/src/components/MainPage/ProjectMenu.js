@@ -111,7 +111,8 @@ function SimpleDialog(props) {
 
   const token = window.localStorage.getItem('clanTimaID');
   const handleRemove = (clanID) => {
-    fetch("https://localhost:5001/Tim/IzbaciClana/" + clanID,
+    const clanTimaID = window.localStorage.getItem('clanTimaID');
+    fetch("https://localhost:5001/Tim/IzbaciClana/" + clanID + "/" + clanTimaID,
           {
               method: "PUT"
           }).then(s =>{
@@ -155,7 +156,8 @@ function SimpleDialog(props) {
 
       const idTim = (JSON.parse(window.localStorage.getItem('TimID')));
 
-      fetch("https://localhost:5001/Tim/PozoviUTim/" + userName + "/" + idTim, {
+      const clanTimaID = window.localStorage.getItem('clanTimaID');
+      fetch("https://localhost:5001/Tim/PozoviUTim/" + userName + "/" + idTim + "/" + clanTimaID, {
         method: "POST"
         }).then(res =>{
           if(res.ok)

@@ -25,13 +25,20 @@ namespace TasKing.Controllers
             jwtService = JwtService;
         }
         
-        [Route("KreirajProjekat")]
+        [Route("KreirajProjekat/{jwt}")]
         [HttpPost]
-        public async Task<ActionResult> KreirajProjekat([FromBody] ProjekatDTO projekat)
+        public async Task<ActionResult> KreirajProjekat([FromBody] ProjekatDTO projekat, string jwt)
         {
             // ovde da proverimo dal je taj koj je kliknuo vodja tima posto samo on sme da kreira ??
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-            
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return Ok(1);
+            }
+
             var proj = Context.Projekti.Where(p => p.naziv == projekat.naziv && p.tim.ID == projekat.timID).FirstOrDefault();
             if(proj == null)
             {
@@ -66,90 +73,6 @@ namespace TasKing.Controllers
                 return Ok(0);
             }
         }
-
-       /*[Route("VratiProjekteSaTaskovima/{clantimaID}")]
-       [HttpGet]
-       public async Task<ActionResult> VratiProjekteSaTaskovima(int clantimaID)
-       {
-           try
-           {
-               var clan = await Context.ClanoviTima.Where(c => c.ID == clantimaID)
-               .Include(c => c.tim)
-               .ThenInclude(t => t.projekti)
-               .ThenInclude(p => p.taskovi)
-               .ThenInclude(task => task.clanTima)
-               .ToListAsync();
-              
-              var projekti = clan[0].tim.projekti
-               .Select(p => new
-               {
-                   id = p.ID,
-                   naziv = p.naziv,
-                   opis = p.opis,
-                   taskoviUkupni = p.taskovi.Select(task => new
-                    {
-                        naziv = task.naziv,
-                        opis = task.opis,
-                        vrednost = task.vrednost,
-                    }),
-                    taskoviUradjeni = p.taskovi.Where(t => t.clanTima.ID == clantimaID).Select(p => new
-                    {
-                        id = p.ID,
-                        naziv = p.naziv,
-                        opis = p.opis,
-                        vrednost = p.vrednost,
-                        tip = p.tip
-                    })
-               }).ToList();
-
-                return Ok(projekti);
-           }
-           catch(Exception e)
-           {
-               return BadRequest("Doslo je do greske" + e.Message);
-           }
-       }*/
-
-        /*[Route("VratiProjekteSaTaskovima/{userID}")]
-        [HttpGet]
-        public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
-        {
-            try
-            {
-                List<ProjectInfo> allProjectsInfo = new List<ProjectInfo>();
-                var clanoviOrg = await Context.ClanoviOrganizacije.Where(clan => clan.korisnik.ID == userID)
-                    .Include(o => o.clanoviTima)
-                    .ThenInclude(t => t.tim)
-                    .ThenInclude(ti => ti.projekti)
-                    .ThenInclude(p => p.taskovi)
-                    .ToListAsync();
-
-                foreach (var clanO in clanoviOrg)
-                {
-                    foreach (var clanT in clanO.clanoviTima)
-                    {
-                        foreach (var proj in clanT.tim.projekti)
-                        {
-                            List<Models.Task> allTasks = new List<Models.Task>();
-                            List<Models.Task> myTasks = new List<Models.Task>();
-                            foreach (var task in proj.taskovi)
-                            {
-                                allTasks.Add(task);
-                                if (task.clanTima == clanT)
-                                    myTasks.Add(task);
-                            }
-                            ProjectInfo projInfo = new ProjectInfo(proj.ID, proj.naziv, proj.opis, proj.aktivan, allTasks, myTasks);
-                            allProjectsInfo.Add(projInfo);
-                        }
-                    }
-                }
-                return Ok(allProjectsInfo);
-            }
-            catch (Exception e)
-            {
-                return BadRequest("Doslo je do greske" + e.Message);
-            }
-        }*/
 
         [Route("VratiProjekteSaTaskovima/{jwt}")]
         [HttpGet]
@@ -289,15 +212,31 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PromeniImeProjekta/{projID}/{novinaziv}")]
+        [Route("PromeniImeProjekta/{projID}/{novinaziv}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniImeProjekta(int projID, string novinaziv)
+        public async Task<ActionResult> PromeniImeProjekta(int projID, string novinaziv, string jwt)
         {
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
+           
             var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
+
+            var projekatstari = await Context.Projekti.Where(p => p.tim.ID == projekat.tim.ID && p.naziv == novinaziv).FirstOrDefaultAsync();
+
+            if(projekatstari != null)
+            {
+                return BadRequest(0);
+            }
 
             if(projekat == null)
             {
-                return BadRequest("Projekat ne postoji!");
+                return BadRequest(1);
             }
 
             try
@@ -312,10 +251,20 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("PromeniOpisProjekta/{projID}/{noviopis}")]
+        [Route("PromeniOpisProjekta/{projID}/{noviopis}/{jwt}")]
         [HttpPut]
-        public async Task<ActionResult> PromeniOpisProjekta(int projID, string noviopis)
+        public async Task<ActionResult> PromeniOpisProjekta(int projID, string noviopis, string jwt)
         {
+
+             var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
+
             var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
 
             if(projekat == null)
@@ -335,10 +284,19 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("ObrisiProjekat/{projID}")]
+        [Route("ObrisiProjekat/{projID}/{jwt}")]
         [HttpDelete]
-        public async Task<ActionResult> ObrisiProjekat(int projID)
+        public async Task<ActionResult> ObrisiProjekat(int projID, string jwt)
         {
+            var token = jwtService.Verify(jwt);
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja.vodjaTima == false)
+            {
+                return BadRequest("Nisi vodja");
+            }
+
             try 
             { 
 

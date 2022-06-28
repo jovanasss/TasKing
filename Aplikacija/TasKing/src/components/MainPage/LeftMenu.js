@@ -481,7 +481,8 @@ const handleOrgClick = () => {
     const fileUploaded = event.target.files[0];
 
     const orgID = (JSON.parse(window.localStorage.getItem('OrgID')));
-    fetch("https://localhost:5001/Organizacija/PromeniSlikuOrganizacije/"+orgID+"/"+fileUploaded.name,
+    const clanOrgID = window.localStorage.getItem('clanOrgID');
+    fetch("https://localhost:5001/Organizacija/PromeniSlikuOrganizacije/"+orgID+"/"+fileUploaded.name+"/"+clanOrgID,
     {
         method:"PUT",
         headers:{

@@ -88,7 +88,8 @@ function SimpleDialog(props) {
   };
 
   const handleHire = (clanID) => {
-    fetch("https://localhost:5001/Task/DodeliTask/" + clanID + "/" + props.taskID,
+    const clanTimaID = window.localStorage.getItem('clanTimaID');
+    fetch("https://localhost:5001/Task/DodeliTask/" + clanID + "/" + props.taskID+"/"+clanTimaID,
         {
             method: "PUT"
         }).then(s =>{
@@ -544,7 +545,8 @@ const handleClose3 = () => {
 };
 
 function changeTask(){
-  fetch("https://localhost:5001/Task/IzmeniTask/"+taskID+"/"+taskName+"/"+taskDesc+"/"+taskType+"/"+bodovi,
+  const clanTimaID = window.localStorage.getItem('clanTimaID');
+  fetch("https://localhost:5001/Task/IzmeniTask/"+taskID+"/"+taskName+"/"+taskDesc+"/"+taskType+"/"+bodovi+"/"+clanTimaID,
           {
               method:"PUT",
               headers:{
@@ -856,7 +858,8 @@ function TaskList(props){
         projekatID  : idProjekta
     };
 
-    let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
+    const clanTimaID = window.localStorage.getItem('clanTimaID');
+    let result = await fetch("https://localhost:5001/Task/KreirajTask/" + clanTimaID, {
       method : 'POST',
       headers : {
         'Content-Type': 'application/json; charset=utf-8',

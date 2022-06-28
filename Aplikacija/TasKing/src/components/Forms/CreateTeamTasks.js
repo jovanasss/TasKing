@@ -112,9 +112,11 @@ function CreateTeamTasks(){
         }
         //console.log(projekat);
 
+        const clanTimaID = window.localStorage.getItem('clanTimaID');
+
         if ( tasks.length !== 0){
 
-            let rezultat = await fetch("https://localhost:5001/Projekat/KreirajProjekat/", {
+            let rezultat = await fetch("https://localhost:5001/Projekat/KreirajProjekat/"+clanTimaID, {
                 method : 'POST',
                 headers : {
                   'Content-Type': 'application/json; charset=utf-8',
@@ -124,7 +126,11 @@ function CreateTeamTasks(){
               });
               let status = rezultat.status;
               let idProjekta = await rezultat.json();
-              if (idProjekta != 0){
+              
+              if(idProjekta === 1){
+                alert("Nisi vodja");
+              }
+              else if (idProjekta != 0){
                               // dodati idProjekta u niz taskova i proslediti kroz body fetcha 
               // za svaki task mora da se doda novi prop idProjekta vrv preko map f-je i onda se vrti foreach sa ovim fetchom ispod
      
@@ -145,9 +151,10 @@ function CreateTeamTasks(){
     
               // ako je ok dodajemo taskove 
               if (status === 200){
-    
+
                 tasks.map(async task => {
-                    let result = await fetch("https://localhost:5001/Task/KreirajTask/", {
+                    const clanTimaID = window.localStorage.getItem('clanTimaID');
+                    let result = await fetch("https://localhost:5001/Task/KreirajTask/" + clanTimaID, {
                         method : 'POST',
                         headers : {
                           'Content-Type': 'application/json; charset=utf-8',
