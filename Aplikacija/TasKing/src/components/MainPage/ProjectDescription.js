@@ -1,6 +1,6 @@
 import * as React from 'react';
 import '../../styles/MainPage/ProjectDescription.css';
-import { AppBar, Toolbar, Typography } from '@mui/material';
+import { AppBar, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -100,7 +100,9 @@ export default function ProjectDescription(props) {
     }
 
     const clanTimaID = window.localStorage.getItem('clanTimaID');
-    fetch("https://localhost:5001/Projekat/PromeniImeProjekta/"+props.ProjectID+"/"+projectName+"/"+clanTimaID,
+    console.log(projectName);
+
+    fetch("https://localhost:5001/Projekat/PromeniImeProjekta/"+props.ProjectID+"/"+ projectName + "/"+ clanTimaID,
     {
         method:"PUT",
         headers:{
@@ -109,7 +111,8 @@ export default function ProjectDescription(props) {
     }).then(res => {
       res.json()
       .then(data => {
-          if(data === 0){
+        console.log(data);
+         if(data === 0){
             console.log(data);
             Store.addNotification({
               title: "Warning!",
@@ -138,10 +141,23 @@ export default function ProjectDescription(props) {
             });
             setOpen1(false);
           }
-          else{
-          window.location.reload(false);
+          else if(data ===2){
+            Store.addNotification({
+              title: "Success!",
+              message: "The name has been changed",
+              type: "success",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+            setOpen1(false);
+          //window.location.reload(false);
           }
-      });
+      }
+      )
   })
   }
 

@@ -220,30 +220,45 @@ namespace TasKing.Controllers
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
             var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if (vodja == null ){
+                return BadRequest("Invalid");
+            }
             if(vodja.vodjaTima == false)
             {
                 return BadRequest("Nisi vodja");
             }
-           
-            var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
 
-            var projekatstari = await Context.Projekti.Where(p => p.tim.ID == projekat.tim.ID && p.naziv == novinaziv).FirstOrDefaultAsync();
-
-            if(projekatstari != null)
-            {
-                return BadRequest(0);
-            }
+                var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
+                //var tim1 = await Context.Timovi.Where(t => t == projekat.tim).FirstOrDefaultAsync();
 
             if(projekat == null)
             {
                 return BadRequest(1);
             }
 
+            
+
+            // ovo je pisalo pre 
+
+            /*var stariProjekat = await Context.Projekti.Where(p => p.naziv.ToLower() == novinaziv.ToLower()  && p.tim.ID == projekat.tim.ID)
+            if ( stariProjekat != null){
+                return BadRequest(0);
+            }*/
+
+            var projekti = await Context.Projekti.Where(p => p.naziv.ToLower() == novinaziv.ToLower() )
+            .Include(t => t.ID == projekat.tim.ID)
+            .FirstOrDefaultAsync();
+
+
+            if ( projekti != null){
+                return BadRequest(0);
+            }
+
             try
             {
                 projekat.naziv = novinaziv;
                 await Context.SaveChangesAsync();
-                return Ok("Naziv projekta je uspesno izmenjen");
+                return Ok(2);
             }
              catch(Exception e)
             {
