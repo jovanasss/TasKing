@@ -1,0 +1,10 @@
+  .teamMenu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .teamList{
+    height: 100vh;
+    overflow: auto;
+    width: 200px;
+  }

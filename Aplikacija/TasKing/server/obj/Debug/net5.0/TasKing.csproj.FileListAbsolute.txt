@@ -1,0 +1,218 @@
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\appsettings.Development.json
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\appsettings.json
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\client\package-lock.json
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\client\package.json
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\client\public\manifest.json
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\TasKing.exe
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\TasKing.deps.json
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\TasKing.runtimeconfig.json
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\TasKing.runtimeconfig.dev.json
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\TasKing.dll
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\ref\TasKing.dll
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\TasKing.pdb
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\Microsoft.OpenApi.dll
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Joka\Desktop\TasKing\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.csproj.AssemblyReference.cache
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.AssemblyInfoInputs.cache
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.AssemblyInfo.cs
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.csproj.CoreCompileInputs.cache
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\scopedcss\bundle\TasKing.styles.css
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\staticwebassets\TasKing.StaticWebAssets.Manifest.cache
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.RazorTargetAssemblyInfo.cache
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.csproj.CopyComplete
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.dll
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\ref\TasKing.dll
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.pdb
+C:\Users\Joka\Desktop\TasKing\obj\Debug\net5.0\TasKing.genruntimeconfig.cache
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\appsettings.Development.json
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\appsettings.json
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.exe
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.deps.json
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.runtimeconfig.json
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.runtimeconfig.dev.json
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\ref\TasKing.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.pdb
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Humanizer.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.Identity.Client.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.OpenApi.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.Configuration.ConfigurationManager.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.Runtime.Caching.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.pdb
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.pdb
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.pdb
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.csproj.AssemblyReference.cache
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.AssemblyInfoInputs.cache
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.AssemblyInfo.cs
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.csproj.CoreCompileInputs.cache
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\scopedcss\bundle\TasKing.styles.css
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\staticwebassets\TasKing.StaticWebAssets.Manifest.cache
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.RazorTargetAssemblyInfo.cache
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.csproj.CopyComplete
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\ref\TasKing.dll
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.pdb
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.genruntimeconfig.cache
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\appsettings.Development.json
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\appsettings.json
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.exe
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.deps.json
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.runtimeconfig.json
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.runtimeconfig.dev.json
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\ref\TasKing.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.pdb
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Humanizer.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.Identity.Client.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Logging.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.OpenApi.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Newtonsoft.Json.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.Configuration.ConfigurationManager.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.Diagnostics.DiagnosticSource.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.Runtime.Caching.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\System.Security.Cryptography.ProtectedData.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.pdb
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.pdb
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.pdb
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.csproj.AssemblyReference.cache
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.GeneratedMSBuildEditorConfig.editorconfig
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.AssemblyInfoInputs.cache
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.AssemblyInfo.cs
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.csproj.CoreCompileInputs.cache
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.MvcApplicationPartsAssemblyInfo.cs
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.MvcApplicationPartsAssemblyInfo.cache
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\staticwebassets\TasKing.StaticWebAssets.Manifest.cache
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\staticwebassets\TasKing.StaticWebAssets.xml
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\scopedcss\bundle\TasKing.styles.css
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.RazorTargetAssemblyInfo.cache
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.csproj.CopyComplete
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.dll
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\ref\TasKing.dll
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.pdb
+D:\Tasking\Aplikacija\TasKing\server\obj\Debug\net5.0\TasKing.genruntimeconfig.cache
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\appsettings.Development.json
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\appsettings.json
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\TasKing.exe
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\TasKing.deps.json
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\TasKing.runtimeconfig.json
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\TasKing.runtimeconfig.dev.json
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\TasKing.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\ref\TasKing.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\TasKing.pdb
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Humanizer.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Design.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Relational.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.Identity.Client.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.IdentityModel.JsonWebTokens.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.IdentityModel.Logging.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Microsoft.OpenApi.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Newtonsoft.Json.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\System.Configuration.ConfigurationManager.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\System.Diagnostics.DiagnosticSource.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\System.Runtime.Caching.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\System.Security.Cryptography.ProtectedData.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.pdb
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.pdb
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.pdb
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.csproj.AssemblyReference.cache
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.GeneratedMSBuildEditorConfig.editorconfig
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.AssemblyInfoInputs.cache
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.AssemblyInfo.cs
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.csproj.CoreCompileInputs.cache
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.MvcApplicationPartsAssemblyInfo.cs
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.MvcApplicationPartsAssemblyInfo.cache
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\staticwebassets\TasKing.StaticWebAssets.Manifest.cache
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\staticwebassets\TasKing.StaticWebAssets.xml
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\scopedcss\bundle\TasKing.styles.css
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.RazorTargetAssemblyInfo.cache
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.csproj.CopyComplete
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\ref\TasKing.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.pdb
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\Tasking\server\obj\Debug\net5.0\TasKing.genruntimeconfig.cache
+C:\Users\Joka\Desktop\si.22.21.tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\TasKing.StaticWebAssets.xml
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Abstractions.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.Extensions.AspNetCore.dll
+F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.Extensions.DependencyInjection.dll

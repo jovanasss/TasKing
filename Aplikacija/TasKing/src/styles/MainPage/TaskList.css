@@ -1,0 +1,60 @@
+.taskList{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+}
+.taskList button{
+    margin: 10px 5px 15px 20px;
+    white-space: nowrap;
+    text-align: center;
+    background-color:rgb(0, 86, 83);
+}
+
+.taskTekst {
+    color: rgb(255, 255, 255);
+
+}
+
+.divTasks{
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+}
+
+.Information{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    width: 50%;
+    margin-left: 28%;
+}
+
+.normal{
+    background-color: rgb(255, 255, 255);
+}
+
+.intrested{
+    background-color: rgb(255, 207, 49);
+}
+
+.working{
+    background-color: rgb(77, 154, 255);
+}
+
+.waitingReview{
+    background-color: rgb(78, 255, 93);
+}
+
+.addBtnBox{
+    align-self: center;
+    display: flex;
+}
+
+.addCard{
+    align-self: center;
+    display: flex;
+}
+
+.addBtn{
+    align-self: center;
+}

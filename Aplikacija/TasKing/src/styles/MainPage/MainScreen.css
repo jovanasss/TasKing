@@ -1,0 +1,8 @@
+.Main{
+    display: flex;
+    flex-direction: row;
+}
+.App{
+    display: flex;
+    flex-direction: row;
+}

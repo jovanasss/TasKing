@@ -1,0 +1,116 @@
+body{
+    background-color: azure;
+    justify-content: center;
+  }
+  .divMainCORG{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+  .formaCORG{
+    display: flex;
+    flex-direction: column;
+    background-color: whitesmoke;
+    width:100%;
+    height: 300px;
+    /*margin-left: 30%;
+    margin-right: 30%;*/
+    margin-top:30%;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  
+  }
+
+  .formaCORGDM{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(46, 45, 45);
+    width:100%;
+    height: 300px;
+    /*margin-left: 30%;
+    margin-right: 30%;*/
+    margin-top:30%;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px 0 rgb(0, 100, 100), 0 6px 20px 0 rgba(0,0,0,0.19);
+  
+  }
+  .GlavniDivCORG{
+      height: 100%;
+  }
+
+.divNaslovCORG{
+    background-color: rgb(0, 100, 100);
+    height: 17.5%;
+    line-height: 250%;
+    border-radius: 10px;
+    border-style: solid;
+    text-align: center;    
+}
+.naslovCORG{
+    margin-top : 10%;
+    margin-right: 17.5%;
+    font-weight: bold;
+    color: aliceblue;
+    font-size: 13px;
+    float: inline-end;
+
+
+}
+.labelStepsDM{
+  color : white;
+}
+.divCORGbuttons{
+    display: flex;
+    justify-content: center;
+    height: 35%;
+}
+.BtnCORG{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 60px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    /*background-color: rgb(161, 17, 161);*/
+    background-color: rgb(0, 100, 100);
+    color: aliceblue;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    margin-left: 7.5%;
+    margin-right: 7.5%;
+    border-radius: 25px;
+  }
+.BtnCORG:hover  {
+ background-color: rgb(31, 206, 206)
+}
+.BtnCORG:active {
+  background-color: rgb(31, 206, 206);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+ 
+.divinputORGname{
+  display: flex;
+  justify-content: center;
+  height: 30%;
+}
+.inputORGname{
+        display: flex;
+        justify-content: center;
+        margin-top: 10%;
+        margin-bottom: 10%;
+        margin-left: 5%;
+        margin-right: 5%;
+        width: 90%;
+}
+.divSteps{
+    text-align: left;
+    margin-left: 10px;
+    height: 10%;
+}

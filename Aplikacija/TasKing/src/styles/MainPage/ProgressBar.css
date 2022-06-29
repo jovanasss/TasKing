@@ -1,0 +1,8 @@
+.progressDiv{
+    display: flex;
+    align-items: center;
+}
+
+.effectText{
+    white-space: nowrap;
+}

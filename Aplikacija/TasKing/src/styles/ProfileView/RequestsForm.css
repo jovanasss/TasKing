@@ -1,0 +1,60 @@
+.MaindivRequestsForm
+{
+    display: flex;
+    flex-direction: row;
+    margin-left: 10%;
+    margin-right: 2%;
+    width: 94%;
+    height: 100%;
+    margin-top: 6%;
+}
+
+@media screen and (min-width: 899px) {
+  .MaindivRequestsForm{
+      width:70%;
+      margin-left:20%;
+      position: relative;
+      left:16px;
+  }
+}
+
+.PaperRequests{
+    height: 60vh;
+    overflow: auto;
+ }
+
+/*.divPaperTeamRequests
+{
+    width: 350px;
+}
+
+.divPaperOrgRequests
+{
+    width: 350px;
+}*/
+
+/*.desnidivRequests
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.levidivRequests
+{
+    display: flex;
+    flex-direction: column;
+}*/
+
+.divButtonSentReceive{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .divPaperTopLabelTeamRequests{
+    margin-left: 42%;
+  }
+
+  .divPaperTopLabelOrganisation{
+    margin-left: 32%;
+  }
