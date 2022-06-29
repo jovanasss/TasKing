@@ -355,7 +355,7 @@ const buttonTexts = (taskID, currentStatus, prijaveLenght) => {
   {
     if(currentStatus==0)
     {
-      return "Pick Candidate"
+      return "Pick"
     }
 
     if(currentStatus==1)
@@ -768,7 +768,8 @@ return(
                     backgroundColor : darkMode ? "rgb(26,25,25)" : "white" ,
                     color : darkMode ? "white "  : "black",
                      }} >
-                      {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).slice(0).reverse()[dialogTask].naziv}</DialogTitle>
+                      {tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).slice(0).reverse()[dialogTask].naziv
+                      + " (" + tasks.filter(task => ((task.status==props.selected-1 || (props.selected==0 && task.status!=3))&&task.status!=-1)).slice(0).reverse()[dialogTask].tip +")"}</DialogTitle>
                   <DialogContent dividers={scroll === 'paper'} style={{backgroundColor : darkMode ? "rgb(26,25,25)" : "white",}} >
                     <DialogContentText
                       id="scroll-dialog-description"

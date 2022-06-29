@@ -364,6 +364,7 @@ export default function ProjectMenu(props) {
   const boje = ['rgb(147, 219, 217)', 'rgb(17, 156, 151)']
   const displej = ['none', 'inline']
   const [userProfilna, setUserProfilna] = React.useState(null);
+  const [imeIPrezime, setImeIPrezime] = React.useState("");
   const [isVodja , setVodja] = React.useState(false)
 
   async function vodjaStatus () {
@@ -503,6 +504,7 @@ export default function ProjectMenu(props) {
             .then(data => {
               if(data!=null)
               setUserProfilna(data[0].profilnaSlika);
+              setImeIPrezime(data[0].ime.slice(0,1) + data[0].prezime.slice(0,1))
               //console.log(data[0].profilnaSlika + "profilna");
             });
         })
@@ -607,7 +609,7 @@ export default function ProjectMenu(props) {
           </Button>
           </ThemeProvider>
             <Avatar src={"../../profile/" + userProfilna} onClick={() => {setujProfil(); navigate('/Profile')}} sx={{marginLeft:"1vw", width:'70px', height:'70px', alignSelf:'center'}}>
-              <AccountCircleIcon sx={{marginLeft:"0.5%", width: '50px', height: '50px' }}/>
+              {imeIPrezime}
             </Avatar>
             </div>
       </Box>

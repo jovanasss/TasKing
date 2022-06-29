@@ -18,7 +18,7 @@ function AccountCreatedForm()  {
   // promena stranice
     let navigate = useNavigate(); 
     const routeChange = () =>{ 
-      let path = `/CoJ`; 
+      let path = `/`; 
       navigate(path);
     }
 

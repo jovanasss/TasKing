@@ -381,7 +381,7 @@ function CreateTeamTasks(){
                             <List style={{maxHeight: '85%', overflow: 'auto'}} >
                                  {tasks.map((task, index) => 
                             <ListItem key={index}>             
-                            <ListItemButton component="a" href="#simple-list" style={{color:'white'}}>
+                            <ListItemButton component="a" href="#simple-list">
                                 <ListItemText primary={task.naziv} secondary={task.bodovi}/>
                             </ListItemButton>
                             </ListItem>   )}                   

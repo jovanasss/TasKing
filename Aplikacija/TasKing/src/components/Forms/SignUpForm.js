@@ -127,7 +127,7 @@ function SignUp(){
     let navigate = useNavigate();
     // promena strane
     const routeChange = () =>{ 
-      let path = `/`; 
+      let path = `/acc`; 
       navigate(path);
     }
 

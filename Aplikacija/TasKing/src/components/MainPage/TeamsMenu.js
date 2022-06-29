@@ -919,7 +919,7 @@ export default function TeamsMenu(props){
                })
 
                setVodja(team.vodja);}} onDoubleClick={team.vodja? handleClickFile : null}>
-                
+                T
                </Avatar> 
                 <input type="file" ref={hiddenFileInput} onChange={handleChangeFile} style={{display: 'none'}} />
                 {team.imeTima.length > 15 
