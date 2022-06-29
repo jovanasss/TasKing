@@ -166,8 +166,11 @@ function CreateTeamTasks(){
               let status = rezultat.status;
               let idProjekta = await rezultat.json();
               
-              if(idProjekta === 1){
+              if(idProjekta === -1){
+                {
                 alert("You aren't team admin");
+                navigate("/Main")
+                }
               }
               else if (idProjekta != 0){
                               // dodati idProjekta u niz taskova i proslediti kroz body fetcha 

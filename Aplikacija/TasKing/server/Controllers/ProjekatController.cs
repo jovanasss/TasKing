@@ -36,7 +36,7 @@ namespace TasKing.Controllers
             var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
             if(vodja.vodjaTima == false)
             {
-                return Ok(1);
+                return Ok(-1);
             }
 
             var proj = Context.Projekti.Where(p => p.naziv == projekat.naziv && p.tim.ID == projekat.timID).FirstOrDefault();
