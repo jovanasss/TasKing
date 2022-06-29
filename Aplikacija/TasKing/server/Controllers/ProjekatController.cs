@@ -99,7 +99,11 @@ namespace TasKing.Controllers
                 }
                 int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-
+                var clanoviProvera = await Context.ClanoviOrganizacije.Where(c => c.korisnik.ID == userID).FirstOrDefaultAsync();
+                if (clanoviProvera == null)
+                {
+                    return BadRequest("Nepostojeci Clan");
+                }
                 List<ProjectInfo> allProjectsInfo = new List<ProjectInfo>();
                 var clanoviOrg = await Context.ClanoviOrganizacije.Where(clan => clan.korisnik.ID == userID)
                     .Include(o => o.clanoviTima)
@@ -154,6 +158,8 @@ namespace TasKing.Controllers
             }
         }  
         
+        // nema tokena nzm dal treba 
+
         [Route("VratiProjekteSaTaskovima2/{userID}")]
         [HttpGet]
         public async Task<ActionResult> VratiProjekteSaTaskovima(int userID)
@@ -214,12 +220,22 @@ namespace TasKing.Controllers
             }
         }  
 
-        [Route("VratiProjekat/{projID}")]
+        /*[Route("VratiProjekat/{projID}/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiProjekat(int projID)
+        public async Task<ActionResult> VratiProjekat(int projID,string jwt)
         {
-            var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
+            // verifikujemo token
 
+            var token = jwtService.Verify(jwt);
+
+            if ( token == null){
+                return BadRequest(-2);
+            }
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+            
+            // verifikujemo projekat
+
+            var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
             if(projekat == null)
             {
                 return BadRequest("Projekat ne postoji!");
@@ -228,7 +244,7 @@ namespace TasKing.Controllers
             {
                 return Ok(projekat);
             }
-        }
+        }*/
 
         [Route("PromeniImeProjekta/{projID}/{novinaziv}/{jwt}/{timID}")]
         [HttpPut]

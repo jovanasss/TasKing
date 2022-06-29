@@ -213,12 +213,31 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiPrijaveZaTask/{taskID}")]
+        [Route("VratiPrijaveZaTask/{taskID}/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiPrijaveZaTask(int taskID)
+        public async Task<ActionResult> VratiPrijaveZaTask(int taskID, string jwt)
         {     
                  try
                 {
+                    // verifikujemo token
+
+                    var token = jwtService.Verify(jwt);
+
+                    if ( token == null)
+                    {
+                        return BadRequest(-2);
+                    }
+                    int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);    
+
+                    // verifikujemo korisnika 
+
+                    var korisnik = await Context.Korisnici.Where(k => k.ID == userID).FirstOrDefaultAsync();
+                    if (korisnik == null)
+                    {
+                        return BadRequest("Nevalidan Korisnik");
+                    }                
+
+
                     var prijave = await Context.PrijaveZaTask.Where(p => p.task.ID == taskID)
                     .Include(p=>p.clanTima)
                     .ThenInclude(c =>c.clanOgranizacije)
@@ -429,12 +448,31 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiTask/{taskID}")]
+        [Route("VratiTask/{taskID}/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiTask(int taskID)
+        public async Task<ActionResult> VratiTask(int taskID , string jwt)
         {
-            var task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
 
+             // verifikujemo token
+
+             var token = jwtService.Verify(jwt);
+
+             if ( token == null)
+             {
+                return BadRequest(-2);
+             }
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+            
+                // verifikujemo korisnika 
+
+                var korisnik = await Context.Korisnici.Where(k => k.ID == userID).FirstOrDefaultAsync();
+                if (korisnik == null)
+                {
+                    return BadRequest("Nevalidan Korisnik");
+                }
+
+
+            var task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
             if(task == null)
             {
                 return BadRequest("Task ne postoji!");

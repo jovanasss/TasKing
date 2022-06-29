@@ -138,7 +138,7 @@ function EditAccountForm(){
                         data.forEach(d =>{
                           idclanova += d.id + " ";
                         })
-                        fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova,
+                        fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova + "/" + localStorage.getItem('user-info'),
                         {
                             method: "GET",
                             headers: {
@@ -531,7 +531,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                         data.forEach(d =>{
                           idclanova1 += d.id + " ";
                         })
-                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova1,
+                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova1 + "/" + localStorage.getItem('user-info'),
                         {
                             method: "GET",
                             headers: {
@@ -786,7 +786,7 @@ function PaperListTeams({ teams }){
     }).then(res => {
         res.json()
         .then(data => {
-          fetch("https://localhost:5001/Tim/IzbaciKorisnikaIzTima/"+timID+"/"+data,
+          fetch("https://localhost:5001/Tim/IzbaciKorisnikaIzTima/"+timID+"/"+data + "/" + localStorage.getItem('user-info'),
           {
               method:"PUT",
               headers:{

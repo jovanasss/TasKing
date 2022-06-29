@@ -176,7 +176,7 @@ function SimpleDialog(props) {
                  if(props.clanID==-1)
                     return;
 
-                  fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID,
+                  fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID + "/" + localStorage.getItem('user-info'),
                   {
                       method:"GET",
                       headers: {
@@ -210,7 +210,7 @@ function SimpleDialog(props) {
     if(props.clanID==-1)
       return;
 
-    fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID,
+    fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID + "/" + localStorage.getItem('user-info'),
   {
       method:"GET",
       headers: {
@@ -369,7 +369,7 @@ export default function TeamsMenu(props){
       setVodja(false)
       return;
     }
-    fetch("https://localhost:5001/Organizacija/VratiClanoveTima/" + props.clanID,
+    fetch("https://localhost:5001/Organizacija/VratiClanoveTima/" + props.clanID + "/" + localStorage.getItem('user-info'),
     {
         method:"GET",
         headers: {
@@ -409,7 +409,7 @@ export default function TeamsMenu(props){
 
 
 
-              fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan,
+              fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan + "/" + localStorage.getItem('user-info'),
               {
                   method:"POST",
                   headers: {
@@ -455,7 +455,7 @@ export default function TeamsMenu(props){
           {
 
 
-            fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan,
+            fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan + "/" + localStorage.getItem('user-info'),
             {
                 method:"POST",
                 headers: {
@@ -513,7 +513,7 @@ export default function TeamsMenu(props){
 
       let OTP =  generate();
       //console.log(OTP);
-      let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP ,
+      let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP + "/" + localStorage.getItem('user-info'),
       {
           method:"GET",
           headers: {
@@ -547,7 +547,7 @@ export default function TeamsMenu(props){
 
     //console.log(idClana);
 
-    let result = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuClana/" + idClana, 
+    let result = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuClana/" + localStorage.getItem('clanOrgID'), 
     {
       method : 'GET',
       headers : {
@@ -567,7 +567,7 @@ export default function TeamsMenu(props){
       }
       //console.log(tim);
     const organizacijaID = (JSON.parse(window.localStorage.getItem('OrgID')));
-    let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+organizacijaID , {
+    let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+organizacijaID +"/"+ localStorage.getItem('user-info'), {
       method : 'GET',
       headers : {
         'Content-Type': 'application/json; charset=utf-8',
@@ -602,7 +602,7 @@ export default function TeamsMenu(props){
           vodja : vodja
         }
   
-        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/" + localStorage.getItem('user-info'),{
           method : 'POST',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -616,7 +616,7 @@ export default function TeamsMenu(props){
         localStorage.setItem('TimID',idNovogTima); 
 
         tmp = await tmp.json();
-               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp,
+               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp + "/" + localStorage.getItem('user-info'), 
                {
                    method:"POST",
                    headers: {
@@ -737,7 +737,7 @@ export default function TeamsMenu(props){
       // joinTeam(userID ,orgID)
 
 
-      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
+      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode + "/" + localStorage.getItem('user-info'), {
         method : 'GET',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
@@ -751,7 +751,7 @@ export default function TeamsMenu(props){
       if (temp != 0){
 
 
-        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima , {
+        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima  + "/" + localStorage.getItem('user-info'), {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -770,7 +770,7 @@ export default function TeamsMenu(props){
           admin : false
         }
 
-        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),{
           method : 'POST',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -792,7 +792,7 @@ export default function TeamsMenu(props){
           }
   
   
-          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/"+ localStorage.getItem('user-info'),{
             method : 'POST',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
@@ -903,7 +903,7 @@ export default function TeamsMenu(props){
 
                //localStorage.setItem('clanTimaID',team.idClan);
                localStorage.setItem('clanTimaID',-1);
-               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + team.idClan,
+               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + team.idClan + "/" + localStorage.getItem('user-info'),
                {
                    method:"POST",
                    headers: {

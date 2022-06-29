@@ -105,7 +105,7 @@ function SimpleDialog(props) {
 
 
   const vratiPrijave = ()=>{
-    fetch("https://localhost:5001/Task/VratiPrijaveZaTask/" + props.taskID,
+    fetch("https://localhost:5001/Task/VratiPrijaveZaTask/" + props.taskID + "/" + localStorage>getItem('user-info') ,
   {
       method:"GET",
       headers: {
@@ -507,7 +507,7 @@ const [open3, setOpen3] = React.useState(false);
 const [curTaskID, setCurTaskId] = React.useState(false);
 
 const handleClickChangeTask = (id) => {
-  fetch("https://localhost:5001/Task/VratiTask/"+id,
+  fetch("https://localhost:5001/Task/VratiTask/"+id + "/" + localStorage.getItem("user-info"),
   {
       method:"GET",
       headers: {

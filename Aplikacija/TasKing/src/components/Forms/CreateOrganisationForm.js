@@ -70,7 +70,7 @@ function CreateOrganisationForm (){
         while(!codeValid){
 
           let OTP = generate();
-          let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP ,
+          let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP + "/" + localStorage.getItem('user-info') ,
           {
               method:"GET",
               headers: {
@@ -95,7 +95,7 @@ function CreateOrganisationForm (){
       while(!codeValid){
         
         let OTP = generate();
-        let result = await fetch("https://localhost:5001/Organizacija/ORGCodeCheck/" + OTP ,
+        let result = await fetch("https://localhost:5001/Organizacija/ORGCodeCheck/" + OTP + "/" + localStorage.getItem('user-info'),
         {
             method:"GET",
             headers: {
@@ -142,7 +142,7 @@ function CreateOrganisationForm (){
           kod : await generateCodeORG()
         }
 
-        let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+0 , {
+        let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+0 + "/" + localStorage.getItem('user-info'), {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -154,7 +154,7 @@ function CreateOrganisationForm (){
 
         if (proveraTima === 0)
         {
-                let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/", {
+                let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/"+ localStorage.getItem('user-info'), {
                   method : 'POST',
                   headers : {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -187,7 +187,8 @@ function CreateOrganisationForm (){
                         idOrganizacije : idNoveOrg,
                         admin : admin
                       }        
-                      let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+                      let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),
+                      {
                         method : 'POST',
                         headers : {
                           'Content-Type': 'application/json; charset=utf-8',
@@ -235,7 +236,7 @@ function CreateOrganisationForm (){
                         }
                         //console.log(ClanTima);
             
-                        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+                        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/"+ localStorage.getItem('user-info'),{
                           method : 'POST',
                           headers : {
                             'Content-Type': 'application/json; charset=utf-8',
@@ -262,7 +263,7 @@ function CreateOrganisationForm (){
                           
                 localStorage.setItem('OrgID',idNoveOrg); 
 
-                fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + temp,
+                fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + temp + "/" + localStorage.getItem('user-info'),
                 {
                     method:"POST",
                     headers: {
@@ -280,7 +281,7 @@ function CreateOrganisationForm (){
                  localStorage.setItem('TimID',idNovogTima); 
  
                  tmp = await tmp.json();
-                fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp,
+                fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp + "/" + localStorage.getItem('user-info'), 
                 {
                     method:"POST",
                     headers: {

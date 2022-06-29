@@ -64,7 +64,7 @@ function CreateOrJoinForm(){
       // joinTeam(userID ,orgID)
       //console.log(teamCode)
 
-      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
+      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode + "/" + localStorage.getItem('user-info'), {
         method : 'GET',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
@@ -80,7 +80,7 @@ function CreateOrJoinForm(){
       if (temp != 0){
 
 
-        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima , {
+        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima + "/" + localStorage.getItem('user-info') , {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -108,7 +108,7 @@ function CreateOrJoinForm(){
           admin : false
         }
 
-        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),{
           method : 'POST',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -134,7 +134,7 @@ function CreateOrJoinForm(){
           //console.log(ClanTima);
   
   
-          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/" + localStorage.getItem('user-info'),{
             method : 'POST',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
@@ -199,7 +199,7 @@ function CreateOrJoinForm(){
           // joinOrg(userID ,orgID)
           //console.log(orgCode)
 
-          let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
+          let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode + "/" + localStorage.getItem('user-info') , {
             method : 'GET',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
@@ -239,7 +239,7 @@ function CreateOrJoinForm(){
               admin : false,
             }
       
-              let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+              let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/"+ localStorage.getItem('user-info'),{
                 method : 'POST',
                 headers : {
                   'Content-Type': 'application/json; charset=utf-8',

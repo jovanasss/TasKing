@@ -416,7 +416,7 @@ export default function ProjectMenu(props) {
       return;
     }
     
-    fetch("https://localhost:5001/Tim/VratiProjekteTima/" + props.timID,
+    fetch("https://localhost:5001/Tim/VratiProjekteTima/" + props.timID + "/" + localStorage.getItem('user-info'),
     {
         method:"GET",
         headers: {

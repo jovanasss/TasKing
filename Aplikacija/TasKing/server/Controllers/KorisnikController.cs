@@ -253,6 +253,9 @@ namespace TasKing.Controllers
             }
         }
 
+
+        // nzm kako da implementiram token ovde
+
         [Route("VratiGledanogKorisnika/{userID}")]
         [HttpGet]
         public async Task<ActionResult> VratiGledanogKorisnika(int userID)
@@ -529,12 +532,23 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiIDClanovaTima/{clanorgID}")]
+        /*[Route("VratiIDClanovaTima/{clanorgID}/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiIDClanovaTima(int clanorgID)
+        public async Task<ActionResult> VratiIDClanovaTima(int clanorgID ,string jwt)
         {
             try
             {
+                // verifikujemo token
+
+                var token = jwtService.Verify(jwt);
+
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+
                 var korisnik = await Context.ClanoviOrganizacije.Where(c => c.ID == clanorgID)
                     .Include(c => c.clanoviTima).ToListAsync();
 
@@ -551,7 +565,7 @@ namespace TasKing.Controllers
             {
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
-        }
+        }*/
 
         [Route("ProveriVodju/{jwt}")]
         [HttpPost]

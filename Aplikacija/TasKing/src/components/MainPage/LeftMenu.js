@@ -88,7 +88,7 @@ export default function LeftMenu(props){
                   {
                     setOrg(data[0].idClan)
                     
-                    fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + data[0].idClan,
+                    fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + data[0].idClan + "/" + localStorage.getItem('user-info'),
                     {
                         method:"POST",
                         headers: {
@@ -171,7 +171,7 @@ export default function LeftMenu(props){
       setOrgCode("")
       // joinTeam(userID ,orgID)
 
-      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode , {
+      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode + "/" + localStorage.getItem('user-info'), {
         method : 'GET',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
@@ -185,7 +185,7 @@ export default function LeftMenu(props){
       if (temp != 0){
 
 
-        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima , {
+        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima + "/" + localStorage.getItem('user-info') , {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -213,7 +213,7 @@ export default function LeftMenu(props){
           admin : false
         }
 
-        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),{
           method : 'POST',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -235,7 +235,7 @@ export default function LeftMenu(props){
           }
   
   
-          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/",{
+          let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/" + localStorage.getItem('user-info'),{
             method : 'POST',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
@@ -261,7 +261,7 @@ export default function LeftMenu(props){
 
           localStorage.setItem('OrgID',idORG); 
 
-          fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + rezultat,
+          fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + rezultat + "/" + localStorage.getItem('user-info'),
                {
                    method:"POST",
                    headers: {
@@ -280,7 +280,7 @@ export default function LeftMenu(props){
 
                tmp = await tmp.json();
                 //console.log(tmp);
-               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp,
+               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp + "/" + localStorage.getItem('user-info'),
                {
                    method:"POST",
                    headers: {
@@ -329,7 +329,7 @@ export default function LeftMenu(props){
       // joinOrg(userID ,orgID)
       setTeamCode("")
 
-      let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode , {
+      let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode + "/" + localStorage.getItem('user-info'), {
         method : 'GET',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
@@ -359,7 +359,7 @@ export default function LeftMenu(props){
         //console.log("Organizacija:" + idNoveOrg);
         localStorage.setItem('OrgID',idNoveOrg); 
   
-          let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/",{
+          let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),{
             method : 'POST',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
@@ -382,7 +382,7 @@ export default function LeftMenu(props){
             });
 
             tmp = await tmp.json();
-            fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + tmp,
+            fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + tmp + "/" + localStorage.getItem('user-info'),
                {
                    method:"POST",
                    headers: {
@@ -563,7 +563,7 @@ const handleOrgClick = () => {
                <Avatar src={"../../profile/"+item.slika} onClick={() =>{setOrg(item.idClan); 
                /*desifruj id**/ 
                localStorage.setItem('clanOrgID',-1);
-               fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + item.idClan,
+               fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + item.idClan + "/" + localStorage.getItem('user-info'),
                {
                    method:"POST",
                    headers: {
