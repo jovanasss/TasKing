@@ -579,7 +579,7 @@ export default function TeamsMenu(props){
 
     if (proveraTima === 0){
       setOpenD(false)
-      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
+      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/"+ localStorage.getItem("user-info"), {
         method : 'POST',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',

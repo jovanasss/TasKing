@@ -165,11 +165,14 @@ function CreateTeamTasks(){
               });
               let status = rezultat.status;
               let idProjekta = await rezultat.json();
-              
-              if(idProjekta === -1){
+              if(idProjekta === -2){
+                alert("Invalid Token !");
+                navigate("/");
+              }
+              else if(idProjekta === -1){
                 {
                 alert("You aren't team admin");
-                navigate("/Main")
+                navigate("/Main");
                 }
               }
               else if (idProjekta != 0){

@@ -112,13 +112,21 @@ namespace TasKing.Controllers
 
         [Route("UlogujKorisnika")]
         [HttpPost]
-        public async Task<ActionResult> UlogujKorisnika([FromBody] KorisnikDTO user){
+        public async Task<ActionResult> UlogujKorisnika([FromBody] KorisnikDTO user)
+        {
             try{
+
+                // verifikacija korisnika 
+
                 Korisnik k1 = await Context.Korisnici.Where(k => k.korisnickoIme == user.korisnickoIme).FirstOrDefaultAsync();
                 if(k1 == null || k1.lozinka != user.lozinka){
                     return Ok(0); // nepostojeci korisnik
                 }
-                else{
+
+                // Korisnik postoji => generisi token , vrati token 
+
+                else
+                {
                     var jwt = new
                      {
                         value = jwtService.Generate(k1.ID)
@@ -132,13 +140,17 @@ namespace TasKing.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [Route("ProveriToken")]
         [HttpPost]
         public async Task<ActionResult> ProveriToken([FromBody] string token)
         {       
-                Console.Write(token);
+                //Console.Write(token);
+
+                // verify vraca null ako je nevalidan ili ako je null 
                 var validanToken = jwtService.Verify(token);
 
+                
                 if (validanToken == null){
                     return Ok(0);
                 }
@@ -150,20 +162,26 @@ namespace TasKing.Controllers
         [Route("VratiClanoveOrganizacije/{jwt}")]
         [HttpGet]
         public async Task<ActionResult> VratiClanoveOrganizacije(string jwt)
-
         {    
                  try
                 {
+                    // verifikujemo token
+
                     var token = jwtService.Verify(jwt);
+
+                    if ( token == null)
+                    {
+                        return BadRequest(-2);
+                    }
                     int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
+                    // verifikujemo korisnika 
+
                     Korisnik korisnik = await Context.Korisnici.Where(k => k.ID == userID).FirstOrDefaultAsync();
-
                     if(korisnik==null)
-
-                        {
-                            return BadRequest("nepostojeci korisnik");
-                        }
+                    {
+                         return BadRequest("nepostojeci korisnik");
+                    }
 
                     var clanInfo = await Context.ClanoviOrganizacije
 
@@ -195,8 +213,23 @@ namespace TasKing.Controllers
         {
             try
             {
+                // verifikujemo token
+
                 var token = jwtService.Verify(jwt);
+
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
                 int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                // verifikovanje korisnika 
+
+                var korisnik = await Context.Korisnici.Where( k => k.ID == userID).FirstOrDefaultAsync();
+                if ( korisnik == null )
+                {
+                    return BadRequest("Nepostojeci korisnik ");
+                }
 
                 var korisnici = await Context.Korisnici
                 .Where(k => k.ID == userID)
@@ -219,6 +252,7 @@ namespace TasKing.Controllers
                 return Unauthorized();
             }
         }
+
         [Route("VratiGledanogKorisnika/{userID}")]
         [HttpGet]
         public async Task<ActionResult> VratiGledanogKorisnika(int userID)
@@ -246,14 +280,30 @@ namespace TasKing.Controllers
                 return Unauthorized();
             }
         }
+
         [Route("VratiIDKorisnika/{jwt}")]
         [HttpGet]
         public async Task<ActionResult> VratiIDKorisnika(string jwt)
         {
             try
             {
+                // verifikujemo token
+
                 var token = jwtService.Verify(jwt);
+
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
                 int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                // verifikovanje korisnika 
+
+                var korisnik = await Context.Korisnici.Where( k => k.ID == userID).FirstOrDefaultAsync();
+                if ( korisnik == null )
+                {
+                    return BadRequest("Nepostojeci korisnik ");
+                }
 
                 var korisnici = await Context.Korisnici
                 .Where(k => k.ID == userID)
@@ -276,13 +326,27 @@ namespace TasKing.Controllers
         public async Task<ActionResult> PromeniUsernameKorisniku(string jwt, string newusername)
 
         {
-            var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
-            var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
-            if(korisnik == null)
+            // verifikujemo token
+
+            var token = jwtService.Verify(jwt);
+
+            if ( token == null)
             {
-                return BadRequest("Korisnik ne postoji!");
+                 return BadRequest(-2);
+            }
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            // verifikovanje korisnika 
+
+            var korisnik = await Context.Korisnici.Where( k => k.ID == userID).FirstOrDefaultAsync();
+            if ( korisnik == null )
+            {
+                return BadRequest("Nepostojeci korisnik ");
+            }
+            if (korisnik.korisnickoIme == newusername)
+            {
+                return BadRequest("Isti username");
             }
 
             try
@@ -301,13 +365,26 @@ namespace TasKing.Controllers
         [HttpPut]
         public async Task<ActionResult> PromeniBrTelefonaKorisniku(string jwt, string novibrtelefona)
         {
-            var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
-            var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
+            // verifikujemo token
 
-            if(korisnik == null)
+            var token = jwtService.Verify(jwt);
+
+            if ( token == null)
             {
-                return BadRequest("Korisnik ne postoji!");
+                 return BadRequest(-2);
+            }
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            // verifikovanje korisnika 
+
+            var korisnik = await Context.Korisnici.Where( k => k.ID == userID).FirstOrDefaultAsync();
+            if ( korisnik == null )
+            {
+                return BadRequest("Nepostojeci korisnik ");
+            }
+            if (korisnik.brTelefona == novibrtelefona)
+            {
+                return BadRequest("Isti broj telefona");
             }
 
             try
@@ -326,13 +403,27 @@ namespace TasKing.Controllers
         [HttpPut]
         public async Task<ActionResult> PromeniSlikuKorisniku(string jwt, string novaslika)
         {
-            var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
-            var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
 
-            if(korisnik == null)
+            // verifikujemo token
+
+            var token = jwtService.Verify(jwt);
+
+            if ( token == null)
             {
-                return BadRequest("Korisnik ne postoji!");
+                 return BadRequest(-2);
+            }
+            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            // verifikovanje korisnika 
+
+            var korisnik = await Context.Korisnici.Where( k => k.ID == userID).FirstOrDefaultAsync();
+            if ( korisnik == null )
+            {
+                return BadRequest("Nepostojeci korisnik ");
+            }
+            if (korisnik.profilnaSlika == novaslika)
+            {
+                return BadRequest("Ista slika");
             }
 
             try
@@ -351,19 +442,32 @@ namespace TasKing.Controllers
         [HttpPut]
         public async Task<ActionResult> PromeniPasswordKorisniku(string jwt, string currentpass, string newpass, string confirmnewpass)
         {
+
+            // verifikujemo token
+
             var token = jwtService.Verify(jwt);
+
+            if ( token == null)
+            {
+                 return BadRequest(-2);
+            }
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-            var korisnik = await Context.Korisnici.Where(kor => kor.ID == userID).FirstOrDefaultAsync();
+            // verifikovanje korisnika 
 
-            if(korisnik == null)
+            var korisnik = await Context.Korisnici.Where( k => k.ID == userID).FirstOrDefaultAsync();
+            if ( korisnik == null )
             {
-                return BadRequest("Korisnik ne postoji!");
+                return BadRequest("Nepostojeci korisnik ");
             }
 
             if(string.Compare(korisnik.lozinka, currentpass) != 0)
             {
                 return BadRequest("Trenutni password nije validan!");
+            }
+            if ( korisnik.lozinka == newpass && korisnik.lozinka == confirmnewpass)
+            {
+                return BadRequest("Novi i stari pass moraju da se razlikuju !");
             }
 
             if(string.Compare(newpass, confirmnewpass) != 0)
@@ -389,8 +493,24 @@ namespace TasKing.Controllers
         {
             try
             {
+                // verifikujemo token
+
                 var token = jwtService.Verify(jwt);
+
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
                 int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                // verifikovanje korisnika 
+
+                var korisnik1 = await Context.Korisnici.Where( k => k.ID == userID).FirstOrDefaultAsync();
+                if ( korisnik1 == null )
+                {
+                    return BadRequest("Nepostojeci korisnik ");
+                }
+
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID)
                     .Include(k => k.clanoviOrganizacije).ToListAsync();
 
@@ -432,16 +552,30 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske:" + e.Message);
             }
         }
+
         [Route("ProveriVodju/{jwt}")]
         [HttpPost]
         public async Task<ActionResult> ProveriVodju(string jwt)
         {
-            var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+                // verifikujemo token
 
-            var vodja = await Context.ClanoviTima.Where(c => c.ID ==  userID).FirstOrDefaultAsync();
+                var token = jwtService.Verify(jwt);
 
-            return Ok(vodja.vodjaTima);
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
+                int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                // verifikovanje clana 
+
+                var clanTima = await Context.ClanoviTima.Where( k => k.ID == userID).FirstOrDefaultAsync();
+                if ( clanTima == null )
+                {
+                    return BadRequest("Nepostojeci Clan ");
+                }
+
+                return Ok(clanTima.vodjaTima);
 
 
         } 

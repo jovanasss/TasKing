@@ -14,13 +14,18 @@ import { Store } from 'react-notifications-component';
 import Tooltip from '@mui/material/Tooltip';
 import { IconButton } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Navigate } from 'react-router-dom';
 
 export default function ProjectDescription(props) {
 
   const [project, setProject] = React.useState([]);
+  const [error ,setError] = React.useState(false);
 
   React.useEffect(() => {
     setProject(props.Project);
+    if (error === true){
+      Navigate("/Main");
+    }
   }, [props]);
 
   //console.log(project);
@@ -113,7 +118,23 @@ export default function ProjectDescription(props) {
       res.json()
       .then(data => {
         //console.log(data);
-         if(data === 0){
+         if(data <= 0){
+          setError(true);
+          Store.addNotification({
+            title: "Warning!",
+            message: "Invalid Token",
+            type: "warning",
+            insert: "top",
+            container: "top-center",
+            dismiss: {
+              duration: 2000,
+              onScreen: true
+            }
+          });
+          setOpen1(false);
+          Navigate("/");
+         }
+         else if(data === 0){
             //console.log(data);
             Store.addNotification({
               title: "Warning!",
@@ -141,12 +162,24 @@ export default function ProjectDescription(props) {
             });
           }
           else if(data === 2){
+            Store.addNotification({
+              title: "Success!",
+              message: "You successfully changed the project name",
+              type: "success",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
             setOpen1(false);
           window.location.reload(false);
           }
       }
       )
   })
+
   }
 
   function changeProjectDescription(){
@@ -187,6 +220,15 @@ export default function ProjectDescription(props) {
         headers:{
             "Content-Type":"application/json"
         },
+    }).then(res => {
+      res.json().then(data => {
+        if (data === -2){
+          alert("Invalid token");
+        }
+        else if (data === -1){
+          alert("Not a team admin");
+        }
+      })
     })
     setOpen2(false);
     window.location.reload(false);

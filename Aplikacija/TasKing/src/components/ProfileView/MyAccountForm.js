@@ -49,7 +49,7 @@ function MyAccountForm({userID}){
 
     const [user, setUser] = useState(null);
     const [projects, setProjects] = useState(null);
-    const   token  = (JSON.parse(window.localStorage.getItem('user-info'))); 
+    const token = (JSON.parse(window.localStorage.getItem('user-info'))); 
     const profileUserInfo = (JSON.parse(window.localStorage.getItem('ProfileUser-info')));
     const OrgID = (JSON.parse(window.localStorage.getItem('OrgID')));
     const darkMode = (JSON.parse(window.localStorage.getItem('darkMode')));
@@ -79,7 +79,11 @@ function MyAccountForm({userID}){
           }).then(res => {
               res.json()
               .then(data => {
+                if (data === -2){
+                  alert("Invalid Token !");
+                }else{
                   setProjects(data.filter(d => d.organizacijaID == OrgID && d.taskoviUradjeni.length != 0));
+                }                 
               });
           })
       }
@@ -107,7 +111,12 @@ function MyAccountForm({userID}){
         }).then(res => {
             res.json()
             .then(data => {
-              setProjects(data.filter(d => d.organizacijaID == OrgID && d.taskoviUradjeni.length != 0));
+              if (data === -2){
+                alert("Invalid Token !");
+              }
+              else {
+                setProjects(data.filter(d => d.organizacijaID == OrgID && d.taskoviUradjeni.length != 0));
+              }
             });
         })
       }

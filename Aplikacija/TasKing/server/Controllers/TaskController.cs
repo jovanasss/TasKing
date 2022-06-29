@@ -24,20 +24,39 @@ namespace TasKing.Controllers
             jwtService = JwtService;
         }
 
+        // proveriti prazani stringovi a task se svakako kreira
+
         [Route("KreirajTask/{jwt}")]
         [HttpPost]
         public async Task<ActionResult> KreirajTask([FromBody] TaskDTO Task, string jwt)
         {   
-            var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
-            if(vodja.vodjaTima == false)
+            // verifikujemo token
+
+            var token = jwtService.Verify(jwt);
+
+            if ( token == null)
             {
-                return BadRequest("Nisi vodja");
+                return BadRequest(-2);
+            }
+            int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            // verifikujemo vodju 
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == clanID).FirstOrDefaultAsync(); 
+            if(vodja == null || vodja.vodjaTima == false)
+            {
+                return BadRequest(-1);
             }
 
+            // verifikujemo projekat 
+
             var projekat = Context.Projekti.Where(p  => p.ID == Task.projekatID).FirstOrDefault();
+            if (projekat == null)
+            {
+                return BadRequest(-3);
+            }
+
             var task = Context.Taskovi.Where( t => t.naziv == Task.naziv && t.projekat == projekat && t.status!=-1).FirstOrDefault();
             if(task == null)
             {
@@ -75,20 +94,36 @@ namespace TasKing.Controllers
                 return Ok(0);
             }
         }
-
+        // proveriti  Vodja ne sme da se prijavi ? resio sam mozda 
         [Route("PrijaviZaTask/{jwt}/{taskID}")]
         [HttpPost]
         public async Task<ActionResult> PrijaviSeZaTask(string jwt, int taskID)
         {     
                 
+                // verifikujemo token
+
                 var token = jwtService.Verify(jwt);
+
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
                 int clanTimaID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
 
-                ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID && c.vodjaTima == false).FirstOrDefaultAsync();
+                // verifikovanje clana i njegove uloge 
+
+                ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID ).FirstOrDefaultAsync();
+                if (clan.vodjaTima == true){
+                    return BadRequest("Clan je vodja !");
+                }
+                if(clan==null){
+                    return BadRequest("Clan tima ne postoji u bazi ");
+                }
+
+                // verifikovanje taska 
+
                 Models.Task task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
-                if(clan==null)
-                    return BadRequest("Clan tima ne postoji u bazi");
 
                 if(task==null)
                     return BadRequest("task ne postoji u bazi");
@@ -131,11 +166,38 @@ namespace TasKing.Controllers
         {
             try
             {
+                // verifikujemo token
+
                 var token = jwtService.Verify(jwt);
+
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
                 int clanTimaID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+                
+
+                // verifikovanje clana i njegove uloge 
+
+                ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID ).FirstOrDefaultAsync();
+                if (clan.vodjaTima == true){
+                    return BadRequest("Clan je vodja !");
+                }
+                if(clan == null){
+                    return BadRequest("Clan tima ne postoji u bazi ");
+                }
+
+                // verifikovanje taska 
+
+                Models.Task task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
+                if(task==null)
+                {
+                    return BadRequest("task ne postoji u bazi");
+                }
+
+                // verifikovanje prijave 
 
                 PrijavaZaTask prijava =  await Context.PrijaveZaTask.Where(p => p.clanTima.ID == clanTimaID && p.task.ID == taskID && p.clanTima.vodjaTima == false).FirstOrDefaultAsync();
-
                 if(prijava == null)
                 {
                     return BadRequest("Prijava ne postoji!");
@@ -181,14 +243,44 @@ namespace TasKing.Controllers
         public async Task<ActionResult> DodeliTask(int clanTimaID, int taskID, string jwt)
         {
 
-             var token = jwtService.Verify(jwt);
-            int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+            // verifikujemo token
 
-            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
-            if(vodja.vodjaTima == false)
+            var token = jwtService.Verify(jwt);
+
+            if ( token == null)
             {
-                return BadRequest("Nisi vodja");
+                return BadRequest(-2);
             }
+            int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+            // verifikujemo vodju 
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == clanID).FirstOrDefaultAsync(); 
+            if(vodja == null || vodja.vodjaTima == false)
+            {
+                return BadRequest(-1);
+            }
+
+            // verifikovanje taska 
+
+            var task1 = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
+            if(task1 == null)
+            {
+                 return BadRequest("task ne postoji u bazi");
+            }
+
+            // verifikovanje clana 
+
+            var clan1 = await Context.ClanoviTima.Where( c => c.ID == clanTimaID).FirstOrDefaultAsync();
+            if (clan1 == null)
+            {
+                return BadRequest("Nepostojeci korisnik !");
+            }
+            if (clan1 != null && clan1.vodjaTima == true)
+            {
+                return BadRequest("Clan je vodja tima !");
+            }
+
                 try
                 {
                     var task =  Context.Taskovi.Where(t=>t.ID==taskID).FirstOrDefault();  
@@ -207,17 +299,46 @@ namespace TasKing.Controllers
                 }
         }
 
+        // proveriti nzm dal treba jos nesto za status 
+
         [Route("PromeniStatus/{taskID}/{status}/{jwt}")]
         [HttpPut]
         public async Task<ActionResult> PromeniStatus(int taskID, int status, string jwt)
         {
+                // verifikujemo token
+
                 var token = jwtService.Verify(jwt);
+
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
                 int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
-                var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+
+                // verifikovanje vodje 
+
+                var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync();
+                if( vodja == null)
+                {
+                    return BadRequest("Nepostojeci korisnik !");
+                } 
                 if(status!=2 && vodja.vodjaTima == false)
                 {
                     return BadRequest("Korisnik nije vodja");
                 }
+
+
+                // verifikovanje taska 
+
+                var task1 = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
+                if(task1 == null)
+                {
+                    return BadRequest("task ne postoji u bazi");
+                }       
+
+
+                // verifikovanje statusa mozda treba ???
+
                 try
                 {
                     var task =  Context.Taskovi.Where(t=>t.ID==taskID)
@@ -239,20 +360,38 @@ namespace TasKing.Controllers
                 }
         }
 
+        // proveriti dal su parametri prazni tipa 
+
         [Route("IzmeniTask/{taskID}/{naziv}/{opis}/{tip}/{vrednost}/{jwt}/{projID}")]
         [HttpPut]
         public async Task<ActionResult> IzmeniTask(int taskID, string naziv, string opis, string tip, string vrednost, string jwt, int projID)
         {
+
+             // verifikujemo token
+
              var token = jwtService.Verify(jwt);
+
+             if ( token == null)
+             {
+                return BadRequest(-2);
+             }
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            // verifikovanje vodje 
+
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync();
+            if( vodja == null)
+            {
+                return BadRequest("Nepostojeci korisnik !");
+            } 
             if(vodja.vodjaTima == false)
             {
-                return BadRequest("Nisi vodja");
+                 return BadRequest("Korisnik nije vodja");
             }
-            var task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
 
+            // verifikovanje taska
+
+            var task = await Context.Taskovi.Where(t => t.ID == taskID).FirstOrDefaultAsync();
             if(task == null)
             {
                 return BadRequest(1);
@@ -264,6 +403,8 @@ namespace TasKing.Controllers
             {
                 return BadRequest(0);
             }
+
+            // provera dal su prazne vrednosti ?
 
             try
             {

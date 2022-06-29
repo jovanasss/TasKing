@@ -29,15 +29,24 @@ namespace TasKing.Controllers
         [HttpPost]
         public async Task<ActionResult> KreirajProjekat([FromBody] ProjekatDTO projekat, string jwt)
         {
-            // ovde da proverimo dal je taj koj je kliknuo vodja tima posto samo on sme da kreira ??
+            // verifikujemo token
+
             var token = jwtService.Verify(jwt);
+
+            if ( token == null){
+                return BadRequest(-2);
+            }
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
+            // verifikujemo vodju 
+
             var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
-            if(vodja.vodjaTima == false)
+            if(vodja == null || vodja.vodjaTima == false)
             {
                 return Ok(-1);
             }
+
+            // ako postoji korisnik i ako je vodja proveravaju se uneti podaci iz body-ja
 
             var proj = Context.Projekti.Where(p => p.naziv == projekat.naziv && p.tim.ID == projekat.timID).FirstOrDefault();
             if(proj == null)
@@ -79,9 +88,18 @@ namespace TasKing.Controllers
         public async Task<ActionResult> VratiProjekteSaTaskovima(string jwt)
         {
             try
-            {
+            {   
+
+                // verifikujemo token
+
                 var token = jwtService.Verify(jwt);
+
+                if ( token == null){
+                    return BadRequest(-2);
+                }
                 int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+
                 List<ProjectInfo> allProjectsInfo = new List<ProjectInfo>();
                 var clanoviOrg = await Context.ClanoviOrganizacije.Where(clan => clan.korisnik.ID == userID)
                     .Include(o => o.clanoviTima)
@@ -216,17 +234,22 @@ namespace TasKing.Controllers
         [HttpPut]
         public async Task<ActionResult> PromeniImeProjekta(int projID, string novinaziv, string jwt, int timID)
         {
+            
+            // verifikujemo token
+
             var token = jwtService.Verify(jwt);
+
+            if ( token == null){
+                return BadRequest(-2);
+            }
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
-            if (vodja == null ){
-                return BadRequest("Invalid");
-            }
+            // verifikujemo vodju 
 
-            if(vodja.vodjaTima == false)
+            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(vodja == null || vodja.vodjaTima == false)
             {
-                return BadRequest("Nisi vodja");
+                return BadRequest(-1);
             }
 
             var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
@@ -260,13 +283,21 @@ namespace TasKing.Controllers
         public async Task<ActionResult> PromeniOpisProjekta(int projID, string noviopis, string jwt)
         {
 
-             var token = jwtService.Verify(jwt);
+            // verifikujemo token
+
+            var token = jwtService.Verify(jwt);
+
+            if ( token == null){
+                return BadRequest(-2);
+            }
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
+            // verifikujemo vodju 
+
             var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
-            if(vodja.vodjaTima == false)
+            if(vodja == null || vodja.vodjaTima == false)
             {
-                return BadRequest("Nisi vodja");
+                return BadRequest(-1);
             }
 
             var projekat = await Context.Projekti.Where(p => p.ID == projID).FirstOrDefaultAsync();
@@ -292,13 +323,22 @@ namespace TasKing.Controllers
         [HttpDelete]
         public async Task<ActionResult> ObrisiProjekat(int projID, string jwt)
         {
+            
+            // verifikujemo token
+
             var token = jwtService.Verify(jwt);
+
+            if ( token == null){
+                return BadRequest(-2);
+            }
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
+            // verifikujemo vodju 
+
             var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
-            if(vodja.vodjaTima == false)
+            if(vodja == null || vodja.vodjaTima == false)
             {
-                return BadRequest("Nisi vodja");
+                return BadRequest(-1);
             }
 
             try 
@@ -332,8 +372,36 @@ namespace TasKing.Controllers
         {     
                  try
                 {
+                    // verifikujemo token
+
                     var token = jwtService.Verify(jwt);
+
+                    if ( token == null){
+                        return BadRequest(-2);
+                    }
                     int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                    // verifikujemo vodju 
+
+                    var vodja = await Context.ClanoviTima.Where(k => k.ID == clanID).FirstOrDefaultAsync(); 
+                    if(vodja == null || vodja.vodjaTima == false)
+                    {
+                        return BadRequest(-1);
+                    }
+
+                    // verifikovanje tima
+
+                    var tim1 = await Context.Timovi.Where(t => t.ID == timID).FirstOrDefaultAsync();
+                    if (tim1 == null ){
+                        return  BadRequest(0);                            
+                    }
+
+                    // verifikovanje projekta 
+
+                    var projekat1 = await Context.Projekti.Where(p => p.ID == ProjekatID).FirstOrDefaultAsync();
+                    if ( projekat1 == null){
+                        return BadRequest(1);
+                    }
 
                     var sviTaskovi = await Context.Taskovi.Where(t => t.projekat.ID == ProjekatID && t.status!=-1).ToListAsync();
 

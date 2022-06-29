@@ -210,7 +210,7 @@ function CreateOrganisationForm (){
                       //console.log(tim);
             
             
-                      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/", {
+                      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/" + localStorage.getItem("user-info"), {
                         method : 'POST',
                         headers : {
                           'Content-Type': 'application/json; charset=utf-8',
