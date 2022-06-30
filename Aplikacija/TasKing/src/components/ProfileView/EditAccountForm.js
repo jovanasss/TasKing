@@ -87,7 +87,7 @@ function EditAccountForm(){
     const [user, setUser] = useState(null);
     const [teamsfirst, setTeamsfirst] = useState(null);
     const [organisationsfirst, setOrganisationsfirst] = useState(null);
-    let idclanova = "";
+    let idevi = [];
 
     const [darkMode ,setDarkMode] = useState((JSON.parse(window.localStorage.getItem('darkMode'))));
     document.body.style.backgroundColor = darkMode ? "rgb(46, 45, 45)" :"azure";
@@ -136,9 +136,10 @@ function EditAccountForm(){
                 res.json()
                     .then(data => {
                         data.forEach(d =>{
-                          idclanova += d.id + " ";
+                          idevi[d++] = d.id ;
                         })
-                        fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova + "/" + localStorage.getItem('user-info'),
+                        let idclanova = idevi.join(" ");
+                        fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/"+idclanova+"/"+ token.value,
                         {
                             method: "GET",
                             headers: {
@@ -531,7 +532,7 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
                         data.forEach(d =>{
                           idclanova1 += d.id + " ";
                         })
-                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova1 + "/" + localStorage.getItem('user-info'),
+                          fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova1 + "/" + token.value,
                         {
                             method: "GET",
                             headers: {
@@ -786,7 +787,7 @@ function PaperListTeams({ teams }){
     }).then(res => {
         res.json()
         .then(data => {
-          fetch("https://localhost:5001/Tim/IzbaciKorisnikaIzTima/"+timID+"/"+data + "/" + localStorage.getItem('user-info'),
+          fetch("https://localhost:5001/Tim/IzbaciKorisnikaIzTima/"+timID+"/"+data + "/" + token.value,
           {
               method:"PUT",
               headers:{

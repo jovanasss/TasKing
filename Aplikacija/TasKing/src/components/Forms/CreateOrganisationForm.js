@@ -70,7 +70,8 @@ function CreateOrganisationForm (){
         while(!codeValid){
 
           let OTP = generate();
-          let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP + "/" + localStorage.getItem('user-info') ,
+          const token = (JSON.parse(window.localStorage.getItem('user-info')));
+          let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP + "/" + token.value ,
           {
               method:"GET",
               headers: {
@@ -95,7 +96,8 @@ function CreateOrganisationForm (){
       while(!codeValid){
         
         let OTP = generate();
-        let result = await fetch("https://localhost:5001/Organizacija/ORGCodeCheck/" + OTP + "/" + localStorage.getItem('user-info'),
+        const token = (JSON.parse(window.localStorage.getItem('user-info')));
+        let result = await fetch("https://localhost:5001/Organizacija/ORGCodeCheck/" + OTP + "/" + token.value,
         {
             method:"GET",
             headers: {
@@ -141,8 +143,9 @@ function CreateOrganisationForm (){
           ime : orgName,
           kod : await generateCodeORG()
         }
-
-        let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+0 + "/" + localStorage.getItem('user-info'), {
+        const token = (JSON.parse(window.localStorage.getItem('user-info')));
+  
+       /* let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+ 0 + "/" + token.value, {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -150,11 +153,10 @@ function CreateOrganisationForm (){
           },
         });
         proveraTima = await proveraTima.json();
-        //console.log("Vrati tim :" ,proveraTima);
+        //console.log("Vrati tim :" ,proveraTima);*/
 
-        if (proveraTima === 0)
-        {
-                let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/"+ localStorage.getItem('user-info'), {
+
+                let result = await fetch("https://localhost:5001/Organizacija/KreirajOrganizaciju/"+ token.value, {
                   method : 'POST',
                   headers : {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -169,8 +171,8 @@ function CreateOrganisationForm (){
             
                       let idNoveOrg = result ;
                       const admin = true ;
-
-                      let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value , {
+                      const a = (JSON.parse(window.localStorage.getItem('user-info')));
+                      let userID = await fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+a.value , {
                         method : 'GET',
                         headers : {
                           'Content-Type': 'application/json; charset=utf-8',
@@ -187,7 +189,7 @@ function CreateOrganisationForm (){
                         idOrganizacije : idNoveOrg,
                         admin : admin
                       }        
-                      let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),
+                      let temp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + a.value,
                       {
                         method : 'POST',
                         headers : {
@@ -211,7 +213,7 @@ function CreateOrganisationForm (){
                       //console.log(tim);
             
             
-                      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/" + localStorage.getItem("user-info"), {
+                      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/" + a.value, {
                         method : 'POST',
                         headers : {
                           'Content-Type': 'application/json; charset=utf-8',
@@ -235,8 +237,8 @@ function CreateOrganisationForm (){
                           vodja : vodja
                         }
                         //console.log(ClanTima);
-            
-                        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/"+ localStorage.getItem('user-info'),{
+                        const token = (JSON.parse(window.localStorage.getItem('user-info')));
+                        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/"+ token.value,{
                           method : 'POST',
                           headers : {
                             'Content-Type': 'application/json; charset=utf-8',
@@ -262,8 +264,8 @@ function CreateOrganisationForm (){
 
                           
                 localStorage.setItem('OrgID',idNoveOrg); 
-
-                fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + temp + "/" + localStorage.getItem('user-info'),
+                const a = (JSON.parse(window.localStorage.getItem('user-info')));
+                fetch("https://localhost:5001/Organizacija/UlogujClanaOrganizacije/" + temp + "/" + a.value,
                 {
                     method:"POST",
                     headers: {
@@ -281,7 +283,8 @@ function CreateOrganisationForm (){
                  localStorage.setItem('TimID',idNovogTima); 
  
                  tmp = await tmp.json();
-                fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp + "/" + localStorage.getItem('user-info'), 
+                 const token = (JSON.parse(window.localStorage.getItem('user-info')));
+                fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp + "/" + token.value, 
                 {
                     method:"POST",
                     headers: {
@@ -316,8 +319,8 @@ function CreateOrganisationForm (){
                     setPage(0);
                 }
                     
-        }
-        else {
+        
+      /* else {
           Store.addNotification({
             title: "Warning!",
             message: "A team with this name already exists",
@@ -331,7 +334,7 @@ function CreateOrganisationForm (){
           });
           //alert("Tim sa unetim imenom vec postoji")
           setTEAMerror(true);
-        }    
+        }*/    
       }else{
         Store.addNotification({
           title: "Error!",

@@ -462,10 +462,7 @@ namespace TasKing.Controllers
                 }
 
                 var tim = await Context.Timovi.Where(k => k.ime == ime && k.organizacija.ID == orgID).FirstOrDefaultAsync();
-                if (tim == null)
-                {
-                    return BadRequest("Nepostojeci TIM");
-                }
+
 
                 return Ok(tim.ID);
             }
@@ -1021,7 +1018,7 @@ namespace TasKing.Controllers
                     return BadRequest(-2);
                 }
                 int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
-                
+
                 // verifikujemo korisnika 
 
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID).FirstOrDefaultAsync();

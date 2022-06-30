@@ -108,7 +108,7 @@ function SimpleDialog(props) {
     }
     else
     {
-      alert("Greska pri vracanju organizacija korisnika");
+      //alert("Greska pri vracanju organizacija korisnika");
     }
   })
 

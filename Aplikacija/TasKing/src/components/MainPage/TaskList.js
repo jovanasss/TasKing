@@ -105,7 +105,8 @@ function SimpleDialog(props) {
 
 
   const vratiPrijave = ()=>{
-    fetch("https://localhost:5001/Task/VratiPrijaveZaTask/" + props.taskID + "/" + localStorage>getItem('user-info') ,
+    const token = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Task/VratiPrijaveZaTask/" + props.taskID + "/" + token.value ,
   {
       method:"GET",
       headers: {
@@ -507,7 +508,8 @@ const [open3, setOpen3] = React.useState(false);
 const [curTaskID, setCurTaskId] = React.useState(false);
 
 const handleClickChangeTask = (id) => {
-  fetch("https://localhost:5001/Task/VratiTask/"+id + "/" + localStorage.getItem("user-info"),
+  const token = JSON.parse(window.localStorage.getItem('user-info'));
+  fetch("https://localhost:5001/Task/VratiTask/"+id + "/" + token.value,
   {
       method:"GET",
       headers: {

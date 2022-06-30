@@ -63,8 +63,8 @@ function CreateOrJoinForm(){
       setOrgCode("")
       // joinTeam(userID ,orgID)
       //console.log(teamCode)
-
-      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode + "/" + localStorage.getItem('user-info'), {
+      const token = (JSON.parse(window.localStorage.getItem('user-info')));
+      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode + "/" + token.value, {
         method : 'GET',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
@@ -80,7 +80,7 @@ function CreateOrJoinForm(){
       if (temp != 0){
 
 
-        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima + "/" + localStorage.getItem('user-info') , {
+        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima + "/" + token.value , {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -108,7 +108,7 @@ function CreateOrJoinForm(){
           admin : false
         }
 
-        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),{
+        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + token.value,{
           method : 'POST',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -198,8 +198,8 @@ function CreateOrJoinForm(){
         else {
           // joinOrg(userID ,orgID)
           //console.log(orgCode)
-
-          let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode + "/" + localStorage.getItem('user-info') , {
+          const token = (JSON.parse(window.localStorage.getItem('user-info')));
+          let temp = await fetch("https://localhost:5001/Organizacija/VratiOrganizaciju/"+orgCode + "/" + token.value , {
             method : 'GET',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
@@ -239,7 +239,7 @@ function CreateOrJoinForm(){
               admin : false,
             }
       
-              let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/"+ localStorage.getItem('user-info'),{
+              let tmp = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/"+ token.value,{
                 method : 'POST',
                 headers : {
                   'Content-Type': 'application/json; charset=utf-8',

@@ -128,7 +128,7 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
             "Content-Type":"application/json"
         },
     })
-    fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),{
+    fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + user.value,{
             method : 'POST',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
@@ -170,7 +170,7 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
             "Content-Type":"application/json"
         },
     })
-   fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/"+ localStorage.getItem('user-info'),{
+   fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/"+ user.value,{
             method : 'POST',
             headers : {
               'Content-Type': 'application/json; charset=utf-8',
@@ -186,7 +186,7 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
         vodja : false
       }
     
-      fetch("https://localhost:5001/Tim/UclaniUTim/"+ localStorage.getItem('user-info'),{
+      fetch("https://localhost:5001/Tim/UclaniUTim/"+ user.value,{
               method : 'POST',
               headers : {
                 'Content-Type': 'application/json; charset=utf-8',

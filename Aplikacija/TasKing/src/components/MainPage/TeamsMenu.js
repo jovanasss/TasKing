@@ -175,8 +175,8 @@ function SimpleDialog(props) {
                  //alert("uspesno je izbacen clan");
                  if(props.clanID==-1)
                     return;
-
-                  fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID + "/" + localStorage.getItem('user-info'),
+                    const token = (JSON.parse(window.localStorage.getItem('user-info')));
+                  fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID + "/" + token.value,
                   {
                       method:"GET",
                       headers: {
@@ -209,8 +209,8 @@ function SimpleDialog(props) {
   React.useEffect(() => {
     if(props.clanID==-1)
       return;
-
-    fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID + "/" + localStorage.getItem('user-info'),
+    const token = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID + "/" + token.value,
   {
       method:"GET",
       headers: {
@@ -369,7 +369,8 @@ export default function TeamsMenu(props){
       setVodja(false)
       return;
     }
-    fetch("https://localhost:5001/Organizacija/VratiClanoveTima/" + props.clanID + "/" + localStorage.getItem('user-info'),
+    const token = (JSON.parse(window.localStorage.getItem('user-info')));
+    fetch("https://localhost:5001/Organizacija/VratiClanoveTima/" + props.clanID + "/" + token.value,
     {
         method:"GET",
         headers: {
@@ -407,9 +408,9 @@ export default function TeamsMenu(props){
               setClanTima(data[0].idClan) 
               localStorage.setItem('TimID',data[0].idTima)
 
+              const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
-
-              fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan + "/" + localStorage.getItem('user-info'),
+              fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan + "/" + token.value,
               {
                   method:"POST",
                   headers: {
@@ -454,8 +455,8 @@ export default function TeamsMenu(props){
           else
           {
 
-
-            fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan + "/" + localStorage.getItem('user-info'),
+            const token = (JSON.parse(window.localStorage.getItem('user-info')));
+            fetch("https://localhost:5001/Tim/UlogujClanaTima/" + data[0].idClan + "/" + token.value,
             {
                 method:"POST",
                 headers: {
@@ -513,7 +514,8 @@ export default function TeamsMenu(props){
 
       let OTP =  generate();
       //console.log(OTP);
-      let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP + "/" + localStorage.getItem('user-info'),
+      const token = (JSON.parse(window.localStorage.getItem('user-info')));
+      let result = await fetch("https://localhost:5001/Tim/TeamCodeCheck/" + OTP + "/" + token.value,
       {
           method:"GET",
           headers: {
@@ -567,7 +569,8 @@ export default function TeamsMenu(props){
       }
       //console.log(tim);
     const organizacijaID = (JSON.parse(window.localStorage.getItem('OrgID')));
-    let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+organizacijaID +"/"+ localStorage.getItem('user-info'), {
+    const token = JSON.parse(window.localStorage.getItem('user-info'));
+    let proveraTima = await fetch("https://localhost:5001/Tim/VratiTimIME/"+teamName+"/"+organizacijaID +"/"+ token.value, {
       method : 'GET',
       headers : {
         'Content-Type': 'application/json; charset=utf-8',
@@ -576,10 +579,11 @@ export default function TeamsMenu(props){
     });
     proveraTima = await proveraTima.json();
     
-
+    
     if (proveraTima === 0){
       setOpenD(false)
-      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/"+ localStorage.getItem("user-info"), {
+      const a = (JSON.parse(window.localStorage.getItem('user-info')));
+      let rezultat = await fetch("https://localhost:5001/Tim/KreirajTim/"+ a.value, {
         method : 'POST',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
@@ -601,8 +605,8 @@ export default function TeamsMenu(props){
           idtima : idNovogTima,
           vodja : vodja
         }
-  
-        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/" + localStorage.getItem('user-info'),{
+        const token = (JSON.parse(window.localStorage.getItem('user-info')));
+        let tmp = await fetch("https://localhost:5001/Tim/UclaniUTim/" + token.value,{
           method : 'POST',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -616,7 +620,7 @@ export default function TeamsMenu(props){
         localStorage.setItem('TimID',idNovogTima); 
 
         tmp = await tmp.json();
-               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp + "/" + localStorage.getItem('user-info'), 
+               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + tmp + "/" + token.value, 
                {
                    method:"POST",
                    headers: {
@@ -735,9 +739,9 @@ export default function TeamsMenu(props){
     }
     else {
       // joinTeam(userID ,orgID)
+      const token = (JSON.parse(window.localStorage.getItem('user-info')));
 
-
-      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode + "/" + localStorage.getItem('user-info'), {
+      let temp = await fetch("https://localhost:5001/Tim/VratiTim/"+teamCode + "/" + token.value, {
         method : 'GET',
         headers : {
           'Content-Type': 'application/json; charset=utf-8',
@@ -751,7 +755,7 @@ export default function TeamsMenu(props){
       if (temp != 0){
 
 
-        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima  + "/" + localStorage.getItem('user-info'), {
+        let nzm = await fetch("https://localhost:5001/Organizacija/VratiOrganizacijuTim/" +idNovogTima  + "/" + token.value, {
           method : 'GET',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -770,7 +774,7 @@ export default function TeamsMenu(props){
           admin : false
         }
 
-        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + localStorage.getItem('user-info'),{
+        let rezultat = await fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + userN.value,{
           method : 'POST',
           headers : {
             'Content-Type': 'application/json; charset=utf-8',
@@ -903,7 +907,8 @@ export default function TeamsMenu(props){
 
                //localStorage.setItem('clanTimaID',team.idClan);
                localStorage.setItem('clanTimaID',-1);
-               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + team.idClan + "/" + localStorage.getItem('user-info'),
+               const token = (JSON.parse(window.localStorage.getItem('user-info')));
+               fetch("https://localhost:5001/Tim/UlogujClanaTima/" + team.idClan + "/" + token.value,
                {
                    method:"POST",
                    headers: {
