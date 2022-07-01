@@ -41,7 +41,7 @@ function MyAccount() {
 
   return(
     <div className="divProfileForm">
-         {userID && <MyAccountForm userID={userID} />}
+         {userID && userID != undefined && <MyAccountForm userID={userID} />}
     </div>
    )
 }
@@ -89,7 +89,8 @@ function MyAccountForm({userID}){
       }
 
       else{
-        fetch("https://localhost:5001/Korisnik/VratiGledanogKorisnika/"+profileUserInfo,
+        const token = JSON.parse(window.localStorage.getItem("user-info"));
+        fetch("https://localhost:5001/Korisnik/VratiGledanogKorisnika/"+profileUserInfo + "/" + token.value,
       {
           method:"GET",
           headers: {
@@ -102,7 +103,7 @@ function MyAccountForm({userID}){
           });
       })
 
-      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima2/"+profileUserInfo,
+      fetch("https://localhost:5001/Projekat/VratiProjekteSaTaskovima2/"+profileUserInfo + "/" + token.value,
         {
             method:"GET",
             headers: {
@@ -124,7 +125,7 @@ function MyAccountForm({userID}){
 
     return(
       <div className="divMyAccount">
-          {projects && user && <MyAccount1 projects={projects} user={user} />}
+          {user!=undefined && projects != undefined && projects && user && <MyAccount1 projects={projects} user={user} />}
       </div>
     )
 }

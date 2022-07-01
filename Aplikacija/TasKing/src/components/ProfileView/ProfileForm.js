@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
 import MyAccount from "./MyAccountForm";
 import EditAccountForm from "./EditAccountForm";
@@ -81,26 +81,51 @@ function Profile(){
 
   const   token  = (JSON.parse(window.localStorage.getItem('user-info'))); 
   const [userID ,setUserID] = useState(null);
+  let navigate = useNavigate();
 
   useEffect(() => {
 
-    fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value,
-    {
-        method:"GET",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }).then(res => {
-        res.json()
-        .then(data => {
-            setUserID(data[0].id);
-        });
-    })
+    fetch("https://localhost:5001/Korisnik/ProveriToken/", {
+      method : 'POST',
+      headers : {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json; charset=utf-8'
+      },
+      body : JSON.stringify(token.value)
+      }).then(res => {
+      res.json().then(data => {
+         if ( data === 1)
+         {
+            fetch("https://localhost:5001/Korisnik/VratiIDKorisnika/"+token.value,
+            {
+                method:"GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(res => {
+                res.json()
+                .then(data => {
+                    setUserID(data[0].id);
+                });
+            })
+         }
+        else
+        {
+           alert("Invalid token!");
+           localStorage.removeItem("user-info")
+           let path = '/';
+           navigate(path);
+        }
+     
+
+       
+       })
+     })
   },[])
 
   return(
     <div className="divProfileForm">
-         {userID && <ProfileForm userID={userID} />}
+         {userID && userID!=undefined && <ProfileForm userID={userID} />}
     </div>
    )
 
@@ -142,7 +167,8 @@ function ProfileForm({userID}){
     })
   }
   else{
-    fetch("https://localhost:5001/Korisnik/VratiGledanogKorisnika/"+profileUserInfo,
+    const token = JSON.parse(window.localStorage.getItem("user-info"));
+    fetch("https://localhost:5001/Korisnik/VratiGledanogKorisnika/"+profileUserInfo + "/" + token.value,
     {
         method:"GET",
         headers: {
@@ -160,7 +186,7 @@ function ProfileForm({userID}){
 if(profileUserInfo == userID){
   return(
     <div className="divProfileForm">
-         {user && <ProfileForm1 user={user} />}
+         {user && user!=undefined && <ProfileForm1 user={user} />}
     </div>
    )
 }
@@ -168,7 +194,7 @@ if(profileUserInfo == userID){
 else{
   return(
     <div className="divProfileForm">
-         {user && <ProfileForm2 user={user} />}
+         {user && user!=undefined && <ProfileForm2 user={user} />}
     </div>
    )
   }

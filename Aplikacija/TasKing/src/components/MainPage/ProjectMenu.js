@@ -122,7 +122,7 @@ function SimpleDialog(props) {
                  if(props.timID<=-1)
                   return;
 
-                  fetch("https://localhost:5001/Tim/VratiClanoveTima/" + props.timID+"/" + token,
+                  fetch("https://localhost:5001/Tim/VratiClanoveTima/" + token,
                   {
                       method:"GET",
                       headers: {
@@ -234,7 +234,7 @@ function SimpleDialog(props) {
     if(props.timID==-1 || localStorage.getItem('clanTimaID')<=-1 || localStorage.getItem('clanTimaID')===null)
     return;
 
-    fetch("https://localhost:5001/Tim/VratiClanoveTima/" + props.timID + "/" + localStorage.getItem('clanTimaID'),
+    fetch("https://localhost:5001/Tim/VratiClanoveTima/" + localStorage.getItem('clanTimaID'),
   {
       method:"GET",
       headers: {
@@ -249,7 +249,12 @@ function SimpleDialog(props) {
     }
     else
     {
-      alert("Greska pri vracanju timova korisnika");
+      res.json().then(data => {
+        if(data==-2)
+          alert("Invalid token");
+          return
+      })
+      alert("Invalid team");
     }
   })
  }, [props.timID, localStorage.getItem('clanTimaID')]);
@@ -415,8 +420,12 @@ export default function ProjectMenu(props) {
       //localStorage.setItem('projID',-1)
       return;
     }
-    const token = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Tim/VratiProjekteTima/" + props.timID + "/" + token.value,
+    const token = window.localStorage.getItem('clanTimaID');
+    if(token==="-1" || token===null)
+    {
+      return;
+    }
+    fetch("https://localhost:5001/Tim/VratiProjekteTima/" + props.timID + "/" + token,
     {
         method:"GET",
         headers: {
@@ -489,7 +498,7 @@ export default function ProjectMenu(props) {
 
   React.useEffect(() => {
      showProjects();
-  }, [props.timID]);
+  }, [props.timID, props.change]);
 
   React.useEffect(()=>{
     const userInfo = (JSON.parse(window.localStorage.getItem('user-info')));

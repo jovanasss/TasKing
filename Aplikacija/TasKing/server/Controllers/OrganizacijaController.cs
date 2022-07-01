@@ -151,9 +151,9 @@ namespace TasKing.Controllers
                 }
         }
 
-        [Route("VratiClanoveTima/{clanID}/{jwt}")]
+        [Route("VratiClanoveTima/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiClanoveTima(int clanID ,string jwt)
+        public async Task<ActionResult> VratiClanoveTima(string jwt)
         {     
                  try
                 {
@@ -166,12 +166,12 @@ namespace TasKing.Controllers
                     {
                         return BadRequest(-2);
                     }
-                    int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+                    int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
                     // verifikujemo korisnika 
 
-                    var korisnik = await Context.Korisnici.Where(k => k.ID == userID).FirstOrDefaultAsync();
-                    if (korisnik == null)
+                    var clan = await Context.ClanoviOrganizacije.Where(k => k.ID == clanID).FirstOrDefaultAsync();
+                    if (clan == null)
                     {
                         return BadRequest("Nevalidan Korisnik");
                     }
@@ -475,6 +475,12 @@ namespace TasKing.Controllers
                     return BadRequest("Nepostojeca Organizacija");
                 }
 
+                var clanOrganizacije = await Context.ClanoviOrganizacije.Where(c => c.organizacija.ID == orgID && c.korisnik.ID == userID).FirstOrDefaultAsync();
+                 if (clanOrganizacije != null)
+                    {
+                        return BadRequest(-1);
+                    }
+
                 // verifikacija poziva 
 
                 var poziv = await Context.PoziviUOrganizaciju.Where(p => p.pozvaniKorisnik.ID == userID && p.organizacija.ID == orgID).FirstOrDefaultAsync();
@@ -584,9 +590,9 @@ namespace TasKing.Controllers
             }
         }
 
-        [Route("VratiClanoveOrganizacije/{clanID}/{jwt}")]
+        [Route("VratiClanoveOrganizacije/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiClanoveOrganizacije(int clanID,string jwt)
+        public async Task<ActionResult> VratiClanoveOrganizacije(string jwt)
         {     
                  try
                 {
@@ -598,15 +604,9 @@ namespace TasKing.Controllers
                     {
                         return BadRequest(-2);
                     }
-                    int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+                    int clanID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
                     // verifikujemo korisnika 
-
-                    var korisnik = await Context.Korisnici.Where(k => k.ID == userID).FirstOrDefaultAsync();
-                    if (korisnik == null)
-                    {
-                        return BadRequest("Nevalidan Korisnik");
-                    }
 
                     var clan = await Context.ClanoviOrganizacije.Where(p => p.ID == clanID)
                     .Include(c => c.organizacija)
@@ -653,10 +653,10 @@ namespace TasKing.Controllers
 
             // verifikujemo vodju
 
-            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).FirstOrDefaultAsync();
+            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).Include(c => c.organizacija).FirstOrDefaultAsync();
             if(vodja == null)
             {
-                return BadRequest("Invalidan vodja");
+                return BadRequest("Nevalidan vodja");
             }
             if(vodja.administrator == false)
             {
@@ -665,7 +665,7 @@ namespace TasKing.Controllers
 
             // verifikujemo clana 
 
-            var clanProvera = await Context.ClanoviOrganizacije.Where(c => c.ID == ClanID).FirstOrDefaultAsync();
+            var clanProvera = await Context.ClanoviOrganizacije.Where(c => c.ID == ClanID).Include(c => c.organizacija).FirstOrDefaultAsync();
             if (clanProvera == null)
             {
                  return BadRequest("Nepostojeci clan");
@@ -679,6 +679,11 @@ namespace TasKing.Controllers
             if (vodja.ID == ClanID)
             {
                 return BadRequest("Ne mozete da izbacite vodju");
+            }
+
+            if (vodja.organizacija.ID != clanProvera.organizacija.ID)
+            {
+                return BadRequest("Niste u toj organizaciji");
             }
 
                 try
@@ -703,9 +708,14 @@ namespace TasKing.Controllers
         {
 
             var token = jwtService.Verify(jwt);
+             if ( token == null)
+            {
+                 return BadRequest(-2);
+            }
+
             int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 
-            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).FirstOrDefaultAsync();
+            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).Include(c => c.organizacija).FirstOrDefaultAsync();
             if(vodja == null)
             {
                 return BadRequest("Nevalidan Vodja");
@@ -719,6 +729,11 @@ namespace TasKing.Controllers
             if(org == null)
             {
                 return BadRequest("Organizacija ne postoji!");
+            }
+
+            if (vodja.organizacija.ID != orgID)
+            {
+                return BadRequest("Niste u toj organizaciji");
             }
 
             try
@@ -751,14 +766,19 @@ namespace TasKing.Controllers
 
             // verifikujemo vodju
 
-            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).FirstOrDefaultAsync();
+            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).Include(c => c.organizacija).FirstOrDefaultAsync();
             if(vodja == null)
             {
-                return BadRequest("Invalidan vodja");
+                return BadRequest("Nevalidan vodja");
             }
             if(vodja.administrator == false)
             {
                 return BadRequest("Nisi vodja");
+            }
+
+            if (vodja.organizacija.ID != orgID)
+            {
+                return BadRequest("Niste u toj organizaciji");
             }
             
                 Korisnik korisnik = await Context.Korisnici.Where(p => p.korisnickoIme == korisnickoIme).FirstOrDefaultAsync();

@@ -175,8 +175,12 @@ function SimpleDialog(props) {
                  //alert("uspesno je izbacen clan");
                  if(props.clanID==-1)
                     return;
-                    const token = (JSON.parse(window.localStorage.getItem('user-info')));
-                  fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID + "/" + token.value,
+                    const token = window.localStorage.getItem('clanOrgID');
+                    if(token==="-1" || token===null)
+                    {
+                      return;
+                    }
+                  fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + token,
                   {
                       method:"GET",
                       headers: {
@@ -209,8 +213,12 @@ function SimpleDialog(props) {
   React.useEffect(() => {
     if(props.clanID==-1)
       return;
-    const token = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + props.clanID + "/" + token.value,
+      const token = window.localStorage.getItem('clanOrgID');
+      if(token==="-1" || token===null)
+      {
+        return;
+      }
+    fetch("https://localhost:5001/Organizacija/VratiClanoveOrganizacije/" + token,
   {
       method:"GET",
       headers: {
@@ -228,7 +236,7 @@ function SimpleDialog(props) {
       alert("Greska pri vracanju organizacija korisnika");
     }
   })
- }, [props.clanID]);
+ }, [props.clanID, props.change]);
 
  async function copyOrgKod () {
   let rez = await fetch("https://localhost:5001/Organizacija/VratiKodOrganizacije/" + localStorage.getItem('clanOrgID'),
@@ -342,6 +350,7 @@ export default function TeamsMenu(props){
   const [teamName ,setTeamName] = useState('')
   const [teamError ,setTeamError] = useState(false)
   const [openSimple, setOpenSimple] = React.useState(false);
+  const [changetim, setChange] = useState(false)
 
   const handleClickOpenSimple = () => {
     setOpenSimple(true);
@@ -358,19 +367,19 @@ export default function TeamsMenu(props){
   const showTeams = ()=>{
 
     setPrevOrg(props.clanID);
-
-    if(props.clanID==-1)
+    const token = window.localStorage.getItem('clanOrgID');
+    if(token==="-1" || token===null)
     {
       setTeams([])
-      setTim(-1)
+      //setTim(-1)
       setClanTima(-1)
       //localStorage.setItem('TimID',-1)
       //localStorage.setItem('clanTimaID',-1)
       setVodja(false)
       return;
     }
-    const token = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Organizacija/VratiClanoveTima/" + props.clanID + "/" + token.value,
+    
+    fetch("https://localhost:5001/Organizacija/VratiClanoveTima/" + token,
     {
         method:"GET",
         headers: {
@@ -387,6 +396,7 @@ export default function TeamsMenu(props){
             setClanTima(-1)
             localStorage.setItem('TimID',-1)
             localStorage.setItem('clanTimaID',-1)
+            setChange(!changetim)
             setVodja(false)
             return;
           }
@@ -397,6 +407,7 @@ export default function TeamsMenu(props){
             setClanTima(-2)
             localStorage.setItem('TimID',-2)
             localStorage.setItem('clanTimaID',-2)
+            setChange(!changetim)
             setVodja(false)
             return;
           }
@@ -421,6 +432,7 @@ export default function TeamsMenu(props){
                   res.json().then(data => {
                     //console.log(data.value);
                     localStorage.setItem('clanTimaID',data.value);
+                    setChange(!changetim)
                   })
                 }
               })
@@ -470,6 +482,7 @@ export default function TeamsMenu(props){
                   setClanTima(data[0].idClan) 
                   localStorage.setItem('TimID',data[0].idTima)
                   localStorage.setItem('clanTimaID',data2.value);
+                  setChange(!changetim)
                 })
               }
             })
@@ -489,14 +502,19 @@ export default function TeamsMenu(props){
       }
       else
       {
-        alert("Greska pri vracanju timova korisnika");
+        res.json().then(data => {
+          if(data==-2)
+            alert("Invalid token");
+            return;
+        })
+        alert("Invalid team");
       }
     })
   }
 
   useEffect(() => {
     showTeams();
-  }, [props.clanID]);
+  }, [props.clanID, props.change]);
   
   const generate = () => {
     let num ='1ABCD2EFG3HIJK4LMN5OPQ6RS7TUV8WXYZ9';
@@ -631,6 +649,7 @@ export default function TeamsMenu(props){
                    res.json().then(data => {
                      //console.log(data.value);
                      localStorage.setItem('clanTimaID',data.value);
+                     setChange(!changetim)
                    })
                  }
                })
@@ -919,6 +938,7 @@ export default function TeamsMenu(props){
                    res.json().then(data => {
                      //console.log(data.value);
                      localStorage.setItem('clanTimaID',data.value);
+                     setChange(!changetim)
                    })
                  }
                })
@@ -1000,13 +1020,14 @@ export default function TeamsMenu(props){
         width:screenWidth> 900? 'calc(100vw - 275px)' : '100vw',
         overflowY: 'auto',
         overflowX: 'hidden'}}>
-        <ProjectMenu timID = {curTim} clanTimaID = {curClanTima}/>
+        <ProjectMenu timID = {curTim} clanTimaID = {curClanTima} change={changetim}/>
       </div>
       <SimpleDialog
                 open={openSimple}
                 onClose={handleCloseSimple}
                 clanID = {props.clanID}
                 vodjaStatus = {vodja}
+                change={props.change}
               />
     </div>
   )

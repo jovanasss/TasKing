@@ -87,7 +87,7 @@ function EditAccountForm(){
     const [user, setUser] = useState(null);
     const [teamsfirst, setTeamsfirst] = useState(null);
     const [organisationsfirst, setOrganisationsfirst] = useState(null);
-    let idevi = [];
+    let idclanova = "";
 
     const [darkMode ,setDarkMode] = useState((JSON.parse(window.localStorage.getItem('darkMode'))));
     document.body.style.backgroundColor = darkMode ? "rgb(46, 45, 45)" :"azure";
@@ -135,10 +135,10 @@ function EditAccountForm(){
             }).then(res => {
                 res.json()
                     .then(data => {
+                      const lastElement = data[data.length-1];
                         data.forEach(d =>{
-                          idevi[d++] = d.id ;
+                          lastElement !== d ? idclanova += d.id + " " : idclanova += d.id;
                         })
-                        let idclanova = idevi.join(" ");
                         fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/"+idclanova+"/"+ token.value,
                         {
                             method: "GET",
@@ -529,8 +529,9 @@ function EditAccountForm1({user, organisationsfirst, teamsfirst}){
             }).then(res => {
                 res.json()
                     .then(data => {
+                      const lastElement = data[data.length-1];
                         data.forEach(d =>{
-                          idclanova1 += d.id + " ";
+                          lastElement !== d ? idclanova1 += d.id + " " : idclanova1 += d.id;
                         })
                           fetch("https://localhost:5001/Tim/VratiTimoveKorisnika/" + idclanova1 + "/" + token.value,
                         {

@@ -256,12 +256,25 @@ namespace TasKing.Controllers
 
         // nzm kako da implementiram token ovde
 
-        [Route("VratiGledanogKorisnika/{userID}")]
+        [Route("VratiGledanogKorisnika/{userID}/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> VratiGledanogKorisnika(int userID)
+        public async Task<ActionResult> VratiGledanogKorisnika(int userID, string jwt)
         {
             try
             {
+                var token = jwtService.Verify(jwt);
+
+                if ( token == null)
+                {
+                    return BadRequest(-2);
+                }
+                int ID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
+
+                var korisnik = await Context.Korisnici.Where( k => k.ID == ID).FirstOrDefaultAsync();
+                if(korisnik==null)
+                {
+                    return BadRequest(-4);
+                }
 
                 var korisnici = await Context.Korisnici
                 .Where(k => k.ID == userID)
@@ -274,6 +287,11 @@ namespace TasKing.Controllers
                     brtelefona = k.brTelefona,
                     profilnaSlika = k.profilnaSlika
                 }).ToListAsync();
+    
+                if(korisnici==null)
+                {
+                    return BadRequest(-3);
+                }
 
                 return Ok(korisnici);
             }
@@ -577,7 +595,7 @@ namespace TasKing.Controllers
 
                 if ( token == null)
                 {
-                    return BadRequest(-2);
+                    return BadRequest(false);
                 }
                 int userID = int.Parse(token.Claims.First(x => x.Type == "id").Value);
 

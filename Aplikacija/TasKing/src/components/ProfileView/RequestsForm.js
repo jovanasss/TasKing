@@ -127,26 +127,53 @@ function RequestsForm1({teamRequests, organisationRequests,userID}){
         headers:{
             "Content-Type":"application/json"
         },
-    })
-    fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + user.value,{
-            method : 'POST',
-            headers : {
-              'Content-Type': 'application/json; charset=utf-8',
-              'Accept': 'application/json; charset=utf-8'
-            },
-            body : JSON.stringify(ClanOrganizacije)
-    });
-    Store.addNotification({
-      title: "Success",
-      message: "The invitation is successfully accepted 😀",
-      type: "success",
-      insert: "top",
-      container: "top-center",
-      dismiss: {
-        duration: 2000,
-        onScreen: true
+    }).then(res => {
+      if(res.ok)
+      {
+        fetch("https://localhost:5001/Organizacija/UclaniUOrganizaciju/" + user.value,{
+          method : 'POST',
+          headers : {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json; charset=utf-8'
+          },
+          body : JSON.stringify(ClanOrganizacije)
+        });
+      Store.addNotification({
+        title: "Success",
+        message: "The invitation is successfully accepted 😀",
+        type: "success",
+        insert: "top",
+        container: "top-center",
+        dismiss: {
+          duration: 2000,
+          onScreen: true
+        }
+      });
       }
-    });
+      else
+      {
+        res.json().then(data => {
+          if(data===-1)
+          {
+            Store.addNotification({
+              title: "Warning",
+              message: "You are already a organisation member",
+              type: "danger",
+              insert: "top",
+              container: "top-center",
+              dismiss: {
+                duration: 2000,
+                onScreen: true
+              }
+            });
+          }
+          else if(data===-2)
+          {
+            alert("invalid token")
+          }
+        });
+      }
+    })
     //alert("The invitation is successfully accepted 😀");
     let o = organisations.filter(org => org.id != orgID);
     setOrganisations(o);

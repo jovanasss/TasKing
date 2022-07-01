@@ -99,6 +99,7 @@ export default function LeftMenu(props){
                         res.json().then(data => {
                           //console.log(data.value);
                           localStorage.setItem('clanOrgID',data.value);
+                          setChange(!change)
                         })
                       }
                     })
@@ -272,6 +273,7 @@ export default function LeftMenu(props){
                    res.json().then(data => {
                      //console.log(data.value);
                      localStorage.setItem('clanOrgID',data.value);
+                     setChange(!change)
                    })
                  }
                })
@@ -291,7 +293,7 @@ export default function LeftMenu(props){
                    res.json().then(data => {
                      //console.log(data.value);
                      localStorage.setItem('clanTimaID',data.value);
-                     localStorage.setItem('projID',-1);
+                     //localStorage.setItem('projID',-1);
                    })
                  }
                })
@@ -393,6 +395,7 @@ export default function LeftMenu(props){
                    res.json().then(data => {
                      //console.log(data.value);
                      localStorage.setItem('clanOrgID',data.value);
+                     setChange(!change)
                    })
                  }
                })
@@ -473,6 +476,7 @@ const handleOrgClick = () => {
   });           
 
   const [curOrg, setOrg] = useState(-1)
+  const [change, setChange] = useState(false)
 
   const hiddenFileInput = React.useRef(null);
 
@@ -485,6 +489,7 @@ const handleOrgClick = () => {
 
     const orgID = (JSON.parse(window.localStorage.getItem('OrgID')));
     const clanOrgID = window.localStorage.getItem('clanOrgID');
+    setChange(!change)
     fetch("https://localhost:5001/Organizacija/PromeniSlikuOrganizacije/"+orgID+"/"+fileUploaded.name+"/"+clanOrgID,
     {
         method:"PUT",
@@ -575,11 +580,13 @@ const handleOrgClick = () => {
                    res.json().then(data => {
                      //console.log(data);
                      localStorage.setItem('clanOrgID',data.value);
+                     setChange(!change)
                    })
                  }
                }) ;
 
                 localStorage.setItem('OrgID',item.orgID); }} onDoubleClick={item.administrator? handleClickFile : null}>
+                  
                 Org
                </Avatar>
                </Tooltip>   
@@ -630,7 +637,7 @@ const handleOrgClick = () => {
             </Dialog>
         </ThemeProvider>
     </div>
-    <TeamsMenu clanID={curOrg} openMenu = {openMenu}/>
+    <TeamsMenu clanID={curOrg} change={change} openMenu = {openMenu}/>
     </div>
   )
 

@@ -100,19 +100,28 @@ function SimpleDialog(props) {
     if(res.ok)
     {
       res.json().then(data => {
-        setMembers(data.members.sort(function(a, b){return b.bodovi-a.bodovi}))
-        setNumOfPoints(data.ukupniBodovi)
-        setWholeValue(data.ukupniBodovi)
-        setSuffix("points")
+        if(data!=-3)
+        {
+          setMembers(data.members.sort(function(a, b){return b.bodovi-a.bodovi}))
+          setNumOfPoints(data.ukupniBodovi)
+          setWholeValue(data.ukupniBodovi)
+          setSuffix("points")
+        }
       });
     }
     else
     {
+      res.json().then(data => {
+      if(data==-1)
+        {
+            alert("invalid token")
+        }
+      })
       //alert("Greska pri vracanju organizacija korisnika");
     }
   })
 
- }, [props]);
+ }, [props.open]);
 
  let navigate = useNavigate();
   // promena strane

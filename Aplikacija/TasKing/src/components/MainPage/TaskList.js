@@ -105,8 +105,18 @@ function SimpleDialog(props) {
 
 
   const vratiPrijave = ()=>{
-    const token = (JSON.parse(window.localStorage.getItem('user-info')));
-    fetch("https://localhost:5001/Task/VratiPrijaveZaTask/" + props.taskID + "/" + token.value ,
+    const token = window.localStorage.getItem('clanTimaID');
+    if(token=== "-1" || token ===null)
+    {
+      return;
+    }
+
+    if(props.taskID === -1 || props.taskID === null)
+    {
+      return;
+    }
+
+    fetch("https://localhost:5001/Task/VratiPrijaveZaTask/" + props.taskID + "/" + token ,
   {
       method:"GET",
       headers: {
@@ -508,8 +518,8 @@ const [open3, setOpen3] = React.useState(false);
 const [curTaskID, setCurTaskId] = React.useState(false);
 
 const handleClickChangeTask = (id) => {
-  const token = JSON.parse(window.localStorage.getItem('user-info'));
-  fetch("https://localhost:5001/Task/VratiTask/"+id + "/" + token.value,
+  const token = localStorage.getItem('clanTimaID');
+  fetch("https://localhost:5001/Task/VratiTask/"+id + "/" + token,
   {
       method:"GET",
       headers: {

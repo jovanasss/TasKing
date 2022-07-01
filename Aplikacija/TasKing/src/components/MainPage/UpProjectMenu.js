@@ -46,7 +46,7 @@ export default function UpProjectMenu(props) {
     const proje = window.localStorage.getItem('projID');
     //console.log(proje);
 
-    if(props.projectID==-1)
+    if(props.projectID===-1 || props.clanTimaID===-1)
     {
       setProject({})
       setProcenat(0)
