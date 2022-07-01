@@ -23,6 +23,7 @@ const AdminRoutes = () => {
                 .then(data => {
                     if ( data === false){
                         setVodja(false);
+                        alert("Not authorized");
                     }else{
                         setVodja(true);
                     }

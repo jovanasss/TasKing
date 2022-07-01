@@ -195,7 +195,7 @@ namespace TasKing.Controllers
                         return BadRequest("ne postoji dati tim");
                     }
 
-                    var clan = await Context.ClanoviTima.Where(c => c.ID == clanID).Include(c => c.tim).FirstOrDefaultAsync(); // && c.tim.ID==timID
+                    var clan = await Context.ClanoviTima.Where(c => c.ID == clanID).Include(c => c.tim).FirstOrDefaultAsync();
 
                     if(clan == null)
                     {

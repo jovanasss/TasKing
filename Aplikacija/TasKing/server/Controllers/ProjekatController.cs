@@ -40,15 +40,15 @@ namespace TasKing.Controllers
 
             // verifikujemo vodju 
 
-            var vodja = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
-            if(vodja == null)
+            var clan = await Context.ClanoviTima.Where(k => k.ID == userID).FirstOrDefaultAsync(); 
+            if(clan == null)
             {
-                return Ok(-3);
+                return BadRequest(-3);
             }
 
-            if(vodja.vodjaTima == false)
+            if(clan.vodjaTima == false)
             {
-                return Ok(-1);
+                return BadRequest(-1);
             }
 
             var clanTima = await Context.ClanoviTima.Where(c => c.tim.ID == projekat.timID && c.ID == userID).FirstOrDefaultAsync();
@@ -90,7 +90,7 @@ namespace TasKing.Controllers
             }
             else
             {
-                return Ok(0);
+                return BadRequest(0);
             }
         }
 

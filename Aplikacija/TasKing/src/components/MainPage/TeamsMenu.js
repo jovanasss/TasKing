@@ -547,7 +547,6 @@ export default function TeamsMenu(props){
         codeValid = true ;
         return OTP;
       }
-      else break;
     }
 }
 

@@ -37,8 +37,8 @@ function LoginForm()  {
       localStorage.removeItem('clanTimaID');
       localStorage.removeItem('projID');
       localStorage.removeItem('selectedStatus');
-      localStorage.removeItem('TimKod');
-      localStorage.removeItem('OrgKod');
+      localStorage.removeItem('user-info');
+      localStorage.removeItem('ProfileUser-info');
     }, []);
 
     async function login(){

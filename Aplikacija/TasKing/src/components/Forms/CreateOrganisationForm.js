@@ -85,7 +85,6 @@ function CreateOrganisationForm (){
             codeValid = true ;
             return OTP;
           }
-          else break;
         }
     }
 
@@ -105,11 +104,15 @@ function CreateOrganisationForm (){
             },
         });
         result = await result.json();
+        if(result === -1)
+        {
+          alert("Unautharized")
+          return -1
+        }
         if ( result === false){
           codeValid = true ;
           return OTP;
         }
-        else break ;
       }
 
     }
@@ -142,6 +145,11 @@ function CreateOrganisationForm (){
           //type : type,
           ime : orgName,
           kod : await generateCodeORG()
+        }
+        if(organizacija.kod==-1)
+        {
+          navigate('/');
+          return;
         }
         const token = (JSON.parse(window.localStorage.getItem('user-info')));
   
@@ -338,7 +346,7 @@ function CreateOrganisationForm (){
       }else{
         Store.addNotification({
           title: "Error!",
-          message: "invalid code",
+          message: "invalid token",
           type: "danger",
           insert: "top",
           container: "top-center",
@@ -347,6 +355,7 @@ function CreateOrganisationForm (){
             onScreen: true
           }
         });
+        navigate('/')
         //alert("NEVALIDAN KOD !!!"); 
       }
     }

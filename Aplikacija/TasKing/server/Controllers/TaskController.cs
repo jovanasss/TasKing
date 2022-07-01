@@ -253,27 +253,29 @@ namespace TasKing.Controllers
 
                     // verifikovanje clana i njegove uloge 
 
-                    ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID ).FirstOrDefaultAsync();
+                    ClanTima clan = await Context.ClanoviTima.Where(c => c.ID == clanTimaID ).Include(c=> c.tim).FirstOrDefaultAsync();
 
                     if(clan == null){
                         return BadRequest("Clan tima ne postoji u bazi ");
                     }
 
-                    /*if (clan.vodjaTima == false){
-                        return BadRequest("Clan nije vodja !");
-                    }*/
+                    if (clan.vodjaTima == false){
+                        return Ok("Clan nije vodja !");
+                    }
 
-                    //Models.Task task = await Context.Taskovi.Where(t => t.ID == taskID).Include(t=> t.projekat).ThenInclude(p => p.tim).FirstOrDefaultAsync();
+
+                    Models.Task task = await Context.Taskovi.Where(t => t.ID == taskID).Include(t=> t.projekat).ThenInclude(p => p.tim).FirstOrDefaultAsync();
                     
-                    /*if(task==null)
+                    if(task==null)
                     {
                         return BadRequest("task ne postoji u bazi");
-                    }*/
+                    }
 
-                    /*if(clan.tim.ID != task.projekat.tim.ID)
+                    if(clan.tim.ID != task.projekat.tim.ID)
                     {
                         return BadRequest("Niste clan tog tima");
-                    }*/
+                    }
+
 
 
                     var prijave = await Context.PrijaveZaTask.Where(p => p.task.ID == taskID)

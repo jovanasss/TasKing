@@ -13,7 +13,7 @@ namespace Models {
 
         private string secureKey = "nemojte da nas hakujete";
 
-        public string Generate2(int id)
+        /*public string Generate2(int id)
         {
             var symetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));
 
@@ -25,11 +25,11 @@ namespace Models {
             var securityToken = new JwtSecurityToken(header , payload); 
 
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
-        }
+        }*/
        public string Generate(int id)
 
         {
-            // generate token that is valid for 7 days
+            // generate token that is valid for 1 day
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secureKey);
 
@@ -45,7 +45,7 @@ namespace Models {
             
         }
 
-        public JwtSecurityToken Verify2(string jwt) 
+        /*public JwtSecurityToken Verify2(string jwt) 
         {
             var tokenHandler =  new JwtSecurityTokenHandler();
 
@@ -60,7 +60,7 @@ namespace Models {
             } , out SecurityToken validatedToken);
             
             return (JwtSecurityToken)validatedToken ;
-        }
+        }*/
 
 
         public JwtSecurityToken? Verify(string token)
@@ -78,7 +78,6 @@ namespace Models {
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 

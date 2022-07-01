@@ -653,14 +653,14 @@ namespace TasKing.Controllers
 
             // verifikujemo vodju
 
-            var vodja = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).Include(c => c.organizacija).FirstOrDefaultAsync();
-            if(vodja == null)
+            var clanOrganizacije = await Context.ClanoviOrganizacije.Where(k => k.ID == userID).Include(c => c.organizacija).FirstOrDefaultAsync();
+            if(clanOrganizacije == null)
             {
-                return BadRequest("Nevalidan vodja");
+                return BadRequest("Nevalidan clan");
             }
-            if(vodja.administrator == false)
+            if(clanOrganizacije.administrator == false)
             {
-                return BadRequest("Nisi vodja");
+                return BadRequest("Nisi admin");
             }
 
             // verifikujemo clana 
@@ -671,20 +671,21 @@ namespace TasKing.Controllers
                  return BadRequest("Nepostojeci clan");
             }
 
+            if (clanOrganizacije.organizacija.ID != clanProvera.organizacija.ID)
+            {
+                return BadRequest("Niste u toj organizaciji");
+            }
+
             if (userID == ClanID)
             {
                 return BadRequest("Ne mozete da izbacite samog sebe");
             }
 
-            if (vodja.ID == ClanID)
+            if (clanOrganizacije.ID == ClanID)
             {
                 return BadRequest("Ne mozete da izbacite vodju");
             }
 
-            if (vodja.organizacija.ID != clanProvera.organizacija.ID)
-            {
-                return BadRequest("Niste u toj organizaciji");
-            }
 
                 try
                 {
@@ -917,7 +918,7 @@ namespace TasKing.Controllers
 
         [Route("ORGCodeCheck/{code}/{jwt}")]
         [HttpGet]
-        public async Task<ActionResult> TeamCodeCheck (string code , string jwt)
+        public async Task<ActionResult> ORGCodeCheck (string code , string jwt)
         {
 
                 // verifikujemo token
@@ -935,7 +936,7 @@ namespace TasKing.Controllers
                 var korisnik = await Context.Korisnici.Where(k => k.ID == userID).FirstOrDefaultAsync();
                 if (korisnik == null)
                 {
-                    return BadRequest("Nevalidan Korisnik");
+                    return BadRequest(-1);
                 }
 
                 var org = await Context.Organizacije.Where(o => o.kod == code).FirstOrDefaultAsync(); 
