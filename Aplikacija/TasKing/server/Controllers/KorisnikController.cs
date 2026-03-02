@@ -254,7 +254,6 @@ namespace TasKing.Controllers
         }
 
 
-        // nzm kako da implementiram token ovde
 
         [Route("VratiGledanogKorisnika/{userID}/{jwt}")]
         [HttpGet]

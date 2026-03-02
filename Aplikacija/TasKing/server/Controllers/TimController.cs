@@ -218,7 +218,6 @@ namespace TasKing.Controllers
                 }
         }
 
-        // proveriti mozda treba jos neka provera dole za projekat 
 
         [Route("vratiProjekat/{projID}/{jwt}")]
         [HttpGet]
@@ -526,9 +525,6 @@ namespace TasKing.Controllers
                 return BadRequest("Doslo je do greske" + e.Message);
             }
         }*/
-
-        /* proveriti ovo sam mozda sjebao kada nema poziva javi se u catch 
-        "Doslo je do greske:Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')"*/
 
         [Route("VratiPoziveIzTima/{jwt}")]
         [HttpGet]

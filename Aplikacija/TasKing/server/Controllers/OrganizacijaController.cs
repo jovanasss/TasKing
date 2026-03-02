@@ -949,7 +949,6 @@ namespace TasKing.Controllers
                 }
         }
 
-        // proveriti administratora 
 
         [Route("VratiKodOrganizacije/{jwt}")]
         [HttpGet]

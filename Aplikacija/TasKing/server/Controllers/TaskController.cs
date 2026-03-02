@@ -24,7 +24,6 @@ namespace TasKing.Controllers
             jwtService = JwtService;
         }
 
-        // proveriti prazani stringovi a task se svakako kreira
 
         [Route("KreirajTask/{jwt}")]
         [HttpPost]
@@ -369,7 +368,6 @@ namespace TasKing.Controllers
                 }
         }
 
-        // proveriti nzm dal treba jos nesto za status 
 
         [Route("PromeniStatus/{taskID}/{status}/{jwt}")]
         [HttpPut]
@@ -444,7 +442,6 @@ namespace TasKing.Controllers
                 }
         }
 
-        // proveriti dal su parametri prazni tipa 
 
         [Route("IzmeniTask/{taskID}/{naziv}/{opis}/{tip}/{vrednost}/{jwt}/{projID}")]
         [HttpPut]

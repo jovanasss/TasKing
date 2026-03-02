@@ -169,7 +169,6 @@ namespace TasKing.Controllers
             }
         }  
         
-        // nema tokena nzm dal treba 
 
         [Route("VratiProjekteSaTaskovima2/{userID}/{jwt}")]
         [HttpGet]

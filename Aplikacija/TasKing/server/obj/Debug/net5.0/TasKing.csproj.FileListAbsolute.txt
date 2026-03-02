@@ -216,3 +216,7 @@ F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0
 F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.dll
 F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.Extensions.AspNetCore.dll
 F:\Desktop\fax\III Godina\SWE\TasKing\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.Extensions.DependencyInjection.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.Extensions.AspNetCore.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\JWT.Extensions.DependencyInjection.dll
+D:\Tasking\Aplikacija\TasKing\server\bin\Debug\net5.0\Microsoft.IdentityModel.Abstractions.dll
