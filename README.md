@@ -135,7 +135,9 @@ The app opens at `http://localhost:3000`.
 ---
 
 ## 👩‍💻 Author
-
+**Nikola Jovanović**
+**Pavle Živanović**
+**Andrija Ivković**
 **Jovana Stojković**
 [GitHub](https://github.com/jovanasss) · [LinkedIn](https://www.linkedin.com/in/jovana-stojkovi%C4%87-543590359/)
 
