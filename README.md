@@ -134,7 +134,7 @@ The app opens at `http://localhost:3000`.
 
 ---
 
-## 👩‍💻 Author
+## 👩‍💻 Authors
 **Nikola Jovanović**
 **Pavle Živanović**
 **Andrija Ivković**
