@@ -125,15 +125,6 @@ The app opens at `http://localhost:3000`.
 
 ---
 
-## 📸 Screenshots
-
-> _Add a few screenshots here to make the project pop — e.g. the login screen, the main project board, and a team view._
->
-> Drop image files into a `screenshots/` folder and reference them like:
-> `![Main board](screenshots/main-board.png)`
-
----
-
 ## 👩‍💻 Authors
 **Nikola Jovanović**
 **Pavle Živanović**
